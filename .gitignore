@@ -1,9 +1,9 @@
 # IDE & gradle files
 /build/
+/*/build/
 /dependencies/
 /cloud-extension-pack/
 .gradle
-gradle.properties
 .idea
 idea-module-files
 *.iml
