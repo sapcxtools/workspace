@@ -1,0 +1,97 @@
+{
+    "aspects": [{
+            "name": "backoffice",
+            "webapps": [{
+                    "contextPath": "/hac",
+                    "name": "hac"
+                },
+                {
+                    "contextPath": "/medias",
+                    "name": "mediaweb"
+                },
+                {
+                    "contextPath": "/backoffice",
+                    "name": "backoffice"
+                },
+                {
+                    "contextPath": "/authorizationserver",
+                    "name": "oauth2"
+                }
+            ]
+        },
+        {
+            "name": "backgroundProcessing",
+            "properties": [],
+            "webapps": [{
+                    "contextPath": "/hac",
+                    "name": "hac"
+                },
+                {
+                    "contextPath": "/medias",
+                    "name": "mediaweb"
+                }
+            ]
+        },
+        {
+            "name": "api",
+            "properties": [],
+            "webapps": [{
+                    "contextPath": "/occ",
+                    "name": "commercewebservices"
+                },
+                {
+                    "contextPath": "/authorizationserver",
+                    "name": "oauth2"
+                },
+                {
+                    "contextPath": "/medias",
+                    "name": "mediaweb"
+                }
+            ]
+        }
+    ],
+    "commerceSuiteVersion": "2105.5",
+    "extensionPacks": [],
+    "extensions": [],
+    "properties": [],
+    "solrVersion": "8.9",
+    "storefrontAddons": [],
+    "useCloudExtensionPack": false,
+    "useConfig": {
+        "extensions": {
+            "exclude": [],
+            "location": "hybris/config/localextensions.xml"
+        },
+        "properties": [{
+                "location": "hybris/config/cloud/common.properties"
+            },
+            {
+                "aspect": "api",
+                "location": "hybris/config/cloud/aspect/api.properties"
+            },
+            {
+                "aspect": "backoffice",
+                "location": "hybris/config/cloud/aspect/backoffice.properties"
+            },
+            {
+                "aspect": "backgroundProcessing",
+                "location": "hybris/config/cloud/aspect/backgroundprocessing.properties"
+            },
+            {
+                "aspect": "admin",
+                "location": "hybris/config/cloud/aspect/admin.properties"
+            },
+            {
+                "location": "hybris/config/cloud/persona/development.properties",
+                "persona": "development"
+            }
+        ],
+        "tests": {
+            "extensions": [
+                "sapcommercetoolkit"
+            ],
+            "annotations": ["UnitTests", "IntegrationTests"],
+            "packages": ["tools.sapcx.*"]
+        }
+    }
+}
