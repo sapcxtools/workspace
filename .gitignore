@@ -72,5 +72,5 @@ hybris/config/local.properties
 hybris/config/solr/instances/default/configsets
 
 # developer-specific properties
-hybris/config/local-config/99-local.properties
-hybris/config/licence/installedSaplicenses.properties
+hybris/config/local-config/
+hybris/config/licence/

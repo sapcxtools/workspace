@@ -94,8 +94,43 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
 tasks.register<WriteProperties>("generateLocalProperties") {
     comment = "GENEREATED AT " + java.time.Instant.now()
     outputFile = project.file("hybris/config/local.properties")
-
     property("hybris.optional.config.dir", "\${HYBRIS_CONFIG_DIR}/local-config")
+    doLast {
+        mkdir(project.file("hybris/config/local-config/"))
+    }
+}
+
+val symlinkConfigTask = tasks.register("symlinkConfig")
+val localConfig = file("hybris/config/local-config")
+mapOf(
+    "10-local.properties" to file("hybris/config/cloud/common.properties"),
+    "20-local.properties" to file("hybris/config/cloud/persona/development.properties"),
+    "50-local.properties" to file("hybris/config/cloud/local-dev.properties")
+).forEach{
+    val symlinkTask = tasks.register<Exec>("symlink${it.key}") {
+        val path = it.value.relativeTo(localConfig)
+        if (Os.isFamily(Os.FAMILY_UNIX)) {
+            commandLine("sh", "-c", "ln -sfn ${path} ${it.key}")
+        } else {
+            // https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
+            val windowsPath = path.toString().replace("[/]".toRegex(), "\\")
+            commandLine("cmd", "/c", """mklink /d "${it.key}" "${windowsPath}" """)
+        }
+        workingDir(localConfig)
+        dependsOn("generateLocalProperties")
+    }
+    symlinkConfigTask.configure {
+        dependsOn(symlinkTask)
+    }
+}
+
+tasks.register<WriteProperties>("generateLocalDeveloperProperties") {
+    dependsOn(symlinkConfigTask)
+    comment = "my.properties - add your own local development configuration parameters here"
+    outputFile = project.file("hybris/config/local-config/99-local.properties")
+    onlyIf {
+        !project.file("hybris/config/local-config/99-local.properties").exists()
+    }
 }
 
 tasks.named("installManifestAddons") {
@@ -105,5 +140,5 @@ tasks.named("installManifestAddons") {
 tasks.register("setupLocalDevelopment") {
     group = "SAP Commerce"
     description = "Setup local development"
-    dependsOn("bootstrapPlatform", "generateLocalProperties", "installManifestAddons")
+    dependsOn("bootstrapPlatform", "generateLocalDeveloperProperties", "installManifestAddons")
 }
