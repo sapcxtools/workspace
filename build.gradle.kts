@@ -36,9 +36,11 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
     val SUSERPASS = project.property("sUserPass") as String
 
     val COMMERCE_VERSION = CCV2.manifest.commerceSuiteVersion
+    val commerceSuiteDownloadUrl = project.property("com.sap.softwaredownloads.commerceSuite.${COMMERCE_VERSION}.downloadUrl")
+    val commerceSuiteChecksum = project.property("com.sap.softwaredownloads.commerceSuite.${COMMERCE_VERSION}.checksum")
 
     tasks.register<Download>("downloadPlatform") {
-        src("https://www.sapcx.tools/dl/hybris-commerce-suite/${INTEXTPACK_VERSION}")
+        src(commerceSuiteDownloadUrl)
         dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
         username(SUSER)
         password(SUSERPASS)
@@ -51,6 +53,8 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
     tasks.register<Verify>("downloadAndVerifyPlatform") {
         dependsOn("downloadPlatform") 
         src(file("dependencies/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
+        algorithm("SHA-256")
+        checksum(commerceSuiteChecksum.toString())
     }
 
     tasks.named("bootstrapPlatform") {
@@ -58,11 +62,13 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
     }
 
     //check if Integration Extension Pack is configured and download it too
-    if (CCV2.manifest.extensionPacks.any{"hybris-commerce-integrations".equals(it.name)}) {
+    if (CCV2.manifest.useCloudExtensionPack) {
         val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version
+        val commerceIntegrationsDownloadUrl = project.property("com.sap.softwaredownloads.commerceIntegrations.${COMMERCE_VERSION}.downloadUrl")
+        val commerceIntegrationsChecksum = project.property("com.sap.softwaredownloads.commerceIntegrations.${COMMERCE_VERSION}.checksum")
         
         tasks.register<Download>("downloadIntExtPack") {
-            src("https://www.sapcx.tools/dl/hybris-commerce-integrations/${INTEXTPACK_VERSION}")
+            src(commerceIntegrationsDownloadUrl)
             dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
             username(SUSER)
             password(SUSERPASS)
@@ -75,6 +81,8 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
         tasks.register<Verify>("downloadAndVerifyIntExtPack") {
             dependsOn("downloadIntExtPack")
             src(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
+            algorithm("SHA-256")
+            checksum(commerceIntegrationsChecksum.toString())
         }
 
         tasks.named("bootstrapPlatform") {
