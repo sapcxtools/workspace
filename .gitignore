@@ -27,7 +27,6 @@ hybris/roles/
 hybris/log/
 hybris/temp/
 hybris/data/
-hybris/config/local-config/99-local.properties
 
 # only allow sapcxtools extension
 hybris/bin/*
@@ -73,6 +72,7 @@ wro_addons.xml
 # Project specific ignores
 hybris/config/local.properties
 hybris/config/solr/instances/default/configsets
+hybris/config/hybris4intellij.properties
 
 # developer-specific properties
 hybris/config/local-config/
