@@ -123,3 +123,35 @@ Use American English spelling rules when writing documentation as well as for co
   - `WARN`: potential usage or configuration errors that should not halt execution
   - `INFO`: information the users might want to know but not by default
   - `DEBUG`: information the developers might want to know to understand execution
+
+## Extensions
+
+All of the extensions have their own repository and are integrated using `git subtree` into this repository. This procedure was choosen
+for two major reasons:
+
+1. A centralized repository holding defined releases of the individual extensions and guaranteeing the compatibility with the standard.
+1. The individual extension repositories allow a clean integration into projects, i.e. direct integration of the source code.
+
+### How-to use
+
+In order to use an extension from the sapcx.tools you can either download the build artefact from our build pipeline (work in progress) or
+integration the extension directly into your repository using git subtree. The following commands shall give you a guidance on how to
+integration the extensions into your local repository. Keep in mind, that you need to run these commands from the root of your project.
+For the sake of simplicity, we assume that you use the default CCv2 repository layout for your project:
+
+- The following command is used to add an extension "foobar" into your repository:
+`git subtree add --squash --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
+- For future updates, please use the following command:
+`git subtree pull --squash --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
+- If you want to push changes from the local repository into the extension, please use:
+`git subtree push --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git feature/<name-of-your-feature>`
+
+Please note, we typically use `--squash` to reduce the number of commits within your project repository. If you want the whole history
+available in your project, feel free to leave out this parameter. Still, we do not recommend this.
+
+### Guidelines for the individual extension repositories
+
+- Before merging a feature into `main`, make sure that you run an integration tests with the centralized repository, i.e. open a feature
+  branch on the centralized repository and pull the changes from the extension repositories feature branch.
+- We want to make sure that the status of the `main` branch in the extension repository is in sync with the centralized repository.
+  Therefore, the merge into `main` should be coordinated with a merge of the pull into the centralized repository.
