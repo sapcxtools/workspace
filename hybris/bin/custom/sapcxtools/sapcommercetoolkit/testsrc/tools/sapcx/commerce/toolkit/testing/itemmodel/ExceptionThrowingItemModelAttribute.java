@@ -1,0 +1,32 @@
+package tools.sapcx.commerce.toolkit.testing.itemmodel;
+
+import java.util.Locale;
+
+class ExceptionThrowingItemModelAttribute extends InMemoryItemModelAttribute {
+    private Throwable throwable;
+
+    ExceptionThrowingItemModelAttribute(String key, Throwable throwable) {
+        super(key, null);
+        this.throwable = throwable;
+    }
+
+    @Override
+    public Object getValue() {
+        throwExpectedThrowable();
+        return super.getValue();
+    }
+
+    @Override
+    public Object getValue(Locale locale) {
+        throwExpectedThrowable();
+        return super.getValue(locale);
+    }
+
+    private void throwExpectedThrowable() {
+        if (throwable instanceof RuntimeException) {
+            throw (RuntimeException) throwable;
+        } else {
+            throw new RuntimeException(throwable);
+        }
+    }
+}
