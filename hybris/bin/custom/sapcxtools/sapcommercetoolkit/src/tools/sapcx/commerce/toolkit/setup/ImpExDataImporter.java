@@ -19,9 +19,9 @@ import de.hybris.platform.core.initialization.SystemSetupParameter;
  */
 @FunctionalInterface
 public interface ImpExDataImporter {
-    default List<SystemSetupParameter> getSystemSetupParameters() {
-        return Collections.emptyList();
-    }
+	default List<SystemSetupParameter> getSystemSetupParameters() {
+		return Collections.emptyList();
+	}
 
-    void importData(SystemSetupContext context);
+	void importData(SystemSetupContext context);
 }

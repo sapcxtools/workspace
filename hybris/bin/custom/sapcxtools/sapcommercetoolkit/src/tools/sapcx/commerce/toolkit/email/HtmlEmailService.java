@@ -5,12 +5,12 @@ import java.io.UnsupportedEncodingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
 
 /**
  * The {@link HtmlEmailService} interface introduces a simplified way of sending HTML emails from processes and

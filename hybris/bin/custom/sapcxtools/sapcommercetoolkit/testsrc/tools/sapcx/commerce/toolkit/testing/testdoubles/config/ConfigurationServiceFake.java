@@ -6,18 +6,18 @@ import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 
 public class ConfigurationServiceFake implements ConfigurationService {
-    private BaseConfiguration configuration = new BaseConfiguration();
+	private BaseConfiguration configuration = new BaseConfiguration();
 
-    @Override
-    public Configuration getConfiguration() {
-        return configuration;
-    }
+	@Override
+	public Configuration getConfiguration() {
+		return configuration;
+	}
 
-    public void setProperty(String key, Object value) {
-        configuration.setProperty(key, value);
-    }
+	public void setProperty(String key, Object value) {
+		configuration.setProperty(key, value);
+	}
 
-    public void clearProperty(String key) {
-        configuration.clearProperty(key);
-    }
+	public void clearProperty(String key) {
+		configuration.clearProperty(key);
+	}
 }

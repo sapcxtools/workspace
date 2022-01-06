@@ -5,9 +5,9 @@ package tools.sapcx.commerce.toolkit.constants;
  * will not been used for any other purpose.
  */
 public final class ToolkitConstants {
-    public static final String EXTENSIONNAME = "sapcommercetoolkit";
+	public static final String EXTENSIONNAME = "sapcommercetoolkit";
 
-    private ToolkitConstants() {
-        //empty to avoid instantiating this constant class
-    }
+	private ToolkitConstants() {
+		// empty to avoid instantiating this constant class
+	}
 }

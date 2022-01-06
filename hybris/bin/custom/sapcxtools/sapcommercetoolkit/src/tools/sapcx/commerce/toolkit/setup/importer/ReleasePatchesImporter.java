@@ -31,73 +31,72 @@ import tools.sapcx.commerce.toolkit.setup.SystemSetupEnvironment;
  * @see SystemSetupEnvironment
  */
 public class ReleasePatchesImporter extends PrefixBasedDataImporter {
-    private static Pattern releaseVersion = Pattern.compile("^[^.]+\\.[^.]+\\.[^.]+\\.([^.]+)\\..*$");
+	private static Pattern releaseVersion = Pattern.compile("^[^.]+\\.[^.]+\\.[^.]+\\.([^.]+)\\..*$");
 
-    @Override
-    public void importData(SystemSetupContext context) {
-        super.importData(context);
-        storeProcessedReleaseItemsInEnvironment();
-    }
+	@Override
+	public void importData(SystemSetupContext context) {
+		super.importData(context);
+		storeProcessedReleaseItemsInEnvironment();
+	}
 
-    private void storeProcessedReleaseItemsInEnvironment() {
-        getEnvironment().getKeys(getPrefix()).stream()
-                .sorted()
-                .filter(getKeyFilterWithDefault(true))
-                .filter(StringUtils::isNotBlank)
-                .forEach(key -> {
-                    Matcher matcher = releaseVersion.matcher(key);
-                    if (matcher.matches()) {
-                        String releaseNumber = matcher.group(1);
-                        getEnvironment().addProcessedItem(releaseNumber, key);
-                    }
-                });
-    }
+	private void storeProcessedReleaseItemsInEnvironment() {
+		getEnvironment().getKeys(getPrefix()).stream()
+				.sorted()
+				.filter(getKeyFilterWithDefault(true))
+				.filter(StringUtils::isNotBlank)
+				.forEach(key -> {
+					Matcher matcher = releaseVersion.matcher(key);
+					if (matcher.matches()) {
+						String releaseNumber = matcher.group(1);
+						getEnvironment().addProcessedItem(releaseNumber, key);
+					}
+				});
+	}
 
-    @Override
-    protected Predicate<String> getKeyFilter(SystemSetupContext context) {
-        return getKeyFilterWithDefault(context.getProcess().isUpdate());
-    }
+	@Override
+	protected Predicate<String> getKeyFilter(SystemSetupContext context) {
+		return getKeyFilterWithDefault(context.getProcess().isUpdate());
+	}
 
-    private Predicate<String> getKeyFilterWithDefault(boolean defaultValue) {
-        return new NewerReleaseVersionsFilter(
-                getEnvironment().getLastProcessedReleaseVersion(),
-                getEnvironment().getLastProcessedItems(),
-                defaultValue
-        );
-    }
+	private Predicate<String> getKeyFilterWithDefault(boolean defaultValue) {
+		return new NewerReleaseVersionsFilter(
+				getEnvironment().getLastProcessedReleaseVersion(),
+				getEnvironment().getLastProcessedItems(),
+				defaultValue);
+	}
 
-    @Override
-    public void setPrefix(String prefix) {
-        super.setPrefix(prefix);
-        releaseVersion = Pattern.compile("^" + Pattern.quote(prefix) + "\\.([^.]+)\\..*$");
-    }
+	@Override
+	public void setPrefix(String prefix) {
+		super.setPrefix(prefix);
+		releaseVersion = Pattern.compile("^" + Pattern.quote(prefix) + "\\.([^.]+)\\..*$");
+	}
 
-    private static class NewerReleaseVersionsFilter implements Predicate<String> {
-        private final String version;
-        private List<String> processedItems;
-        private final boolean defaultValue;
+	private static class NewerReleaseVersionsFilter implements Predicate<String> {
+		private final String version;
+		private List<String> processedItems;
+		private final boolean defaultValue;
 
-        public NewerReleaseVersionsFilter(String version, List<String> processedItems, boolean defaultValue) {
-            this.version = StringUtils.defaultIfBlank(version, "");
-            this.processedItems = processedItems;
-            this.defaultValue = defaultValue;
-        }
+		public NewerReleaseVersionsFilter(String version, List<String> processedItems, boolean defaultValue) {
+			this.version = StringUtils.defaultIfBlank(version, "");
+			this.processedItems = processedItems;
+			this.defaultValue = defaultValue;
+		}
 
-        @Override
-        public boolean test(String key) {
-            Matcher matcher = releaseVersion.matcher(key);
-            if (matcher.matches()) {
-                String releaseNumber = matcher.group(1);
-                int comparisonResult = releaseNumber.compareToIgnoreCase(version);
-                boolean isOlderVersion = comparisonResult < 0;
-                boolean isSameVersion = comparisonResult == 0;
-                boolean wasProcessed = processedItems.contains(key);
-                if (isOlderVersion || (isSameVersion && wasProcessed)) {
-                    return false;
-                }
-            }
+		@Override
+		public boolean test(String key) {
+			Matcher matcher = releaseVersion.matcher(key);
+			if (matcher.matches()) {
+				String releaseNumber = matcher.group(1);
+				int comparisonResult = releaseNumber.compareToIgnoreCase(version);
+				boolean isOlderVersion = comparisonResult < 0;
+				boolean isSameVersion = comparisonResult == 0;
+				boolean wasProcessed = processedItems.contains(key);
+				if (isOlderVersion || (isSameVersion && wasProcessed)) {
+					return false;
+				}
+			}
 
-            return defaultValue;
-        }
-    }
+			return defaultValue;
+		}
+	}
 }

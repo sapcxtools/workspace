@@ -17,49 +17,49 @@ import org.apache.commons.lang.StringUtils;
  * @see PrefixBasedDataImporter
  */
 public class ProjectDataImporter extends PrefixBasedDataImporter {
-    private boolean importOnInitialization = false;
+	private boolean importOnInitialization = false;
 
-    @Override
-    public List<SystemSetupParameter> getSystemSetupParameters() {
-        SystemSetupParameter parameter = new SystemSetupParameter(getPrefix());
-        parameter.setLabel("Optional: " + getTitle());
-        parameter.setMultiSelect(true);
-        getEnvironment().getKeys(getPrefix()).stream()
-                .map(this::shortenKey)
-                .sorted()
-                .forEach(key -> parameter.addValue(key, false));
-        if (parameter.getValues() == null || parameter.getValues().size() == 0) {
-            return Collections.emptyList();
-        } else {
-            return Collections.singletonList(parameter);
-        }
-    }
+	@Override
+	public List<SystemSetupParameter> getSystemSetupParameters() {
+		SystemSetupParameter parameter = new SystemSetupParameter(getPrefix());
+		parameter.setLabel("Optional: " + getTitle());
+		parameter.setMultiSelect(true);
+		getEnvironment().getKeys(getPrefix()).stream()
+				.map(this::shortenKey)
+				.sorted()
+				.forEach(key -> parameter.addValue(key, false));
+		if (parameter.getValues() == null || parameter.getValues().size() == 0) {
+			return Collections.emptyList();
+		} else {
+			return Collections.singletonList(parameter);
+		}
+	}
 
-    @Override
-    protected Predicate<String> getKeyFilter(SystemSetupContext context) {
-        return key -> {
-            if (isSystemInitialization(context) && shouldImportProjectData()) {
-                return true;
-            }
+	@Override
+	protected Predicate<String> getKeyFilter(SystemSetupContext context) {
+		return key -> {
+			if (isSystemInitialization(context) && shouldImportProjectData()) {
+				return true;
+			}
 
-            String[] parameters = context.getParameters(context.getExtensionName() + "_" + getPrefix());
-            return parameters != null && Arrays.stream(parameters).anyMatch(shortenKey(key)::equalsIgnoreCase);
-        };
-    }
+			String[] parameters = context.getParameters(context.getExtensionName() + "_" + getPrefix());
+			return parameters != null && Arrays.stream(parameters).anyMatch(shortenKey(key)::equalsIgnoreCase);
+		};
+	}
 
-    private String shortenKey(String key) {
-        return StringUtils.replaceOnce(key, getPrefix() + ".", "");
-    }
+	private String shortenKey(String key) {
+		return StringUtils.replaceOnce(key, getPrefix() + ".", "");
+	}
 
-    private boolean isSystemInitialization(SystemSetupContext context) {
-        return context.getProcess().isInit() && !context.getProcess().isAll();
-    }
+	private boolean isSystemInitialization(SystemSetupContext context) {
+		return context.getProcess().isInit() && !context.getProcess().isAll();
+	}
 
-    private boolean shouldImportProjectData() {
-        return getEnvironment().isDevelopment() || importOnInitialization;
-    }
+	private boolean shouldImportProjectData() {
+		return getEnvironment().isDevelopment() || importOnInitialization;
+	}
 
-    public void setImportOnInitialization(boolean importOnInitialization) {
-        this.importOnInitialization = importOnInitialization;
-    }
+	public void setImportOnInitialization(boolean importOnInitialization) {
+		this.importOnInitialization = importOnInitialization;
+	}
 }
