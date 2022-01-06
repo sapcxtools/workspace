@@ -1,14 +1,13 @@
 package tools.sapcx.commerce.toolkit.testing.itemmodel;
 
+import static org.apache.commons.collections4.SetUtils.emptyIfNull;
 import static tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory.attributeFor;
 import static tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory.localizedAttributeFor;
 
 import java.io.ObjectStreamException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import de.hybris.platform.core.PK;
@@ -17,23 +16,51 @@ import de.hybris.platform.servicelayer.model.AbstractItemModel;
 import de.hybris.platform.servicelayer.model.ItemModelInternalContext;
 import de.hybris.platform.servicelayer.model.attribute.DynamicAttributeHandler;
 
-class InMemoryItemModelContext implements ItemModelInternalContext {
-	private final PK pk;
-	private final String typeCode;
+class InMemoryItemModelContext implements ItemModelInternalContext, InMemoryItemModelContextAccessor {
+	private static AtomicLong nextPk = new AtomicLong(System.currentTimeMillis());
+
+	private long persistenceVersion = 0L;
+	private PK pk;
+	private PK newPK;
+	private String itemType;
+	private int typeCode = -1;
 	private Map<String, ItemModelAttribute> attributes = new HashMap<>();
 
-	private InMemoryItemModelContext(String typeCode, PK pk) {
-		this.pk = pk;
+	static InMemoryItemModelContext contextWithAttributes(Class<? extends ItemModel> itemType) {
+		String simpleName = itemType.getSimpleName().replaceAll("Model$", "");
+		return new InMemoryItemModelContext(simpleName);
+	}
+
+	static InMemoryItemModelContext contextWithAttributes(Class<? extends ItemModel> itemType, int typeCode) {
+		String simpleName = itemType.getSimpleName().replaceAll("Model$", "");
+		return new InMemoryItemModelContext(simpleName, typeCode);
+	}
+
+	/**
+	 * Returns getNextPk with the leftmost 17 bits masked, i.e. only the rightmost 47 bits.
+	 *
+	 * In PK.createPK_Counter() the counter value is left shifted by 16 bits, causing it to become
+	 * negative if the 17th bit happens to be a one, which is not allowed.
+	 */
+	private static long getNextPkForPKCounter() {
+		return getNextPk() & 0x7FFFFFFFFFFFL;
+	}
+
+	private static long getNextPk() {
+		return nextPk.getAndIncrement();
+	}
+
+	private InMemoryItemModelContext(String itemType) {
+		this.itemType = itemType;
+	}
+
+	private InMemoryItemModelContext(String itemType, int typeCode) {
+		this.itemType = itemType;
 		this.typeCode = typeCode;
 	}
 
-	static InMemoryItemModelContext contextWithAttributes(Class<? extends ItemModel> itemType, PK pk) {
-		String typeCode = itemType.getSimpleName().replaceAll("Model$", "");
-		return new InMemoryItemModelContext(typeCode, pk);
-	}
-
-	InMemoryItemModelContext copy(PK pk) {
-		InMemoryItemModelContext clone = new InMemoryItemModelContext(typeCode, pk);
+	InMemoryItemModelContext copy() {
+		InMemoryItemModelContext clone = new InMemoryItemModelContext(itemType, typeCode);
 		clone.attributes = attributes.values().stream()
 				.collect(Collectors.toMap(ItemModelAttribute::getKey, ItemModelAttribute::clone));
 		return clone;
@@ -52,7 +79,7 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 
 	@Override
 	public String getItemType() {
-		return typeCode;
+		return itemType;
 	}
 
 	@Override
@@ -68,7 +95,6 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 	@Override
 	public <T> void setPropertyValue(String attribute, T value) {
 		this.setValue(attribute, value);
-
 	}
 
 	@Override
@@ -135,17 +161,17 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 
 	@Override
 	public long getPersistenceVersion() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return persistenceVersion;
 	}
 
 	@Override
 	public boolean exists() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return !isNew() && !isRemoved();
 	}
 
 	@Override
 	public boolean isNew() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return pk == null;
 	}
 
 	@Override
@@ -155,22 +181,22 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 
 	@Override
 	public boolean isUpToDate() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return !isNew() && !isDirty();
 	}
 
 	@Override
 	public boolean isDirty() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return attributes.values().stream().map(ItemModelAttribute::isDirty).anyMatch(Boolean.TRUE::equals);
 	}
 
 	@Override
 	public boolean isDirty(String s) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return attributes.containsKey(s) && attributes.get(s).isDirty();
 	}
 
 	@Override
 	public boolean isDirty(String s, Locale locale) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return attributes.containsKey(s) && attributes.get(s).isDirty();
 	}
 
 	@Override
@@ -205,22 +231,37 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 
 	@Override
 	public <T> T getOriginalValue(String s) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return attributes.containsKey(s) ? (T) attributes.get(s).getOriginalValue() : null;
 	}
 
 	@Override
 	public <T> T getOriginalValue(String s, Locale locale) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
-	}
-
-	@Override
-	public Map<Locale, Set<String>> getDirtyLocalizedAttributes() {
-		throw new UnsupportedOperationException("getDirtyLocalizedAttributes not supported by InMenoryItemModelContext, yet!");
+		return attributes.containsKey(s) ? (T) attributes.get(s).getOriginalValue(locale) : null;
 	}
 
 	@Override
 	public Set<String> getDirtyAttributes() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return attributes.values().stream()
+				.filter(ItemModelAttribute::isDirty)
+				.map(ItemModelAttribute::getKey)
+				.collect(Collectors.toSet());
+	}
+
+	@Override
+	public Map<Locale, Set<String>> getDirtyLocalizedAttributes() {
+		Set<Locale> dirtyLocales = attributes.values().stream()
+				.flatMap(a -> a.getDirtyLocales().stream())
+				.collect(Collectors.toSet());
+
+		Map<Locale, Set<String>> dirtyLocalizedAttributes = new HashMap<>();
+		for (Locale dirtyLocale : dirtyLocales) {
+			Set<String> dirtyAttributes = attributes.values().stream()
+					.filter(a -> a.isDirty(dirtyLocale))
+					.map(ItemModelAttribute::getKey)
+					.collect(Collectors.toSet());
+			dirtyLocalizedAttributes.put(dirtyLocale, dirtyAttributes);
+		}
+		return dirtyLocalizedAttributes;
 	}
 
 	@Override
@@ -230,12 +271,22 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 
 	@Override
 	public <T> T getLocalizedDynamicValue(AbstractItemModel abstractItemModel, String s, Locale locale) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		ItemModelAttribute itemModelAttribute = attributes.get(s);
+		if (itemModelAttribute instanceof InMemoryDynamicItemModelAttribute) {
+			return (T) itemModelAttribute.getValue(locale);
+		} else {
+			throw new UnsupportedOperationException("No dynamic attribute handler registered for attribute " + s);
+		}
 	}
 
 	@Override
 	public <T> void setLocalizedDynamicValue(AbstractItemModel abstractItemModel, String s, Locale locale, T t) {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		ItemModelAttribute itemModelAttribute = attributes.get(s);
+		if (itemModelAttribute instanceof InMemoryDynamicItemModelAttribute) {
+			itemModelAttribute.setValue(locale, t);
+		} else {
+			throw new UnsupportedOperationException("No dynamic attribute handler registered for attribute " + s);
+		}
 	}
 
 	@Override
@@ -244,18 +295,44 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 	}
 
 	@Override
+	public void save() {
+		if (isNew()) {
+			this.pk = generateNewPK();
+		}
+		persistenceVersion++;
+
+		attributes.values().stream().forEach(ItemModelAttribute::save);
+	}
+
+	@Override
+	public void refresh() {
+		attributes.values().stream().forEach(ItemModelAttribute::reload);
+	}
+
+	@Override
 	public PK getNewPK() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		return newPK;
 	}
 
 	@Override
 	public PK generateNewPK() {
-		throw new UnsupportedOperationException("This method is not supported with testing, yet");
+		if (newPK == null) {
+			if (!isNew()) {
+				throw new IllegalStateException("Could not generate new PK for model which is not new.");
+			}
+
+			if (typeCode != -1) {
+				newPK = PK.createFixedCounterPK(typeCode, getNextPkForPKCounter());
+			} else {
+				newPK = PK.fromLong(getNextPk());
+			}
+		}
+		return newPK;
 	}
 
 	@Override
 	public int hashCode(AbstractItemModel abstractItemModel) {
-		return hashCode();
+		return abstractItemModel.getItemModelContext().hashCode();
 	}
 
 	@Override
@@ -265,11 +342,13 @@ class InMemoryItemModelContext implements ItemModelInternalContext {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		InMemoryItemModelContext that = (InMemoryItemModelContext) o;
-		return Objects.equals(typeCode, that.typeCode) && Objects.equals(attributes, that.attributes);
+		if (pk != null && pk.equals(that.pk))
+			return true;
+		return Objects.equals(itemType, that.itemType) && Objects.equals(attributes, that.attributes);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(typeCode, attributes);
+		return (pk != null) ? pk.hashCode() : Objects.hash(itemType, attributes);
 	}
 }

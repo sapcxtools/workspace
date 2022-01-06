@@ -30,62 +30,62 @@ import tools.sapcx.commerce.toolkit.setup.SystemSetupEnvironment;
  * The order is determined by the configuration keys and not by the loading order of the underlying properties files.
  */
 public class PrefixBasedDataImporter implements ImpExDataImporter {
-    private SystemSetupEnvironment environment;
-    private ImpExDataImportExecutor impExDataImportExecutor;
-    private String title;
-    private String prefix;
+	private SystemSetupEnvironment environment;
+	private ImpExDataImportExecutor impExDataImportExecutor;
+	private String title;
+	private String prefix;
 
-    @Override
-    public void importData(SystemSetupContext context) {
-        getImpExDataImportExecutor().getLogger().start(context, getTitle());
+	@Override
+	public void importData(SystemSetupContext context) {
+		getImpExDataImportExecutor().getLogger().start(context, getTitle());
 
-        getEnvironment().getKeys(getPrefix()).stream()
-                .sorted()
-                .filter(getKeyFilter(context))
-                .map(getEnvironment()::mapKeyToFile)
-                .filter(StringUtils::isNotBlank)
-                .forEach(file -> getImpExDataImportExecutor().importImpexFile(context, file));
+		getEnvironment().getKeys(getPrefix()).stream()
+				.sorted()
+				.filter(getKeyFilter(context))
+				.map(getEnvironment()::mapKeyToFile)
+				.filter(StringUtils::isNotBlank)
+				.forEach(file -> getImpExDataImportExecutor().importImpexFile(context, file));
 
-        getImpExDataImportExecutor().getLogger().stop(context, getTitle());
-    }
+		getImpExDataImportExecutor().getLogger().stop(context, getTitle());
+	}
 
-    protected Predicate<String> getKeyFilter(SystemSetupContext context) {
-        return StringUtils::isNotBlank;
-    }
+	protected Predicate<String> getKeyFilter(SystemSetupContext context) {
+		return StringUtils::isNotBlank;
+	}
 
-    @Required
-    public void setEnvironment(SystemSetupEnvironment environment) {
-        this.environment = environment;
-    }
+	@Required
+	public void setEnvironment(SystemSetupEnvironment environment) {
+		this.environment = environment;
+	}
 
-    public SystemSetupEnvironment getEnvironment() {
-        return environment;
-    }
+	public SystemSetupEnvironment getEnvironment() {
+		return environment;
+	}
 
-    @Required
-    public void setImpExDataImportExecutor(ImpExDataImportExecutor impExDataImportExecutor) {
-        this.impExDataImportExecutor = impExDataImportExecutor;
-    }
+	@Required
+	public void setImpExDataImportExecutor(ImpExDataImportExecutor impExDataImportExecutor) {
+		this.impExDataImportExecutor = impExDataImportExecutor;
+	}
 
-    public ImpExDataImportExecutor getImpExDataImportExecutor() {
-        return impExDataImportExecutor;
-    }
+	public ImpExDataImportExecutor getImpExDataImportExecutor() {
+		return impExDataImportExecutor;
+	}
 
-    @Required
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	@Required
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    @Required
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	@Required
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
-    public String getPrefix() {
-        return prefix;
-    }
+	public String getPrefix() {
+		return prefix;
+	}
 }
