@@ -9,58 +9,58 @@ import org.apache.log4j.Logger;
  * in the log files of the system as well as in the JSP context of the triggered system setup process.
  */
 public final class ImpExDataImporterLogger {
-    static final Logger LOG = Logger.getLogger(ImpExDataImporterLogger.class);
+	static final Logger LOG = Logger.getLogger(ImpExDataImporterLogger.class);
 
-    private final Logger logger;
+	private final Logger logger;
 
-    public ImpExDataImporterLogger() {
-        this(LOG);
-    }
+	public ImpExDataImporterLogger() {
+		this(LOG);
+	}
 
-    public ImpExDataImporterLogger(Logger logger) {
-        this.logger = logger;
-    }
+	public ImpExDataImporterLogger(Logger logger) {
+		this.logger = logger;
+	}
 
-    public void debug(SystemSetupContext context, String message) {
-        debug(context, message, null);
-    }
+	public void debug(SystemSetupContext context, String message) {
+		debug(context, message, null);
+	}
 
-    public void debug(SystemSetupContext context, String message, Exception e) {
-        logger.debug(message, e);
-        if (logger.isDebugEnabled()) {
-            printToJsp(context, message, "cyan");
-        }
-    }
+	public void debug(SystemSetupContext context, String message, Exception e) {
+		logger.debug(message, e);
+		if (logger.isDebugEnabled()) {
+			printToJsp(context, message, "cyan");
+		}
+	}
 
-    public void info(SystemSetupContext context, String message) {
-        info(context, message, null);
-    }
+	public void info(SystemSetupContext context, String message) {
+		info(context, message, null);
+	}
 
-    public void info(SystemSetupContext context, String message, Exception e) {
-        logger.info(message, e);
-        printToJsp(context, message, "green");
-    }
+	public void info(SystemSetupContext context, String message, Exception e) {
+		logger.info(message, e);
+		printToJsp(context, message, "green");
+	}
 
-    public void error(SystemSetupContext context, String message) {
-        error(context, message, null);
-    }
+	public void error(SystemSetupContext context, String message) {
+		error(context, message, null);
+	}
 
-    public void error(SystemSetupContext context, String message, Exception e) {
-        logger.error(message, e);
-        printToJsp(context, message, "red");
-    }
+	public void error(SystemSetupContext context, String message, Exception e) {
+		logger.error(message, e);
+		printToJsp(context, message, "red");
+	}
 
-    private void printToJsp(SystemSetupContext context, String message, String color) {
-        if (context.getJspContext() != null) {
-            context.getJspContext().println("<font color='" + color + "'>" + message + "</font>");
-        }
-    }
+	private void printToJsp(SystemSetupContext context, String message, String color) {
+		if (context.getJspContext() != null) {
+			context.getJspContext().println("<font color='" + color + "'>" + message + "</font>");
+		}
+	}
 
-    public void start(SystemSetupContext context, String dataId) {
-        info(context, "> Starting importing of: " + dataId);
-    }
+	public void start(SystemSetupContext context, String dataId) {
+		info(context, "> Starting importing of: " + dataId);
+	}
 
-    public void stop(SystemSetupContext context, String dataId) {
-        info(context, "> Import of " + dataId + " is done.");
-    }
+	public void stop(SystemSetupContext context, String dataId) {
+		info(context, "> Import of " + dataId + " is done.");
+	}
 }

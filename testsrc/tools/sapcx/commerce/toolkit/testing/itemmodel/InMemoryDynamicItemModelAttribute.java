@@ -1,10 +1,6 @@
 package tools.sapcx.commerce.toolkit.testing.itemmodel;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import de.hybris.platform.servicelayer.model.AbstractItemModel;
@@ -46,8 +42,36 @@ public class InMemoryDynamicItemModelAttribute<T extends AbstractItemModel, VALU
 	}
 
 	@Override
+	public Object getOriginalValue() {
+		throw new UnsupportedOperationException("This method is not supported with dynamic attribute handlers");
+	}
+
+	@Override
 	public void setValue(Object value) {
 		handler.set(item, (VALUE) value);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return false;
+	}
+
+	@Override
+	public boolean isDirty(Locale locale) {
+		return false;
+	}
+
+	@Override
+	public List<Locale> getDirtyLocales() {
+		return List.of();
+	}
+
+	@Override
+	public void save() {
+	}
+
+	@Override
+	public void reload() {
 	}
 
 	@Override
@@ -57,6 +81,11 @@ public class InMemoryDynamicItemModelAttribute<T extends AbstractItemModel, VALU
 		} else {
 			return getValue();
 		}
+	}
+
+	@Override
+	public Object getOriginalValue(Locale locale) {
+		throw new UnsupportedOperationException("This method is not supported with dynamic attribute handlers");
 	}
 
 	@Override

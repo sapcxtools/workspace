@@ -31,7 +31,7 @@ public interface HtmlEmailGenerator {
 	}
 
 	HtmlEmail createHtmlEmailFromTemplate(String subject, Collection<InternetAddress> to, Collection<InternetAddress> cc, Collection<InternetAddress> bcc, String template,
-										  Map<String, Object> contextParameters, Locale locale) throws EmailException;
+			Map<String, Object> contextParameters, Locale locale) throws EmailException;
 
 	default HtmlEmail createHtmlEmailFromTemplate(String subject, Collection<InternetAddress> to, Collection<InternetAddress> cc, String template,
 			Map<String, Object> contextParameters, Locale locale) throws EmailException {
@@ -39,7 +39,7 @@ public interface HtmlEmailGenerator {
 	}
 
 	default HtmlEmail createHtmlEmailFromTemplate(String subject, Collection<InternetAddress> to, String template,
-												  Map<String, Object> contextParameters, Locale locale) throws EmailException {
+			Map<String, Object> contextParameters, Locale locale) throws EmailException {
 		return createHtmlEmailFromTemplate(subject, to, null, null, template, contextParameters, locale);
 	}
 }
