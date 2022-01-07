@@ -30,11 +30,8 @@ hybris/data/
 hybris/config/local-config/99-local.properties
 
 # only allow sapcxtools extension
-hybris/bin/*
-!hybris/bin/custom/sapcxtools/
-
-# .classpath files in sapcxtools to ignore
-hybris/bin/custom/sapcxtools/**/.classpath
+hybris/bin/modules/
+hybris/bin/platform/
 
 # Filename patterns to ignore
 *.class
