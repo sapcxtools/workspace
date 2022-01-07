@@ -30,64 +30,64 @@ import tools.sapcx.commerce.toolkit.constants.ToolkitConstants;
  */
 @SystemSetup(extension = ToolkitConstants.EXTENSIONNAME)
 public class ToolkitSystemSetup {
-    private ValidationService validationService;
-    private ImpExDataImporter elementaryDataImporter;
-    private ImpExDataImporter releasePatchesImporter;
-    private ImpExDataImporter essentialDataImporter;
-    private List<ImpExDataImporter> projectDataImporters = new ArrayList<>();
+	private ValidationService validationService;
+	private ImpExDataImporter elementaryDataImporter;
+	private ImpExDataImporter releasePatchesImporter;
+	private ImpExDataImporter essentialDataImporter;
+	private List<ImpExDataImporter> projectDataImporters = new ArrayList<>();
 
-    @SystemSetup(process = SystemSetup.Process.ALL, type = SystemSetup.Type.ALL)
-    public void reliableSetupPhases(final SystemSetupContext context) {
-        Consumer<ImpExDataImporter> importData = importer -> importer.importData(context);
+	@SystemSetup(process = SystemSetup.Process.ALL, type = SystemSetup.Type.ALL)
+	public void reliableSetupPhases(final SystemSetupContext context) {
+		Consumer<ImpExDataImporter> importData = importer -> importer.importData(context);
 
-        if (context.getType().isEssential()) {
-            if (isSystemInitialization(context)) {
-                Optional.ofNullable(elementaryDataImporter).ifPresent(importData);
-            }
+		if (context.getType().isEssential()) {
+			if (isSystemInitialization(context)) {
+				Optional.ofNullable(elementaryDataImporter).ifPresent(importData);
+			}
 
-            Optional.ofNullable(releasePatchesImporter).ifPresent(importData);
-            Optional.ofNullable(essentialDataImporter).ifPresent(importData);
+			Optional.ofNullable(releasePatchesImporter).ifPresent(importData);
+			Optional.ofNullable(essentialDataImporter).ifPresent(importData);
 
-            validationService.reloadValidationEngine();
-        }
+			validationService.reloadValidationEngine();
+		}
 
-        if (context.getType().isProject()) {
-            projectDataImporters.forEach(importData);
-        }
-    }
+		if (context.getType().isProject()) {
+			projectDataImporters.forEach(importData);
+		}
+	}
 
-    @SystemSetupParameterMethod
-    public List<SystemSetupParameter> getSystemSetupParameters() {
-        final List<SystemSetupParameter> params = new ArrayList<>();
-        for (ImpExDataImporter projectDataImporter : projectDataImporters) {
-            params.addAll(projectDataImporter.getSystemSetupParameters());
-        }
-        return params;
-    }
+	@SystemSetupParameterMethod
+	public List<SystemSetupParameter> getSystemSetupParameters() {
+		final List<SystemSetupParameter> params = new ArrayList<>();
+		for (ImpExDataImporter projectDataImporter : projectDataImporters) {
+			params.addAll(projectDataImporter.getSystemSetupParameters());
+		}
+		return params;
+	}
 
-    private boolean isSystemInitialization(SystemSetupContext context) {
-        return context.getProcess().isInit() && !context.getProcess().isAll();
-    }
+	private boolean isSystemInitialization(SystemSetupContext context) {
+		return context.getProcess().isInit() && !context.getProcess().isAll();
+	}
 
-    @Required
-    public void setValidationService(ValidationService validationService) {
-        this.validationService = validationService;
-    }
+	@Required
+	public void setValidationService(ValidationService validationService) {
+		this.validationService = validationService;
+	}
 
-    public void setElementaryDataImporter(ImpExDataImporter elementaryDataImporter) {
-        this.elementaryDataImporter = elementaryDataImporter;
-    }
+	public void setElementaryDataImporter(ImpExDataImporter elementaryDataImporter) {
+		this.elementaryDataImporter = elementaryDataImporter;
+	}
 
-    public void setReleasePatchesImporter(ImpExDataImporter releasePatchesImporter) {
-        this.releasePatchesImporter = releasePatchesImporter;
-    }
+	public void setReleasePatchesImporter(ImpExDataImporter releasePatchesImporter) {
+		this.releasePatchesImporter = releasePatchesImporter;
+	}
 
-    public void setEssentialDataImporter(ImpExDataImporter essentialDataImporter) {
-        this.essentialDataImporter = essentialDataImporter;
-    }
+	public void setEssentialDataImporter(ImpExDataImporter essentialDataImporter) {
+		this.essentialDataImporter = essentialDataImporter;
+	}
 
-    public void setProjectDataImporters(List<ImpExDataImporter> projectDataImporters) {
-        this.projectDataImporters.clear();
-        this.projectDataImporters.addAll(projectDataImporters);
-    }
+	public void setProjectDataImporters(List<ImpExDataImporter> projectDataImporters) {
+		this.projectDataImporters.clear();
+		this.projectDataImporters.addAll(projectDataImporters);
+	}
 }

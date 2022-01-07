@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.toolkit.testing.testdoubles.models;
 
+import static org.apache.commons.collections4.MapUtils.emptyIfNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,8 +12,6 @@ import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.core.model.product.ProductModel;
 
 import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;
-
-import static org.apache.commons.collections4.MapUtils.emptyIfNull;
 
 public class ProductBuilder<ITEM extends ProductModel> {
 	public static ProductBuilder<ProductModel> product(String code) {

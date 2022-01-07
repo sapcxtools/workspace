@@ -19,94 +19,93 @@ import org.springframework.mock.web.MockJspWriter;
 
 @UnitTest
 public class ImpExDataImporterLoggerTests {
-    private SystemSetupContext context;
-    private Writer jspOutWriter = new StringBuilderWriter();
-    private Level previousLevel;
+	private SystemSetupContext context;
+	private Writer jspOutWriter = new StringBuilderWriter();
+	private Level previousLevel;
 
-    private ImpExDataImporterLogger logger;
+	private ImpExDataImporterLogger logger;
 
-    @Before
-    public void setUp() throws Exception {
-        jspOutWriter = new StringBuilderWriter();
+	@Before
+	public void setUp() throws Exception {
+		jspOutWriter = new StringBuilderWriter();
 
-        context = new SystemSetupContext(Collections.emptyMap(), SystemSetup.Type.ESSENTIAL, SystemSetup.Process.ALL, "extensionName");
-        context.setJspContext(new JspContext(new MockJspWriter(jspOutWriter), null, null));
+		context = new SystemSetupContext(Collections.emptyMap(), SystemSetup.Type.ESSENTIAL, SystemSetup.Process.ALL, "extensionName");
+		context.setJspContext(new JspContext(new MockJspWriter(jspOutWriter), null, null));
 
-        logger = new ImpExDataImporterLogger();
-        previousLevel = ImpExDataImporterLogger.LOG.getLevel();
-    }
+		logger = new ImpExDataImporterLogger();
+		previousLevel = ImpExDataImporterLogger.LOG.getLevel();
+	}
 
-    @After
-    public void tearDown() throws Exception {
-        ImpExDataImporterLogger.LOG.setLevel(previousLevel);
-    }
+	@After
+	public void tearDown() throws Exception {
+		ImpExDataImporterLogger.LOG.setLevel(previousLevel);
+	}
 
-    @Test
-    public void verifyStartLogsToJspContext() {
-        logger.start(context, "test");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("> Starting importing of: test", "green"));
-    }
+	@Test
+	public void verifyStartLogsToJspContext() {
+		logger.start(context, "test");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("> Starting importing of: test", "green"));
+	}
 
-    @Test
-    public void verifyDebugDoesNotLogToJspContext() {
-        logger.debug(context, "debug text");
-        assertThat(jspOutWriter.toString()).isEmpty();
-    }
+	@Test
+	public void verifyDebugDoesNotLogToJspContext() {
+		logger.debug(context, "debug text");
+		assertThat(jspOutWriter.toString()).isEmpty();
+	}
 
-    @Test
-    public void verifyDebugWithExceptionDoesNotLogToJspContext() {
-        logger.debug(context, "debug text");
-        assertThat(jspOutWriter.toString()).isEmpty();
-    }
+	@Test
+	public void verifyDebugWithExceptionDoesNotLogToJspContext() {
+		logger.debug(context, "debug text");
+		assertThat(jspOutWriter.toString()).isEmpty();
+	}
 
-    @Test
-    public void verifyDebugLogsToJspContextIfDebugIsEnabled() {
-        ImpExDataImporterLogger.LOG.setLevel(Level.DEBUG);
+	@Test
+	public void verifyDebugLogsToJspContextIfDebugIsEnabled() {
+		ImpExDataImporterLogger.LOG.setLevel(Level.DEBUG);
 
-        logger.debug(context, "debug text");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("debug text", "cyan"));
-    }
+		logger.debug(context, "debug text");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("debug text", "cyan"));
+	}
 
-    @Test
-    public void verifyDebugWithExceptionLogsToJspContextIfDebugIsEnabled() {
-        ImpExDataImporterLogger.LOG.setLevel(Level.DEBUG);
+	@Test
+	public void verifyDebugWithExceptionLogsToJspContextIfDebugIsEnabled() {
+		ImpExDataImporterLogger.LOG.setLevel(Level.DEBUG);
 
-        logger.debug(context, "debug text");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("debug text", "cyan"));
-    }
+		logger.debug(context, "debug text");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("debug text", "cyan"));
+	}
 
-    @Test
-    public void verifyStopLogsToJspContext() {
-        logger.stop(context, "test");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("> Import of test is done.", "green"));
-    }
+	@Test
+	public void verifyStopLogsToJspContext() {
+		logger.stop(context, "test");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("> Import of test is done.", "green"));
+	}
 
-    @Test
-    public void verifyInfoLogsToJspContext() {
-        logger.info(context, "info text");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("info text", "green"));
-    }
+	@Test
+	public void verifyInfoLogsToJspContext() {
+		logger.info(context, "info text");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("info text", "green"));
+	}
 
-    @Test
-    public void verifyInfoWithExceptionLogsToJspContext() {
-        logger.info(context, "info text", new RuntimeException("exception"));
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("info text", "green"));
-    }
+	@Test
+	public void verifyInfoWithExceptionLogsToJspContext() {
+		logger.info(context, "info text", new RuntimeException("exception"));
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("info text", "green"));
+	}
 
-    @Test
-    public void verifyErrorLogsToJspContext() {
-        logger.error(context, "error text");
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("error text", "red"));
-    }
+	@Test
+	public void verifyErrorLogsToJspContext() {
+		logger.error(context, "error text");
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("error text", "red"));
+	}
 
-    @Test
-    public void verifyErrorWithExceptionLogsToJspContext() {
-        logger.error(context, "error text", new RuntimeException("exception"));
-        assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("error text", "red"));
-    }
+	@Test
+	public void verifyErrorWithExceptionLogsToJspContext() {
+		logger.error(context, "error text", new RuntimeException("exception"));
+		assertThat(jspOutWriter.toString()).isEqualTo(coloredTextWithNewline("error text", "red"));
+	}
 
-
-    private String coloredTextWithNewline(String text, String color) {
-        return "<font color='" + color + "'>" + text + "</font><br/>\n";
-    }
+	private String coloredTextWithNewline(String text, String color) {
+		return "<font color='" + color + "'>" + text + "</font><br/>\n";
+	}
 }

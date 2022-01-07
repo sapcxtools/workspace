@@ -9,25 +9,25 @@ import de.hybris.platform.servicelayer.event.events.AbstractEvent;
 import org.springframework.context.ApplicationListener;
 
 public class EventServiceFake implements EventService {
-    private Set<ApplicationListener> effectiveEventListeners = new HashSet<>();
+	private Set<ApplicationListener> effectiveEventListeners = new HashSet<>();
 
-    @Override
-    public void publishEvent(AbstractEvent abstractEvent) {
-        effectiveEventListeners.forEach(listener -> listener.onApplicationEvent(abstractEvent));
-    }
+	@Override
+	public void publishEvent(AbstractEvent abstractEvent) {
+		effectiveEventListeners.forEach(listener -> listener.onApplicationEvent(abstractEvent));
+	}
 
-    @Override
-    public boolean registerEventListener(ApplicationListener applicationListener) {
-        return effectiveEventListeners.add(applicationListener);
-    }
+	@Override
+	public boolean registerEventListener(ApplicationListener applicationListener) {
+		return effectiveEventListeners.add(applicationListener);
+	}
 
-    @Override
-    public boolean unregisterEventListener(ApplicationListener applicationListener) {
-        return effectiveEventListeners.remove(applicationListener);
-    }
+	@Override
+	public boolean unregisterEventListener(ApplicationListener applicationListener) {
+		return effectiveEventListeners.remove(applicationListener);
+	}
 
-    @Override
-    public Set<ApplicationListener> getEventListeners() {
-        return new HashSet<>(effectiveEventListeners);
-    }
+	@Override
+	public Set<ApplicationListener> getEventListeners() {
+		return new HashSet<>(effectiveEventListeners);
+	}
 }
