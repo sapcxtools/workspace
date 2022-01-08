@@ -1,5 +1,8 @@
 # SAP Commerce Extension
 
+![CI](https://github.com/sapcxtools/extensions/actions/workflows/buildandtest.yml/badge.svg) 
+[![CodeCov](https://codecov.io/gh/sapcxtools/extensions/branch/main/graph/badge.svg?token=F1BIK8R7NZ)](https://codecov.io/gh/sapcxtools/extensions)
+
 All extensions available in this repository are built with high test coverage and do not influence the behavior of
 your project without changes to your configuration. This is guaranteed and intended by design, because the extensions
 give the full control of functionality into the hands of the project teams. Our coding conventions and code reviews
