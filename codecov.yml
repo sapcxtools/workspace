@@ -1,0 +1,3 @@
+ignore:
+  - "hybris/bin/custom/sapcxtools/**/gensrc"
+  - "hybris/bin/custom/sapcxtools/**/testsrc"
