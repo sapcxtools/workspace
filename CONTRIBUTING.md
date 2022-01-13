@@ -140,9 +140,9 @@ integration the extensions into your local repository. Keep in mind, that you ne
 For the sake of simplicity, we assume that you use the default CCv2 repository layout for your project:
 
 - The following command is used to add an extension "foobar" into your repository:
-`git subtree add --squash --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
+`git subtree add --squash --message "add extension foobar from SAP CX Tools" --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
 - For future updates, please use the following command:
-`git subtree pull --squash --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
+`git subtree pull --squash --message "update extension foobar from SAP CX Tools" --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git main`
 - If you want to push changes from the local repository into the extension, please use:
 `git subtree push --prefix=core-customize/hybris/bin/custom/sapcxtools/foobar git@github.com:sapcxtools/foobar.git feature/<name-of-your-feature>`
 
