@@ -34,26 +34,38 @@ jobs:
         echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
         echo "${USER_CONFIG}" >> ${HOME}/.gradle/gradle.properties
         echo "sUserAuthorization=${AUTHORIZATION}" >> ${HOME}/.gradle/gradle.properties
-    - name: Bootstrap platform
-      run: ./gradlew setupLocalDevelopment
-    - name: Adapt configuration for CI
+    - name: SAP Commerce environment
       run: |
         echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/hybris/config/local-config" >> $GITHUB_ENV
-        cat $GITHUB_WORKSPACE/ci/local-testing.properties >> $GITHUB_WORKSPACE/hybris/config/local-config/99-local.properties
+        echo "HYBRIS_BIN_DIR=$GITHUB_WORKSPACE/hybris/bin" >> $GITHUB_ENV
+        echo "HYBRIS_CONF_DIR=$GITHUB_WORKSPACE/hybris/config" >> $GITHUB_ENV
+        echo "HYBRIS_LOG_DIR=$GITHUB_WORKSPACE/hybris/log" >> $GITHUB_ENV
+    - name: Bootstrap platform
+      run: ./gradlew setupLocalDevelopment
     - name: Build platform
       run: ./gradlew yall
     - name: Run unit tests
       run: |
+        cat $GITHUB_WORKSPACE/ci/config/testing-unit.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
         ./gradlew yunittests
         
         # Target never fails, therefore, check for test errors and fail if errors were found
-        for file in $GITHUB_WORKSPACE/hybris/log/junit/test-results/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+        for file in $HYBRIS_LOG_DIR/junit/test-results/unit/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+    - name: Run integration tests
+      run: |
+        cat $GITHUB_WORKSPACE/ci/config/testing-integration.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
+        ./gradlew yintegrationtests
+        
+        # Target never fails, therefore, check for test errors and fail if errors were found
+        for file in $HYBRIS_LOG_DIR/junit/test-results/integration/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
     - name: Coverage Report
       env:
         TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        LOG_DIR: 
       run: |
         # Generate codecov report 
-        java -jar $GITHUB_WORKSPACE/ci/jacococli.jar report $GITHUB_WORKSPACE/hybris/log/junit/jacoco.exec --classfiles $GITHUB_WORKSPACE/hybris/bin/custom --sourcefiles $GITHUB_WORKSPACE/hybris/bin/custom --xml $GITHUB_WORKSPACE/hybris/log/junit/jacoco.xml
+        java -jar $GITHUB_WORKSPACE/ci/lib/jacococli.jar merge $HYBRIS_LOG_DIR/junit/jacoco-unit.exec $HYBRIS_LOG_DIR/junit/jacoco-integration.exec --destfile $HYBRIS_LOG_DIR/junit/jacoco.exec
+        java -jar $GITHUB_WORKSPACE/ci/lib/jacococli.jar report $HYBRIS_LOG_DIR/junit/jacoco.exec --classfiles $HYBRIS_BIN_DIR/custom --sourcefiles $HYBRIS_BIN_DIR/custom --xml $HYBRIS_LOG_DIR/junit/jacoco.xml
 
         # Download codecov uploader
         curl -Os https://uploader.codecov.io/latest/linux/codecov
@@ -61,7 +73,7 @@ jobs:
         
         # Upload report to codecov
         if [ $GITHUB_REF_TYPE -eq "branch" ]; then
-          ./codecov -f $GITHUB_WORKSPACE/hybris/log/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --branch GITHUB_REF_NAME -t $TOKEN
+          ./codecov -f $HYBRIS_LOG_DIR/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --branch GITHUB_REF_NAME -t $TOKEN
         else
-          ./codecov -f $GITHUB_WORKSPACE/hybris/log/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --tag GITHUB_REF_NAME -t $TOKEN
+          ./codecov -f $HYBRIS_LOG_DIR/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --tag GITHUB_REF_NAME -t $TOKEN
         fi
