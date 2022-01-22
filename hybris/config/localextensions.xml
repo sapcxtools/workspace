@@ -3,7 +3,7 @@
   <extensions>
     <path dir="${HYBRIS_BIN_DIR}"/>
 
-    <!-- SAP commerce toolkit -->
+    <!-- SAP CX Tools -->
     <extension name="sapcommercetoolkit"/>
     <extension name="sapcxsearch"/>
   </extensions>

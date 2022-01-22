@@ -54,7 +54,6 @@
     "extensionPacks": [],
     "extensions": [],
     "properties": [],
-    "solrVersion": "8.9",
     "storefrontAddons": [],
     "useCloudExtensionPack": false,
     "useConfig": {
@@ -88,10 +87,10 @@
         ],
         "tests": {
             "extensions": [
-                "sapcommercetoolkit"
+                "sapcommercetoolkit,sapcxsearch"
             ],
             "annotations": ["UnitTests", "IntegrationTests"],
-            "packages": ["tools.sapcx.*"]
+            "packages": ["tools.sapcx.commerce.*"]
         }
     }
 }
