@@ -1,0 +1,53 @@
+name: Dependency Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        extension: ['sapcommercetoolkit', 'sapcxsearch']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        cache: 'gradle'
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+    - name: Set up cache for SAP artifacts
+      uses: actions/cache@v2
+      with:
+        key: sap-artifacts-cache-${{ hashFiles('manifest.json') }}
+        path: dependencies
+    - name: SAP download config
+      env:
+        USER_CONFIG: ${{ secrets.GRADLE_USER_CONFIG }}
+        AUTHORIZATION: ${{ secrets.SAP_DOWNLOAD_AUTHORIZATION }}
+      shell: bash
+      run: |
+        mkdir -p ${HOME}/.gradle
+        echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+        echo "${USER_CONFIG}" >> ${HOME}/.gradle/gradle.properties
+        echo "sUserAuthorization=${AUTHORIZATION}" >> ${HOME}/.gradle/gradle.properties
+    - name: SAP Commerce environment
+      run: |
+        echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/hybris/config/local-config" >> $GITHUB_ENV
+        echo "HYBRIS_BIN_DIR=$GITHUB_WORKSPACE/hybris/bin" >> $GITHUB_ENV
+        echo "HYBRIS_CONF_DIR=$GITHUB_WORKSPACE/hybris/config" >> $GITHUB_ENV
+        echo "HYBRIS_LOG_DIR=$GITHUB_WORKSPACE/hybris/log" >> $GITHUB_ENV
+    - name: Configure extension
+      run: |
+        cp -f ci/config/localextensions-template.xml $HYBRIS_CONF_DIR/localextensions.xml
+        sed -i 's/EXTENSIONNAME/${{ matrix.extension }}/' $HYBRIS_CONF_DIR/localextensions.xml
+    - name: Bootstrap platform
+      run: ./gradlew setupLocalDevelopment
+    - name: Build platform
+      run: ./gradlew yall
