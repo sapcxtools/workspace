@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ develop ]
 
 jobs:
   build:
@@ -61,7 +61,6 @@ jobs:
     - name: Coverage Report
       env:
         TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        LOG_DIR: 
       run: |
         # Generate codecov report 
         java -jar $GITHUB_WORKSPACE/ci/lib/jacococli.jar merge $HYBRIS_LOG_DIR/junit/jacoco-unit.exec $HYBRIS_LOG_DIR/junit/jacoco-integration.exec --destfile $HYBRIS_LOG_DIR/junit/jacoco.exec

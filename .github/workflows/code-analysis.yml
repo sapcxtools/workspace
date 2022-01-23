@@ -2,9 +2,7 @@ name: Code Analysis
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ develop, 'feature/**' ]
 
 jobs:
   code-analysis: 
