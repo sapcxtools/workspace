@@ -50,3 +50,17 @@ jobs:
       run: ./gradlew setupLocalDevelopment
     - name: Build platform
       run: ./gradlew yall
+    - name: Run unit tests
+      run: |
+        cat $GITHUB_WORKSPACE/ci/config/testing-unit.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
+        ./gradlew yunittests
+        
+        # Target never fails, therefore, check for test errors and fail if errors were found
+        for file in $HYBRIS_LOG_DIR/junit/test-results/unit/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+    - name: Run integration tests
+      run: |
+        cat $GITHUB_WORKSPACE/ci/config/testing-integration.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
+        ./gradlew yintegrationtests
+        
+        # Target never fails, therefore, check for test errors and fail if errors were found
+        for file in $HYBRIS_LOG_DIR/junit/test-results/integration/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
