@@ -1,7 +1,10 @@
 # SAP Commerce Extension
 
-![CI](https://github.com/sapcxtools/extensions/actions/workflows/buildandtest.yml/badge.svg) 
-[![CodeCov](https://codecov.io/gh/sapcxtools/extensions/branch/main/graph/badge.svg?token=F1BIK8R7NZ)](https://codecov.io/gh/sapcxtools/extensions)
+[![Build & Test](https://github.com/sapcxtools/extensions/actions/workflows/buildandtest.yml/badge.svg)](https://github.com/sapcxtools/extensions/actions/workflows/buildandtest.yml) 
+[![Code Analysis](https://github.com/sapcxtools/extensions/actions/workflows/code-analysis.yml/badge.svg)](https://github.com/sapcxtools/extensions/actions/workflows/code-analysis.yml) 
+[![Code Coverage](https://codecov.io/gh/sapcxtools/extensions/branch/main/graph/badge.svg?token=F1BIK8R7NZ)](https://codecov.io/gh/sapcxtools/extensions)
+[![Dependency Check](https://github.com/sapcxtools/extensions/actions/workflows/dependency-check.yml/badge.svg)](https://github.com/sapcxtools/extensions/actions/workflows/dependency-check.yml) 
+[![Backwards Compatibility](https://github.com/sapcxtools/extensions/actions/workflows/backwards-compatibility.yml/badge.svg)](https://github.com/sapcxtools/extensions/actions/workflows/backwards-compatibility.yml) 
 
 All extensions available in this repository are built with high test coverage and do not influence the behavior of
 your project without changes to your configuration. This is guaranteed and intended by design, because the extensions
