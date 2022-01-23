@@ -1,6 +1,7 @@
 # Folders to ignore, whatever the place they are
 .DS_Store
 .metadata
+.settings
 classes
 testclasses
 eclipsebin
