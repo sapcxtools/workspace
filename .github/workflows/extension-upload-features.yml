@@ -1,0 +1,52 @@
+name: Integration changes of pull request from extension
+
+on:
+  workflow_call:
+    inputs:
+      extension_name:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+    secrets:
+      TOKEN:
+        required: true
+
+jobs:
+  integrate: 
+    runs-on: ubuntu-latest
+    env:
+      OWNER: sapcxtools-support
+      EMAIL: support@sapcx.tools
+      TOKEN: ${{ secrets.TOKEN }}
+    steps:
+      - name: Print configuration
+        run: |
+          echo "Received notification on pull request:"
+          echo "Extension: ${{ inputs.extension_name }}"
+          echo "Repository: ${{ inputs.repository }}"
+          echo "Branch: ${{ inputs.branch }}"
+      - name: Checkout main repository
+        run: |
+          git clone --branch develop https://$OWNER:$TOKEN@github.com/sapcxtools/extensions.git/ .
+      - name: Git user configuration
+        run: |
+          git config user.name "$OWNER"
+          git config user.email "$EMAIL"
+      - name: Create feature branch
+        run: |
+          if git show-ref --verify --quiet "refs/heads/${{ inputs.extension_name }}/${{ inputs.branch }}"; then
+            echo "Branch '${{ inputs.extension_name }}/${{ inputs.branch }}' already exists! In order to update the feature including support for rebased branches, we remove the old feature branch an create it from scratch."
+            git branch -d -f "${{ inputs.extension_name }}/${{ inputs.branch }}"
+          fi
+          git checkout -b "${{ inputs.extension_name }}/${{ inputs.branch }}"
+      - name: Update subtree from feature
+        run: |
+          git subtree pull --message "integrate '${{ inputs.branch }}' from '${{ inputs.extension_name }}'" --prefix=hybris/bin/custom/sapcxtools/${{ inputs.extension_name }} https://$OWNER:$TOKEN@github.com/${{ inputs.repository }}.git/ "${{ inputs.branch }}"
+      - name: Push feature branch to origin
+        run: |
+          git push --force origin "${{ inputs.extension_name }}/${{ inputs.branch }}"
