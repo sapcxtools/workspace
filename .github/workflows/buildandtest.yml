@@ -73,6 +73,7 @@ jobs:
         TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         # Generate codecov report 
+        mkdir -p "$HYBRIS_BIN_DIR/custom"
         java -jar $GITHUB_WORKSPACE/ci/lib/jacococli.jar merge $HYBRIS_LOG_DIR/junit/jacoco-unit.exec $HYBRIS_LOG_DIR/junit/jacoco-integration.exec --destfile $HYBRIS_LOG_DIR/junit/jacoco.exec
         java -jar $GITHUB_WORKSPACE/ci/lib/jacococli.jar report $HYBRIS_LOG_DIR/junit/jacoco.exec --classfiles $HYBRIS_BIN_DIR/custom --sourcefiles $HYBRIS_BIN_DIR/custom --xml $HYBRIS_LOG_DIR/junit/jacoco.xml
 
