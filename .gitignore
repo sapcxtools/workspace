@@ -1,37 +1,15 @@
-# IDE & gradle files
-build/
-build/
-/dependencies/
-/cloud-extension-pack/
-.gradle/
-.idea/
-idea-module-files/
-*.iml
-com.springsource.sts.config.flow.prefs
-org.springframework.ide.eclipse.beans.core.prefs
-org.springframework.ide.eclipse.core.prefs
-.springBeans
-org.sonar.ide.eclipse.core.prefs
-HybrisCodeGeneration.launch
-
 # Folders to ignore, whatever the place they are
 .DS_Store
 .metadata
-classes/
-testclasses/
-eclipsebin/
-gensrc/
+.settings
+classes
+testclasses
+eclipsebin
+gensrc 
 
-# Folders to ignore from the root of the repository
-core-customize/hybris/roles/
-core-customize/hybris/log/
-core-customize/hybris/temp/
-core-customize/hybris/data/
-core-customize/hybris/config/local-config/99-local.properties
-
-# only allow sapcxtools extension
-core-customize/hybris/bin/modules/
-core-customize/hybris/bin/platform/
+# .classpath files and lib folder in sapcxtools to ignore
+.classpath
+lib/
 
 # Filename patterns to ignore
 *.class
@@ -66,11 +44,3 @@ wro_addons.xml
 
 # Backoffice artifacts
 *_bof.jar
-
-# Project specific ignores
-core-customize/hybris/config/local.properties
-core-customize/hybris/config/solr/instances/default/configsets
-
-# developer-specific properties
-core-customize/hybris/config/local-config/
-core-customize/hybris/config/licence/installedSaplicenses.properties
