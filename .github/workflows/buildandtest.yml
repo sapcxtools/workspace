@@ -48,9 +48,14 @@ jobs:
       run: |
         cat $GITHUB_WORKSPACE/ci/config/testing-unit.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
         ./gradlew yunittests
-        
+
         # Target never fails, therefore, check for test errors and fail if errors were found
         for file in $HYBRIS_LOG_DIR/junit/test-results/unit/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+
+        if [ ! -f "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec" ]; then
+          mkdir -p "$HYBRIS_LOG_DIR/junit"
+          touch "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec"
+        fi
     - name: Run integration tests
       run: |
         cat $GITHUB_WORKSPACE/ci/config/testing-integration.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
@@ -58,6 +63,11 @@ jobs:
         
         # Target never fails, therefore, check for test errors and fail if errors were found
         for file in $HYBRIS_LOG_DIR/junit/test-results/integration/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+
+        if [ ! -f "$HYBRIS_LOG_DIR/junit/jacoco-integration.exec" ]; then
+          mkdir -p "$HYBRIS_LOG_DIR/junit"
+          touch "$HYBRIS_LOG_DIR/junit/jacoco-integration.exec"
+        fi
     - name: Coverage Report
       env:
         TOKEN: ${{ secrets.CODECOV_TOKEN }}
