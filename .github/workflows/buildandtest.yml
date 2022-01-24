@@ -36,10 +36,10 @@ jobs:
         echo "sUserAuthorization=${AUTHORIZATION}" >> ${HOME}/.gradle/gradle.properties
     - name: SAP Commerce environment
       run: |
-        echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/hybris/config/local-config" >> $GITHUB_ENV
-        echo "HYBRIS_BIN_DIR=$GITHUB_WORKSPACE/hybris/bin" >> $GITHUB_ENV
-        echo "HYBRIS_CONF_DIR=$GITHUB_WORKSPACE/hybris/config" >> $GITHUB_ENV
-        echo "HYBRIS_LOG_DIR=$GITHUB_WORKSPACE/hybris/log" >> $GITHUB_ENV
+        echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/core-customize/hybris/config/local-config" >> $GITHUB_ENV
+        echo "HYBRIS_BIN_DIR=$GITHUB_WORKSPACE/core-customize/hybris/bin" >> $GITHUB_ENV
+        echo "HYBRIS_CONF_DIR=$GITHUB_WORKSPACE/core-customize/hybris/config" >> $GITHUB_ENV
+        echo "HYBRIS_LOG_DIR=$GITHUB_WORKSPACE/core-customize/hybris/log" >> $GITHUB_ENV
     - name: Bootstrap platform
       run: ./gradlew setupLocalDevelopment
     - name: Build platform
