@@ -22,7 +22,7 @@ jobs:
     - name: Set up cache for SAP artifacts
       uses: actions/cache@v2
       with:
-        key: sap-artifacts-cache-${{ hashFiles('manifest.json') }}
+        key: sap-artifacts-cache-${{ hashFiles('core-customize/manifest.json') }}
         path: dependencies
     - name: SAP download config
       env:

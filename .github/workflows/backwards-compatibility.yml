@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['2105.5', '2011.15', '2005.21']
+        version: ['2011.17', '2005.22']
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -26,7 +26,7 @@ jobs:
     - name: Set up cache for SAP artifacts
       uses: actions/cache@v2
       with:
-        key: sap-artifacts-cache-${{ hashFiles('manifest.json') }}-${{ matrix.version }}
+        key: sap-artifacts-cache-${{ hashFiles('core-customize/manifest.json') }}-${{ matrix.version }}
         path: dependencies
     - name: Configure SAP version
       run: |
