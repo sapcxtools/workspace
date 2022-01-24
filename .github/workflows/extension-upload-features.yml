@@ -46,7 +46,7 @@ jobs:
           git checkout -b "${{ inputs.extension_name }}/${{ inputs.branch }}"
       - name: Update subtree from feature
         run: |
-          git subtree pull --message "integrate '${{ inputs.branch }}' from '${{ inputs.extension_name }}'" --prefix=hybris/bin/custom/sapcxtools/${{ inputs.extension_name }} https://$OWNER:$TOKEN@github.com/${{ inputs.repository }}.git/ "${{ inputs.branch }}"
+          git subtree pull --message "integrate '${{ inputs.branch }}' from '${{ inputs.extension_name }}'" --prefix=core-customize/hybris/bin/custom/sapcxtools/${{ inputs.extension_name }} https://$OWNER:$TOKEN@github.com/${{ inputs.repository }}.git/ "${{ inputs.branch }}"
       - name: Push feature branch to origin
         run: |
           git push --force origin "${{ inputs.extension_name }}/${{ inputs.branch }}"

@@ -1,1 +1,2 @@
 rootProject.name = 'sapcxtools-extensions'
+include 'core-customize'
