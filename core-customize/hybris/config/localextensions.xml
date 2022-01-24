@@ -4,5 +4,6 @@
     <path dir="${HYBRIS_BIN_DIR}"/>
 
     <!-- SAP CX Tools -->
+    <extension name="sapcxtemplate"/>
   </extensions>
 </hybrisconfig>

@@ -46,10 +46,10 @@ if (project.hasProperty("sUserAuthorization")) {
     }
 
     //check if Integration Extension Pack is configured and download it too
-    if (CCV2.manifest.useCloudExtensionPack) {
+    if (CCV2.manifest.extensionPacks.any{"hybris-commerce-integrations".equals(it.name)}) {
         val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version
-        val commerceIntegrationsDownloadUrl = project.property("com.sap.softwaredownloads.commerceIntegrations.${COMMERCE_VERSION}.downloadUrl")
-        val commerceIntegrationsChecksum = project.property("com.sap.softwaredownloads.commerceIntegrations.${COMMERCE_VERSION}.checksum")
+        val commerceIntegrationsDownloadUrl = project.property("com.sap.softwaredownloads.commerceIntegrations.${INTEXTPACK_VERSION}.downloadUrl")
+        val commerceIntegrationsChecksum = project.property("com.sap.softwaredownloads.commerceIntegrations.${INTEXTPACK_VERSION}.checksum")
         
         tasks.register<Download>("downloadIntExtPack") {
             src(commerceIntegrationsDownloadUrl)
