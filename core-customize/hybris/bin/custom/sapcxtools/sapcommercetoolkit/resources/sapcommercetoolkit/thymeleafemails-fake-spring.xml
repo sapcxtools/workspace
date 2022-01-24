@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<beans profile="sapcommercetools-fake-localmails">
+		<alias name="localDirectoryHtmlEmailService" alias="htmlEmailService"/>
+		<bean id="localDirectoryHtmlEmailService" class="tools.sapcx.commerce.toolkit.email.StoreInLocalDirectoryHtmlEmailService">
+			<constructor-arg name="directory" value="${sapcommercetoolkit.fakes.htmlEmailService.localstorage.directory}"/>
+			<constructor-arg name="filenamePattern" value="${sapcommercetoolkit.fakes.htmlEmailService.localstorage.filenamepattern}"/>
+			<constructor-arg name="extension" value="${sapcommercetoolkit.fakes.htmlEmailService.localstorage.extension}"/>
+		</bean>
+	</beans>
+</beans>
