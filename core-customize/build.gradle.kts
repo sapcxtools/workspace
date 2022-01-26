@@ -4,6 +4,7 @@ import de.undercouch.gradle.tasks.download.Download
 import de.undercouch.gradle.tasks.download.Verify
 
 import java.time.Instant
+import java.util.Base64
 
 plugins {
     id("sap.commerce.build") version("3.6.0")
@@ -17,8 +18,10 @@ repositories {
     mavenCentral()
 }
 
-if (project.hasProperty("sUserAuthorization")) {
-    val AUTHORIZATION = project.property("sUserAuthorization") as String
+if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
+    val SUSER = project.property("sUser") as String
+    val SUSERPASS = project.property("sUserPass") as String
+    val AUTHORIZATION = Base64.getEncoder().encodeToString((SUSER + ":" + SUSERPASS).toByteArray())
 
     val COMMERCE_VERSION = CCV2.manifest.commerceSuiteVersion
     val commerceSuiteDownloadUrl = project.property("com.sap.softwaredownloads.commerceSuite.${COMMERCE_VERSION}.downloadUrl")
