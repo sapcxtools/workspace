@@ -1,6 +1,6 @@
-# SAP CX Template
+# SAP CX Backoffice
 
-The `sapcxtemplate` extension improves ...
+The `sapcxbackoffice` extension improves the experience with the SAP CX Backoffice Application.
 
 ## FEATURE DESCRIPTION
 

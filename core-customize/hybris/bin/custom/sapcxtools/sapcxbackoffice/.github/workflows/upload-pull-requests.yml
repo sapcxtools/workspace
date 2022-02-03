@@ -9,7 +9,7 @@ jobs:
   upload: 
     uses: sapcxtools/extensions/.github/workflows/extension-upload-features.yml@develop
     with:
-      extension_name: 'sapcxtemplate'
+      extension_name: 'sapcxbackoffice'
       repository: $GITHUB_REPOSITORY
       branch: $GITHUB_REF_NAME
     secrets:
