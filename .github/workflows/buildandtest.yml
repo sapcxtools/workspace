@@ -27,13 +27,11 @@ jobs:
     - name: SAP download config
       env:
         USER_CONFIG: ${{ secrets.GRADLE_USER_CONFIG }}
-        AUTHORIZATION: ${{ secrets.SAP_DOWNLOAD_AUTHORIZATION }}
       shell: bash
       run: |
         mkdir -p ${HOME}/.gradle
         echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
         echo "${USER_CONFIG}" >> ${HOME}/.gradle/gradle.properties
-        echo "sUserAuthorization=${AUTHORIZATION}" >> ${HOME}/.gradle/gradle.properties
     - name: SAP Commerce environment
       run: |
         echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/core-customize/hybris/config/local-config" >> $GITHUB_ENV
