@@ -7,5 +7,6 @@
     <extension name="sapcxtemplate"/>
     <extension name="sapcommercetoolkit"/>
     <extension name="sapcxbackoffice"/>
+    <extension name="sapcxreporting"/>
   </extensions>
 </hybrisconfig>
