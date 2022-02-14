@@ -1,6 +1,6 @@
-# SAP CX Template
+# SAP CX Reporting
 
-The `sapcxtemplate` extension improves ...
+The `sapcxreporting` extension provides data reporting capabilities.
 
 ## FEATURE DESCRIPTION
 
