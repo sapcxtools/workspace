@@ -1,27 +1,34 @@
 package tools.sapcx.commerce.backoffice.i18n;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.hybris.backoffice.i18n.BackofficeLocaleService;
 
+import de.hybris.platform.servicelayer.i18n.I18NService;
 import de.hybris.platform.servicelayer.user.UserService;
 
-import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Enhancement of the {@link BackofficeLocaleService} to enhance configuration possibilities!
- *
+ * <p>
  * This class introduces the configuration possibilities for activating a sort order based on the ISO code,
  * such that all data locales appear in the order of their ISO code within the backoffice cockpit. To activate
  * this feature, simply set the {@code orderLanguagesByIsoCode} property to {@code true}.
- *
+ * <p>
  * In addition, the UI locales can be limited by define a comma-separated list of ISO codes.
  */
 public class ConfigurableBackofficeLocaleService extends BackofficeLocaleService {
 	private UserService userService;
+	private I18NService i18nService;
 	private Comparator<Locale> localeComparator = Comparator.comparing(Locale::toString);
 
 	private boolean sortDataLocalesByIsoCode = false;
@@ -32,17 +39,13 @@ public class ConfigurableBackofficeLocaleService extends BackofficeLocaleService
 	public List<Locale> getAllLocales() {
 		if (askForAllLocalesOnLoginScreen()) {
 			return getAllUILocales();
+		} else {
+			return getAllSupportedLocales();
 		}
-
-		List<Locale> dataLocales = getAllLocalesFromSuperclass();
-		if (sortDataLocalesByIsoCode) {
-			Collections.sort(dataLocales, localeComparator);
-		}
-		return dataLocales;
 	}
 
 	private boolean askForAllLocalesOnLoginScreen() {
-		return userService.isAnonymousUser(userService.getCurrentUser());
+		return "anonymous".equals(userService.getCurrentUser().getUid());
 	}
 
 	@Override
@@ -55,30 +58,31 @@ public class ConfigurableBackofficeLocaleService extends BackofficeLocaleService
 
 	private synchronized void initializeUILocales() {
 		if (this.uiLocales == null) {
-			if (this.localesForBackofficeUi.isEmpty()) {
-				this.uiLocales = getAllUILocalesFromSuperclass();
-			} else {
-				Map<String, Locale> allLocales = getAllLocalesFromSuperclass().stream()
-						.collect(Collectors.toMap(Locale::toString, Function.identity()));
-				List<Locale> tmpLocales = new ArrayList<>(localesForBackofficeUi.size());
-				for (String configuredLocale : localesForBackofficeUi) {
-					if (allLocales.containsKey(configuredLocale)) {
-						tmpLocales.add(allLocales.get(configuredLocale));
-					}
-				}
-
-				if (!tmpLocales.isEmpty()) {
-					this.uiLocales = Collections.unmodifiableList(tmpLocales);
-				} else {
-					this.uiLocales = getAllUILocalesFromSuperclass();
+			Map<String, Locale> allLocales = getAllSupportedLocales().stream()
+					.collect(Collectors.toMap(Locale::toString, Function.identity()));
+			List<Locale> tmpLocales = new ArrayList<>(localesForBackofficeUi.size());
+			for (String configuredLocale : localesForBackofficeUi) {
+				if (allLocales.containsKey(configuredLocale)) {
+					tmpLocales.add(allLocales.get(configuredLocale));
 				}
 			}
+
+			// With fallback to all supported locales, if no locale matches
+			this.uiLocales = Collections.unmodifiableList(
+					tmpLocales.isEmpty() ? getAllSupportedLocales() : tmpLocales);
 		}
 	}
 
 	@Required
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	@Required
+	@Override
+	public void setI18nService(I18NService i18nService) {
+		super.setI18nService(i18nService);
+		this.i18nService = i18nService;
 	}
 
 	@Required
@@ -98,27 +102,11 @@ public class ConfigurableBackofficeLocaleService extends BackofficeLocaleService
 		}
 	}
 
-	/**
-	 * This method was introduced for testing purpose. Without this method a unit test case would have to setup the whole infrastructure
-	 * required by the superclass. With this method in place, we can simply mock the answer from the superclass by overriding the method
-	 * within the test.
-	 *
-	 * @return the result of invoking {@link #getAllLocales()} on the superclass
-	 */
-	@VisibleForTesting
-	protected List<Locale> getAllLocalesFromSuperclass() {
-		return super.getAllLocales();
-	}
-
-	/**
-	 * This method was introduced for testing purpose. Without this method a unit test case would have to setup the whole infrastructure
-	 * required by the superclass. With this method in place, we can simply mock the answer from the superclass by overriding the method
-	 * within the test.
-	 *
-	 * @return the result of invoking {@link #getAllUILocales()} on the superclass
-	 */
-	@VisibleForTesting
-	protected List<Locale> getAllUILocalesFromSuperclass() {
-		return super.getAllUILocales();
+	private List<Locale> getAllSupportedLocales() {
+		ArrayList<Locale> supportedLocales = new ArrayList<>(this.i18nService.getSupportedLocales());
+		if (sortDataLocalesByIsoCode) {
+			supportedLocales.sort(localeComparator);
+		}
+		return supportedLocales;
 	}
 }
