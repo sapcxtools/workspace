@@ -3,15 +3,21 @@ name: Dependency Check
 on:
   push:
     branches: [ develop ]
+    paths:
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*.java"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*-beans.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*-items.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/extensioninfo.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/external-dependencies.xml"
   pull_request:
-    branches: [ develop ]
+    branches: [ main, develop ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        extension: ['sapcxtemplate','sapcommercetoolkit','sapcxbackoffice','sapcxreporting']
+        extension: ['sapcommercetoolkit','sapcxbackoffice','sapcxreporting']
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11

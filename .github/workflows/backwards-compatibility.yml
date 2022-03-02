@@ -2,9 +2,15 @@ name: Backwards Compatibility
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
+    paths:
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*.java"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*-beans.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/*-items.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/extensioninfo.xml"
+      - "core-customize/hybris/bin/custom/sapcxtools/**/external-dependencies.xml"
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
   schedule:
     - cron: '0 15 * * 0,3'
 

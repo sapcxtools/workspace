@@ -1,0 +1,18 @@
+name: Reintegrate changes into single extension repository
+
+on:
+  push:
+    tags: [ v* ]
+
+jobs:
+  reintegrate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        extension: ['sapcommercetoolkit','sapcxbackoffice','sapcxreporting']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Reintegrate extension
+      run: |
+        git subtree push --prefix=core-customize/hybris/bin/custom/sapcxtools/${{ matrix.extension }} git@github.com:sapcxtools/${{ matrix.extension }}.git feature/release-{{ env.GITHUB_REF_NAME }}
