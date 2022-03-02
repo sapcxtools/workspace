@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hybris.bootstrap.annotations.UnitTest;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import tools.sapcx.commerce.toolkit.testing.testdoubles.core.I18NServiceStubForLocales;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.user.UserServiceFake;
 
+@UnitTest
 public class ConfigurableBackofficeLocaleServiceTests {
 	private List<Locale> localesFromI18NService = new ArrayList<>();
 	private ConfigurableBackofficeLocaleService service;
