@@ -9,49 +9,42 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
+import tools.sapcx.commerce.toolkit.testing.testdoubles.core.I18NServiceStubForLocales;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.user.UserServiceFake;
 
 public class ConfigurableBackofficeLocaleServiceTests {
-	private List<Locale> allLocalesFromSuperclass = new ArrayList<>();
+	private List<Locale> localesFromI18NService = new ArrayList<>();
 	private ConfigurableBackofficeLocaleService service;
 	private UserServiceFake userService;
 
 	@Before
 	public void setUp() throws Exception {
-		service = new ConfigurableBackofficeLocaleService() {
-			@Override
-			public List<Locale> getAllLocalesFromSuperclass() {
-				return allLocalesFromSuperclass;
-			}
-
-			@Override
-			public List<Locale> getAllUILocalesFromSuperclass() {
-				return allLocalesFromSuperclass;
-			}
-		};
+		service = new ConfigurableBackofficeLocaleService();
 		userService = UserServiceFake.fake();
 		service.setUserService(userService);
 	}
 
 	@Test
-	public void withoutConfiguration_ReturnsUnmodifiedResultsFromSuperclass() throws Exception {
-		allLocalesFromSuperclass.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
+	public void withoutConfiguration_ReturnsUnmodifiedResultsFromI18NService() throws Exception {
+		localesFromI18NService.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
 
+		service.setI18nService(new I18NServiceStubForLocales(localesFromI18NService));
 		service.setSortDataLocalesByIsoCode(false);
 		service.setLocalesForBackofficeUi("");
 
 		assertThat(service.getAllUILocales())
-				.describedAs("Expected all UI locales to be identical with list from superclass!")
-				.containsExactlyElementsOf(allLocalesFromSuperclass);
+				.describedAs("Expected all UI locales to be identical with list from i18n service!")
+				.containsExactlyElementsOf(localesFromI18NService);
 		assertThat(service.getAllLocales())
-				.describedAs("Expected all locales to be identical with list from superclass!")
-				.containsExactlyElementsOf(allLocalesFromSuperclass);
+				.describedAs("Expected all locales to be identical with list from i18n service!")
+				.containsExactlyElementsOf(localesFromI18NService);
 	}
 
 	@Test
 	public void withConfiguration_ReturnsReducedSetOfUiLocalesInTheCorrectOrder() throws Exception {
-		allLocalesFromSuperclass.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
+		localesFromI18NService.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
 
+		service.setI18nService(new I18NServiceStubForLocales(localesFromI18NService));
 		service.setSortDataLocalesByIsoCode(true);
 		service.setLocalesForBackofficeUi("en_US,de_DE");
 
@@ -65,14 +58,15 @@ public class ConfigurableBackofficeLocaleServiceTests {
 
 	@Test
 	public void withInvalidConfiguration_ReturnsUnmodifiedResultsFromSuperclass() throws Exception {
-		allLocalesFromSuperclass.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
+		localesFromI18NService.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
 
+		service.setI18nService(new I18NServiceStubForLocales(localesFromI18NService));
 		service.setSortDataLocalesByIsoCode(true);
 		service.setLocalesForBackofficeUi("unknown");
 
 		assertThat(service.getAllUILocales())
-				.describedAs("Expected all UI locales to be identical with list from superclass!")
-				.containsExactlyElementsOf(allLocalesFromSuperclass);
+				.describedAs("Expected all UI locales to be identical with list from i18n service!")
+				.containsExactly(Locale.GERMAN, Locale.GERMANY, Locale.ENGLISH, Locale.UK, Locale.US);
 		assertThat(service.getAllLocales())
 				.describedAs("Expected all locales to be sorted by ISO code!")
 				.containsExactly(Locale.GERMAN, Locale.GERMANY, Locale.ENGLISH, Locale.UK, Locale.US);
@@ -80,8 +74,9 @@ public class ConfigurableBackofficeLocaleServiceTests {
 
 	@Test
 	public void forLoginPageAsAnonymousUser_returnsAllUILocalesForBoth() throws Exception {
-		allLocalesFromSuperclass.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
+		localesFromI18NService.addAll(List.of(Locale.ENGLISH, Locale.GERMAN, Locale.US, Locale.UK, Locale.GERMANY));
 
+		service.setI18nService(new I18NServiceStubForLocales(localesFromI18NService));
 		service.setSortDataLocalesByIsoCode(true);
 		service.setLocalesForBackofficeUi("en_US,de_DE");
 
