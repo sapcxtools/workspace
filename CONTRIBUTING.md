@@ -94,10 +94,7 @@ Use American English spelling rules when writing documentation as well as for co
 - Favor `{@code foo}` over `<code>foo</code>`.
 - Favor literals (e.g., `{@literal @}`) over HTML entities.
 - New classes and methods should have `@since ...` annotation.
-- Use `@since 5.0` instead of `@since 5.0.0`.
-- Do not use `@author` tags. Instead, contributors are listed on [GitHub](https://github.com/junit-team/junit5/graphs/contributors).
-- Do not use verbs in third person form (e.g. use "Discover tests..." instead of "Discovers tests...")
-  in the first sentence describing a method.
+- Favor `@since 1.0` over `@since 1.0.0`.
 
 ### Tests
 
