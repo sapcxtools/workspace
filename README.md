@@ -1,4 +1,4 @@
-# SAP Commerce Workspace
+# SAP CX Workspace
 
 [![Build & Test](https://github.com/sapcxtools/workspace/actions/workflows/buildandtest.yml/badge.svg)](https://github.com/sapcxtools/workspace/actions/workflows/buildandtest.yml) 
 [![Code Analysis](https://github.com/sapcxtools/workspace/actions/workflows/code-analysis.yml/badge.svg)](https://github.com/sapcxtools/workspace/actions/workflows/code-analysis.yml) 
