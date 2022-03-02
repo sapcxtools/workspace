@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '0 15 * * 0,3'
 
 jobs:
   build:
@@ -12,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['2011.17', '2005.22']
+        version: ['2011.18', '2005.23']
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11

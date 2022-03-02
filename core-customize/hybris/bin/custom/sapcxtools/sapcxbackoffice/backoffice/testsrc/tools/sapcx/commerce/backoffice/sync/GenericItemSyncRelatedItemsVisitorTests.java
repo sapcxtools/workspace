@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 
+import de.hybris.bootstrap.annotations.UnitTest;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.core.model.media.MediaModel;
@@ -21,6 +22,7 @@ import org.junit.Test;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.core.DummyTypeService;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.core.InMemoryModelService;
 
+@UnitTest
 public class GenericItemSyncRelatedItemsVisitorTests {
 	private DummyTypeService typeService;
 	private InMemoryModelService modelService;
