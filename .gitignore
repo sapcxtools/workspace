@@ -1,7 +1,7 @@
 # IDE & gradle files
 build/
 build/
-/dependencies/
+/dependencies
 /cloud-extension-pack/
 .gradle/
 .idea/

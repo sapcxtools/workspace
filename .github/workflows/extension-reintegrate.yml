@@ -1,4 +1,4 @@
-name: Reintegrate changes into single extension repository
+name: Reintegrate changes into extension repositories
 
 on:
   push:
@@ -13,6 +13,11 @@ jobs:
         extension: ['sapcommercetoolkit','sapcxbackoffice','sapcxreporting']
     steps:
     - uses: actions/checkout@v2
-    - name: Reintegrate extension
+      with:
+        fetch-depth: 0
+    - name: Reintegrate extension ${{ matrix.extension }}
       run: |
-        git subtree push --prefix=core-customize/hybris/bin/custom/sapcxtools/${{ matrix.extension }} git@github.com:sapcxtools/${{ matrix.extension }}.git feature/release-{{ env.GITHUB_REF_NAME }}
+        git config --global user.name "sapcxtools-support"
+        git config --global user.email "support@sapcx.tools"
+        git remote add ${{ matrix.extension }} https://sapcxtools:${{ secrets.SAPCXTOOLS_PAT }}@github.com/sapcxtools/${{ matrix.extension }}.git
+        git subtree push --prefix=core-customize/hybris/bin/custom/sapcxtools/${{ matrix.extension }} ${{ matrix.extension }} release/${{ github.ref_name }}
