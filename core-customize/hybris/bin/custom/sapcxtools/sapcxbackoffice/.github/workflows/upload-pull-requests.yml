@@ -1,16 +1,14 @@
 name: Upload features
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'feature/*'
+      - 'feature/**'
 
 jobs:
   upload: 
-    uses: sapcxtools/extensions/.github/workflows/extension-upload-features.yml@develop
+    uses: sapcxtools/workspace/.github/workflows/extension-upload-features.yml@develop
     with:
       extension_name: 'sapcxbackoffice'
       repository: $GITHUB_REPOSITORY
       branch: $GITHUB_REF_NAME
-    secrets:
-      TOKEN: '${{ secrets.SAPCXTOOLS_TOKEN }}'
