@@ -1,0 +1,14 @@
+name: Upload features
+
+on:
+  pull_request:
+    branches:
+      - 'feature/**'
+
+jobs:
+  upload: 
+    uses: sapcxtools/workspace/.github/workflows/extension-upload-features.yml@develop
+    with:
+      extension_name: 'sapcxreporting'
+      repository: $GITHUB_REPOSITORY
+      branch: $GITHUB_REF_NAME
