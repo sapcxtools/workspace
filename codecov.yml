@@ -1,5 +1,4 @@
 ignore:
-  - "hybris/bin/custom/sapcxtools/**/backoffice/src/**/*"
-  - "hybris/bin/custom/sapcxtools/**/backoffice/testsrc/**/*"
-  - "hybris/bin/custom/sapcxtools/**/gensrc/**/*"
-  - "hybris/bin/custom/sapcxtools/**/testsrc/**/*"
+  - "core-customize/hybris/bin/custom/sapcxtools/**/backoffice/src"
+  - "core-customize/hybris/bin/custom/sapcxtools/**/gensrc"
+  - "core-customize/hybris/bin/custom/sapcxtools/**/testsrc"
