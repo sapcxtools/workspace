@@ -1,0 +1,3 @@
+INSERT_UPDATE QueryReportConfiguration; title[unique = true]; exportFormat(code); description                                                         ; searchQuery
+                                      ; allTypes as CSV     ; CSV               ; Returns all item types from the system with their number of objects ; SELECT {code}, {extensionName}, count(*) FROM {ComposedType} GROUP BY {code}, {extensionName}
+                                      ; allTypes as XLS     ; EXCEL             ; Returns all item types from the system with their number of objects ; SELECT {code}, {extensionName}, count(*) FROM {ComposedType} GROUP BY {code}, {extensionName}
