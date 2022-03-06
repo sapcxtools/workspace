@@ -22,7 +22,7 @@ jobs:
     env:
       OWNER: sapcxtools-support
       EMAIL: support@sapcx.tools
-      TOKEN: ${{ secrets.TOKEN }}
+      TOKEN: ${{ secrets.SAPCXTOOLS_PAT }}
     steps:
       - name: Print configuration
         run: |
@@ -30,13 +30,13 @@ jobs:
           echo "Extension: ${{ inputs.extension_name }}"
           echo "Repository: ${{ inputs.repository }}"
           echo "Branch: ${{ inputs.branch }}"
-      - name: Checkout main repository
+      - name: Checkout workspace repository
         run: |
-          git clone --branch develop https://$OWNER:$TOKEN@github.com/sapcxtools/extensions.git/ .
+          git clone --branch develop https://$OWNER:$TOKEN@github.com/sapcxtools/workspace.git/ .
       - name: Git user configuration
         run: |
-          git config user.name "$OWNER"
-          git config user.email "$EMAIL"
+          git config --global user.name "$OWNER"
+          git config --global user.email "$EMAIL"
       - name: Create feature branch
         run: |
           if git show-ref --verify --quiet "refs/heads/${{ inputs.extension_name }}/${{ inputs.branch }}"; then
