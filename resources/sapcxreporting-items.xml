@@ -27,10 +27,14 @@
         <itemtype code="QueryReportConfiguration" extends="GenericItem">
             <deployment table="cxqryrprt" typecode="31151"/>
             <attributes>
-                <attribute qualifier="title" type="java.lang.String">
+                <attribute qualifier="id" type="java.lang.String">
+                    <persistence type="property" />
+                    <modifiers unique="true" />
+                </attribute>
+                <attribute qualifier="title" type="localized:java.lang.String">
                     <persistence type="property" />
                 </attribute>
-                <attribute qualifier="description" type="java.lang.String">
+                <attribute qualifier="description" type="localized:java.lang.String">
                     <persistence type="property" />
                 </attribute>
                 <attribute qualifier="searchQuery" type="java.lang.String">
@@ -108,8 +112,7 @@
             </attributes>
             <indexes>
                 <index name="idx">
-                    <key attribute="title"/>
-                    <key attribute="exportFormat"/>
+                    <key attribute="id"/>
                 </index>
             </indexes>
         </itemtype>
