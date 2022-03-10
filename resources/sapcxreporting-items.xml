@@ -22,7 +22,13 @@
     </relations>
 
     <itemtypes>
-        <itemtype code="ReportGenerationSchedule" extends="CronJob"></itemtype>
+        <itemtype code="ReportGenerationSchedule" extends="CronJob">
+            <attributes>
+                <attribute qualifier="job" type="Job" redeclare="true">
+                    <defaultvalue>"reportGeneratorJobPerformable"</defaultvalue>
+                </attribute>
+            </attributes>
+        </itemtype>
 
         <itemtype code="QueryReportConfiguration" extends="GenericItem">
             <deployment table="cxqryrprt" typecode="31151"/>
