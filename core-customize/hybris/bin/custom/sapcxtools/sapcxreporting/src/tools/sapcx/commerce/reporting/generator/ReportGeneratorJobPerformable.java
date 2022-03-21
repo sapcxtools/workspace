@@ -1,7 +1,5 @@
 package tools.sapcx.commerce.reporting.generator;
 
-import static org.apache.logging.log4j.core.util.FileUtils.getFileExtension;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +28,7 @@ import de.hybris.platform.servicelayer.cronjob.PerformResult;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -150,7 +149,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 	protected void addEmailAttachment(HtmlEmail mail, File reportFile, boolean useCompression, String title) throws EmailException {
 		File file = reportFile;
 		String dateTime = DateFormatUtils.format(new Date(), "yyyyMMdd-HHmmss");
-		String filename = String.format("%s %s.%s", title, dateTime, getFileExtension(reportFile));
+		String extension = FilenameUtils.getExtension(reportFile.getAbsolutePath());
+		String filename = String.format("%s %s.%s", title, dateTime, extension);
 
 		if (useCompression) {
 			try {
