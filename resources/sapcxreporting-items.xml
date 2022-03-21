@@ -49,13 +49,13 @@
                             <value>HYBRIS.LONG_STRING</value>
                         </columntype>
                         <columntype database="mysql">
-                            <value>NCLOB</value>
+                            <value>TEXT</value>
                         </columntype>
                         <columntype database="oracle">
                             <value>CLOB</value>
                         </columntype>
                         <columntype database="sqlserver">
-                            <value>NCLOB</value>
+                            <value>TEXT</value>
                         </columntype>
                     </persistence>
                 </attribute>
