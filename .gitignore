@@ -49,6 +49,7 @@ ruleset.xml
 .pmd
 *build.number
 base.properties
+sonar.dump
 
 #  Addon specific copy folders
 **/_ui/addons

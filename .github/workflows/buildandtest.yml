@@ -19,7 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           distribution: "adopt"
@@ -55,13 +57,13 @@ jobs:
           cat $GITHUB_WORKSPACE/ci/config/testing-unit.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
           ./gradlew yunittests
 
-          # Target never fails, therefore, check for test errors and fail if errors were found
-          for file in $HYBRIS_LOG_DIR/junit/test-results/unit/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
+            # Target never fails, therefore, check for test errors and fail if errors were found
+            for file in $HYBRIS_LOG_DIR/junit/test-results/unit/*.xml; do if [ "$(grep -cE '<(error|failure)' "${file}")" -gt 0 ]; then exit 1; fi; done
 
-          if [ ! -f "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec" ]; then
-            mkdir -p "$HYBRIS_LOG_DIR/junit"
-            touch "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec"
-          fi
+            if [ ! -f "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec" ]; then
+              mkdir -p "$HYBRIS_LOG_DIR/junit"
+              touch "$HYBRIS_LOG_DIR/junit/jacoco-unit.exec"
+            fi
       - name: Run integration tests
         run: |
           cat $GITHUB_WORKSPACE/ci/config/testing-integration.properties > $HYBRIS_CONF_DIR/local-config/99-local.properties
@@ -93,3 +95,10 @@ jobs:
           else
             ./codecov -f $HYBRIS_LOG_DIR/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --tag GITHUB_REF_NAME -t $TOKEN
           fi
+      - name: SonarCloud Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          # Perform sonar cloud scan
+          ./gradlew sonarqube
