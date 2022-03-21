@@ -22,15 +22,25 @@
     </relations>
 
     <itemtypes>
-        <itemtype code="ReportGenerationSchedule" extends="CronJob"></itemtype>
+        <itemtype code="ReportGenerationSchedule" extends="CronJob">
+            <attributes>
+                <attribute qualifier="job" type="Job" redeclare="true">
+                    <defaultvalue>"reportGeneratorJobPerformable"</defaultvalue>
+                </attribute>
+            </attributes>
+        </itemtype>
 
         <itemtype code="QueryReportConfiguration" extends="GenericItem">
             <deployment table="cxqryrprt" typecode="31151"/>
             <attributes>
-                <attribute qualifier="title" type="java.lang.String">
+                <attribute qualifier="id" type="java.lang.String">
+                    <persistence type="property" />
+                    <modifiers unique="true" />
+                </attribute>
+                <attribute qualifier="title" type="localized:java.lang.String">
                     <persistence type="property" />
                 </attribute>
-                <attribute qualifier="description" type="java.lang.String">
+                <attribute qualifier="description" type="localized:java.lang.String">
                     <persistence type="property" />
                 </attribute>
                 <attribute qualifier="searchQuery" type="java.lang.String">
@@ -39,13 +49,13 @@
                             <value>HYBRIS.LONG_STRING</value>
                         </columntype>
                         <columntype database="mysql">
-                            <value>NCLOB</value>
+                            <value>TEXT</value>
                         </columntype>
                         <columntype database="oracle">
                             <value>CLOB</value>
                         </columntype>
                         <columntype database="sqlserver">
-                            <value>NCLOB</value>
+                            <value>TEXT</value>
                         </columntype>
                     </persistence>
                 </attribute>
@@ -108,8 +118,7 @@
             </attributes>
             <indexes>
                 <index name="idx">
-                    <key attribute="title"/>
-                    <key attribute="exportFormat"/>
+                    <key attribute="id"/>
                 </index>
             </indexes>
         </itemtype>
