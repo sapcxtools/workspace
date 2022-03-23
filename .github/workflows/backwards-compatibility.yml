@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['2011.18', '2005.23']
+        version: ['2011.19', '2005.23']
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
