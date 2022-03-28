@@ -16,42 +16,43 @@ import static org.apache.commons.collections4.SetUtils.emptyIfNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InstalledExtensionVerifier extends YTypeSystemSource {
-    public static InstalledExtensionVerifier verifyExtensions(String platformHome) {
-        return new InstalledExtensionVerifier(platformHome);
+    public static InstalledExtensionVerifier verifier() {
+        PlatformConfig platformConfig = ConfigUtil.getPlatformConfig(InstalledExtensionVerifier.class);
+        return new InstalledExtensionVerifier(platformConfig);
     }
 
     private Set<String> requiredExtensions = new HashSet<>();
-    private Set<String> forbiddenExtensions = new HashSet<>();
+    private Set<String> prohibitedExtensions = new HashSet<>();
 
-    private InstalledExtensionVerifier(String platformHome) {
+    private InstalledExtensionVerifier(PlatformConfig platformConfig) {
         super(
-                PlatformConfig.getInstance(ConfigUtil.getSystemConfig(platformHome)),
+                platformConfig,
                 new YTypeSystemLoader(true),
                 OverridenItemsXml.empty()
         );
     }
 
-    public InstalledExtensionVerifier required(String... requiredExtensions) {
+    public InstalledExtensionVerifier requires(String... requiredExtensions) {
         if (requiredExtensions == null) {
             return this;
         }
-        return required(Arrays.stream(requiredExtensions).collect(Collectors.toSet()));
+        return requires(Arrays.stream(requiredExtensions).collect(Collectors.toSet()));
     }
 
-    public InstalledExtensionVerifier required(Set<String> requiredExtensions) {
+    public InstalledExtensionVerifier requires(Set<String> requiredExtensions) {
         this.requiredExtensions.addAll(emptyIfNull(requiredExtensions));
         return this;
     }
 
-    public InstalledExtensionVerifier forbidden(String... forbiddenExtensions) {
-        if (forbiddenExtensions == null) {
+    public InstalledExtensionVerifier prohibits(String... prohibitedExtensions) {
+        if (prohibitedExtensions == null) {
             return this;
         }
-        return forbidden(Arrays.stream(forbiddenExtensions).collect(Collectors.toSet()));
+        return prohibits(Arrays.stream(prohibitedExtensions).collect(Collectors.toSet()));
     }
 
-    public InstalledExtensionVerifier forbidden(Set<String> forbiddenExtensions) {
-        this.forbiddenExtensions.addAll(emptyIfNull(forbiddenExtensions));
+    public InstalledExtensionVerifier prohibits(Set<String> prohibitedExtensions) {
+        this.prohibitedExtensions.addAll(emptyIfNull(prohibitedExtensions));
         return this;
     }
 
@@ -66,10 +67,10 @@ public class InstalledExtensionVerifier extends YTypeSystemSource {
                     .containsAll(this.requiredExtensions);
         }
 
-        if (!this.forbiddenExtensions.isEmpty()) {
+        if (!this.prohibitedExtensions.isEmpty()) {
             assertThat(configuredExtensions)
-                    .describedAs("Forbidden extensions found in configuration!")
-                    .doesNotContainAnyElementsOf(this.forbiddenExtensions);
+                    .describedAs("Prohibited extensions found in configuration!")
+                    .doesNotContainAnyElementsOf(this.prohibitedExtensions);
         }
     }
 }
