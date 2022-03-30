@@ -39,7 +39,7 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 	}
 
 	private void importImpexFile(SystemSetupContext context, final String file, final String fileEncoding, boolean isMainImportFile) {
-		if (isMainImportFile && !context.getProcess().isInit()) {
+		if (isMainImportFile && context.getProcess().isUpdate()) {
 			String extension = StringUtils.substringAfterLast(file, ".");
 			String filePath = StringUtils.removeEnd(file, "." + extension);
 			String cleanupFilePath = String.format("%s_%s.%s", filePath, "cleanup", extension);

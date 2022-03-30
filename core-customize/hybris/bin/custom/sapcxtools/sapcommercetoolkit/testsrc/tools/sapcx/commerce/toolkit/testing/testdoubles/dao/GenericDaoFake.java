@@ -3,6 +3,7 @@ package tools.sapcx.commerce.toolkit.testing.testdoubles.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.hybris.platform.core.model.ItemModel;
 import de.hybris.platform.servicelayer.internal.dao.GenericDao;
@@ -54,7 +55,8 @@ public class GenericDaoFake<T extends ItemModel> implements GenericDao<T> {
 	@Override
 	public List<T> find(Map<String, ?> map) {
 		this.map = map;
-		return this.models;
+		return models.stream().filter(model -> matchesCriteriaMap(map, model)).collect(Collectors.toList());
+
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class GenericDaoFake<T extends ItemModel> implements GenericDao<T> {
 	public List<T> find(Map<String, ?> map, SortParameters sortParameters) {
 		this.map = map;
 		this.sortParameters = sortParameters;
-		return this.models;
+		return models.stream().filter(model -> matchesCriteriaMap(map, model)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -75,6 +77,16 @@ public class GenericDaoFake<T extends ItemModel> implements GenericDao<T> {
 		this.map = map;
 		this.sortParameters = sortParameters;
 		this.count = count;
-		return this.models;
+		return models.stream().filter(model -> matchesCriteriaMap(map, model)).limit(count).collect(Collectors.toList());
+
+	}
+
+	private boolean matchesCriteriaMap(Map<String, ?> map, T model) {
+		for (String key : map.keySet()) {
+			if (!model.getProperty(key).equals(map.get(key))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
