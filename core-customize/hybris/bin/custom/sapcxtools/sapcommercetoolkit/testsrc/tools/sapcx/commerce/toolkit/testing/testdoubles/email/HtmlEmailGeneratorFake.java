@@ -14,20 +14,10 @@ import tools.sapcx.commerce.toolkit.email.HtmlEmailGenerator;
 public class HtmlEmailGeneratorFake implements HtmlEmailGenerator {
 	@Override
 	public HtmlEmail createHtmlEmail() throws EmailException {
-		return new HtmlEmail();
-	}
-
-	@Override
-	public HtmlEmail createHtmlEmail(String subject, String body, Collection<InternetAddress> to, Collection<InternetAddress> cc, Collection<InternetAddress> bcc)
-			throws EmailException {
-		HtmlEmail htmlEmail = createHtmlEmail();
+		HtmlEmail htmlEmail = new HtmlEmail();
 		htmlEmail.setHostName("localhost");
 		htmlEmail.setCharset("UTF-8");
-		htmlEmail.setSubject(subject);
-		htmlEmail.setHtmlMsg(body);
-		htmlEmail.setTo(to);
-		htmlEmail.setCc(cc);
-		htmlEmail.setBcc(bcc);
+		htmlEmail.setFrom("from@local.dev");
 		return htmlEmail;
 	}
 
