@@ -1,15 +1,10 @@
 package tools.sapcx.commerce.toolkit.email;
 
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.mail.internet.InternetAddress;
 
 import de.hybris.platform.util.mail.MailUtils;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.assertj.core.util.VisibleForTesting;
@@ -51,45 +46,7 @@ public class ThymeleafHtmlEmailGenerator implements HtmlEmailGenerator {
 	}
 
 	@Override
-	public HtmlEmail createHtmlEmail(
-			String subject,
-			String body,
-			Collection<InternetAddress> to,
-			Collection<InternetAddress> cc,
-			Collection<InternetAddress> bcc) throws EmailException {
-		if (CollectionUtils.isEmpty(to)) {
-			throw new EmailException(String.format("Cannot create email without recipients. Please provide at least one valid email address!"));
-		}
-
-		HtmlEmail email = createHtmlEmail();
-		email.setTo(to);
-		if (CollectionUtils.isNotEmpty(cc)) {
-			email.setCc(cc);
-		}
-		if (CollectionUtils.isNotEmpty(bcc)) {
-			email.setBcc(bcc);
-		}
-		email.setSubject(subject);
-		email.setHtmlMsg(body);
-
-		return email;
-	}
-
-	@Override
-	public HtmlEmail createHtmlEmailFromTemplate(
-			String subject,
-			Collection<InternetAddress> to,
-			Collection<InternetAddress> cc,
-			Collection<InternetAddress> bcc,
-			String template,
-			Map<String, Object> contextParameters,
-			Locale locale) throws EmailException {
-		Context ctx = new Context(locale);
-		ctx.setVariables(contextParameters);
-		ctx.setVariable("subject", subject);
-		ctx.setVariable("recipients", to.stream().map(InternetAddress::getAddress).collect(Collectors.toList()));
-		String body = templateEngine.process(template, ctx);
-
-		return createHtmlEmail(subject, body, to, cc, bcc);
+	public String processTemplate(String template, Map<String, Object> contextParameters, Locale locale) {
+		return templateEngine.process(template, new Context(locale, contextParameters));
 	}
 }

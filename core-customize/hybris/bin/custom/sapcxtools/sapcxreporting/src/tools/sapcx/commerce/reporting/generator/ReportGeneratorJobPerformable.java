@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.reporting.generator;
 
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -126,14 +128,11 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 	private HtmlEmail createResultEmail(QueryReportConfigurationModel report, GenericSearchResult search, boolean hasAttachments) throws EmailException {
 		String title = report.getTitle();
 		String description = getDescription(search, hasAttachments, report.getDescription());
-
-		Collection<InternetAddress> emails = new ArrayList<>();
-		for (String recipient : CollectionUtils.emptyIfNull(report.getEmailRecipients())) {
-			InternetAddress internetAddress = htmlEmailService.getInternetAddress(recipient);
-			emails.add(internetAddress);
-		}
-
-		return htmlEmailGenerator.createHtmlEmail(title, description, emails);
+		return htmlEmailGenerator.newHtmlEmail()
+				.subject(title)
+				.body(description)
+				.custom(builder -> emptyIfNull(report.getEmailRecipients()).forEach(builder::to))
+				.build();
 	}
 
 	private String getDescription(GenericSearchResult search, boolean hasAttachment, String description) {
