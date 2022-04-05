@@ -12,9 +12,12 @@ on:
       extension:
         required: true
         type: string
+    secrets:
+      GRADLE_USER_CONFIG:
+        required: true
 
 jobs:
-  build:
+  single-extension:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
