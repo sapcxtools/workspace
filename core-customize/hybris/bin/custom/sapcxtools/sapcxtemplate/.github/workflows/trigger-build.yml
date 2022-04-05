@@ -1,8 +1,6 @@
 name: Build and Test
 
 on:
-  push:
-    branches: ["release/**", "feature/**"]
   pull_request:
     branches: [main]
 
