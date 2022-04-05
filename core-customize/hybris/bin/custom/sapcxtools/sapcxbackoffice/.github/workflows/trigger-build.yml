@@ -1,0 +1,17 @@
+name: Build and Test
+
+on:
+  push:
+    branches: ["release/**", "feature/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    uses: sapcxtools/workspace/.github/workflows/buildandtest_singleextension.yml@develop
+    with:
+      repository: ${{ github.repository }}
+      ref: ${{ github.ref }}
+      extension: "sapcxbackoffice"
+    secrets:
+      GRADLE_USER_CONFIG: ${{ secrets.GRADLE_USER_CONFIG }}
