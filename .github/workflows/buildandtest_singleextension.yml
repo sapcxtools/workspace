@@ -69,7 +69,7 @@ jobs:
         run: |
           cp -f ci/config/localextensions-template.xml $HYBRIS_CONF_DIR/localextensions.xml
           sed -i 's/EXTENSIONNAME/${{ inputs.extension }}/' $HYBRIS_CONF_DIR/localextensions.xml
-          cat 'testclasses.extensions=${{ inputs.extension }}' > $HYBRIS_CONF_DIR/local-config/99-local.properties
+          echo 'testclasses.extensions=${{ inputs.extension }}' > $HYBRIS_CONF_DIR/local-config/99-local.properties
       - name: Build platform
         run: ./gradlew yall
       - name: Run unit tests
