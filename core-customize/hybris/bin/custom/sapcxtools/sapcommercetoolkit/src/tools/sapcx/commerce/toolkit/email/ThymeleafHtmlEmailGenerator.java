@@ -10,6 +10,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.assertj.core.util.VisibleForTesting;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.exceptions.TemplateEngineException;
 
 /**
  * This {@link HtmlEmailGenerator} uses Thymeleaf as template engine and supports multiple template formats:
@@ -46,7 +47,11 @@ public class ThymeleafHtmlEmailGenerator implements HtmlEmailGenerator {
 	}
 
 	@Override
-	public String processTemplate(String template, Map<String, Object> contextParameters, Locale locale) {
-		return templateEngine.process(template, new Context(locale, contextParameters));
+	public String processTemplate(String template, Map<String, Object> contextParameters, Locale locale) throws EmailException {
+		try {
+			return templateEngine.process(template, new Context(locale, contextParameters));
+		} catch (TemplateEngineException e) {
+			throw new EmailException(String.format("Email cannot be created. Could not process template %s", template), e);
+		}
 	}
 }
