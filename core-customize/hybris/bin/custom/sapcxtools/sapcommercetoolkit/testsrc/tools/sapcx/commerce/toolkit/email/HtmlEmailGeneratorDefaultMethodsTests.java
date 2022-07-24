@@ -1,7 +1,6 @@
 package tools.sapcx.commerce.toolkit.email;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 
@@ -19,7 +17,6 @@ import org.apache.commons.mail.HtmlEmail;
 import org.junit.Before;
 import org.junit.Test;
 
-import tools.sapcx.commerce.toolkit.email.attachments.HtmlEmailAttachmentBuilders;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.email.HtmlEmailGeneratorFake;
 
 public class HtmlEmailGeneratorDefaultMethodsTests {

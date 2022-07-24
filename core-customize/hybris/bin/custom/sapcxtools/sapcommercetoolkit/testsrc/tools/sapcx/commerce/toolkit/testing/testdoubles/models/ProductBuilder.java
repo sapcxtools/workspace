@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.core.model.product.ProductModel;
 
 import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;

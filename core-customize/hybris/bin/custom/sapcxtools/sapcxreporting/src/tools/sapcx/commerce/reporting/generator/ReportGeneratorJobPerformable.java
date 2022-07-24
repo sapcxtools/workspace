@@ -19,7 +19,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.activation.DataSource;
-import javax.mail.internet.InternetAddress;
 import javax.mail.util.ByteArrayDataSource;
 
 import de.hybris.platform.cronjob.enums.CronJobResult;
@@ -28,7 +27,6 @@ import de.hybris.platform.media.services.MimeService;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
