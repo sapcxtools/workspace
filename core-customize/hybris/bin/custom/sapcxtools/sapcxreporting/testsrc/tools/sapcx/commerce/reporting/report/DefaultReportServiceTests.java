@@ -122,7 +122,7 @@ public class DefaultReportServiceTests {
 
 	@Test
 	public void whenReportGeneratorFails_noReportIsGenerated() {
-		doThrow(IOException.class).when(reportGenerator).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		doThrow(RuntimeException.class).when(reportGenerator).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
 
 		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
 
