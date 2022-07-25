@@ -1,5 +1,5 @@
 plugins {
-    id("com.diffplug.spotless") version("6.0.4")
+    id("com.diffplug.spotless") version("6.8.0")
 }
 
 repositories {
@@ -15,6 +15,7 @@ spotless {
         targetExclude("core-customize/hybris/bin/custom/sapcxtools/**/gensrc/**")
         importOrderFile(importOrderConfigFile)
         eclipse().configFile(javaFormatterConfigFile)
+        removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
     }

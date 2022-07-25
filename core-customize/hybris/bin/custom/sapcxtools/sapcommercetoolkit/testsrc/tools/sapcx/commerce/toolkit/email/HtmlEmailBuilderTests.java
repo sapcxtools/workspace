@@ -3,13 +3,11 @@ package tools.sapcx.commerce.toolkit.email;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -22,12 +20,10 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.BeanUtils;
 
 import tools.sapcx.commerce.toolkit.email.attachments.HtmlEmailAttachmentBuilders;
 import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;
 import tools.sapcx.commerce.toolkit.testing.testdoubles.email.HtmlEmailGeneratorFake;
-import tools.sapcx.commerce.toolkit.testing.utils.ReflectionUtils;
 
 @UnitTest
 public class HtmlEmailBuilderTests {

@@ -34,7 +34,7 @@
             <deployment table="cxqryrprt" typecode="31151"/>
             <attributes>
                 <attribute qualifier="id" type="java.lang.String">
-                    <persistence type="property" />
+                    <persistence type="property"/>
                     <modifiers unique="true" />
                 </attribute>
                 <attribute qualifier="title" type="localized:java.lang.String">
@@ -56,6 +56,9 @@
                         </columntype>
                         <columntype database="sqlserver">
                             <value>TEXT</value>
+                        </columntype>
+                        <columntype database="sap">
+                            <value>NCLOB</value>
                         </columntype>
                     </persistence>
                 </attribute>

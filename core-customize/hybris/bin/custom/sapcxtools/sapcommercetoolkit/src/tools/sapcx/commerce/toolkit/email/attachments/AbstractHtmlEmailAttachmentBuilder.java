@@ -2,7 +2,6 @@ package tools.sapcx.commerce.toolkit.email.attachments;
 
 import javax.activation.DataSource;
 
-import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 

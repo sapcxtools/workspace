@@ -1,12 +1,10 @@
 package tools.sapcx.commerce.toolkit.testing.itemmodel;
 
-import static org.apache.commons.collections4.SetUtils.emptyIfNull;
 import static tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory.attributeFor;
 import static tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory.localizedAttributeFor;
 
 import java.io.ObjectStreamException;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 

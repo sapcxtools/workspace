@@ -23,7 +23,7 @@ import org.apache.commons.mail.HtmlEmail;
 public interface HtmlEmailGenerator {
 	HtmlEmail createHtmlEmail() throws EmailException;
 
-	default String processTemplate(String template, Map<String, Object> contextParameters, Locale locale) {
+	default String processTemplate(String template, Map<String, Object> contextParameters, Locale locale) throws EmailException {
 		return template;
 	}
 
