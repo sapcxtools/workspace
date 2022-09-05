@@ -13,6 +13,7 @@
 		<property name="projectDataImporters" ref="sapcommercetoolkitProjectDataImporters"/>
 	</bean>
 	<util:list id="sapcommercetoolkitProjectDataImporters" value-type="tools.sapcx.commerce.toolkit.setup.ImpExDataImporter">
+		<ref bean="platformOverlayImporter"/>
 		<ref bean="sampleDataImporter"/>
 		<ref bean="testDataImporter"/>
 		<ref bean="releasePatchReRunImporter"/>
@@ -36,6 +37,13 @@
 		<property name="impExDataImportExecutor" ref="toolkitImpExDataImportExecutor"/>
 		<property name="title" value="Essential Data"/>
 		<property name="prefix" value="sapcommercetoolkit.impeximport.essentialdata"/>
+	</bean>
+	<bean id="platformOverlayImporter" class="tools.sapcx.commerce.toolkit.setup.importer.ProjectDataImporter">
+		<property name="environment" ref="toolkitSystemSetupEnvironment"/>
+		<property name="impExDataImportExecutor" ref="toolkitImpExDataImportExecutor"/>
+		<property name="title" value="Platform Overlays"/>
+		<property name="prefix" value="sapcommercetoolkit.impeximport.overlay"/>
+		<property name="importOnInitialization" value="true"/>
 	</bean>
 	<bean id="sampleDataImporter" class="tools.sapcx.commerce.toolkit.setup.importer.ProjectDataImporter">
 		<property name="environment" ref="toolkitSystemSetupEnvironment"/>

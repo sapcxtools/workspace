@@ -15,6 +15,7 @@ properties that follow a convention. Any extension in your project may contribut
 | Elementary    | Imported only during initialization. This stage should contain import that are crucial for the system to work. |
 | Release Patch | Only imported once per system during the system update. The `SystemSetup` keeps track of the imported files and the current release version. |
 | Essential     | Always imported during initialization or update. This contains data that is maintained by the development team and needs to be updated with every release. |
+| Overlay       | Always imported during project data update. This contains data that overlays essentialdata imports from the standard extensions shipped by SAP. |
 | Sample Data   | Only imported if activated or selected manually in the admin console. This contains data that is shipped by the development team but will be maintained on the platform, e.g. initial CMS pages and components. |
 | Test Data     | Only imported if activated or selected manually in the admin console. This contains data that is shipped and used primarly by the development team on local and DEV environments. |
 
@@ -59,6 +60,7 @@ sapcommercetoolkit.impeximport.releasepatch.release2x0x0.0001.insertdefaultvalue
 sapcommercetoolkit.impeximport.essentialdata.0010.userrights=/path/to/file.impex
 sapcommercetoolkit.impeximport.essentialdata.0300.solrconfiguration=/path/to/file.impex
 sapcommercetoolkit.impeximport.essentialdata.5000.cmstemplates=/path/to/file.impex
+sapcommercetoolkit.impeximport.overlay.1000.core=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0100.categories=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0200.classificationsystem=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0500.products=/path/to/file.impex
@@ -71,6 +73,9 @@ sapcommercetoolkit.impeximport.testdata.5000.cms=/path/to/file.impex
 ```
 
 ### Hints
+
+One should include the `sapcommercetoolkit` within the list of extension to execute projectdata updates on
+system init and update via the property `update.executeProjectData.extensionName.list=sapcommercetoolkit`.
 
 Typically, one activates the `sapcommercetoolkit.impeximport.environment.supportlocalizedfiles` by setting it to `true`.
 This will automatically resolve localized files that have the same name as the one specified in the configuration, but with
