@@ -49,7 +49,7 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 		String logPrefix = ">> Import of file [" + file + "] -> ";
 		try (final InputStream resourceAsStream = resourceLoader.getResource(file).getInputStream()) {
 			if (resourceAsStream != null) {
-				getLogger().debug(context, logPrefix);
+				getLogger().info(context, logPrefix + "STARTED.");
 
 				final ImportConfig importConfig = new ImportConfig();
 				importConfig.setScript(new StreamBasedImpExResource(resourceAsStream, fileEncoding));
