@@ -383,13 +383,14 @@ public class ToolkitSystemSetupTests {
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.essentialdata.0002.something", "/essential/file0002.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.essentialdata.0001.something", "/essential/file0001.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.essentialdata.0003.something", "/essential/file0003.impex");
+		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.overlay.0001.overlay1", "/overlay/file0001.impex");
+		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.overlay.0002.overlay2", "/overlay/file0002.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.testdata.0001.optionaltext", "/testdata/file0001.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.testdata.0003", "/testdata/file0003.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.testdata.0002", "/testdata/file0002.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.sampledata.0003", "/sampledata/file0003.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.sampledata.0002.optionaltext", "/sampledata/file0002.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.sampledata.0001", "/sampledata/file0001.impex");
-
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.releasepatch.release1x0.0001.optionaltext", "/releasepatches/release1x0-0001.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.releasepatch.release1x0.0002", "/releasepatches/release1x0-0002.impex");
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.releasepatch.release2x1.0002", "/releasepatches/release2x1-0002.impex");

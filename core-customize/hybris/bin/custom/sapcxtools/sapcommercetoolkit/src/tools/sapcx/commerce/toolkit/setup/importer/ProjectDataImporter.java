@@ -18,9 +18,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ProjectDataImporter extends PrefixBasedDataImporter {
 	private boolean importOnInitialization = false;
+	private boolean allowManualImport = true;
 
 	@Override
 	public List<SystemSetupParameter> getSystemSetupParameters() {
+		if (allowManualImport == false) {
+			return Collections.emptyList();
+		}
+
 		SystemSetupParameter parameter = new SystemSetupParameter(getPrefix());
 		parameter.setLabel("Optional: " + getTitle());
 		parameter.setMultiSelect(true);
@@ -61,5 +66,9 @@ public class ProjectDataImporter extends PrefixBasedDataImporter {
 
 	public void setImportOnInitialization(boolean importOnInitialization) {
 		this.importOnInitialization = importOnInitialization;
+	}
+
+	public void setAllowManualImport(boolean allowManualImport) {
+		this.allowManualImport = allowManualImport;
 	}
 }
