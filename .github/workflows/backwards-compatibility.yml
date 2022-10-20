@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["2105.12", "2011.22", "2005.27"]
+        version: ["2105.15", "2011.25", "2005.30"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -42,13 +42,11 @@ jobs:
       - name: SAP download config
         env:
           USER_CONFIG: ${{ secrets.GRADLE_USER_CONFIG }}
-          AUTHORIZATION: ${{ secrets.SAP_DOWNLOAD_AUTHORIZATION }}
         shell: bash
         run: |
           mkdir -p ${HOME}/.gradle
           echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
           echo "${USER_CONFIG}" >> ${HOME}/.gradle/gradle.properties
-          echo "sUserAuthorization=${AUTHORIZATION}" >> ${HOME}/.gradle/gradle.properties
       - name: SAP Commerce environment
         run: |
           echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/core-customize/hybris/config/local-config" >> $GITHUB_ENV

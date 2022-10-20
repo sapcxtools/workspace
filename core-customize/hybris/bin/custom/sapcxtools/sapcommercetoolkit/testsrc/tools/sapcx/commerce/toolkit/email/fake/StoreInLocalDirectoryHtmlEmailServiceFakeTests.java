@@ -1,4 +1,4 @@
-package tools.sapcx.commerce.toolkit.email;
+package tools.sapcx.commerce.toolkit.email.fake;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,14 +23,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 @UnitTest
-public class StoreInLocalDirectoryHtmlEmailServiceTests {
-	private StoreInLocalDirectoryHtmlEmailService service;
+public class StoreInLocalDirectoryHtmlEmailServiceFakeTests {
+	private StoreLocallyHtmlEmailServiceFake service;
 	private Path tempDirectoryPath;
 
 	@Before
 	public void setUp() throws Exception {
 		tempDirectoryPath = FileUtils.getTempDirectory().toPath().resolve("emails");
-		service = new StoreInLocalDirectoryHtmlEmailService(tempDirectoryPath.toString(), "{subject}.{extension}", "eml");
+		service = StoreLocallyHtmlEmailServiceFake.storeInFilesystem(tempDirectoryPath.toString(), "{subject}.{extension}", "eml");
 	}
 
 	@After

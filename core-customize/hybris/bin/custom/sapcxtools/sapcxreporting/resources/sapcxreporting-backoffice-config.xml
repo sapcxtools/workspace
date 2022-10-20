@@ -17,12 +17,14 @@
     <!-- Navigation -->
     <context component="explorer-tree" merge-by="module">
         <explorer-tree:explorer-tree>
-            <explorer-tree:navigation-node id="sapcxreporting.treenode.reporting" merge-mode="merge">
-                <explorer-tree:type-node code="QueryReportConfiguration" id="sapcxtools_typenode_queryreportconfiguration"/>
-                <explorer-tree:type-node code="ReportGenerationSchedule" id="sapcxtools_typenode_reportgenerationschedule"/>
-                <explorer-tree:navigation-node id="sapcxreporting.treenode.reporting.parameters" merge-mode="merge">
-                    <explorer-tree:type-node code="QueryReportConfigurationParameter" id="sapcxtools_typenode_queryreportconfigurationparameter"/>
-                    <explorer-tree:type-node code="ConfigurationPropertyAccessor" id="sapcxtools_typenode_configurationpropertyaccessor"/>
+            <explorer-tree:navigation-node id="sapcxtools_treenode_main">
+                <explorer-tree:navigation-node id="sapcxreporting.treenode.reporting" merge-mode="merge">
+                    <explorer-tree:type-node code="QueryReportConfiguration" id="sapcxtools_typenode_queryreportconfiguration"/>
+                    <explorer-tree:type-node code="ReportGenerationSchedule" id="sapcxtools_typenode_reportgenerationschedule"/>
+                    <explorer-tree:navigation-node id="sapcxreporting.treenode.reporting.parameters" merge-mode="merge">
+                        <explorer-tree:type-node code="QueryReportConfigurationParameter" id="sapcxtools_typenode_queryreportconfigurationparameter"/>
+                        <explorer-tree:type-node code="ConfigurationPropertyAccessor" id="sapcxtools_typenode_configurationpropertyaccessor"/>
+                    </explorer-tree:navigation-node>
                 </explorer-tree:navigation-node>
             </explorer-tree:navigation-node>
         </explorer-tree:explorer-tree>

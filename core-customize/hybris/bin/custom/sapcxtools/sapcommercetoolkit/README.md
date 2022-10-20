@@ -15,6 +15,7 @@ properties that follow a convention. Any extension in your project may contribut
 | Elementary    | Imported only during initialization. This stage should contain import that are crucial for the system to work. |
 | Release Patch | Only imported once per system during the system update. The `SystemSetup` keeps track of the imported files and the current release version. |
 | Essential     | Always imported during initialization or update. This contains data that is maintained by the development team and needs to be updated with every release. |
+| Overlay       | Always imported during project data update. This contains data that overlays essentialdata imports from the standard extensions shipped by SAP. |
 | Sample Data   | Only imported if activated or selected manually in the admin console. This contains data that is shipped by the development team but will be maintained on the platform, e.g. initial CMS pages and components. |
 | Test Data     | Only imported if activated or selected manually in the admin console. This contains data that is shipped and used primarly by the development team on local and DEV environments. |
 
@@ -59,6 +60,7 @@ sapcommercetoolkit.impeximport.releasepatch.release2x0x0.0001.insertdefaultvalue
 sapcommercetoolkit.impeximport.essentialdata.0010.userrights=/path/to/file.impex
 sapcommercetoolkit.impeximport.essentialdata.0300.solrconfiguration=/path/to/file.impex
 sapcommercetoolkit.impeximport.essentialdata.5000.cmstemplates=/path/to/file.impex
+sapcommercetoolkit.impeximport.overlay.1000.core=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0100.categories=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0200.classificationsystem=/path/to/file.impex
 sapcommercetoolkit.impeximport.sampledata.0500.products=/path/to/file.impex
@@ -71,6 +73,9 @@ sapcommercetoolkit.impeximport.testdata.5000.cms=/path/to/file.impex
 ```
 
 ### Hints
+
+One should include the `sapcommercetoolkit` within the list of extension to execute projectdata updates on
+system init and update via the property `update.executeProjectData.extensionName.list=sapcommercetoolkit`.
 
 Typically, one activates the `sapcommercetoolkit.impeximport.environment.supportlocalizedfiles` by setting it to `true`.
 This will automatically resolve localized files that have the same name as the one specified in the configuration, but with
@@ -117,9 +122,9 @@ Your localized messages must be added to a message bundled called `messages` pla
 If you are not comfortable with these default configuration, you can specify your own configuration by overlaying the bean alias of the
 template engine called `emailTemplateEngine`. 
 
-For local development there is also a `StoreInLocalDirectoryHtmlEmailService`. This service does not even send any emails, but instead
-stores them in a configurable local directory. In order to activate this feature, you need to activate/add the spring profile 
-`sapcommercetools-fake-localmails` to your `local.properties`:
+For local development there is also a `StoreLocallyHtmlEmailService`. This service does not even send any emails, but instead
+stores them in a configurable local directory or the database. In order to activate this feature, you need to activate/add the
+spring profile `sapcommercetools-fake-localmails` to your `local.properties`:
 
 ```properties
 spring.profiles.active=sapcommercetools-fake-localmails
@@ -129,9 +134,33 @@ spring.profiles.active=sapcommercetools-fake-localmails
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.method | String | The method for storing mails locally, either `file` or `database`<br/>(default: `file`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.directory | String | The directory to which the email files will be stored to<br/>(default: `${HYBRIS_LOG_DIR}/mails`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.filenamepattern | String | The pattern for the generated files. It can be adjusted with the following parameters: timestamp, datetime, subject, from, to, extension<br/>(default: `{timestamp}_{subject}.{extension}`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.extension | String | Specify the file extension for the generated local files, use whatever is supported by your email client<br/>(default: `eml`) | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.mediafolder | String | The media folder to place fake email media items into<br/>(default: `fake-emails`) | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.daysToKeepEmails | int | the number of days to keep local emails in the database<br/>(default: `7`) | 
+
+### Cleanup of stored email within database
+
+If you store the emails within the database, make sure you are initializing the database from time to time (e.g. on local
+development machines), or to setup a maintenance cronjob that removes the fake emails periodically (e.g. on STAGE). The 
+sapcommercetoolkit already defines a `cleanupLocallyHtmlEmailsPerformable` bean instance that can be configured by creating
+a `CronJob` instance with the following configuration:
+
+```impex
+# Clean Up CronJob
+INSERT_UPDATE CronJob; code[unique = true]    ; job(code)                  ; sessionLanguage(isoCode)
+                     ; cleanupLocallyHtmlEmailsCronJob ; cleanupLocallyHtmlEmailsPerformable ; en
+
+# Trigger for Clean Up
+INSERT_UPDATE Trigger; cronJob(code)[unique = true]    ; active; activationTime[dateformat = dd.MM.yyyy HH:mm:ss]; year; month; day; hour; minute; second; relative; weekInterval; daysOfWeek(code)
+                     ; cleanupLocallyHtmlEmailsCronJob ; true  ; 01.01.2022 01:00:00                             ; -1  ; -1   ; -1 ; 1   ; 0     ; 0     ; false   ; 1           ; MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+```
+
+**Note**: Keep in mind, that SAP Commerce is creating the `Job` items automatically on system update for each bean
+implementing the `JobPerformable` interface. After activating the fake you need to run a system update (or initialize)
+first, otherwise the lines above will fail telling you that the `cleanupLocallyHtmlEmailsPerformable` cannot be resolved.
 
 ### Extended configuration of the `HtmlEmailService`
 
