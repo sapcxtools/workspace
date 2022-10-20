@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="items.xsd">
+    <itemtypes>
+        <itemtype code="LocallyStoredEmail" extends="CatalogUnawareMedia">
+            <attributes>
+                <attribute qualifier="sender" type="java.lang.String">
+                    <persistence type="property"/>
+                    <modifiers read="true" write="true" optional="true"/>
+                </attribute>
+                <attribute qualifier="recipients" type="java.lang.String">
+                    <persistence type="property"/>
+                    <modifiers read="true" write="true" optional="true"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+    </itemtypes>
+</items>

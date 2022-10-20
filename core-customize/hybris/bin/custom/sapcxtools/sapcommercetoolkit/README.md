@@ -122,9 +122,9 @@ Your localized messages must be added to a message bundled called `messages` pla
 If you are not comfortable with these default configuration, you can specify your own configuration by overlaying the bean alias of the
 template engine called `emailTemplateEngine`. 
 
-For local development there is also a `StoreInLocalDirectoryHtmlEmailService`. This service does not even send any emails, but instead
-stores them in a configurable local directory. In order to activate this feature, you need to activate/add the spring profile 
-`sapcommercetools-fake-localmails` to your `local.properties`:
+For local development there is also a `StoreLocallyHtmlEmailService`. This service does not even send any emails, but instead
+stores them in a configurable local directory or the database. In order to activate this feature, you need to activate/add the
+spring profile `sapcommercetools-fake-localmails` to your `local.properties`:
 
 ```properties
 spring.profiles.active=sapcommercetools-fake-localmails
@@ -134,9 +134,33 @@ spring.profiles.active=sapcommercetools-fake-localmails
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.method | String | The method for storing mails locally, either `file` or `database`<br/>(default: `file`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.directory | String | The directory to which the email files will be stored to<br/>(default: `${HYBRIS_LOG_DIR}/mails`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.filenamepattern | String | The pattern for the generated files. It can be adjusted with the following parameters: timestamp, datetime, subject, from, to, extension<br/>(default: `{timestamp}_{subject}.{extension}`) | 
 | sapcommercetoolkit.fakes.htmlEmailService.localstorage.extension | String | Specify the file extension for the generated local files, use whatever is supported by your email client<br/>(default: `eml`) | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.mediafolder | String | The media folder to place fake email media items into<br/>(default: `fake-emails`) | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.daysToKeepEmails | int | the number of days to keep local emails in the database<br/>(default: `7`) | 
+
+### Cleanup of stored email within database
+
+If you store the emails within the database, make sure you are initializing the database from time to time (e.g. on local
+development machines), or to setup a maintenance cronjob that removes the fake emails periodically (e.g. on STAGE). The 
+sapcommercetoolkit already defines a `cleanupLocallyHtmlEmailsPerformable` bean instance that can be configured by creating
+a `CronJob` instance with the following configuration:
+
+```impex
+# Clean Up CronJob
+INSERT_UPDATE CronJob; code[unique = true]    ; job(code)                  ; sessionLanguage(isoCode)
+                     ; cleanupLocallyHtmlEmailsCronJob ; cleanupLocallyHtmlEmailsPerformable ; en
+
+# Trigger for Clean Up
+INSERT_UPDATE Trigger; cronJob(code)[unique = true]    ; active; activationTime[dateformat = dd.MM.yyyy HH:mm:ss]; year; month; day; hour; minute; second; relative; weekInterval; daysOfWeek(code)
+                     ; cleanupLocallyHtmlEmailsCronJob ; true  ; 01.01.2022 01:00:00                             ; -1  ; -1   ; -1 ; 1   ; 0     ; 0     ; false   ; 1           ; MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+```
+
+**Note**: Keep in mind, that SAP Commerce is creating the `Job` items automatically on system update for each bean
+implementing the `JobPerformable` interface. After activating the fake you need to run a system update (or initialize)
+first, otherwise the lines above will fail telling you that the `cleanupLocallyHtmlEmailsPerformable` cannot be resolved.
 
 ### Extended configuration of the `HtmlEmailService`
 
