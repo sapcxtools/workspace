@@ -345,6 +345,6 @@ them. And if you are missing a builder, feel free to raise an issue or to create
 
 ## License
 
-_Published under GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007._
+_Licensed under the Apache License, Version 2.0, January 2004_
 
-_Copyright (c) 2021 Stefan Bechtold_
+_Copyright 2021-2022, SAP CX Tools_
