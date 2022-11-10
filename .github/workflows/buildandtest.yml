@@ -36,12 +36,14 @@ jobs:
           path: dependencies
       - name: SAP download config
         env:
-          USER_CONFIG: ${{ secrets.GRADLE_USER_CONFIG }}
+          SAPCX_ARTEFACT_USER: ${{ secrets.SAPCX_ARTEFACT_USER }}
+          SAPCX_ARTEFACT_PASSWORD: ${{ secrets.SAPCX_ARTEFACT_PASSWORD }}
         shell: bash
         run: |
           mkdir -p ${HOME}/.gradle
           echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
-          echo "${USER_CONFIG}" >> ${HOME}/.gradle/gradle.properties
+          echo "SAPCX_ARTEFACT_USER=${SAPCX_ARTEFACT_USER}" >> ${HOME}/.gradle/gradle.properties
+          echo "SAPCX_ARTEFACT_PASSWORD=${SAPCX_ARTEFACT_PASSWORD}" >> ${HOME}/.gradle/gradle.properties
       - name: SAP Commerce environment
         run: |
           echo "HYBRIS_OPT_CONFIG_DIR=$GITHUB_WORKSPACE/core-customize/hybris/config/local-config" >> $GITHUB_ENV
