@@ -9,7 +9,7 @@
 
 ### Project Licenses
 
-- All modules use [GNU General Public License v3.0](LICENSE.md).
+- All modules use [APACHE LICENSE, VERSION 2.0](LICENSE.md).
 
 ## Commit Messages
 
