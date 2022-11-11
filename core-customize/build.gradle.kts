@@ -13,11 +13,6 @@ repositories {
     mavenCentral()
 }
 
-val ftpAntTask by configurations.creating
-dependencies {
-    ftpAntTask("org.apache.ant:ant-commons-net:1.10.12")
-}
-
 if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
     val USER = project.property("SAPCX_ARTEFACT_USER") as String
     val PASSWORD = project.property("SAPCX_ARTEFACT_PASSWORD") as String
