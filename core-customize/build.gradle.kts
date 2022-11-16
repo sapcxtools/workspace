@@ -1,7 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 import de.undercouch.gradle.tasks.download.Download
-import de.undercouch.gradle.tasks.download.Verify
 
 import java.time.Instant
 import java.util.Base64
@@ -9,7 +8,7 @@ import java.util.Base64
 plugins {
     id("sap.commerce.build") version("3.7.1")
     id("sap.commerce.build.ccv2") version("3.7.1")
-    id("de.undercouch.download") version("5.1.0")
+    id("de.undercouch.download") version("4.1.2")
 }
 
 val DEPENDENCY_FOLDER = "../dependencies"
@@ -18,17 +17,14 @@ repositories {
     mavenCentral()
 }
 
-if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
-    val SUSER = project.property("sUser") as String
-    val SUSERPASS = project.property("sUserPass") as String
-    val AUTHORIZATION = Base64.getEncoder().encodeToString((SUSER + ":" + SUSERPASS).toByteArray())
+if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
+    val USER = project.property("SAPCX_ARTEFACT_USER") as String
+    val PASSWORD = project.property("SAPCX_ARTEFACT_PASSWORD") as String
+    val AUTHORIZATION = Base64.getEncoder().encodeToString((USER + ":" + PASSWORD).toByteArray())
 
     val COMMERCE_VERSION = CCV2.manifest.commerceSuiteVersion
-    val commerceSuiteDownloadUrl = project.property("com.sap.softwaredownloads.commerceSuite.${COMMERCE_VERSION}.downloadUrl")
-    val commerceSuiteChecksum = project.property("com.sap.softwaredownloads.commerceSuite.${COMMERCE_VERSION}.checksum")
-
     tasks.register<Download>("downloadPlatform") {
-        src(commerceSuiteDownloadUrl)
+        src("http://artefacts.sapcx.tools/hybris-commerce-suite/${COMMERCE_VERSION}.zip")
         dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
         header("Authorization", "Basic ${AUTHORIZATION}")
         overwrite(false)
@@ -37,25 +33,15 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
         useETag(true)
     }
 
-    tasks.register<Verify>("downloadAndVerifyPlatform") {
-        dependsOn("downloadPlatform") 
-        src(file("${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
-        algorithm("SHA-256")
-        checksum(commerceSuiteChecksum.toString())
-    }
-
     tasks.named("bootstrapPlatform") {
-        dependsOn("downloadAndVerifyPlatform")
+        dependsOn("downloadPlatform")
     }
 
     //check if Integration Extension Pack is configured and download it too
     if (CCV2.manifest.extensionPacks.any{"hybris-commerce-integrations".equals(it.name)}) {
-        val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version
-        val commerceIntegrationsDownloadUrl = project.property("com.sap.softwaredownloads.commerceIntegrations.${INTEXTPACK_VERSION}.downloadUrl")
-        val commerceIntegrationsChecksum = project.property("com.sap.softwaredownloads.commerceIntegrations.${INTEXTPACK_VERSION}.checksum")
-        
+        val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version        
         tasks.register<Download>("downloadIntExtPack") {
-            src(commerceIntegrationsDownloadUrl)
+            src("http://artefacts.sapcx.tools/hybris-commerce-integrations/${INTEXTPACK_VERSION}.zip")
             dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
             header("Authorization", "Basic ${AUTHORIZATION}")
             overwrite(false)
@@ -64,15 +50,8 @@ if (project.hasProperty("sUser") && project.hasProperty("sUserPass")) {
             useETag(true)
         }
 
-        tasks.register<Verify>("downloadAndVerifyIntExtPack") {
-            dependsOn("downloadIntExtPack")
-            src(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
-            algorithm("SHA-256")
-            checksum(commerceIntegrationsChecksum.toString())
-        }
-
         tasks.named("bootstrapPlatform") {
-            dependsOn("downloadAndVerifyIntExtPack")
+            dependsOn("downloadIntExtPack")
         }
     }
 }

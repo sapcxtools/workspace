@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.hybris.bootstrap.annotations.UnitTest;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,16 +22,16 @@ public class HtmlEmailAddressTests {
 
 	@Test
 	public void testToString() {
-		assertThat(address.toString()).isEqualTo(ToStringBuilder.reflectionToString(address));
-		assertThat(otherAddress.toString()).isEqualTo(ToStringBuilder.reflectionToString(otherAddress));
-		assertThat(sameAddress.toString()).isEqualTo(ToStringBuilder.reflectionToString(sameAddress));
+		assertThat(address.toString()).contains("name=name", "email=email@localhost");
+		assertThat(otherAddress.toString()).contains("name=other", "email=other@localhost");
+		assertThat(sameAddress.toString()).contains("name=name", "email=email@localhost");
 	}
 
 	@Test
 	public void testHashCode() {
-		assertThat(address.hashCode()).isEqualTo(HashCodeBuilder.reflectionHashCode(address));
-		assertThat(otherAddress.hashCode()).isEqualTo(HashCodeBuilder.reflectionHashCode(otherAddress));
-		assertThat(sameAddress.hashCode()).isEqualTo(HashCodeBuilder.reflectionHashCode(sameAddress));
+		assertThat(address.hashCode()).isEqualTo(-922879761);
+		assertThat(otherAddress.hashCode()).isEqualTo(1061622428);
+		assertThat(sameAddress.hashCode()).isEqualTo(-922879761);
 	}
 
 	@Test

@@ -1,7 +1,6 @@
 package tools.sapcx.commerce.toolkit.email.fake;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,8 +64,11 @@ public class StoreInDatabaseHtmlEmailServiceFakeTests {
 		assertThat(generatedEmail.getMime()).isEqualTo("application/octet-stream");
 		verify(modelService).save(generatedEmail);
 
+		ArgumentCaptor<LocallyStoredEmailModel> emailCaptor = ArgumentCaptor.forClass(LocallyStoredEmailModel.class);
 		ArgumentCaptor<byte[]> contentCaptor = ArgumentCaptor.forClass(byte[].class);
-		verify(mediaService).setDataForMedia(eq(generatedEmail), contentCaptor.capture());
+		verify(mediaService).setDataForMedia(emailCaptor.capture(), contentCaptor.capture());
+
+		assertThat(emailCaptor.getValue()).isEqualTo(generatedEmail);
 
 		String content = new String(contentCaptor.getValue());
 		assertThat(content)
