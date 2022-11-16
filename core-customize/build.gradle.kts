@@ -1,10 +1,14 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
+import de.undercouch.gradle.tasks.download.Download
+
 import java.time.Instant
+import java.util.Base64
 
 plugins {
     id("sap.commerce.build") version("3.7.1")
     id("sap.commerce.build.ccv2") version("3.7.1")
+    id("de.undercouch.download") version("4.1.2")
 }
 
 val DEPENDENCY_FOLDER = "../dependencies"
@@ -16,20 +20,17 @@ repositories {
 if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
     val USER = project.property("SAPCX_ARTEFACT_USER") as String
     val PASSWORD = project.property("SAPCX_ARTEFACT_PASSWORD") as String
-    
+    val AUTHORIZATION = Base64.getEncoder().encodeToString((USER + ":" + PASSWORD).toByteArray())
+
     val COMMERCE_VERSION = CCV2.manifest.commerceSuiteVersion
-    tasks.register("downloadPlatform") {
-        doLast {
-            ant.withGroovyBuilder {
-                "get"(
-                    "src" to "http://artefacts.sapcx.tools/hybris-commerce-suite/${COMMERCE_VERSION}.zip",
-                    "dest" to "${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip",
-                    "username" to "${USER}",
-                    "password" to "${PASSWORD}",
-                    "skipexisting" to "true"
-                )
-            }
-        }
+    tasks.register<Download>("downloadPlatform") {
+        src("http://artefacts.sapcx.tools/hybris-commerce-suite/${COMMERCE_VERSION}.zip")
+        dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
+        header("Authorization", "Basic ${AUTHORIZATION}")
+        overwrite(false)
+        tempAndMove(true)
+        onlyIfModified(true)
+        useETag(true)
     }
 
     tasks.named("bootstrapPlatform") {
@@ -39,18 +40,14 @@ if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ART
     //check if Integration Extension Pack is configured and download it too
     if (CCV2.manifest.extensionPacks.any{"hybris-commerce-integrations".equals(it.name)}) {
         val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version        
-        tasks.register("downloadIntExtPack") {
-            doLast {
-                ant.withGroovyBuilder {
-                    "get"(
-                        "src" to "http://artefacts.sapcx.tools/hybris-commerce-integrations/${INTEXTPACK_VERSION}.zip",
-                        "dest" to "${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip",
-                        "username" to "${USER}",
-                        "password" to "${PASSWORD}",
-                        "skipexisting" to "true"
-                    )
-                }
-            }
+        tasks.register<Download>("downloadIntExtPack") {
+            src("http://artefacts.sapcx.tools/hybris-commerce-integrations/${INTEXTPACK_VERSION}.zip")
+            dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
+            header("Authorization", "Basic ${AUTHORIZATION}")
+            overwrite(false)
+            tempAndMove(true)
+            onlyIfModified(true)
+            useETag(true)
         }
 
         tasks.named("bootstrapPlatform") {
