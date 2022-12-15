@@ -1,4 +1,4 @@
-name: Backwards Compatibility
+name: Backwards Compatibility (JDK 11)
 
 on:
   push:
