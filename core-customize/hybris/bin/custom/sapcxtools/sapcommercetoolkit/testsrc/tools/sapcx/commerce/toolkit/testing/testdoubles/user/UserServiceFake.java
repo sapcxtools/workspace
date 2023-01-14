@@ -42,9 +42,8 @@ public class UserServiceFake implements UserService {
 			return withAdmin(admin);
 		}
 
-
 		public Builder withAnonymous(CustomerModel anonymous) {
-			fake.anonymous  = anonymous;
+			fake.anonymous = anonymous;
 			fake.users.put(anonymous.getUid(), anonymous);
 			return this;
 		}
@@ -84,7 +83,8 @@ public class UserServiceFake implements UserService {
 	public Map<String, UserModel> users = new HashMap<>();
 	public Map<String, UserGroupModel> userGroups = new HashMap<>();
 
-	public UserServiceFake() {};
+	public UserServiceFake() {
+	};
 
 	// Keep static methods for now. Remove later and use the builder.
 	public static UserServiceFake fake() {
