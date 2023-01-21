@@ -1,7 +1,16 @@
 package tools.sapcx.commerce.toolkit.testing.testdoubles.user;
 
-import java.util.*;
+import static org.apache.commons.collections4.SetUtils.emptyIfNull;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import de.hybris.platform.core.model.security.PrincipalModel;
 import de.hybris.platform.core.model.user.AbstractUserAuditModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.core.model.user.EmployeeModel;
@@ -24,55 +33,63 @@ public class UserServiceFake implements UserService {
 	public static class Builder {
 		UserServiceFake fake = new UserServiceFake();
 
-		public Builder withCurrent(UserModel user) {
+		public Builder registerCurrentUser(UserModel user) {
 			fake.current = user;
 			fake.users.put(user.getUid(), user);
 			return this;
 		}
 
-		public Builder withAdmin(EmployeeModel employeeModel) {
-			fake.admin = employeeModel;
-			fake.users.put(employeeModel.getUid(), employeeModel);
-			return this;
-		}
-
-		public Builder autoAdmin() {
-			EmployeeModel admin = InMemoryModelFactory.createTestableItemModel(EmployeeModel.class);
-			admin.setUid("admin");
-			return withAdmin(admin);
-		}
-
-		public Builder withAnonymous(CustomerModel anonymous) {
-			fake.anonymous = anonymous;
-			fake.users.put(anonymous.getUid(), anonymous);
-			return this;
-		}
-
-		public Builder autoAnonymous() {
-			CustomerModel anonymous = InMemoryModelFactory.createTestableItemModel(CustomerModel.class);
-			anonymous.setUid("anonymous");
-			return withAnonymous(anonymous);
-		}
-
-		public Builder withCurrentId(String customerId) {
+		public Builder registerCurrentUserId(String customerId) {
 			CustomerModel customer = InMemoryModelFactory.createTestableItemModel(CustomerModel.class);
 			customer.setUid(customerId);
-			return withCurrent(customer);
+			return registerCurrentUser(customer);
 		}
 
-		public Builder withCurrentAndCustomClass(String customerId, Class<? extends CustomerModel> customerClass) {
+		public Builder registerCurrentUserEntity(String customerId, Class<? extends CustomerModel> customerClass) {
 			CustomerModel customer = InMemoryModelFactory.createTestableItemModel(customerClass);
 			customer.setUid(customerId);
-			return withCurrent(customer);
+			return registerCurrentUser(customer);
 		}
 
-		public Builder withUserGroups(List<UserGroupModel> userGroups) {
-			fake.userGroups = new HashMap<>();
+		public Builder registerUserWithGroups(UserModel user, List<UserGroupModel> userGroups) {
+			linkUserAndGroupsBidirectional(user, userGroups);
+			userGroups.forEach(userGroup -> fake.userGroups.put(userGroup.getUid(), userGroup));
+			return registerCurrentUser(user);
+		}
+
+		private static void linkUserAndGroupsBidirectional(UserModel user, List<UserGroupModel> userGroups) {
+			user.setGroups(new HashSet<>(userGroups));
+			for (UserGroupModel userGroup : userGroups) {
+
+				Set<PrincipalModel> members;
+				if (userGroup.getMembers() == null || userGroup.getMembers().isEmpty()) {
+					members = new HashSet<>();
+				} else {
+					members = userGroup.getMembers();
+				}
+
+				members.add(user);
+				userGroup.setMembers(members);
+			}
+		}
+
+		public Builder registerGroups(List<UserGroupModel> userGroups) {
 			userGroups.forEach(userGroup -> fake.userGroups.put(userGroup.getUid(), userGroup));
 			return this;
 		}
 
 		public UserServiceFake build() {
+			EmployeeModel admin = InMemoryModelFactory.createTestableItemModel(EmployeeModel.class);
+			admin.setUid("admin");
+			fake.admin = admin;
+
+			CustomerModel anonymous = InMemoryModelFactory.createTestableItemModel(CustomerModel.class);
+			anonymous.setUid("anonymous");
+			fake.anonymous = anonymous;
+
+			fake.users.put(admin.getUid(), admin);
+			fake.users.put(anonymous.getUid(), anonymous);
+
 			return fake;
 		}
 	}
@@ -83,8 +100,6 @@ public class UserServiceFake implements UserService {
 	public Map<String, UserModel> users = new HashMap<>();
 	public Map<String, UserGroupModel> userGroups = new HashMap<>();
 
-	public UserServiceFake() {
-	};
 
 	// Keep static methods for now. Remove later and use the builder.
 	public static UserServiceFake fake() {
@@ -114,6 +129,8 @@ public class UserServiceFake implements UserService {
 
 		return new UserServiceFake(admin, anonymous, customer);
 	}
+
+	private UserServiceFake() {};
 
 	public UserServiceFake(EmployeeModel admin, CustomerModel anonymous, UserModel current) {
 		this.admin = admin;
@@ -148,7 +165,7 @@ public class UserServiceFake implements UserService {
 
 	@Override
 	public UserGroupModel getUserGroup(String s) {
-		return null;
+		return userGroups.get(s);
 	}
 
 	@Override
@@ -164,7 +181,10 @@ public class UserServiceFake implements UserService {
 
 	@Override
 	public Set<UserGroupModel> getAllUserGroupsForUser(UserModel userModel) {
-		return new HashSet<>(userGroups.values());
+		return emptyIfNull(userModel.getGroups()).stream()
+				.filter(UserGroupModel.class::isInstance)
+				.map(UserGroupModel.class::cast)
+				.collect(Collectors.toSet());
 	}
 
 	@Override
@@ -189,7 +209,8 @@ public class UserServiceFake implements UserService {
 
 	@Override
 	public boolean isMemberOfGroup(UserModel userModel, UserGroupModel userGroupModel) {
-		return userModel.getGroups().contains(userGroupModel);
+		return emptyIfNull(userModel.getGroups()).stream()
+				.anyMatch(userGroup -> userGroup.getUid().equals(userGroupModel.getUid()));
 	}
 
 	@Override
