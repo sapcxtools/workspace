@@ -86,7 +86,7 @@
             }
         ],
         "tests": {
-            "extensions": ["sapcommercetoolkit", "sapcxbackoffice", "sapcxreporting"],
+            "extensions": ["sapcommercetoolkit", "sapcxbackoffice", "sapcxreporting", "sapcxsearch"],
             "annotations": ["UnitTests", "IntegrationTests"],
             "packages": ["tools.sapcx.commerce.*"]
         }
