@@ -22,14 +22,13 @@ import org.slf4j.Logger;
 import tools.sapcx.commerce.search.model.SolrIndexerConfigurableCronJobModel;
 import tools.sapcx.commerce.search.service.CxIndexerService;
 
-public class SolrIndexerConfigurableCronJobPerformable extends AbstractJobPerformable<SolrIndexerConfigurableCronJobModel> {
-
-	private static final Logger LOG = getLogger(SolrIndexerConfigurableCronJobPerformable.class);
+public class SolrIndexerConfigurableJobPerformable extends AbstractJobPerformable<SolrIndexerConfigurableCronJobModel> {
+	private static final Logger LOG = getLogger(SolrIndexerConfigurableJobPerformable.class);
 
 	private CxIndexerService cxIndexerService;
 	private FacetSearchConfigService facetSearchConfigService;
 
-	public SolrIndexerConfigurableCronJobPerformable(CxIndexerService cxIndexerService, FacetSearchConfigService facetSearchConfigService) {
+	public SolrIndexerConfigurableJobPerformable(CxIndexerService cxIndexerService, FacetSearchConfigService facetSearchConfigService) {
 		this.cxIndexerService = cxIndexerService;
 		this.facetSearchConfigService = facetSearchConfigService;
 	}

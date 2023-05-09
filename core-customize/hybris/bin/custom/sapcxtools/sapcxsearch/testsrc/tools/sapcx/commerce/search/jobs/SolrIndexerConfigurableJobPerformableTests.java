@@ -26,9 +26,8 @@ import tools.sapcx.commerce.search.model.SolrIndexerConfigurableCronJobModel;
 import tools.sapcx.commerce.search.service.CxIndexerService;
 
 @UnitTest
-public class SolrIndexerConfigurableCronJobPerformableTests {
-
-	private SolrIndexerConfigurableCronJobPerformable jobPerformable;
+public class SolrIndexerConfigurableJobPerformableTests {
+	private SolrIndexerConfigurableJobPerformable jobPerformable;
 	private CxIndexerService cxIndexerService;
 	private FacetSearchConfigService facetSearchConfigService;
 	private SolrIndexerConfigurableCronJobModel jobModel;
@@ -39,7 +38,7 @@ public class SolrIndexerConfigurableCronJobPerformableTests {
 	public void setUp() throws Exception {
 		cxIndexerService = mock(CxIndexerService.class);
 		facetSearchConfigService = mock(FacetSearchConfigService.class);
-		jobPerformable = new SolrIndexerConfigurableCronJobPerformable(cxIndexerService, facetSearchConfigService);
+		jobPerformable = new SolrIndexerConfigurableJobPerformable(cxIndexerService, facetSearchConfigService);
 
 		jobModel = createTestableItemModel(SolrIndexerConfigurableCronJobModel.class);
 		configModel = createTestableItemModel(SolrFacetSearchConfigModel.class);
@@ -56,7 +55,6 @@ public class SolrIndexerConfigurableCronJobPerformableTests {
 		jobModel.setIndexerOperation(IndexerOperationValues.FULL);
 
 		facetSearchConfig = new FacetSearchConfig();
-
 	}
 
 	@Test

@@ -6,7 +6,7 @@
         <property name="cronJobService" ref="cronJobService"/>
         <property name="labelService" ref="labelService"/>
         <property name="modelService" ref="modelService"/>
-        <property name="jobDefinitionCode" value="solrIndexerConfigurableCronJobPerformable"/>
+        <property name="jobDefinitionCode" value="solrIndexerConfigurableJobPerformable"/>
         <property name="currentObjectPrefix" value="newItem"/>
     </bean>
 </beans>

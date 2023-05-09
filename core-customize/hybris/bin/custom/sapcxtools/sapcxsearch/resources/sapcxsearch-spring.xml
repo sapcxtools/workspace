@@ -6,10 +6,9 @@
         <constructor-arg name="indexerStrategyFactory" ref="indexerStrategyFactory"/>
     </bean>
 
-    <bean id="solrIndexerConfigurableCronJobPerformable" class="tools.sapcx.commerce.search.jobs.SolrIndexerConfigurableCronJobPerformable"
+    <bean id="solrIndexerConfigurableJobPerformable" class="tools.sapcx.commerce.search.jobs.SolrIndexerConfigurableJobPerformable"
           parent="abstractJobPerformable">
         <constructor-arg name="cxIndexerService" ref="cxIndexerService"/>
         <constructor-arg name="facetSearchConfigService" ref="facetSearchConfigService"/>
     </bean>
-
 </beans>
