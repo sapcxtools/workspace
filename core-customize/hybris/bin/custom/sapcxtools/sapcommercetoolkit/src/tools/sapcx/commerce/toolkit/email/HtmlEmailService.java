@@ -9,19 +9,41 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-
 /**
  * The {@link HtmlEmailService} interface introduces a simplified way of sending HTML emails from processes and
  * workflows, without the need of having a CMS template and page defined for the email to be sent, as required with
  * the SAP standard. It should be used in favor of the standard services.
- *
+ * <p>
  * If one is using the acceleratorservices extension, they should override the DefaultEmailService by a delegation
  * service that generates the email and calls this service.
  */
 public interface HtmlEmailService {
-	String sendEmail(HtmlEmail email) throws EmailException;
+	/**
+	 * Sends the email. Internally we unwrap the proxy created by the {@link #proxy(HtmlEmail)} method and
+	 * calls the {@link #sendEmailInternal(HtmlEmail)} method with its result.
+	 *
+	 * Note: This method must not be overridden! Please implement {@link #sendEmailInternal(HtmlEmail)} instead.
+	 *
+	 * @param email the email to be sent
+	 * @return the message id of the underlying MimeMessage
+	 * @throws EmailException the sending failed
+	 */
+	default String sendEmail(HtmlEmail email) throws EmailException {
+		if (email instanceof ProxyHtmlEmail) {
+			return sendEmailInternal(((ProxyHtmlEmail) email).getProxiedHtmlEmail());
+		} else {
+			return sendEmailInternal(email);
+		}
+	}
+
+	/**
+	 * Sends the email.
+	 *
+	 * @param email the email to be sent
+	 * @return the message id of the underlying MimeMessage
+	 * @throws EmailException the sending failed
+	 */
+	String sendEmailInternal(HtmlEmail email) throws EmailException;
 
 	default InternetAddress getInternetAddress(String emailAddress) throws EmailException {
 		return getInternetAddress(emailAddress, null);
@@ -43,20 +65,9 @@ public interface HtmlEmailService {
 	 * that will be sent with the {@link HtmlEmailService} directly.
 	 *
 	 * @param email the email to be sent
-	 * @param <T> the class of the html email object
-	 * @return a proxy that guarantees, that the send method invokes the {@link HtmlEmailService#sendEmail(HtmlEmail)} method
+	 * @return a proxy that guarantees, that the send method invokes current {@link HtmlEmailService#sendEmail(HtmlEmail)} method
 	 */
-	default <T extends HtmlEmail> T proxy(T email) {
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(email.getClass());
-		enhancer.setCallback(
-				(MethodInterceptor) (object, method, objects, methodProxy) -> {
-					if ("send".equals(method.getName())) {
-						return sendEmail(email);
-					} else {
-						return method.invoke(email, objects);
-					}
-				});
-		return (T) enhancer.create();
+	default HtmlEmail proxy(HtmlEmail email) throws IllegalArgumentException {
+		return new ProxyHtmlEmail(this, email);
 	}
 }

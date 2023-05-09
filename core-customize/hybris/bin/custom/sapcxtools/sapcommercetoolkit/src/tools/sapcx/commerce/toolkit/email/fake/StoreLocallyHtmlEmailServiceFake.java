@@ -84,7 +84,7 @@ public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 	}
 
 	@Override
-	public String sendEmail(HtmlEmail email) throws EmailException {
+	public String sendEmailInternal(HtmlEmail email) throws EmailException {
 		// first let the email generate the mime message, which also sets sent date
 		buildHtmlEmail(email);
 

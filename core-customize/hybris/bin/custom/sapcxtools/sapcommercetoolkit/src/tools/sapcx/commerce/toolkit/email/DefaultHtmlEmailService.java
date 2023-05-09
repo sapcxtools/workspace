@@ -5,7 +5,7 @@ import org.apache.commons.mail.HtmlEmail;
 
 public class DefaultHtmlEmailService implements HtmlEmailService {
 	@Override
-	public String sendEmail(HtmlEmail email) throws EmailException {
+	public String sendEmailInternal(HtmlEmail email) throws EmailException {
 		return email.send();
 	}
 }
