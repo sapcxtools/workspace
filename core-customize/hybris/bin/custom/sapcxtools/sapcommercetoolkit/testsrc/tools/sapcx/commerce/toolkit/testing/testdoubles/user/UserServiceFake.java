@@ -100,7 +100,6 @@ public class UserServiceFake implements UserService {
 	public Map<String, UserModel> users = new HashMap<>();
 	public Map<String, UserGroupModel> userGroups = new HashMap<>();
 
-
 	// Keep static methods for now. Remove later and use the builder.
 	public static UserServiceFake fake() {
 		return withCustomerId("customer");
@@ -130,7 +129,8 @@ public class UserServiceFake implements UserService {
 		return new UserServiceFake(admin, anonymous, customer);
 	}
 
-	private UserServiceFake() {};
+	private UserServiceFake() {
+	};
 
 	public UserServiceFake(EmployeeModel admin, CustomerModel anonymous, UserModel current) {
 		this.admin = admin;
