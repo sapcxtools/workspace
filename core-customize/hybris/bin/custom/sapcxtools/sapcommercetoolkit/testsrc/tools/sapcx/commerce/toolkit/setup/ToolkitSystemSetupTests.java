@@ -172,6 +172,22 @@ public class ToolkitSystemSetupTests {
 	}
 
 	@Test
+	public void whenAll_verifyThatReleasePatchesAreNotPerformed() throws Exception {
+		addConfigurationForImpExFiles();
+
+		SystemSetupContext context = contextFor(SystemSetup.Process.ALL, SystemSetup.Type.ALL);
+		systemSetup.reliableSetupPhases(context);
+
+		assertThat(importedFiles).doesNotContain(
+				"/releasepatches/release1x0-0001.impex",
+				"/releasepatches/release1x0-0002.impex",
+				"/releasepatches/release2x0-0001.impex",
+				"/releasepatches/release2x0-0002.impex",
+				"/releasepatches/release2x1-0001.impex",
+				"/releasepatches/release2x1-0002.impex");
+	}
+
+	@Test
 	public void whenUpdateAfterInit_verifyThatReleasePatchesAreNotPerformed() throws Exception {
 		addConfigurationForImpExFiles();
 		performSilently(SystemSetup.Process.INIT);
@@ -370,9 +386,9 @@ public class ToolkitSystemSetupTests {
 	private void addEnvironmentConfiguration(boolean isDevelopment, boolean shouldImportSampleData, boolean shouldImportTestData) {
 		configurationServiceFake.setProperty(SystemSetupEnvironment.ISDEVELOPMENTKEY, isDevelopment);
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.environment.importsampledata", shouldImportSampleData);
-		sampleDataImporter.setImportOnInitialization(shouldImportSampleData);
+		sampleDataImporter.setImportOnInitialization(isDevelopment || shouldImportSampleData);
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.environment.importtestdata", shouldImportTestData);
-		testDataImporter.setImportOnInitialization(shouldImportTestData);
+		testDataImporter.setImportOnInitialization(isDevelopment || shouldImportTestData);
 		configurationServiceFake.setProperty("sapcxtoolkit.impeximport.environment.importtestdata", shouldImportTestData);
 	}
 

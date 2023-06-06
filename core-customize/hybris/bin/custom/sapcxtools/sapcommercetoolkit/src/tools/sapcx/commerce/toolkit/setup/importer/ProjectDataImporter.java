@@ -43,7 +43,7 @@ public class ProjectDataImporter extends PrefixBasedDataImporter {
 	@Override
 	protected Predicate<String> getKeyFilter(SystemSetupContext context) {
 		return key -> {
-			if (isSystemInitialization(context) && shouldImportProjectData()) {
+			if (isSystemInitialization(context) && importOnInitialization) {
 				return true;
 			}
 
@@ -58,10 +58,6 @@ public class ProjectDataImporter extends PrefixBasedDataImporter {
 
 	private boolean isSystemInitialization(SystemSetupContext context) {
 		return context.getProcess().isInit() && !context.getProcess().isAll();
-	}
-
-	private boolean shouldImportProjectData() {
-		return getEnvironment().isDevelopment() || importOnInitialization;
 	}
 
 	public void setImportOnInitialization(boolean importOnInitialization) {

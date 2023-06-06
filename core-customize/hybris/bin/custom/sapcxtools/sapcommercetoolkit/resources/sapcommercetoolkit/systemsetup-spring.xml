@@ -51,7 +51,7 @@
 		<property name="impExDataImportExecutor" ref="toolkitImpExDataImportExecutor"/>
 		<property name="title" value="Sample Data"/>
 		<property name="prefix" value="sapcommercetoolkit.impeximport.sampledata"/>
-		<property name="importOnInitialization" value="${sapcommercetoolkit.impeximport.environment.importsampledata}"/>
+		<property name="importOnInitialization" value="#{${sapcommercetoolkit.impeximport.environment.isdevelopment} || ${sapcommercetoolkit.impeximport.environment.importsampledata}}"/>
 		<property name="allowManualImport" value="true"/>
 	</bean>
 	<bean id="testDataImporter" class="tools.sapcx.commerce.toolkit.setup.importer.ProjectDataImporter">
@@ -59,7 +59,7 @@
 		<property name="impExDataImportExecutor" ref="toolkitImpExDataImportExecutor"/>
 		<property name="title" value="Test Data"/>
 		<property name="prefix" value="sapcommercetoolkit.impeximport.testdata"/>
-		<property name="importOnInitialization" value="${sapcommercetoolkit.impeximport.environment.importtestdata}"/>
+		<property name="importOnInitialization" value="#{${sapcommercetoolkit.impeximport.environment.isdevelopment} || ${sapcommercetoolkit.impeximport.environment.importtestdata}}"/>
 		<property name="allowManualImport" value="true"/>
 	</bean>
 	<bean id="releasePatchReRunImporter" class="tools.sapcx.commerce.toolkit.setup.importer.ProjectDataImporter">

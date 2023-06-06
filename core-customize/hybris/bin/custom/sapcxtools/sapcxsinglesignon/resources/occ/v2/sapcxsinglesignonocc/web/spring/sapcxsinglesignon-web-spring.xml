@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Additional filters before spring security chain -->
+    <bean depends-on="commerceWebServicesFilterChainListV2" parent="listMergeDirective">
+        <property name="beforeBeanNames" value="springSecurityFilterChain"/>
+        <property name="add" ref="auth0AccessTokenVerificationFilter"/>
+    </bean>
+
+    <alias name="cxAuth0AccessTokenVerificationFilter" alias="auth0AccessTokenVerificationFilter"/>
+    <bean id="cxAuth0AccessTokenVerificationFilter" parent="externalAccessTokenVerificationFilter"
+          class="tools.sapcx.commerce.sso.auth0.filter.Auth0AccessTokenVerificationFilter">
+        <constructor-arg name="customerIdField" value="${sapcxsinglesignon.auth0.customer.idfield}"/>
+    </bean>
+
+    <bean id="externalAccessTokenVerificationFilter" abstract="true"
+          class="tools.sapcx.commerce.sso.filter.ExternalAccessTokenVerificationFilter">
+        <constructor-arg name="clientDetailsService" ref="oauthClientDetails"/>
+        <constructor-arg name="userDetailsService" ref="wsUserDetailsService"/>
+        <constructor-arg name="oAuth2RequestFactory" ref="oAuth2RequestFactory"/>
+        <constructor-arg name="tokenStore" ref="oauthTokenStore"/>
+        <constructor-arg name="occClientId" value="${sapcxsinglesignon.filter.login.userClientId}"/>
+        <constructor-arg name="tokenExpiration" value="${sapcxsinglesignon.filter.login.tokenExpiration}"/>
+        <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.enabled}" type="boolean"/>
+    </bean>
+</beans>

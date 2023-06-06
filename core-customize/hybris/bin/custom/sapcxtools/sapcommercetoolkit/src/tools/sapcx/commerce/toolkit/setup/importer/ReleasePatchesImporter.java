@@ -55,7 +55,8 @@ public class ReleasePatchesImporter extends PrefixBasedDataImporter {
 
 	@Override
 	protected Predicate<String> getKeyFilter(SystemSetupContext context) {
-		return getKeyFilterWithDefault(context.getProcess().isUpdate());
+		boolean shouldExecuteByDefault = !context.getProcess().isInit();
+		return getKeyFilterWithDefault(shouldExecuteByDefault);
 	}
 
 	private Predicate<String> getKeyFilterWithDefault(boolean defaultValue) {

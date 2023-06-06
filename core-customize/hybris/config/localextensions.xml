@@ -8,5 +8,7 @@
     <extension name="sapcommercetoolkit"/>
     <extension name="sapcxbackoffice"/>
     <extension name="sapcxreporting"/>
+    <extension name="sapcxsearch"/>
+    <extension name="sapcxsinglesignon"/>
   </extensions>
 </hybrisconfig>

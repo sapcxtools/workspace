@@ -93,7 +93,7 @@ public class ModelServiceFake implements ModelService {
 
 	@Override
 	public void refresh(Object o) {
-		throw new UnsupportedOperationException();
+		// Do nothing for now
 	}
 
 	@Override

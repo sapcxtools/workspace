@@ -34,7 +34,7 @@ public class DefaultHtmlEmailServiceTests {
 	public void verifyProxyMethodWrapsHtmlEmailObject() throws EmailException {
 		TestHtmlEmail email = new TestHtmlEmail();
 
-		TestHtmlEmail proxy = emailService.proxy(email);
+		HtmlEmail proxy = emailService.proxy(email);
 		String messageId = proxy.send();
 
 		assertThat(email.numberOfInvocationsOfSend).isEqualTo(1);

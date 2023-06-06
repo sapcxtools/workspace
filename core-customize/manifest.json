@@ -50,7 +50,7 @@
             ]
         }
     ],
-    "commerceSuiteVersion": "2205.6",
+    "commerceSuiteVersion": "2211.6",
     "extensionPacks": [],
     "extensions": [],
     "properties": [],
@@ -86,7 +86,7 @@
             }
         ],
         "tests": {
-            "extensions": ["sapcommercetoolkit", "sapcxbackoffice", "sapcxreporting"],
+            "extensions": ["sapcommercetoolkit", "sapcxbackoffice", "sapcxreporting", "sapcxsearch", "sapcxsinglesignon"],
             "annotations": ["UnitTests", "IntegrationTests"],
             "packages": ["tools.sapcx.commerce.*"]
         }
