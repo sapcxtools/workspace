@@ -42,6 +42,10 @@ interface SdkAction<RESPONSE> {
 		return (returnType.isInstance(value)) ? returnType.cast(value) : null;
 	}
 
+	default String getCustomerIdField() {
+		return getConfigurationService().getCustomerIdField();
+	}
+
 	default String getCustomerConnection() {
 		return getConfigurationService().getCustomerConnection();
 	}

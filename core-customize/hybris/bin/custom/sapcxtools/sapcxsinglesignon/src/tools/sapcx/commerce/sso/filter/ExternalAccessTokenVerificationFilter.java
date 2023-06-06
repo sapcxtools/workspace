@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 
+import javax.annotation.Nonnull;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -75,10 +76,13 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 		this.enabled = enabled;
 	}
 
+	@Nonnull
+	protected abstract String getUserIdFromAccessToken(String accessTokenValue);
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		if (enabled) {
-			Authentication accessToken = tokenExtractor.extract(request);
+		Authentication accessToken = tokenExtractor.extract(request);
+		if (enabled && accessToken != null) {
 			String accessTokenValue = accessToken.getPrincipal().toString();
 			LOG.debug("Access token extracted from request: {}", accessTokenValue);
 
@@ -124,8 +128,6 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 		return oAuth2AccessToken;
 	}
 
-	protected abstract String getUserIdFromAccessToken(String accessTokenValue);
-
 	private OAuth2AccessToken storeAuthenticationForUser(String accessTokenValue, String oAuth2ClientId, String userId) {
 		assert isNotBlank(oAuth2ClientId);
 		assert isNotBlank(userId);
@@ -167,7 +169,7 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 
 	@Override
 	public void afterPropertiesSet() throws ServletException {
+		super.afterPropertiesSet();
 		this.tokenExtractor = new BearerTokenExtractor();
-		this.afterPropertiesSet();
 	}
 }

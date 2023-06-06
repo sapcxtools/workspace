@@ -28,7 +28,7 @@ public interface Actions {
 		return CreateUserAction.createUser(customer);
 	}
 
-	static User updateUser(CustomerModel customer) throws Auth0Exception {
-		return UpdateUserAction.updateUser(customer);
+	static User updateUser(User user, CustomerModel customer) throws Auth0Exception {
+		return UpdateUserAction.updateUser(user, customer);
 	}
 }

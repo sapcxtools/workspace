@@ -2,6 +2,8 @@ package tools.sapcx.commerce.sso.auth0.filter;
 
 import static org.apache.commons.collections4.MapUtils.emptyIfNull;
 
+import javax.annotation.Nonnull;
+
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.auth.UserInfo;
 
@@ -21,7 +23,7 @@ import tools.sapcx.commerce.sso.filter.ExternalAccessTokenVerificationFilter;
 public class Auth0AccessTokenVerificationFilter extends ExternalAccessTokenVerificationFilter {
 	private static final Logger LOG = LoggerFactory.getLogger(Auth0AccessTokenVerificationFilter.class);
 
-	private String userIdField;
+	private String customerIdField;
 
 	public Auth0AccessTokenVerificationFilter(
 			OAuth2RequestFactory oAuth2RequestFactory,
@@ -31,18 +33,19 @@ public class Auth0AccessTokenVerificationFilter extends ExternalAccessTokenVerif
 			String occClientId,
 			int tokenExpiration,
 			boolean enabled,
-			String userIdField) {
+			String customerIdField) {
 		super(oAuth2RequestFactory, clientDetailsService, userDetailsService, tokenStore, occClientId, tokenExpiration, enabled);
-		this.userIdField = userIdField;
+		this.customerIdField = customerIdField;
 	}
 
 	@Override
+	@Nonnull
 	protected String getUserIdFromAccessToken(String accessTokenValue) {
 		try {
 			UserInfo userDetails = Actions.getUserInformation(accessTokenValue);
 			if (userDetails != null) {
-				String userId = (String) emptyIfNull(userDetails.getValues()).getOrDefault(userIdField, null);
-				LOG.debug("Mapped user ID using field '{}': '{}'", userIdField, userId != null ? userId : "-none-");
+				String userId = (String) emptyIfNull(userDetails.getValues()).getOrDefault(customerIdField, null);
+				LOG.debug("Mapped user ID using field '{}': '{}'", customerIdField, userId != null ? userId : "-none-");
 				return userId;
 			}
 		} catch (Auth0Exception e) {

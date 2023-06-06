@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 class FetchUserAction implements SdkAction<User> {
 	private static final Logger LOG = LoggerFactory.getLogger(FetchUserAction.class);
 
-	static User getUser(String email) throws Auth0Exception {
-		return new FetchUserAction().execute(Map.of("email", email));
+	static User getUser(String id) throws Auth0Exception {
+		return new FetchUserAction().execute(Map.of("id", id));
 	}
 
 	private FetchUserAction() {
@@ -22,16 +22,16 @@ class FetchUserAction implements SdkAction<User> {
 
 	@Override
 	public User execute(Map<String, Object> parameter) throws Auth0Exception {
-		String email = getWithType(parameter, "email", String.class);
+		String userId = getWithType(parameter, "id", String.class);
 		User user = null;
 		try {
-			UserFilter userByEmail = new UserFilter().withQuery(email).withFields("email", true);
-			return user = fetchFirst(managementAPI().users().list(userByEmail));
+			UserFilter userById = new UserFilter().withQuery(userId);
+			return user = fetchFirst(managementAPI().users().list(userById));
 		} catch (Auth0Exception exception) {
-			LOG.debug(String.format("Search for user with email '%s' could not be executed!", email), exception);
+			LOG.debug(String.format("Search for user with ID '%s' could not be executed!", userId), exception);
 			throw exception;
 		} finally {
-			LOG.debug("Lookup for existing user with email '{}' resulted in: '{}'", email, user != null ? user.getId() : "-not found-");
+			LOG.debug("Lookup for existing user with ID '{}' resulted in: '{}'", userId, user != null ? user.getId() : "-not found-");
 		}
 	}
 }

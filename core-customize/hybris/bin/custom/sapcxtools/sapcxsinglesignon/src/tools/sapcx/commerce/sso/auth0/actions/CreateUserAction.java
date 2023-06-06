@@ -27,7 +27,7 @@ class CreateUserAction implements SdkAction<User> {
 	@Override
 	public User execute(Map<String, Object> parameter) throws Auth0Exception {
 		CustomerModel customer = getWithType(parameter, "customer", CustomerModel.class);
-		String email = customer.getUid();
+		String customerId = customer.getUid();
 
 		User user = null;
 		try {
@@ -40,10 +40,10 @@ class CreateUserAction implements SdkAction<User> {
 
 			return user = fetch(managementAPI().users().create(userInfo));
 		} catch (Auth0Exception exception) {
-			LOG.debug(String.format("Create user with email '%s' failed!", email), exception);
+			LOG.debug(String.format("Create user with ID '%s' failed!", customerId), exception);
 			throw exception;
 		} finally {
-			LOG.debug("Create user with email '{}' resulted in: '{}'.", email, user != null ? user.getId() : "-error-");
+			LOG.debug("Create user with ID '{}' resulted in: '{}'.", customerId, user != null ? user.getId() : "-error-");
 		}
 	}
 

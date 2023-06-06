@@ -38,7 +38,8 @@
     <!-- Customer Replication Strategy -->
     <alias name="cxAuth0CustomerReplicationStrategy" alias="customerReplicationStrategy"/>
     <bean id="cxAuth0CustomerReplicationStrategy" class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerReplicationStrategy">
+        <constructor-arg name="userService" ref="userService"/>
         <constructor-arg name="auth0RoleForCustomers" value="${sapcxsinglesignon.auth0.customer.role}"/>
-        <constructor-arg name="enabled" value="${sapcxsinglesignon.replication.enabled}"/>
+        <constructor-arg name="enabled" value="${sapcxsinglesignon.replication.enabled}" type="boolean"/>
     </bean>
 </beans>

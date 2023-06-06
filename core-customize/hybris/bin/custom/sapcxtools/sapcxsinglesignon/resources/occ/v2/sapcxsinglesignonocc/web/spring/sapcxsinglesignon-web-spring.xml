@@ -12,7 +12,7 @@
     <alias name="cxAuth0AccessTokenVerificationFilter" alias="auth0AccessTokenVerificationFilter"/>
     <bean id="cxAuth0AccessTokenVerificationFilter" parent="externalAccessTokenVerificationFilter"
           class="tools.sapcx.commerce.sso.auth0.filter.Auth0AccessTokenVerificationFilter">
-        <constructor-arg name="userIdField" value="${sapcxsinglesignon.auth0.login.userIdField}"/>
+        <constructor-arg name="customerIdField" value="${sapcxsinglesignon.auth0.customer.idfield}"/>
     </bean>
 
     <bean id="externalAccessTokenVerificationFilter" abstract="true"
@@ -23,6 +23,6 @@
         <constructor-arg name="tokenStore" ref="oauthTokenStore"/>
         <constructor-arg name="occClientId" value="${sapcxsinglesignon.filter.login.userClientId}"/>
         <constructor-arg name="tokenExpiration" value="${sapcxsinglesignon.filter.login.tokenExpiration}"/>
-        <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.login.enabled}"/>
+        <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.enabled}" type="boolean"/>
     </bean>
 </beans>

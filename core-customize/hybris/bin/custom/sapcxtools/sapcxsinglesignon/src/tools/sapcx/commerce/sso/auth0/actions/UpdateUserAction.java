@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 class UpdateUserAction implements SdkAction<User> {
 	private static final Logger LOG = LoggerFactory.getLogger(UpdateUserAction.class);
 
-	static User updateUser(CustomerModel customer) throws Auth0Exception {
-		return new UpdateUserAction().execute(Map.of("customer", customer));
+	static User updateUser(User user, CustomerModel customer) throws Auth0Exception {
+		return new UpdateUserAction().execute(Map.of("user", user, "customer", customer));
 	}
 
 	private UpdateUserAction() {
@@ -24,19 +24,18 @@ class UpdateUserAction implements SdkAction<User> {
 
 	@Override
 	public User execute(Map<String, Object> parameter) throws Auth0Exception {
+		User user = getWithType(parameter, "user", User.class);
 		CustomerModel customer = getWithType(parameter, "customer", CustomerModel.class);
-		String email = customer.getUid();
-
-		User user = null;
+		String customerId = customer.getUid();
 		try {
 			Converter<CustomerModel, User> customerConverter = getCustomerConverter();
 			User userInfo = customerConverter.convert(customer);
 			return user = fetch(managementAPI().users().update(user.getId(), userInfo));
 		} catch (Auth0Exception exception) {
-			LOG.debug(String.format("Search for user with email '%s' failed!", customer.getUid()), exception);
+			LOG.debug(String.format("Search for user with ID '%s' failed!", customer.getUid()), exception);
 			throw exception;
 		} finally {
-			LOG.debug("Update information for existing user with email '{}' resulted in: '{}'", email, user != null ? user.getId() : "-error-");
+			LOG.debug("Update information for existing user with ID '{}' resulted in: '{}'", customerId, user != null ? user.getId() : "-error-");
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.sso.auth0.replication;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import com.auth0.json.mgmt.users.User;
 
 import de.hybris.platform.commerceservices.strategies.CustomerNameStrategy;
@@ -16,15 +18,22 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 
 	@Override
 	public void populate(CustomerModel source, User target) throws ConversionException {
-		String[] nameParts = customerNameStrategy.splitName(source.getName());
-		if (nameParts.length == 2) {
-			target.setGivenName(nameParts[0]);
-			target.setFamilyName(nameParts[1]);
-		}
+		target.setEmail(source.getContactEmail());
+		target.setEmailVerified(target.getEmail() != null);
 
 		target.setName(source.getName());
-		target.setEmail(source.getUid());
-		target.setEmailVerified(true);
+		target.setNickname(source.getCustomerID());
+
+		String[] nameParts = customerNameStrategy.splitName(source.getName());
+		if (nameParts.length == 2) {
+			if (isNotBlank(nameParts[0])) {
+				target.setGivenName(nameParts[0]);
+			}
+			if (isNotBlank(nameParts[1])) {
+				target.setFamilyName(nameParts[1]);
+			}
+		}
+
 		target.setBlocked(!Boolean.FALSE.equals(source.isLoginDisabled()));
 	}
 }

@@ -20,6 +20,7 @@ public class SdkConfigurationService {
 	private static final String AUTH0_MANAGEMENT_API_CLIENTID = "sapcxsinglesignon.auth0.management.api.clientid";
 	private static final String AUTH0_MANAGEMENT_API_CLIENTSECRET = "sapcxsinglesignon.auth0.management.api.clientsecret";
 	private static final String AUTH0_CUSTOMER_CONNECTION = "sapcxsinglesignon.auth0.customer.connection";
+	private static final String AUTH0_CUSTOMER_ID_FIELD = "sapcxsinglesignon.auth0.customer.idfield";
 
 	private ConfigurationService configurationService;
 	private Converter<CustomerModel, User> customerConverter;
@@ -71,6 +72,10 @@ public class SdkConfigurationService {
 
 	public String getCustomerConnection() {
 		return configurationService.getConfiguration().getString(AUTH0_CUSTOMER_CONNECTION);
+	}
+
+	public String getCustomerIdField() {
+		return configurationService.getConfiguration().getString(AUTH0_CUSTOMER_ID_FIELD);
 	}
 
 	public Converter<CustomerModel, User> getCustomerConverter() {
