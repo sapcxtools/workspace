@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchResultHeader;
 import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;
@@ -25,7 +26,7 @@ public class CsvReportGeneratorTests {
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	private File tempReportFile;
-	private QueryReportConfigurationModel queryReportConfiguration;
+	private QueryFileConfigurationData queryReportConfiguration;
 	private List<GenericSearchResultHeader> headers = new ArrayList<>();
 	private List<Map<GenericSearchResultHeader, String>> values = new ArrayList<>();
 
@@ -35,7 +36,7 @@ public class CsvReportGeneratorTests {
 	public void setUp() throws Exception {
 		tempReportFile = tempFolder.newFile("report.csv");
 
-		queryReportConfiguration = InMemoryModelFactory.createTestableItemModel(QueryReportConfigurationModel.class);
+		queryReportConfiguration = new QueryFileConfigurationData();
 		queryReportConfiguration.setCsvEncoding("UTF-8");
 		queryReportConfiguration.setCsvCommentChar('#');
 		queryReportConfiguration.setCsvFieldSeparator(';');

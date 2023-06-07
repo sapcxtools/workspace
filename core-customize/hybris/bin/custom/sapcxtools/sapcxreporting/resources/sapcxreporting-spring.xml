@@ -13,6 +13,7 @@
         <property name="htmlEmailGenerator" ref="htmlEmailGenerator" />
         <property name="htmlEmailService" ref="htmlEmailService" />
         <property name="mimeService" ref="mimeService" />
+        <property name="queryConfigurationConverter" ref="queryConfigurationConverter"/>
     </bean>
 
     <alias alias="reportService" name="cxReportService" />
@@ -56,4 +57,15 @@
         <property name="interceptor" ref="reportGenerationScheduleInitDefaultInterceptor"/>
         <property name="typeCode" value="ReportGenerationSchedule"/>
     </bean>
+
+    <bean id="queryConfigurationConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData"/>
+        <property name="populators">
+            <list>
+                <ref bean="queryReportConfigurationPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="queryReportConfigurationPopulator" class="tools.sapcx.commerce.reporting.populators.QueryReportConfigurationPopulator"/>
 </beans>

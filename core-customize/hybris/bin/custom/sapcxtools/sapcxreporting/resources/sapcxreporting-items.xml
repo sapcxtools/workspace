@@ -118,6 +118,9 @@
                     <persistence type="property" />
                     <defaultvalue>de.hybris.platform.util.Config.getBoolean("sapcxreporting.report.format.excel.alternatinglines", false)</defaultvalue>
                 </attribute>
+                <attribute qualifier="stringDateFormat" type="localized:java.lang.String">
+                    <persistence type="property" />
+                </attribute>
             </attributes>
             <indexes>
                 <index name="idx">

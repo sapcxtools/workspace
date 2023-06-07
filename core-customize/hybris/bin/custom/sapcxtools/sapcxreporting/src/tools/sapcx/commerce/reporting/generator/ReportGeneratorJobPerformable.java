@@ -21,12 +21,15 @@ import java.util.zip.ZipOutputStream;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
 
+import com.netzsch.cx.mynetzsch.core.model.ProductGroupModel;
+import com.netzsch.cx.mynetzsch.facades.machine.data.ProductGroupData;
 import de.hybris.platform.cronjob.enums.CronJobResult;
 import de.hybris.platform.cronjob.enums.CronJobStatus;
 import de.hybris.platform.media.services.MimeService;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
 
+import de.hybris.platform.servicelayer.dto.converter.Converter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -42,6 +45,7 @@ import org.springframework.beans.factory.annotation.Required;
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.model.ReportGenerationScheduleModel;
 import tools.sapcx.commerce.reporting.report.ReportService;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchService;
 import tools.sapcx.commerce.toolkit.email.HtmlEmailGenerator;
@@ -56,6 +60,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 	private HtmlEmailGenerator htmlEmailGenerator;
 	private HtmlEmailService htmlEmailService;
 	private MimeService mimeService;
+
+	private Converter<QueryReportConfigurationModel, QueryFileConfigurationData> queryConfigurationConverter;
 
 	@Override
 	public PerformResult perform(ReportGenerationScheduleModel schedule) {
@@ -105,7 +111,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		Optional<File> zipFile = Optional.empty();
 		try {
 			GenericSearchResult searchResult = genericSearchService.search(query, params);
-			reportFile = reportService.getReportFile(report, searchResult);
+
+			reportFile = reportService.getReportFile(queryConfigurationConverter.convert(report), searchResult);
 
 			HtmlEmail mail = createResultEmail(report, searchResult, reportFile.isPresent());
 			if (reportFile.isPresent()) {
@@ -246,5 +253,14 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 	@Required
 	public void setHtmlEmailService(HtmlEmailService htmlEmailService) {
 		this.htmlEmailService = htmlEmailService;
+	}
+
+	public Converter<QueryReportConfigurationModel, QueryFileConfigurationData> getQueryConfigurationConverter() {
+		return queryConfigurationConverter;
+	}
+
+	@Required
+	public void setQueryConfigurationConverter(Converter<QueryReportConfigurationModel, QueryFileConfigurationData> queryConfigurationConverter) {
+		this.queryConfigurationConverter = queryConfigurationConverter;
 	}
 }

@@ -10,6 +10,7 @@ import de.hybris.platform.util.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
 
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 
 /**
  * Implementation of the {@link CSVWriter} that takes the configuration for the CSV file from the underlying
@@ -32,12 +33,12 @@ public class CsvReportWriter extends CSVWriter {
 	 * @throws FileNotFoundException        if given {@link File} does not exist or is not writable
 	 * @throws UnsupportedEncodingException if encoding of {@link QueryReportConfigurationModel} is not supported
 	 */
-	public CsvReportWriter(File file, QueryReportConfigurationModel report) throws UnsupportedEncodingException, FileNotFoundException {
+	public CsvReportWriter(File file, QueryFileConfigurationData report) throws UnsupportedEncodingException, FileNotFoundException {
 		super(file, StringUtils.defaultIfBlank(report.getCsvEncoding(), INITIAL_ENCODING));
 		reinitializeDefaultsFromReport(report);
 	}
 
-	private void reinitializeDefaultsFromReport(QueryReportConfigurationModel report) {
+	private void reinitializeDefaultsFromReport(QueryFileConfigurationData report) {
 		setCommentchar(getValueWithDefaultSupplier(report.getCsvCommentChar(), super::getDefaultCommentChar));
 		setFieldseparator(getValueWithDefaultSupplier(report.getCsvFieldSeparator(), super::getDefaultFieldSeparator));
 		setTextseparator(getValueWithDefaultSupplier(report.getCsvTextSeparator(), super::getDefaultTextSeparator));

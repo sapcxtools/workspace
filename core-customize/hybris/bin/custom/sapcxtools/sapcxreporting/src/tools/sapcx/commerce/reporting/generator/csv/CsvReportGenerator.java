@@ -2,18 +2,13 @@ package tools.sapcx.commerce.reporting.generator.csv;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.sapcx.commerce.reporting.generator.ReportGenerator;
-import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchResultHeader;
 
@@ -22,7 +17,7 @@ public class CsvReportGenerator implements ReportGenerator {
 	private static final String CSV_EXTENSION = "csv";
 
 	@Override
-	public boolean createReport(QueryReportConfigurationModel report, GenericSearchResult result, File file) {
+	public boolean createReport(QueryFileConfigurationData report, GenericSearchResult result, File file) {
 		CsvReportWriter csvWriter = null;
 		try {
 			List<GenericSearchResultHeader> headers = result.getHeaders();
