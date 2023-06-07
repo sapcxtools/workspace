@@ -14,11 +14,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchResultHeader;
-import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;
 
 @UnitTest
 public class CsvReportGeneratorTests {

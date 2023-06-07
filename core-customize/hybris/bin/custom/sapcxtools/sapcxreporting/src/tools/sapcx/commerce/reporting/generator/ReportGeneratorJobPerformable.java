@@ -21,15 +21,13 @@ import java.util.zip.ZipOutputStream;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
 
-import com.netzsch.cx.mynetzsch.core.model.ProductGroupModel;
-import com.netzsch.cx.mynetzsch.facades.machine.data.ProductGroupData;
 import de.hybris.platform.cronjob.enums.CronJobResult;
 import de.hybris.platform.cronjob.enums.CronJobStatus;
 import de.hybris.platform.media.services.MimeService;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
-
 import de.hybris.platform.servicelayer.dto.converter.Converter;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -130,7 +128,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		}
 	}
 
-	private HtmlEmail createResultEmail(QueryReportConfigurationModel report, GenericSearchResult search, boolean hasAttachments) throws EmailException {
+	private HtmlEmail createResultEmail(QueryReportConfigurationModel report, GenericSearchResult search,
+			boolean hasAttachments) throws EmailException {
 		String title = report.getTitle();
 		String description = getDescription(search, hasAttachments, report.getDescription());
 		return htmlEmailGenerator.newHtmlEmail()
@@ -232,10 +231,6 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		this.reportService = reportService;
 	}
 
-	public ReportService getReportService() {
-		return reportService;
-	}
-
 	@Required
 	public void setHtmlEmailGenerator(HtmlEmailGenerator htmlEmailGenerator) {
 		this.htmlEmailGenerator = htmlEmailGenerator;
@@ -246,17 +241,9 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		this.mimeService = mimeService;
 	}
 
-	public HtmlEmailGenerator getHtmlEmailGenerator() {
-		return htmlEmailGenerator;
-	}
-
 	@Required
 	public void setHtmlEmailService(HtmlEmailService htmlEmailService) {
 		this.htmlEmailService = htmlEmailService;
-	}
-
-	public Converter<QueryReportConfigurationModel, QueryFileConfigurationData> getQueryConfigurationConverter() {
-		return queryConfigurationConverter;
 	}
 
 	@Required
