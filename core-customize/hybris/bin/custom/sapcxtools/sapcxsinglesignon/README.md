@@ -21,7 +21,7 @@ which are set to `false` by default.
 In addition to the backend configuration, the composable storefront needs to be extended with
 configuration settings as within the following example:
 
-```javascript
+```typescript
 export const authCodeFlowConfig: AuthConfig = {
 	authentication: {
 		client_id: '<client id>',
@@ -29,11 +29,12 @@ export const authCodeFlowConfig: AuthConfig = {
 		baseUrl: 'https://<your-auth0-domain>',
 		tokenEndpoint: '/oauth/token',
 		loginUrl: '/authorize',
-		revokeEndpoint: '/oidc/logout',
-		logoutUrl: 'https://www.<your-domain>.com/?revalidate_token=true',
+		revokeEndpoint: '/oauth/revoke',
+        logoutUrl: '/oidc/logout',
 		userinfoEndpoint: '/userinfo',
 		OAuthLibConfig: {
-			redirectUri: 'https://www.your-domain>.com/',
+			redirectUri: 'https://www.<your-domain>.com',
+            postLogoutRedirectUri: 'https://www.<your-domain>.com',
 			responseType: 'code',
 			scope: 'openid profile email',
 			showDebugInformation: true,
@@ -41,6 +42,53 @@ export const authCodeFlowConfig: AuthConfig = {
 		},
 	},
 };
+```
+
+To avoid failing requests during the logout sequence, we also strongly recommend to overlay the standard logout
+guard from the Spartacus project, with an implementation as follows here:
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router, UrlTree } from '@angular/router';
+import { AuthRedirectService, AuthService, CmsService, OccEndpointsService, ProtectedRoutesService, SemanticPathService } from '@spartacus/core';
+import { LogoutGuard } from '@spartacus/storefront';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable({
+	providedIn: 'root',
+})
+export class OAuth2LogoutGuard extends LogoutGuard {
+	constructor(
+		protected auth: AuthService,
+		protected cms: CmsService,
+		protected semanticPathService: SemanticPathService,
+		protected protectedRoutes: ProtectedRoutesService,
+		protected router: Router,
+		protected authRedirectService: AuthRedirectService,
+		protected http: HttpClient,
+        protected endpointsService: OccEndpointsService
+	) {
+		super(auth, cms, semanticPathService, protectedRoutes, router, authRedirectService);
+	}
+
+	canActivate(): Observable<boolean | UrlTree> {
+		// Logout route should never be remembered by guard
+		this.authRedirectService.reportNotAuthGuard();
+
+		// Revoke access token from SAP Commerce Backend
+		var endpoint = this.getRevocationEndpoint();
+		this.http.post(endpoint, "").subscribe();
+
+		// Perform standard OAuth2 logoutgitgi
+		return from(this.logout()).pipe(map(() => true));
+	}
+	
+	getRevocationEndpoint(): string {
+		return this.endpointsService.buildUrl('/users/current/revokeAccessToken');
+	}
+}
 ```
 
 For the customer replication, one can add additional populators to the `auth0CustomerConverter` converter bean.
