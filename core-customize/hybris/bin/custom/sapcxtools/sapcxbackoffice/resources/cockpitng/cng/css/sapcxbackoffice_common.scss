@@ -1,0 +1,8 @@
+@import "cockpitng-globals.scss";
+
+/*Icons for explorer tree */
+div.yw-explorerTree .y-tree-icon-sapcxtools_treenode_main.y-tree-icon:before {
+  font-family: var(--bo-content-icon-font-family);
+  content: "\e10c";
+  color: var(--bo-content-icon-color);
+}
