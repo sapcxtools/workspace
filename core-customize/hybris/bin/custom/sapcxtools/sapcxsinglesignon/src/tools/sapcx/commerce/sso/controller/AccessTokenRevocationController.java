@@ -3,11 +3,6 @@ package tools.sapcx.commerce.sso.controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import de.hybris.platform.webservicescommons.swagger.ApiBaseSiteIdAndUserIdParam;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/{baseSiteId}/users/{userId}/revokeAccessToken")
-@Tag(name = "Users")
 public class AccessTokenRevocationController {
 	private static final Logger LOG = LoggerFactory.getLogger(AccessTokenRevocationController.class);
 
@@ -42,8 +36,6 @@ public class AccessTokenRevocationController {
 	@Secured({ "ROLE_CUSTOMERGROUP", "ROLE_TRUSTED_CLIENT" })
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@Operation(operationId = "revokeAccessToken", summary = "Revokes an access token.")
-	@ApiBaseSiteIdAndUserIdParam
 	public void revokeAccessToken(HttpServletRequest request) {
 		Authentication accessToken = tokenExtractor.extract(request);
 
