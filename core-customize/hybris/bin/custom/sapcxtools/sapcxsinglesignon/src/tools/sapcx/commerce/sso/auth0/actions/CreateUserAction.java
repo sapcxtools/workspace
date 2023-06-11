@@ -2,7 +2,6 @@ package tools.sapcx.commerce.sso.auth0.actions;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.users.User;
@@ -48,7 +47,7 @@ class CreateUserAction implements SdkAction<User> {
 	}
 
 	private char[] getRandomPassword() {
-		RandomGenerator randomPasswordGenerator = new Random();
+		Random randomPasswordGenerator = new Random();
 		byte[] password = new byte[32];
 		randomPasswordGenerator.nextBytes(password);
 		return new String(password).toCharArray();
