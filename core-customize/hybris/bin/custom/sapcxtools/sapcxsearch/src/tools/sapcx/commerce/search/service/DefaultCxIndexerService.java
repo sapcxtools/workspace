@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import de.hybris.platform.solrfacetsearch.config.FacetSearchConfig;
-import de.hybris.platform.solrfacetsearch.config.IndexConfig;
 import de.hybris.platform.solrfacetsearch.config.IndexOperation;
 import de.hybris.platform.solrfacetsearch.config.IndexedType;
 import de.hybris.platform.solrfacetsearch.indexer.exceptions.IndexerException;
@@ -18,7 +17,6 @@ import de.hybris.platform.solrfacetsearch.indexer.strategies.IndexerStrategyFact
 import org.slf4j.Logger;
 
 public class DefaultCxIndexerService implements CxIndexerService {
-
 	private static final Logger LOG = getLogger(DefaultCxIndexerService.class);
 
 	private final IndexerStrategyFactory indexerStrategyFactory;
@@ -33,12 +31,14 @@ public class DefaultCxIndexerService implements CxIndexerService {
 	}
 
 	@Override
-	public void performIndexForIndexedTypes(FacetSearchConfig facetSearchConfig, IndexOperation indexOperation, List<String> indexedTypeNameList, Map<String, String> indexerHints)
-			throws IndexerException {
-		IndexConfig indexConfig = facetSearchConfig.getIndexConfig();
+	public void performIndexForIndexedTypes(
+			FacetSearchConfig facetSearchConfig,
+			IndexOperation indexOperation,
+			List<String> indexedTypeNameList,
+			Map<String, String> indexerHints) throws IndexerException {
 		List<IndexedType> indexedTypeList = getTypesToIndex(facetSearchConfig, indexedTypeNameList);
 		for (IndexedType indexedType : indexedTypeList) {
-			LOG.info(String.format("Perform %s Index for Indexed Type %s", indexOperation, indexedType.getIdentifier()));
+			LOG.info(String.format("Perform index operation '%s' for indexed type '%s'", indexOperation, indexedType.getIdentifier()));
 			IndexerStrategy indexerStrategy = createIndexerStrategy(facetSearchConfig);
 			indexerStrategy.setIndexOperation(indexOperation);
 			indexerStrategy.setFacetSearchConfig(facetSearchConfig);
