@@ -48,43 +48,71 @@ To avoid failing requests during the logout sequence, we also strongly recommend
 guard from the Spartacus project, with an implementation as follows here:
 
 ```typescript
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
-import { AuthRedirectService, AuthService, CmsService, OccEndpointsService, ProtectedRoutesService, SemanticPathService } from '@spartacus/core';
+import {
+    AuthRedirectService,
+    AuthService,
+    CmsService,
+    OccEndpointsService,
+    ProtectedRoutesService,
+    SemanticPathService,
+} from '@spartacus/core';
 import { LogoutGuard } from '@spartacus/storefront';
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
-@Injectable({
-	providedIn: 'root',
-})
-export class OAuth2LogoutGuard extends LogoutGuard {
-	constructor(
-		protected auth: AuthService,
-		protected cms: CmsService,
-		protected semanticPathService: SemanticPathService,
-		protected protectedRoutes: ProtectedRoutesService,
-		protected router: Router,
-		protected authRedirectService: AuthRedirectService,
-		protected http: HttpClient,
+@Injectable()
+export class KronosLogoutGuard extends LogoutGuard {
+    constructor(
+        protected auth: AuthService,
+        protected cms: CmsService,
+        protected semanticPathService: SemanticPathService,
+        protected protectedRoutes: ProtectedRoutesService,
+        protected router: Router,
+        protected authRedirectService: AuthRedirectService,
+        protected http: HttpClient,
         protected endpointsService: OccEndpointsService
-	) {
-		super(auth, cms, semanticPathService, protectedRoutes, router, authRedirectService);
-	}
+    ) {
+        super(auth, cms, semanticPathService, protectedRoutes, router, authRedirectService);
+    }
 
 	canActivate(): Observable<boolean | UrlTree> {
 		// Logout route should never be remembered by guard
 		this.authRedirectService.reportNotAuthGuard();
 
-		// Revoke access token from SAP Commerce Backend
-		var endpoint = this.getRevocationEndpoint();
-		this.http.post(endpoint, "").subscribe();
+        /**
+         * Note:
+         * We must wait until the access token was revoked from the backend before
+         * performing the call to this.logout(), otherwise racing conditions may
+         * terminate the call before the backend took note of it.
+         *
+         * But we do not care whether the action was successful or not, because the
+         * user shall walk through the logout process in any case.
+         *
+         * In rare situations, it may occur that a token was not successfully
+         * removed from the backend, but those cases all have in common, that the
+         * accesss token is not longer valid, e.g. has expired, or already replaced
+         * by a different one.
+         */
+        return this.revokeAccessToken().pipe(
+            take(1), // wait until call finished
+            switchMap(() => this.logout()), // perform standard oauth2 logout
+            map(() => true)
+        );
+    }
 
-		// Perform standard OAuth2 logoutgitgi
-		return from(this.logout()).pipe(map(() => true));
-	}
-	
+    revokeAccessToken(): Observable<boolean | any> {
+        let endpoint = this.getRevocationEndpoint();
+        return this.http.post(endpoint, '').pipe(
+            map(() => of(true)),
+            catchError((err: HttpErrorResponse) => {
+                return of(false);
+            })
+        );
+    }
+    
 	getRevocationEndpoint(): string {
 		return this.endpointsService.buildUrl('/users/current/revokeAccessToken');
 	}
