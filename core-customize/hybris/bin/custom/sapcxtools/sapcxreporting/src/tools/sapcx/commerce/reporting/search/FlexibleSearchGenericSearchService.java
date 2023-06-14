@@ -67,7 +67,7 @@ public class FlexibleSearchGenericSearchService implements GenericSearchService 
 				connection.rollback();
 			}
 		} catch (FlexibleSearchException | SQLException e) {
-			LOG.error(String.format("Error during execution of query '%s'", query, parameters), e);
+			LOG.error(String.format("Error during execution of query '%s' with parameters: '{%s}'", query, parameters), e);
 			return error(e.getMessage());
 		}
 	}

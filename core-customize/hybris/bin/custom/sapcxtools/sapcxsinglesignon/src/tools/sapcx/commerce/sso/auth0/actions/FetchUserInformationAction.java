@@ -24,7 +24,8 @@ class FetchUserInformationAction implements SdkAction<UserInfo> {
 		String accessToken = getWithType(parameter, "accessToken", String.class);
 		UserInfo userInfo = null;
 		try {
-			return userInfo = fetch(authAPI().userInfo(accessToken));
+			userInfo = fetch(authAPI().userInfo(accessToken));
+			return userInfo;
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Retrieval of user information for access token '%s' failed!", accessToken), exception);
 			throw exception;

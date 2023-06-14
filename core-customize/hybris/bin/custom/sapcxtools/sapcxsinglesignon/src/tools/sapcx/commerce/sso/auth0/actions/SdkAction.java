@@ -14,8 +14,8 @@ import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
 @FunctionalInterface
-interface SdkAction<RESPONSE> {
-	RESPONSE execute(Map<String, Object> requestParameter) throws Auth0Exception;
+interface SdkAction<R> {
+	R execute(Map<String, Object> requestParameter) throws Auth0Exception;
 
 	default ManagementAPI managementAPI() throws Auth0Exception {
 		return getConfigurationService().getManagementAPI();

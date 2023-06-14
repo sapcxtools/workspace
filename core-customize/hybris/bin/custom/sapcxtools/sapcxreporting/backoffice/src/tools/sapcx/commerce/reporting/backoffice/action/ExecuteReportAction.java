@@ -59,15 +59,17 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 		}
 
 		File media = reportFile.get();
-		try {
+		try (FileInputStream inputStream = new FileInputStream(media)) {
 			String extension = FilenameUtils.getExtension(media.getAbsolutePath());
-			Filedownload.save(new FileInputStream(media), Files.probeContentType(media.toPath()), report.getTitle() + "." + extension);
+			Filedownload.save(inputStream, Files.probeContentType(media.toPath()), report.getTitle() + "." + extension);
 			return success();
 		} catch (IOException e) {
 			LOG.error("Error reading media file for report " + report.getTitle(), e);
 			return error(actionContext.getLabel(FILE_READ_ERROR));
 		} finally {
-			media.delete();
+			if (!media.delete()) {
+				LOG.warn("Error deleting temporary media file at: " + media.getAbsolutePath());
+			}
 		}
 	}
 

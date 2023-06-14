@@ -37,10 +37,12 @@ import tools.sapcx.commerce.toolkit.model.LocallyStoredEmailModel;
 
 public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 	private static final Logger LOG = Logger.getLogger(StoreLocallyHtmlEmailServiceFake.class);
-	private static final String TIMESTAMP_FORMAT = "YYYYMMdd-HHmmssS";
+	private static final String TIMESTAMP_FORMAT = "yyyyMMdd-HHmmssS";
 	private static final String MEDIACODE_FORMAT = "fake-email_%s";
 	private static final String DEFAULT_FILENAME_PATTERN = "{timestamp}_{subject}.{extension}";
 	private static final String DEFAULT_EXTENSION = "eml";
+	private static final String METHOD_FILE = "file";
+	private static final String METHOD_DATABASE = "database";
 
 	private ModelService modelService;
 	private MediaService mediaService;
@@ -57,18 +59,18 @@ public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 
 	public static StoreLocallyHtmlEmailServiceFake storeInFilesystem(
 			String directory, String filenamePattern, String extension) {
-		return new StoreLocallyHtmlEmailServiceFake(null, null, "file", directory, filenamePattern, extension, null);
+		return new StoreLocallyHtmlEmailServiceFake(null, null, METHOD_FILE, directory, filenamePattern, extension, null);
 	}
 
 	public static StoreLocallyHtmlEmailServiceFake storeInDatabase(
 			String mediaFolder, ModelService modelService, MediaService mediaService) {
-		return new StoreLocallyHtmlEmailServiceFake(modelService, mediaService, "database", null, DEFAULT_FILENAME_PATTERN, DEFAULT_EXTENSION, mediaFolder);
+		return new StoreLocallyHtmlEmailServiceFake(modelService, mediaService, METHOD_DATABASE, null, DEFAULT_FILENAME_PATTERN, DEFAULT_EXTENSION, mediaFolder);
 	}
 
 	public static StoreLocallyHtmlEmailServiceFake storeInDatabase(
 			String mediaFolder, String filenamePattern, String extension,
 			ModelService modelService, MediaService mediaService) {
-		return new StoreLocallyHtmlEmailServiceFake(modelService, mediaService, "database", null, filenamePattern, extension, mediaFolder);
+		return new StoreLocallyHtmlEmailServiceFake(modelService, mediaService, METHOD_DATABASE, null, filenamePattern, extension, mediaFolder);
 	}
 
 	public StoreLocallyHtmlEmailServiceFake(
@@ -174,7 +176,7 @@ public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 		Date sentDate = email.getSentDate() != null ? email.getSentDate() : new Date();
 		Map<String, String> replacements = Map.of(
 				"{timestamp}", Long.toString(sentDate.getTime()),
-				"{datetime}", new SimpleDateFormat("YYYYMMdd-HHmmssS").format(sentDate),
+				"{datetime}", new SimpleDateFormat(TIMESTAMP_FORMAT).format(sentDate),
 				"{subject}", email.getSubject() != null ? email.getSubject() : "",
 				"{from}", escapeAddress(email.getFromAddress()),
 				"{to}", escapeAddress(emptyIfNull(email.getToAddresses()).stream().findAny().orElse(null)),
@@ -209,16 +211,16 @@ public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 	}
 
 	private void configurePersistenceMethod(String method) {
-		if ("file".equalsIgnoreCase(method)) {
+		if (METHOD_FILE.equalsIgnoreCase(method)) {
 			LOG.info("Using SMTP fake service storing emails locally into the file system.");
 			this.useFilesystem = true;
 			this.useDatabase = false;
-		} else if ("database".equalsIgnoreCase(method)) {
+		} else if (METHOD_DATABASE.equalsIgnoreCase(method)) {
 			LOG.info("Using SMTP fake service storing emails locally into the database.");
 			this.useFilesystem = false;
 			this.useDatabase = true;
 		} else {
-			throw new IllegalArgumentException("Persistence method must be either 'file' or 'database'!");
+			throw new IllegalArgumentException(String.format("Persistence method must be either '%s' or '%s'!", METHOD_FILE, METHOD_DATABASE));
 		}
 	}
 }

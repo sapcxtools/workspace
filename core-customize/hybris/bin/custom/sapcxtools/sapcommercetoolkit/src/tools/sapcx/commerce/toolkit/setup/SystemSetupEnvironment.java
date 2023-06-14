@@ -148,7 +148,9 @@ public final class SystemSetupEnvironment {
 			File file = configuration.getFile();
 			if (!file.exists()) {
 				file.getParentFile().mkdirs();
-				file.createNewFile();
+				if (!file.createNewFile()) {
+					throw new IOException("Cannot create file at: " + fileName);
+				}
 				configuration.setHeader(FILE_HEADER);
 				configuration.save();
 			} else {

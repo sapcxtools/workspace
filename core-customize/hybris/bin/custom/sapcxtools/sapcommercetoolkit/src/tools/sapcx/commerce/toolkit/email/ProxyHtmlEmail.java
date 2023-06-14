@@ -24,6 +24,8 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 
 class ProxyHtmlEmail extends HtmlEmail {
+	private static final String UNSUPPORTED_OPERATION_MESSAGE = "This method must not be called on the proxy object!";
+
 	private HtmlEmailService htmlEmailService;
 	private HtmlEmail proxiedHtmlEmail;
 
@@ -148,27 +150,27 @@ class ProxyHtmlEmail extends HtmlEmail {
 
 	@Override
 	public BodyPart getPrimaryBodyPart() throws MessagingException {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public MimeMultipart getContainer() {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public BodyPart createBodyPart() {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public MimeMultipart createMimeMultipart() {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	protected void init() {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
@@ -409,22 +411,22 @@ class ProxyHtmlEmail extends HtmlEmail {
 
 	@Override
 	public boolean isInitialized() {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public void setInitialized(boolean b) {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public InternetAddress[] toInternetAddressArray(List<InternetAddress> list) {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override
 	public MimeMessage createMimeMessage(Session aSession) {
-		throw new UnsupportedOperationException("This method must not be called on the proxy object!");
+		throw new UnsupportedOperationException(UNSUPPORTED_OPERATION_MESSAGE);
 	}
 
 	@Override

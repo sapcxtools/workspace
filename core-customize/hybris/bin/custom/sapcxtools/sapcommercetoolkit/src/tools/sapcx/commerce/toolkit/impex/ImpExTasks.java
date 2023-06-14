@@ -17,6 +17,10 @@ import org.apache.commons.lang3.StringUtils;
  * Util class that provides useful execution tasks for ImpEx imports.
  */
 public final class ImpExTasks {
+	private ImpExTasks() {
+		// Avoid instantiation
+	}
+
 	/**
 	 * This method is intended to be called by an ImpEx script while code execution is enabled, e.g.:
 	 *

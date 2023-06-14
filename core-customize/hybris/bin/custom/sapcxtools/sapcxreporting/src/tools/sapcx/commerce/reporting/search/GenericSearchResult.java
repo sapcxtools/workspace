@@ -2,7 +2,6 @@ package tools.sapcx.commerce.reporting.search;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +27,7 @@ public class GenericSearchResult {
 	public List<String> getHeaderNames() {
 		return getHeaders().stream()
 				.map(GenericSearchResultHeader::getExportName)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public List<Map<GenericSearchResultHeader, String>> getValues() {

@@ -31,7 +31,7 @@ import tools.sapcx.commerce.toolkit.setup.SystemSetupEnvironment;
  * @see SystemSetupEnvironment
  */
 public class ReleasePatchesImporter extends PrefixBasedDataImporter {
-	private static Pattern releaseVersion = Pattern.compile("^[^.]+\\.[^.]+\\.[^.]+\\.([^.]+)\\..*$");
+	private Pattern releaseVersion = Pattern.compile("^[^.]+\\.[^.]+\\.[^.]+\\.([^.]+)\\..*$");
 
 	@Override
 	public void importData(SystemSetupContext context) {
@@ -63,7 +63,8 @@ public class ReleasePatchesImporter extends PrefixBasedDataImporter {
 		return new NewerReleaseVersionsFilter(
 				getEnvironment().getLastProcessedReleaseVersion(),
 				getEnvironment().getLastProcessedItems(),
-				defaultValue);
+				defaultValue,
+				releaseVersion);
 	}
 
 	@Override
@@ -76,11 +77,13 @@ public class ReleasePatchesImporter extends PrefixBasedDataImporter {
 		private final String version;
 		private List<String> processedItems;
 		private final boolean defaultValue;
+		private Pattern releaseVersion;
 
-		public NewerReleaseVersionsFilter(String version, List<String> processedItems, boolean defaultValue) {
+		public NewerReleaseVersionsFilter(String version, List<String> processedItems, boolean defaultValue, Pattern releaseVersion) {
 			this.version = StringUtils.defaultIfBlank(version, "");
 			this.processedItems = processedItems;
 			this.defaultValue = defaultValue;
+			this.releaseVersion = releaseVersion;
 		}
 
 		@Override
