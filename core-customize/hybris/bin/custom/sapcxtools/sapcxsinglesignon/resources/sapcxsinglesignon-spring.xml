@@ -26,12 +26,12 @@
     </bean>
 
     <!-- Customer Save Interceptor -->
-    <alias name="cxReplicateCustomerOnModificationSaveInterceptor" alias="replicateCustomerOnModificationSaveInterceptor"/>
-    <bean id="cxReplicateCustomerOnModificationSaveInterceptor" class="tools.sapcx.commerce.sso.replication.ReplicateCustomerOnModificationSaveInterceptor">
+    <alias name="cxCustomerReplicationInterceptor" alias="customerReplicationInterceptor"/>
+    <bean id="cxCustomerReplicationInterceptor" class="tools.sapcx.commerce.sso.replication.CustomerReplicationInterceptor">
         <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
     </bean>
-    <bean id="replicateCustomerOnModificationSaveInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
-        <property name="interceptor" ref="replicateCustomerOnModificationSaveInterceptor"/>
+    <bean id="cxCustomerReplicationInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="customerReplicationInterceptor"/>
         <property name="typeCode" value="Customer"/>
     </bean>
 
@@ -40,6 +40,7 @@
     <bean id="cxAuth0CustomerReplicationStrategy" class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerReplicationStrategy">
         <constructor-arg name="userService" ref="userService"/>
         <constructor-arg name="auth0RoleForCustomers" value="${sapcxsinglesignon.auth0.customer.role}"/>
-        <constructor-arg name="enabled" value="${sapcxsinglesignon.replication.enabled}" type="boolean"/>
+        <constructor-arg name="isReplicationEnabled" value="${sapcxsinglesignon.replication.enabled}" type="boolean"/>
+        <constructor-arg name="isRemovalEnabled" value="${sapcxsinglesignon.removal.enabled}" type="boolean"/>
     </bean>
 </beans>
