@@ -1,4 +1,4 @@
-package tools.sapcx.commerce.template.config;
+package tools.sapcx.commerce.sso.config;
 
 import de.hybris.bootstrap.annotations.UnitTest;
 
@@ -13,6 +13,8 @@ public class ExtensionConfigurationTests {
 		InstalledExtensionVerifier.verifier()
 				.requires("sapcxsinglesignon")
 				.requires("sapcommercetoolkit")
+				.requires("commercewebservices")
+				.requires("oauth2")
 				.verify();
 	}
 }

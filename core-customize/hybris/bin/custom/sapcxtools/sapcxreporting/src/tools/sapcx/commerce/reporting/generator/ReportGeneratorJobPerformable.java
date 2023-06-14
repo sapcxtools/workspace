@@ -26,6 +26,7 @@ import de.hybris.platform.cronjob.enums.CronJobStatus;
 import de.hybris.platform.media.services.MimeService;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
+import de.hybris.platform.servicelayer.dto.converter.Converter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -42,6 +43,7 @@ import org.springframework.beans.factory.annotation.Required;
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.model.ReportGenerationScheduleModel;
 import tools.sapcx.commerce.reporting.report.ReportService;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchService;
 import tools.sapcx.commerce.toolkit.email.HtmlEmailGenerator;
@@ -56,6 +58,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 	private HtmlEmailGenerator htmlEmailGenerator;
 	private HtmlEmailService htmlEmailService;
 	private MimeService mimeService;
+
+	private Converter<QueryReportConfigurationModel, QueryFileConfigurationData> queryConfigurationConverter;
 
 	@Override
 	public PerformResult perform(ReportGenerationScheduleModel schedule) {
@@ -105,7 +109,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		Optional<File> zipFile = Optional.empty();
 		try {
 			GenericSearchResult searchResult = genericSearchService.search(query, params);
-			reportFile = reportService.getReportFile(report, searchResult);
+
+			reportFile = reportService.getReportFile(queryConfigurationConverter.convert(report), searchResult);
 
 			HtmlEmail mail = createResultEmail(report, searchResult, reportFile.isPresent());
 			if (reportFile.isPresent()) {
@@ -123,7 +128,8 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		}
 	}
 
-	private HtmlEmail createResultEmail(QueryReportConfigurationModel report, GenericSearchResult search, boolean hasAttachments) throws EmailException {
+	private HtmlEmail createResultEmail(QueryReportConfigurationModel report, GenericSearchResult search,
+			boolean hasAttachments) throws EmailException {
 		String title = report.getTitle();
 		String description = getDescription(search, hasAttachments, report.getDescription());
 		return htmlEmailGenerator.newHtmlEmail()
@@ -225,10 +231,6 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		this.reportService = reportService;
 	}
 
-	public ReportService getReportService() {
-		return reportService;
-	}
-
 	@Required
 	public void setHtmlEmailGenerator(HtmlEmailGenerator htmlEmailGenerator) {
 		this.htmlEmailGenerator = htmlEmailGenerator;
@@ -239,12 +241,13 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		this.mimeService = mimeService;
 	}
 
-	public HtmlEmailGenerator getHtmlEmailGenerator() {
-		return htmlEmailGenerator;
-	}
-
 	@Required
 	public void setHtmlEmailService(HtmlEmailService htmlEmailService) {
 		this.htmlEmailService = htmlEmailService;
+	}
+
+	@Required
+	public void setQueryConfigurationConverter(Converter<QueryReportConfigurationModel, QueryFileConfigurationData> queryConfigurationConverter) {
+		this.queryConfigurationConverter = queryConfigurationConverter;
 	}
 }

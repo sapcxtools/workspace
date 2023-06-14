@@ -41,7 +41,6 @@ public class SolrIndexerConfigurableJobPerformable extends AbstractJobPerformabl
 			IndexOperation indexOperation = getIndexerOperation(jobModel);
 
 			cxIndexerService.performIndexForIndexedTypes(facetSearchConfig, indexOperation, indexedTypeNameList, jobModel.getIndexerHints());
-
 		} catch (FacetConfigServiceException | IndexerException e) {
 			LOG.error(e.getMessage(), e);
 			return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);

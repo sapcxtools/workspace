@@ -21,7 +21,7 @@ which are set to `false` by default.
 In addition to the backend configuration, the composable storefront needs to be extended with
 configuration settings as within the following example:
 
-```javascript
+```typescript
 export const authCodeFlowConfig: AuthConfig = {
 	authentication: {
 		client_id: '<client id>',
@@ -29,11 +29,12 @@ export const authCodeFlowConfig: AuthConfig = {
 		baseUrl: 'https://<your-auth0-domain>',
 		tokenEndpoint: '/oauth/token',
 		loginUrl: '/authorize',
-		revokeEndpoint: '/oidc/logout',
-		logoutUrl: 'https://www.<your-domain>.com/?revalidate_token=true',
+		revokeEndpoint: '/oauth/revoke',
+        logoutUrl: '/oidc/logout',
 		userinfoEndpoint: '/userinfo',
 		OAuthLibConfig: {
-			redirectUri: 'https://www.your-domain>.com/',
+			redirectUri: 'https://www.<your-domain>.com',
+            postLogoutRedirectUri: 'https://www.<your-domain>.com',
 			responseType: 'code',
 			scope: 'openid profile email',
 			showDebugInformation: true,
@@ -41,6 +42,81 @@ export const authCodeFlowConfig: AuthConfig = {
 		},
 	},
 };
+```
+
+To avoid failing requests during the logout sequence, we also strongly recommend to overlay the standard logout
+guard from the Spartacus project, with an implementation as follows here:
+
+```typescript
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router, UrlTree } from '@angular/router';
+import {
+    AuthRedirectService,
+    AuthService,
+    CmsService,
+    OccEndpointsService,
+    ProtectedRoutesService,
+    SemanticPathService,
+} from '@spartacus/core';
+import { LogoutGuard } from '@spartacus/storefront';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+
+@Injectable()
+export class KronosLogoutGuard extends LogoutGuard {
+    constructor(
+        protected auth: AuthService,
+        protected cms: CmsService,
+        protected semanticPathService: SemanticPathService,
+        protected protectedRoutes: ProtectedRoutesService,
+        protected router: Router,
+        protected authRedirectService: AuthRedirectService,
+        protected http: HttpClient,
+        protected endpointsService: OccEndpointsService
+    ) {
+        super(auth, cms, semanticPathService, protectedRoutes, router, authRedirectService);
+    }
+
+	canActivate(): Observable<boolean | UrlTree> {
+		// Logout route should never be remembered by guard
+		this.authRedirectService.reportNotAuthGuard();
+
+        /**
+         * Note:
+         * We must wait until the access token was revoked from the backend before
+         * performing the call to this.logout(), otherwise racing conditions may
+         * terminate the call before the backend took note of it.
+         *
+         * But we do not care whether the action was successful or not, because the
+         * user shall walk through the logout process in any case.
+         *
+         * In rare situations, it may occur that a token was not successfully
+         * removed from the backend, but those cases all have in common, that the
+         * accesss token is not longer valid, e.g. has expired, or already replaced
+         * by a different one.
+         */
+        return this.revokeAccessToken().pipe(
+            take(1), // wait until call finished
+            switchMap(() => this.logout()), // perform standard oauth2 logout
+            map(() => true)
+        );
+    }
+
+    revokeAccessToken(): Observable<boolean | any> {
+        let endpoint = this.getRevocationEndpoint();
+        return this.http.post(endpoint, '').pipe(
+            map(() => of(true)),
+            catchError((err: HttpErrorResponse) => {
+                return of(false);
+            })
+        );
+    }
+    
+	getRevocationEndpoint(): string {
+		return this.endpointsService.buildUrl('/users/current/revokeAccessToken');
+	}
+}
 ```
 
 For the customer replication, one can add additional populators to the `auth0CustomerConverter` converter bean.

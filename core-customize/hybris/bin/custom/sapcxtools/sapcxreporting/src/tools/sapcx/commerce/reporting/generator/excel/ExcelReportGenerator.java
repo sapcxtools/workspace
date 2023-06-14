@@ -8,11 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
@@ -22,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.sapcx.commerce.reporting.generator.ReportGenerator;
-import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.reporting.search.GenericSearchResultHeader;
 
@@ -31,7 +27,7 @@ public class ExcelReportGenerator implements ReportGenerator {
 	private static final String EXCEL_EXTENSION = "xlsx";
 
 	@Override
-	public boolean createReport(QueryReportConfigurationModel report, GenericSearchResult result, File file) {
+	public boolean createReport(QueryFileConfigurationData report, GenericSearchResult result, File file) {
 		try (SXSSFWorkbook workbook = new SXSSFWorkbook()) {
 			SXSSFSheet sheet = createSheetWithConfiguration(report, workbook);
 			int headerRows = addHeader(report, result, workbook, sheet);
@@ -49,7 +45,7 @@ public class ExcelReportGenerator implements ReportGenerator {
 		}
 	}
 
-	private SXSSFSheet createSheetWithConfiguration(QueryReportConfigurationModel report, SXSSFWorkbook workbook) {
+	private SXSSFSheet createSheetWithConfiguration(QueryFileConfigurationData report, SXSSFWorkbook workbook) {
 		SXSSFSheet sheet = workbook.createSheet("Report");
 		if (shouldHaveColumnsResized(report)) {
 			sheet.trackAllColumnsForAutoSizing();
@@ -57,13 +53,13 @@ public class ExcelReportGenerator implements ReportGenerator {
 		return sheet;
 	}
 
-	private int addHeader(QueryReportConfigurationModel report, GenericSearchResult result, SXSSFWorkbook workbook, SXSSFSheet sheet) {
+	private int addHeader(QueryFileConfigurationData report, GenericSearchResult result, SXSSFWorkbook workbook, SXSSFSheet sheet) {
 		CellStyle headerStyle = getStyle(workbook, IndexedColors.BLACK, shouldHaveHighlightedHeader(report), IndexedColors.GREY_40_PERCENT, IndexedColors.BLACK);
 		addRow(sheet, 0, result.getHeaderNames(), headerStyle);
 		return 1;
 	}
 
-	private int addResultRows(QueryReportConfigurationModel report, GenericSearchResult result, SXSSFWorkbook workbook, SXSSFSheet sheet, int headerOffset) {
+	private int addResultRows(QueryFileConfigurationData report, GenericSearchResult result, SXSSFWorkbook workbook, SXSSFSheet sheet, int headerOffset) {
 		CellStyle rowStyleOdd = getStyle(workbook, IndexedColors.BLACK, false, IndexedColors.WHITE, IndexedColors.BLACK);
 		CellStyle rowStyleEven = getStyle(workbook, IndexedColors.BLACK, false, IndexedColors.GREY_25_PERCENT, IndexedColors.BLACK);
 
@@ -109,7 +105,7 @@ public class ExcelReportGenerator implements ReportGenerator {
 		}
 	}
 
-	private void formatWorksheet(QueryReportConfigurationModel report, SXSSFSheet sheet, int numberOfColumns, int numberOfRows) {
+	private void formatWorksheet(QueryFileConfigurationData report, SXSSFSheet sheet, int numberOfColumns, int numberOfRows) {
 		if (shouldHaveFrozenHeader(report)) {
 			sheet.createFreezePane(0, 1);
 		}
@@ -140,24 +136,24 @@ public class ExcelReportGenerator implements ReportGenerator {
 		return EXCEL_EXTENSION;
 	}
 
-	private boolean shouldHaveHighlightedHeader(QueryReportConfigurationModel report) {
-		return report.isExcelHighlightHeader();
+	private boolean shouldHaveHighlightedHeader(QueryFileConfigurationData report) {
+		return report.getExcelHighlightHeader();
 	}
 
-	private boolean shouldHaveFrozenHeader(QueryReportConfigurationModel report) {
-		return report.isExcelFreezeHeader();
+	private boolean shouldHaveFrozenHeader(QueryFileConfigurationData report) {
+		return report.getExcelFreezeHeader();
 	}
 
-	private boolean shouldHaveFilterActivated(QueryReportConfigurationModel report) {
-		return report.isExcelActivateFilter();
+	private boolean shouldHaveFilterActivated(QueryFileConfigurationData report) {
+		return report.getExcelActivateFilter();
 	}
 
-	private boolean shouldHaveColumnsResized(QueryReportConfigurationModel report) {
-		return report.isExcelAutosizeColumns();
+	private boolean shouldHaveColumnsResized(QueryFileConfigurationData report) {
+		return report.getExcelAutosizeColumns();
 	}
 
-	private boolean shouldHaveAlternatingLines(QueryReportConfigurationModel report) {
-		return report.isExcelAlternatingLines();
+	private boolean shouldHaveAlternatingLines(QueryFileConfigurationData report) {
+		return report.getExcelAlternatingLines();
 	}
 
 	private boolean isAlternatingLine(int rowIndex) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
-    <extension abstractclassprefix="Generated" classprefix="CxTemplate" jaloLogicFree="true" name="sapcxsearch" usemaven="true" version="4.1.0">
+    <extension abstractclassprefix="Generated" classprefix="CxTemplate" jaloLogicFree="true" name="sapcxsearch" usemaven="true" version="4.1.1">
         <requires-extension name="sapcommercetoolkit"/>
         <requires-extension name="backoffice"/>
         <requires-extension name="solrfacetsearch"/>

@@ -30,6 +30,7 @@ import tools.sapcx.commerce.reporting.model.CatalogVersionConfigurationParameter
 import tools.sapcx.commerce.reporting.model.CategoryConfigurationParameterModel;
 import tools.sapcx.commerce.reporting.model.ProductConfigurationParameterModel;
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 import tools.sapcx.commerce.toolkit.testing.itemmodel.InMemoryModelFactory;
 
@@ -40,6 +41,7 @@ public class DefaultReportServiceTests {
 
 	private ReportGenerator reportGenerator;
 	private QueryReportConfigurationModel report;
+	private QueryFileConfigurationData fileConfiguration;
 	private DefaultReportService service;
 
 	@Before
@@ -47,9 +49,12 @@ public class DefaultReportServiceTests {
 		report = InMemoryModelFactory.createTestableItemModel(QueryReportConfigurationModel.class);
 		report.setExportFormat(ReportExportFormat.CSV);
 
+		fileConfiguration = new QueryFileConfigurationData();
+		fileConfiguration.setExportFormat("CSV");
+
 		reportGenerator = mock(ReportGenerator.class);
 		when(reportGenerator.getExtension()).thenReturn("csv");
-		when(reportGenerator.createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class))).thenReturn(true);
+		when(reportGenerator.createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class))).thenReturn(true);
 
 		service = new DefaultReportService();
 		service.setGenerators(Map.of(ReportExportFormat.CSV, reportGenerator));
@@ -100,34 +105,34 @@ public class DefaultReportServiceTests {
 
 	@Test
 	public void withErrorsInSearchResult_noReportIsGenerated() {
-		Optional<File> reportFile = service.getReportFile(report, ERRONEOUS_SEARCH_RESULT);
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, ERRONEOUS_SEARCH_RESULT);
 		assertThat(reportFile).isNotPresent();
 	}
 
 	@Test
 	public void withMissingExportFormatMapping_noReportIsGenerated() {
-		report.setExportFormat(ReportExportFormat.EXCEL);
-		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
+		fileConfiguration.setExportFormat("EXCEL");
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, EMPTY_SEARCH_RESULT);
 		assertThat(reportFile).isNotPresent();
 	}
 
 	@Test
 	public void withMatchingExportFormatMapping_reportIsGenerated() {
-		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, EMPTY_SEARCH_RESULT);
 
 		assertThat(reportFile).isPresent();
 		assertThat(reportFile.get()).exists();
-		verify(reportGenerator).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		verify(reportGenerator).createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class));
 	}
 
 	@Test
 	public void whenReportGeneratorFails_noReportIsGenerated() {
-		doThrow(RuntimeException.class).when(reportGenerator).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		doThrow(RuntimeException.class).when(reportGenerator).createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class));
 
-		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, EMPTY_SEARCH_RESULT);
 
 		assertThat(reportFile).isNotPresent();
-		verify(reportGenerator).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		verify(reportGenerator).createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class));
 	}
 
 	@Test
@@ -145,10 +150,10 @@ public class DefaultReportServiceTests {
 		};
 		service.setGenerators(Map.of(ReportExportFormat.CSV, reportGenerator));
 
-		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, EMPTY_SEARCH_RESULT);
 
 		assertThat(reportFile).isNotPresent();
-		verify(reportGenerator, never()).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		verify(reportGenerator, never()).createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class));
 	}
 
 	@Test
@@ -165,10 +170,10 @@ public class DefaultReportServiceTests {
 		};
 		service.setGenerators(Map.of(ReportExportFormat.CSV, reportGenerator));
 
-		Optional<File> reportFile = service.getReportFile(report, EMPTY_SEARCH_RESULT);
+		Optional<File> reportFile = service.getReportFile(fileConfiguration, EMPTY_SEARCH_RESULT);
 
 		assertThat(reportFile).isNotPresent();
-		verify(reportGenerator, never()).createReport(eq(report), eq(EMPTY_SEARCH_RESULT), any(File.class));
+		verify(reportGenerator, never()).createReport(eq(fileConfiguration), eq(EMPTY_SEARCH_RESULT), any(File.class));
 	}
 
 }

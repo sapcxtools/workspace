@@ -4,10 +4,8 @@ import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +18,7 @@ import tools.sapcx.commerce.reporting.enums.ReportExportFormat;
 import tools.sapcx.commerce.reporting.generator.ReportGenerator;
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationParameterModel;
+import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
 
 public class DefaultReportService implements ReportService {
@@ -28,12 +27,12 @@ public class DefaultReportService implements ReportService {
 	private Map<ReportExportFormat, ReportGenerator> generators;
 
 	@Override
-	public Optional<File> getReportFile(QueryReportConfigurationModel report, GenericSearchResult result) {
+	public Optional<File> getReportFile(QueryFileConfigurationData report, GenericSearchResult result) {
 		if (result.hasError()) {
 			return Optional.empty();
 		}
 
-		ReportExportFormat exportFormat = report.getExportFormat();
+		ReportExportFormat exportFormat = ReportExportFormat.valueOf(report.getExportFormat());
 		ReportGenerator reportGenerator = generators.get(exportFormat);
 		if (reportGenerator == null) {
 			LOG.error(String.format("No generator registered for export format: %s. " +
@@ -95,6 +94,11 @@ public class DefaultReportService implements ReportService {
 			reportDir.mkdirs();
 		}
 		return reportDir;
+	}
+
+	@Override
+	public List<ReportExportFormat> getConfiguredReportFormats() {
+		return generators.keySet().stream().collect(Collectors.toList());
 	}
 
 	@Required
