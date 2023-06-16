@@ -59,7 +59,9 @@ public class DefaultReportService implements ReportService {
 		}
 
 		if (!reportWasGenerated) {
-			file.delete();
+			if (!file.delete()) {
+				LOG.warn("Error deleting temporary report file at: " + file.getAbsolutePath());
+			}
 			file = null;
 		}
 

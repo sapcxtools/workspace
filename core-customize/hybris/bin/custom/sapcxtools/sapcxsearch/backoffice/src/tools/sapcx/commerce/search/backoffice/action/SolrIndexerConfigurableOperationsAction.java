@@ -11,12 +11,7 @@ import com.hybris.cockpitng.widgets.configurableflow.ConfigurableFlowContextPara
 
 import de.hybris.platform.solrfacetsearch.model.config.SolrFacetSearchConfigModel;
 
-import org.apache.log4j.Logger;
-
 public class SolrIndexerConfigurableOperationsAction extends AbstractComponentWidgetAdapterAware implements CockpitAction<SolrFacetSearchConfigModel, Object> {
-
-	private static final Logger LOG = Logger.getLogger(SolrIndexerConfigurableOperationsAction.class);
-
 	@Override
 	public ActionResult<Object> perform(ActionContext<SolrFacetSearchConfigModel> actionContext) {
 		Map<Object, Object> parametersMap = Maps.newHashMap();

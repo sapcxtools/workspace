@@ -145,7 +145,7 @@ public class HtmlEmailBuilder {
 	}
 
 	public HtmlEmailBuilder attach(HtmlEmailAttachmentBuilder builder) {
-		return afterBuildHook(email -> builder.attach(email));
+		return afterBuildHook(builder::attach);
 	}
 
 	public HtmlEmailBuilder custom(Consumer<HtmlEmailBuilder> consumer) {

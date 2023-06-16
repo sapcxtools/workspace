@@ -174,28 +174,21 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 
 	@VisibleForTesting
 	File createZipArchive(File reportFile) throws IOException {
-		ZipOutputStream zos = null;
-		try {
-			Path filePath = reportFile.toPath();
-			String fileName = filePath.getFileName().toString();
-			String fileNameForZip = fileName + ".zip";
-			Path zipFilePath = filePath.getParent().resolve(fileNameForZip);
+		Path filePath = reportFile.toPath();
+		String fileName = filePath.getFileName().toString();
+		String fileNameForZip = fileName + ".zip";
+		Path zipFilePath = filePath.getParent().resolve(fileNameForZip);
 
-			Files.createFile(zipFilePath);
-			File zipFile = zipFilePath.toFile();
-			zos = new ZipOutputStream(FileUtils.openOutputStream(zipFile));
+		Files.createFile(zipFilePath);
+		File zipFile = zipFilePath.toFile();
 
+		try (ZipOutputStream zos = new ZipOutputStream(FileUtils.openOutputStream(zipFile))) {
 			ZipEntry zipEntry = new ZipEntry(fileName);
 			zos.putNextEntry(zipEntry);
 			FileUtils.copyFile(reportFile, zos);
-
-			return zipFile;
-		} finally {
-			if (zos != null) {
-				zos.finish();
-				zos.close();
-			}
 		}
+
+		return zipFile;
 	}
 
 	protected DataSource getFileDataSource(File file) throws IOException {

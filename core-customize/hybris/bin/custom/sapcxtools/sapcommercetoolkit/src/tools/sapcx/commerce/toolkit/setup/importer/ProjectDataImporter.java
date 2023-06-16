@@ -22,7 +22,7 @@ public class ProjectDataImporter extends PrefixBasedDataImporter {
 
 	@Override
 	public List<SystemSetupParameter> getSystemSetupParameters() {
-		if (allowManualImport == false) {
+		if (!allowManualImport) {
 			return Collections.emptyList();
 		}
 

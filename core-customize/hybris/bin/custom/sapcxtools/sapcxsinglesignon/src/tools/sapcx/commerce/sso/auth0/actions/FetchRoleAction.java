@@ -26,7 +26,8 @@ class FetchRoleAction implements SdkAction<Role> {
 		Role role = null;
 		try {
 			RolesFilter roleByName = new RolesFilter().withName(roleName);
-			return role = fetchFirst(managementAPI().roles().list(roleByName));
+			role = fetchFirst(managementAPI().roles().list(roleByName));
+			return role;
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Search for role with name '%s' could not be executed!", roleName), exception);
 			throw exception;

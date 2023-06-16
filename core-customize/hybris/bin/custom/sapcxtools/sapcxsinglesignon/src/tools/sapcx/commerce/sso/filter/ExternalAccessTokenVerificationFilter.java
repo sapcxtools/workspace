@@ -59,7 +59,7 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 	private boolean enabled;
 	private TokenExtractor tokenExtractor;
 
-	public ExternalAccessTokenVerificationFilter(
+	protected ExternalAccessTokenVerificationFilter(
 			OAuth2RequestFactory oAuth2RequestFactory,
 			ClientDetailsService clientDetailsService,
 			UserDetailsService userDetailsService,
@@ -88,7 +88,7 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 
 			OAuth2AccessToken oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, false);
 			LOG.debug("OAuth2 AccessToken from token store (1st attempt, without lock): {} (expired? => {})", oAuth2AccessToken,
-					oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);
+					oAuth2AccessToken != null && oAuth2AccessToken.isExpired());
 
 			String revalidateToken = defaultIfBlank(request.getParameter(REVALIDATE_TOKEN_PARAMETER), "false");
 			if (oAuth2AccessToken != null && revalidateToken.equals("true")) {
@@ -104,7 +104,7 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 				synchronized (accessTokenValue.intern()) {
 					oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, true);
 					LOG.debug("OAuth2 AccessToken from token store (2nd attempt, with lock): {} (expired? => {})", oAuth2AccessToken,
-							oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);
+							oAuth2AccessToken != null && oAuth2AccessToken.isExpired());
 				}
 			}
 		}

@@ -14,14 +14,11 @@ import de.hybris.platform.solrfacetsearchbackoffice.wizards.BaseSolrIndexerWizar
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.*;
 
 import tools.sapcx.commerce.search.model.SolrIndexerConfigurableCronJobModel;
 
 public class SolrIndexerConfigurableOperationStep extends BaseSolrIndexerWizardStep {
-
 	private CronJobService cronJobService;
 	private String jobDefinitionCode;
 
@@ -66,13 +63,11 @@ public class SolrIndexerConfigurableOperationStep extends BaseSolrIndexerWizardS
 	private Button initStartButton(Component component, Combobox operationsCombo, Combobox indexedTypesCombo) {
 		Button startButton = new Button();
 		startButton.setLabel(Labels.getLabel("com.hybris.cockpitng.widgets.configurableflow.create.solrindexer.cronjob.start"));
-		startButton.addEventListener("onClick", new EventListener<Event>() {
-			public void onEvent(Event event) throws Exception {
-				SolrIndexerConfigurableCronJobModel cronJob = SolrIndexerConfigurableOperationStep.this.getCronJob(component);
-				cronJob.setIndexerOperation((IndexerOperationValues) operationsCombo.getSelectedItem().getValue());
-				cronJob.setIndexedTypes(List.of((SolrIndexedTypeModel) indexedTypesCombo.getSelectedItem().getValue()));
-				SolrIndexerConfigurableOperationStep.this.startCronJob(SolrIndexerConfigurableOperationStep.this.getWidgetController(), cronJob);
-			}
+		startButton.addEventListener("onClick", event -> {
+			SolrIndexerConfigurableCronJobModel cronJob = SolrIndexerConfigurableOperationStep.this.getCronJob(component);
+			cronJob.setIndexerOperation(operationsCombo.getSelectedItem().getValue());
+			cronJob.setIndexedTypes(List.of(indexedTypesCombo.getSelectedItem().getValue()));
+			SolrIndexerConfigurableOperationStep.this.startCronJob(SolrIndexerConfigurableOperationStep.this.getWidgetController(), cronJob);
 		});
 		return startButton;
 	}
@@ -81,13 +76,9 @@ public class SolrIndexerConfigurableOperationStep extends BaseSolrIndexerWizardS
 		final Combobox indexedTypesCombo = new Combobox();
 		SolrIndexerCronJobModel solrIndexerCronJobModel = getCronJob(component);
 		indexedTypesCombo.setModel(new ListModelList<>(solrIndexerCronJobModel.getFacetSearchConfig().getSolrIndexedTypes()));
-		indexedTypesCombo.setItemRenderer(new ComboitemRenderer<SolrIndexedTypeModel>() {
-			@Override
-			public void render(Comboitem comboitem, SolrIndexedTypeModel solrIndexedTypeModel, int i) throws Exception {
-				comboitem.setLabel(solrIndexedTypeModel.getType().getName());
-				comboitem.setValue(solrIndexedTypeModel);
-			}
-
+		indexedTypesCombo.setItemRenderer((ComboitemRenderer<SolrIndexedTypeModel>) (comboItem, solrIndexedType, index) -> {
+			comboItem.setLabel(solrIndexedType.getType().getName());
+			comboItem.setValue(solrIndexedType);
 		});
 		return indexedTypesCombo;
 	}
@@ -95,15 +86,13 @@ public class SolrIndexerConfigurableOperationStep extends BaseSolrIndexerWizardS
 	private Combobox initOperationsCombo() {
 		final Combobox operationsCombo = new Combobox();
 		operationsCombo.setModel(new ListModelList<>(IndexerOperationValues.values()));
-		operationsCombo.setItemRenderer(new ComboitemRenderer<Object>() {
-			public void render(Comboitem radio, Object entity, int index) throws Exception {
-				IndexerOperationValues indexerOperation = (IndexerOperationValues) entity;
-				radio.setLabel(SolrIndexerConfigurableOperationStep.this.getLabelService().getObjectLabel(indexerOperation));
-				radio.setValue(entity);
-				if (IndexerOperationValues.PARTIAL_UPDATE.equals(indexerOperation)) {
-					radio.setDisabled(true);
-					radio.setVisible(false);
-				}
+		operationsCombo.setItemRenderer((radio, entity, index) -> {
+			IndexerOperationValues indexerOperation = (IndexerOperationValues) entity;
+			radio.setLabel(SolrIndexerConfigurableOperationStep.this.getLabelService().getObjectLabel(indexerOperation));
+			radio.setValue(entity);
+			if (IndexerOperationValues.PARTIAL_UPDATE.equals(indexerOperation)) {
+				radio.setDisabled(true);
+				radio.setVisible(false);
 			}
 		});
 		return operationsCombo;

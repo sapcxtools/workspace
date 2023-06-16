@@ -51,15 +51,7 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 			if (resourceAsStream != null) {
 				getLogger().info(context, logPrefix + "STARTED.");
 
-				final ImportConfig importConfig = new ImportConfig();
-				importConfig.setScript(new StreamBasedImpExResource(resourceAsStream, fileEncoding));
-				importConfig.setSynchronous(Boolean.TRUE);
-
-				importConfig.setLegacyMode(environment.useLegacyModeForImpEx());
-				importConfig.setEnableCodeExecution(environment.enableCodeExecution());
-				importConfig.setValidationMode(environment.getValidationMode());
-				importConfig.setLocale(environment.getDefaultLocaleForImpEx());
-
+				final ImportConfig importConfig = createImportConfiguration(resourceAsStream, fileEncoding);
 				final ImportResult importResult = importService.importData(importConfig);
 				if (importResult.isError()) {
 					getLogger().error(context, logPrefix + "FAILED!");
@@ -67,14 +59,8 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 					getLogger().info(context, logPrefix + "SUCCESSFUL!");
 				}
 
-				if (isMainImportFile && environment.supportLocalizedImpExFiles()) {
-					String extension = StringUtils.substringAfterLast(file, ".");
-					String filePath = StringUtils.removeEnd(file, "." + extension);
-					List<LanguageModel> languages = commonI18NService.getAllLanguages();
-					for (LanguageModel language : CollectionUtils.emptyIfNull(languages)) {
-						String languageFilePath = String.format("%s_%s.%s", filePath, language.getIsocode(), extension);
-						importImpexFile(context, languageFilePath, fileEncoding, false);
-					}
+				if (isMainImportFile) {
+					processLocalizedImpExFiles(context, file, fileEncoding);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -85,6 +71,30 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 			}
 		} catch (Exception e) {
 			getLogger().error(context, logPrefix + "FAILED!", e);
+		}
+	}
+
+	private ImportConfig createImportConfiguration(InputStream resourceAsStream, String fileEncoding) {
+		final ImportConfig importConfig = new ImportConfig();
+		importConfig.setScript(new StreamBasedImpExResource(resourceAsStream, fileEncoding));
+		importConfig.setSynchronous(Boolean.TRUE);
+
+		importConfig.setLegacyMode(environment.useLegacyModeForImpEx());
+		importConfig.setEnableCodeExecution(environment.enableCodeExecution());
+		importConfig.setValidationMode(environment.getValidationMode());
+		importConfig.setLocale(environment.getDefaultLocaleForImpEx());
+		return importConfig;
+	}
+
+	private void processLocalizedImpExFiles(SystemSetupContext context, String file, String fileEncoding) {
+		if (environment.supportLocalizedImpExFiles()) {
+			String extension = StringUtils.substringAfterLast(file, ".");
+			String filePath = StringUtils.removeEnd(file, "." + extension);
+			List<LanguageModel> languages = commonI18NService.getAllLanguages();
+			for (LanguageModel language : CollectionUtils.emptyIfNull(languages)) {
+				String languageFilePath = String.format("%s_%s.%s", filePath, language.getIsocode(), extension);
+				importImpexFile(context, languageFilePath, fileEncoding, false);
+			}
 		}
 	}
 
