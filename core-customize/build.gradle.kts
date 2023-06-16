@@ -8,7 +8,7 @@ import java.util.Base64
 plugins {
     id("sap.commerce.build") version("3.7.1")
     id("sap.commerce.build.ccv2") version("3.7.1")
-    id("de.undercouch.download") version("4.1.2")
+    id("de.undercouch.download") version("4.1.3-SNAPSHOT")
 }
 
 val DEPENDENCY_FOLDER = "../dependencies"
