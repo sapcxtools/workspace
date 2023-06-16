@@ -29,8 +29,8 @@ public interface HtmlEmailService {
 	 * @throws EmailException the sending failed
 	 */
 	default String sendEmail(HtmlEmail email) throws EmailException {
-		if (email instanceof ProxyHtmlEmail proxyHtmlEmail) {
-			return sendEmailInternal(proxyHtmlEmail.getProxiedHtmlEmail());
+		if (email instanceof ProxyHtmlEmail) {
+			return sendEmailInternal(((ProxyHtmlEmail) email).getProxiedHtmlEmail());
 		} else {
 			return sendEmailInternal(email);
 		}
