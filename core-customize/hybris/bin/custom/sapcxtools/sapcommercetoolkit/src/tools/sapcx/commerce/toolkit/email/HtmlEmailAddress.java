@@ -49,10 +49,12 @@ public class HtmlEmailAddress {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
+		}
 		HtmlEmailAddress that = (HtmlEmailAddress) o;
 		return new EqualsBuilder()
 				.append(name, that.name)

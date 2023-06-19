@@ -10,6 +10,7 @@ import de.hybris.platform.cronjob.enums.ErrorMode;
 import de.hybris.platform.cronjob.enums.JobLogLevel;
 import de.hybris.platform.cronjob.model.CronJobModel;
 import de.hybris.platform.servicelayer.cronjob.CronJobService;
+import de.hybris.platform.servicelayer.exceptions.SystemException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,7 +56,7 @@ public final class ImpExTasks {
 			syncConfig.setAbortWhenCollidingSyncIsRunning(false);
 			synchronizationService.synchronize(syncJob, syncConfig);
 		} catch (Exception e) {
-			throw new RuntimeException(String.format(
+			throw new SystemException(String.format(
 					"Could not start full catalog sync for parameters [source=%s, target=%s, code=%s]! Please verify the catalog versions are valid and the sync job is configured correctly.",
 					source, target, syncJobCode), e);
 		}
@@ -72,13 +73,7 @@ public final class ImpExTasks {
 	 * @param cronJobCode the cron job code to be executed
 	 */
 	public static void startCronJob(String cronJobCode) {
-		CronJobService cronJobService = (CronJobService) Registry.getApplicationContext().getBean("cronJobService");
-		try {
-			CronJobModel cronJob = cronJobService.getCronJob(cronJobCode);
-			cronJobService.performCronJob(cronJob, true);
-		} catch (Exception e) {
-			throw new RuntimeException(String.format("Could not start cron job for parameters [code=%s]! Please verify the cron job is configured correctly.", cronJobCode), e);
-		}
+		startCronJob(cronJobCode, true);
 	}
 
 	/**
@@ -92,12 +87,27 @@ public final class ImpExTasks {
 	 * @param cronJobCode the cron job code to be executed
 	 */
 	public static void startCronJobNonBlocking(String cronJobCode) {
+		startCronJob(cronJobCode, false);
+	}
+
+	/**
+	 * This method is intended to be called by an ImpEx script while code execution is enabled, e.g.:
+	 *
+	 * <code>#%tools.sapcx.commerce.toolkit.impex.ImpExTasks.startCronJob("your-cronjob-code", true);</code>
+	 *
+	 * One may use it to e.g. trigger a solr indexing after system update. The second parameter defines whether the job
+	 * is performed synchronously (true) or asynchronously (false).
+	 *
+	 * @param cronJobCode the cron job code to be executed
+	 * @param synchronous perform cronjob synchronously (true) or asynchronously (false)
+	 */
+	public static void startCronJob(String cronJobCode, boolean synchronous) {
 		CronJobService cronJobService = (CronJobService) Registry.getApplicationContext().getBean("cronJobService");
 		try {
 			CronJobModel cronJob = cronJobService.getCronJob(cronJobCode);
-			cronJobService.performCronJob(cronJob, true);
+			cronJobService.performCronJob(cronJob, synchronous);
 		} catch (Exception e) {
-			throw new RuntimeException(String.format("Could not start cron job for parameters [code=%s]! Please verify the cron job is configured correctly.", cronJobCode), e);
+			throw new SystemException(String.format("Could not start cron job for parameters [code=%s]! Please verify the cron job is configured correctly.", cronJobCode), e);
 		}
 	}
 }
