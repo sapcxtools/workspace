@@ -30,11 +30,11 @@ export const authCodeFlowConfig: AuthConfig = {
 		tokenEndpoint: '/oauth/token',
 		loginUrl: '/authorize',
 		revokeEndpoint: '/oauth/revoke',
-        logoutUrl: '/oidc/logout',
+		logoutUrl: '/oidc/logout',
 		userinfoEndpoint: '/userinfo',
 		OAuthLibConfig: {
 			redirectUri: 'https://www.<your-domain>.com',
-            postLogoutRedirectUri: 'https://www.<your-domain>.com',
+			postLogoutRedirectUri: 'https://www.<your-domain>.com',
 			responseType: 'code',
 			scope: 'openid profile email',
 			showDebugInformation: true,
@@ -44,7 +44,27 @@ export const authCodeFlowConfig: AuthConfig = {
 };
 ```
 
-To avoid failing requests during the logout sequence, we also strongly recommend to overlay the standard logout
+Our proposal is, to use the `sapcxenvconfig` extension to provide this environment specific configuration with the
+secured configuration provided by the SAP Commerce Cloud console. The example above can be configured like this:
+
+```properties
+sapcxenvconfig.frontend.authentication.client_id=<client id>
+sapcxenvconfig.frontend.authentication.client_secret=<client secret>
+sapcxenvconfig.frontend.authentication.baseUrl=https://<your-auth0-domain>
+sapcxenvconfig.frontend.authentication.tokenEndpoint=/oauth/token
+sapcxenvconfig.frontend.authentication.loginUrl=/authorize
+sapcxenvconfig.frontend.authentication.revokeEndpoint=/oauth/revoke
+sapcxenvconfig.frontend.authentication.logoutUrl=/oidc/logout
+sapcxenvconfig.frontend.authentication.userinfoEndpoint=/userinfo
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.redirectUri=https://www.<your-domain>.com
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.postLogoutRedirectUri=https://www.<your-domain>.com
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.responseType=code
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.scope=openid profile email
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.showDebugInformation=true
+sapcxenvconfig.frontend.authentication.OAuthLibConfig.disablePKCE=false
+```
+
+To avoid failing requests during the logout sequence, we also strongly recommend overlaying the standard logout
 guard from the Spartacus project, with an implementation as follows here:
 
 ```typescript

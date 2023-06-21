@@ -152,6 +152,9 @@ sapcxenvconfig.frontend.toplevel.enabled=true
 }
 ```
 
+Another example for configuring OAuth with Auth0 within the frontend can be found in the documentation of the
+`sapcxenvconfig` extension.
+
 ## License
 
 _Licensed under the Apache License, Version 2.0, January 2004_
