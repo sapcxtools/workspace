@@ -18,10 +18,8 @@ public class CsvReportGenerator implements ReportGenerator {
 
 	@Override
 	public boolean createReport(QueryFileConfigurationData report, GenericSearchResult result, File file) {
-		CsvReportWriter csvWriter = null;
-		try {
+		try (CsvReportWriter csvWriter = new CsvReportWriter(file, report)) {
 			List<GenericSearchResultHeader> headers = result.getHeaders();
-			csvWriter = new CsvReportWriter(file, report);
 			addRow(csvWriter, result.getHeaderNames());
 
 			List<Map<GenericSearchResultHeader, String>> rowValues = result.getValues();
@@ -41,10 +39,6 @@ public class CsvReportGenerator implements ReportGenerator {
 		} catch (IOException e) {
 			LOG.error(String.format("Could not write CSV to file: %s", file.getAbsolutePath()), e);
 			return false;
-		} finally {
-			if (csvWriter != null) {
-				csvWriter.closeQuietly();
-			}
 		}
 	}
 

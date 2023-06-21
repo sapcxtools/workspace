@@ -228,6 +228,7 @@ public class FlexibleSearchGenericSearchService implements GenericSearchService 
 			this.catalogVersions = catalogVersions;
 		}
 
+		@Override
 		public TranslationResult execute() {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug(String.format(LOG_MSG_TRANSLATION_INPUT, query, parameters, user, locale, catalogVersions));

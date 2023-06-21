@@ -19,7 +19,7 @@ public interface ReportService {
 	 *
 	 * @param report    the report to be generated
 	 * @param result    the search result to turn into a csv file
-	 * @return
+	 * @return the generated report file, empty if no report was generated
 	 */
 	Optional<File> getReportFile(QueryFileConfigurationData report, GenericSearchResult result);
 
@@ -27,10 +27,15 @@ public interface ReportService {
 	 * Gets a map of the configured parameters with its name as key and the item or item list as value
 	 *
 	 * @param report to get parameter config from
-	 * @return
+	 * @return the report parameters
 	 */
 	Map<String, Object> getReportParameters(QueryReportConfigurationModel report);
 
+	/**
+	 * Return the directory to be used for report generation.
+	 *
+	 * @return the report directory
+	 */
 	File getReportDirectory();
 
 	/**
