@@ -63,7 +63,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 				Actions.assignRole(role, user);
 			}
 		} catch (Auth0Exception exception) {
-			LOG.error("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customerId);
+			LOG.debug("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customerId);
 			throw new RuntimeException("Could not replicate customer to Auth0!", exception);
 		}
 	}
@@ -90,7 +90,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 				Actions.removeUser(user, customer);
 			}
 		} catch (Auth0Exception exception) {
-			LOG.error("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
+			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
 			throw new RuntimeException("Could not remove customer on Auth0 side!", exception);
 		}
 	}
