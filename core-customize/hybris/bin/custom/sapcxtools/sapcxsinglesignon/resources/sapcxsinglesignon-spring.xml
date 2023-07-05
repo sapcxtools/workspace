@@ -29,11 +29,14 @@
     <alias name="cxCustomerReplicationInterceptor" alias="customerReplicationInterceptor"/>
     <bean id="cxCustomerReplicationInterceptor" class="tools.sapcx.commerce.sso.replication.CustomerReplicationInterceptor">
         <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
+        <constructor-arg name="customerReplicationFilter" ref="customerReplicationFilter"/>
     </bean>
     <bean id="cxCustomerReplicationInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
         <property name="interceptor" ref="customerReplicationInterceptor"/>
         <property name="typeCode" value="Customer"/>
     </bean>
+    <alias name="cxAllCustomerReplicationFilter" alias="customerReplicationFilter"/>
+    <bean id="cxAllCustomerReplicationFilter" class="tools.sapcx.commerce.sso.replication.AllCustomerReplicationFilter"/>
 
     <!-- Customer Replication Strategy -->
     <alias name="cxAuth0CustomerReplicationStrategy" alias="customerReplicationStrategy"/>
