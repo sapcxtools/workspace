@@ -16,6 +16,10 @@ public interface Actions {
 		AssignRoleAction.assignRole(role, user);
 	}
 
+	static void removeRole(Role role, User user) throws Auth0Exception {
+		RemoveRoleAction.removeRole(role, user);
+	}
+
 	static UserInfo getUserInformation(String accessToken) throws Auth0Exception {
 		return FetchUserInformationAction.getUserInformation(accessToken);
 	}

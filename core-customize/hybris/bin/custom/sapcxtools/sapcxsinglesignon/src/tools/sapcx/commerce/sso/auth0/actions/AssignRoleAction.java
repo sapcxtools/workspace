@@ -27,7 +27,7 @@ class AssignRoleAction implements SdkAction<Void> {
 		User user = getWithType(parameter, "user", User.class);
 
 		try {
-			submit(managementAPI().roles().assignUsers(role.getId(), List.of(user.getId())));
+			submit(managementAPI().users().addRoles(role.getId(), List.of(user.getId())));
 			LOG.debug("Assigned role with name '{}' to user with email '{}'.", role.getName(), user.getEmail());
 			return null;
 		} catch (Auth0Exception exception) {
