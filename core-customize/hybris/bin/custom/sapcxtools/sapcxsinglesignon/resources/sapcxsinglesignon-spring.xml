@@ -20,6 +20,9 @@
             <list>
                 <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerPopulator">
                     <constructor-arg name="customerNameStrategy" ref="customerNameStrategy"/>
+                    <constructor-arg name="useBlockedStatusForDisabledCustomers" value="${sapcxsinglesignon.auth0.customer.useblockedstatus}"/>
+                    <constructor-arg name="requireEmailVerificationForNewCustomers" value="${sapcxsinglesignon.auth0.customer.requireemailverification}"/>
+                    <constructor-arg name="requirePasswordVerificationForNewCustomers" value="${sapcxsinglesignon.auth0.customer.requirepasswordverification}"/>
                 </bean>
             </list>
         </property>

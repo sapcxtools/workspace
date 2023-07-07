@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.sso.replication;
 
+import java.util.function.Predicate;
+
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.interceptor.InterceptorContext;
 import de.hybris.platform.servicelayer.interceptor.InterceptorException;
@@ -8,8 +10,6 @@ import de.hybris.platform.servicelayer.interceptor.ValidateInterceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Predicate;
 
 public class CustomerReplicationInterceptor implements ValidateInterceptor<CustomerModel>, RemoveInterceptor<CustomerModel> {
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerReplicationInterceptor.class);

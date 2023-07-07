@@ -11,9 +11,19 @@ import de.hybris.platform.servicelayer.dto.converter.ConversionException;
 
 public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 	private CustomerNameStrategy customerNameStrategy;
+	private boolean useBlockedStatusForDisabledCustomers;
+	private boolean requireEmailVerificationForNewCustomers;
+	private boolean requirePasswordVerificationForNewCustomers;
 
-	public Auth0CustomerPopulator(CustomerNameStrategy customerNameStrategy) {
+	public Auth0CustomerPopulator(
+			CustomerNameStrategy customerNameStrategy,
+			boolean useBlockedStatusForDisabledCustomers,
+			boolean requireEmailVerificationForNewCustomers,
+			boolean requirePasswordVerificationForNewCustomers) {
 		this.customerNameStrategy = customerNameStrategy;
+		this.useBlockedStatusForDisabledCustomers = useBlockedStatusForDisabledCustomers;
+		this.requireEmailVerificationForNewCustomers = requireEmailVerificationForNewCustomers;
+		this.requirePasswordVerificationForNewCustomers = requirePasswordVerificationForNewCustomers;
 	}
 
 	@Override
@@ -34,6 +44,11 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 			}
 		}
 
-		target.setBlocked(!Boolean.FALSE.equals(source.isLoginDisabled()));
+		target.setVerifyEmail(requireEmailVerificationForNewCustomers);
+		target.setVerifyPassword(requirePasswordVerificationForNewCustomers);
+
+		if (useBlockedStatusForDisabledCustomers) {
+			target.setBlocked(!Boolean.FALSE.equals(source.isLoginDisabled()));
+		}
 	}
 }
