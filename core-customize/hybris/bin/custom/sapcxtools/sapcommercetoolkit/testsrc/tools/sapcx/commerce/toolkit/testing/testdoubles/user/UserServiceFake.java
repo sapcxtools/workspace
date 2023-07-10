@@ -60,14 +60,7 @@ public class UserServiceFake implements UserService {
 		private static void linkUserAndGroupsBidirectional(UserModel user, List<UserGroupModel> userGroups) {
 			user.setGroups(new HashSet<>(userGroups));
 			for (UserGroupModel userGroup : userGroups) {
-
-				Set<PrincipalModel> members;
-				if (userGroup.getMembers() == null || userGroup.getMembers().isEmpty()) {
-					members = new HashSet<>();
-				} else {
-					members = userGroup.getMembers();
-				}
-
+				Set<PrincipalModel> members = new HashSet<>(emptyIfNull(userGroup.getMembers()));
 				members.add(user);
 				userGroup.setMembers(members);
 			}
