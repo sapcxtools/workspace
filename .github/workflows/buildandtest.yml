@@ -2,7 +2,7 @@ name: Build and Test
 
 on:
   push:
-    branches: [develop, "feature/**"]
+    branches: [develop]
     paths:
       - "core-customize/hybris/bin/custom/sapcxtools/**/*.java"
       - "core-customize/hybris/bin/custom/sapcxtools/**/*-beans.xml"
