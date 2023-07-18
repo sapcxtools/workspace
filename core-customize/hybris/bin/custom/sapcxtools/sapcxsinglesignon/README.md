@@ -167,8 +167,6 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 | sapcxsinglesignon.auth0.customer.role               | String  | the role to assign to newly created customer accounts |
 | sapcxsinglesignon.auth0.customer.idfield            | String  | field name used for user ID mapping (default: email) |
 | sapcxsinglesignon.auth0.customer.useblockedstatus   | Boolean | specifies if the user shall be blocked when disabled in SAP Commerce (default: false) |
-| sapcxsinglesignon.auth0.customer.requireemailverification    | Boolean | specifies if the user creation shall trigger an email verification process (default: false) |
-| sapcxsinglesignon.auth0.customer.requirepasswordverification | Boolean | specifies if the user creation shall trigger an password verification process (default: false) |
 
 ## License
 
