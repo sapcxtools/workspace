@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 public class CustomerReplicationInterceptor implements ValidateInterceptor<CustomerModel>, RemoveInterceptor<CustomerModel> {
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerReplicationInterceptor.class);
+	private static final String REPLICATE_FAILED_MSG = "Could not replicate customer with ID '%s'. Data may no be in sync and needs to be corrected manually!";
+	private static final String REMOVE_FAILED_MSG = "Could not remove customer with ID '%s'! Account needs to be removed manually!";
 
 	private CustomerReplicationStrategy customerReplicationStrategy;
 	private Predicate<CustomerModel> customerReplicationFilter;
@@ -29,7 +31,7 @@ public class CustomerReplicationInterceptor implements ValidateInterceptor<Custo
 				customerReplicationStrategy.replicate(customer);
 			}
 		} catch (RuntimeException e) {
-			LOG.warn("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customer.getUid());
+			LOG.warn(String.format(REPLICATE_FAILED_MSG, customer.getUid()), e);
 		}
 	}
 
@@ -40,7 +42,7 @@ public class CustomerReplicationInterceptor implements ValidateInterceptor<Custo
 				customerReplicationStrategy.remove(customer);
 			}
 		} catch (RuntimeException e) {
-			LOG.warn("Could not remove customer with ID '{}'! Account needs to be removed manually!", customer.getUid());
+			LOG.warn(String.format(REMOVE_FAILED_MSG, customer.getUid()), e);
 		}
 	}
 }
