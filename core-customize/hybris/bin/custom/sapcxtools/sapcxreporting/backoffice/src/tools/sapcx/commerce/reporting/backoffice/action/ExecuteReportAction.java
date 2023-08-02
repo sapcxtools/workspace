@@ -21,6 +21,7 @@ import org.zkoss.zhtml.Filedownload;
 import org.zkoss.zhtml.Messagebox;
 
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
+import tools.sapcx.commerce.reporting.populators.QueryReportConfigurationPopulator;
 import tools.sapcx.commerce.reporting.report.ReportService;
 import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
@@ -37,12 +38,15 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 	private GenericSearchService genericFlexibleSearch;
 
 	@Resource
+	private QueryReportConfigurationPopulator queryReportConfigurationPopulator;
+
+	@Resource
 	private ReportService dataReportService;
 
 	@Override
 	public ActionResult<Object> perform(ActionContext<QueryReportConfigurationModel> actionContext) {
 		QueryReportConfigurationModel report = actionContext.getData();
-		QueryFileConfigurationData queryFileConfigurationData = new QueryFileConfigurationData();
+
 		String query = report.getSearchQuery();
 		Map<String, Object> params = dataReportService.getReportParameters(report);
 
@@ -53,6 +57,8 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 			return error(MessageFormat.format(actionContext.getLabel(SEARCH_ERROR), searchResult.getError()));
 		}
 
+		QueryFileConfigurationData queryFileConfigurationData = new QueryFileConfigurationData();
+		queryReportConfigurationPopulator.populate(report, queryFileConfigurationData);
 		Optional<File> reportFile = dataReportService.getReportFile(queryFileConfigurationData, searchResult);
 		if (!reportFile.isPresent()) {
 			return error(actionContext.getLabel(REPORT_GENERATE_ERROR));
