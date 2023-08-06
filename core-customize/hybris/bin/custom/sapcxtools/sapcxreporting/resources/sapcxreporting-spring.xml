@@ -44,6 +44,18 @@
         <property name="flexibleSearchService" ref="flexibleSearchService" />
     </bean>
 
+    <!-- Report Download Facade -->
+    <alias alias="reportDownloadFacade" name="cxSolrReportDownloadFacade" />
+    <bean id="cxSolrReportDownloadFacade" class="tools.sapcx.commerce.reporting.download.SolrReportDownloadFacade">
+        <constructor-arg name="reportService" ref="reportService"/>
+        <constructor-arg name="reportSearchFacades" ref="reportSearchFacadesMap"/>
+    </bean>
+    <alias alias="reportSearchFacadesMap" name="cxReportSearchFacadesMap" />
+    <util:map id="cxReportSearchFacadesMap"
+              key-type="java.lang.String"
+              value-type="tools.sapcx.commerce.reporting.search.AbstractGenericSearchFacade">
+    </util:map>
+
     <!-- Domain -->
     <bean id="valueFieldOfConfigurationPropertyAccessorAttributeHandler" class="tools.sapcx.commerce.reporting.domain.ValueFieldOfConfigurationPropertyAccessorAttributeHandler">
         <property name="configurationService" ref="configurationService"/>
