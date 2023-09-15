@@ -84,7 +84,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable()
-export class KronosLogoutGuard extends LogoutGuard {
+export class CustomLogoutGuard extends LogoutGuard {
     constructor(
         protected auth: AuthService,
         protected cms: CmsService,
