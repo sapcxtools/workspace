@@ -75,7 +75,19 @@ function getOccBaseUrl(meta: Meta) {
     } else if (environment.occBaseUrl !== undefined) {
         return environment.occBaseUrl;
     } else {
-        return '';
+        let frontendHost = window.location.hostname;
+        let firstSegment = frontendHost.split('.')[0];
+        let remainingSegments = frontendHost.split('.').slice(1).join('.');
+
+        let apiFirstSegment = 'api';
+        if (firstSegment == 'wwwd1') {
+            apiFirstSegment = 'apid1';
+        } else if (firstSegment == 'wwws1') {
+            apiFirstSegment = 'apis1';
+        }
+
+        let apiHost = apiFirstSegment + '.' + remainingSegments;
+        return window.location.protocol + '//' + apiHost;
     }
 }
 ```
