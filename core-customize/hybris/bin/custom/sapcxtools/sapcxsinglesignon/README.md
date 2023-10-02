@@ -14,16 +14,16 @@ Auth0, whenever a customer object is created or changed within SAP commerce clou
 
 ### How to activate and use
 
-To activate the functionality, one needs to set the configuration parameters accordingly for each
-environment, especially the flags `sapcxsinglesignon.filter.enabled` and `sapcxsinglesignon.replication.enabled`
-which are set to `false` by default.
+To activate the functionality, one needs to set the configuration parameters accordingly for each environment,
+especially the flags `sapcxsinglesignon.filter.enabled`, `sapcxsinglesignon.replicate.creation.enabled`, and
+`sapcxsinglesignon.replicate.removal.enabled` which are set to `false` by default.
 
 Also, the IDP should be configured to use the SAP Commerce OCC endpoint as audience, and provide the following
 information within the access token, as they are required by the filter:
 
- - email and/or username (whatever field is configured as idfield)
- - given_name (first name for customer creation)
- - family_name (last name for customer creation)
+- email and/or username (whatever field is configured as `idfield`)
+- given_name (first name for customer creation)
+- family_name (last name for customer creation)
 
 For example, using Auth0, the following post login handler is required:
 
