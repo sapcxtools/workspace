@@ -10,6 +10,7 @@ import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,24 +22,24 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 
 	private UserService userService;
 	private String auth0RoleForCustomers;
-	private boolean isReplicationEnabled;
+	private boolean isCreationEnabled;
 	private boolean isRemovalEnabled;
 
 	public Auth0CustomerReplicationStrategy(
 			UserService userService,
 			String auth0RoleForCustomers,
-			boolean isReplicationEnabled,
+			boolean isCreationEnabled,
 			boolean isRemovalEnabled) {
 		this.userService = userService;
 		this.auth0RoleForCustomers = auth0RoleForCustomers;
-		this.isReplicationEnabled = isReplicationEnabled;
+		this.isCreationEnabled = isCreationEnabled;
 		this.isRemovalEnabled = isRemovalEnabled;
 	}
 
 	@Override
 	public void replicate(@Nonnull CustomerModel customer) {
-		if (!isReplicationEnabled) {
-			LOG.debug("Customer replication is disabled by configuration.");
+		if (!isCreationEnabled) {
+			LOG.debug("Customer creation is disabled by configuration.");
 			return;
 		}
 
@@ -51,34 +52,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 		updateUserRoles(user, !customer.isLoginDisabled());
 	}
 
-	@Override
-	public void remove(@Nonnull CustomerModel customer) {
-		if (userService.isAnonymousUser(customer)) {
-			LOG.debug("Anonymous user removal is disabled by convention.");
-			return;
-		}
-
-		String customerId = customer.getUid();
-		try {
-			User user = Actions.getUser(customerId);
-			if (user == null) {
-				LOG.debug("User for provided customer ID '{}' does not exist! Removal not necessary.", customerId);
-			} else if (isRemovalEnabled) {
-				LOG.debug("User for provided customer ID '{}' exists: '{}'. Trigger user removal.", customerId, user.getId());
-				Actions.removeUser(user, customer);
-			} else if (isReplicationEnabled) {
-				LOG.debug("Customer removal is disabled by configuration, but replication is enabled => Update user roles.");
-				updateUserRoles(user, false);
-			} else {
-				LOG.debug("Customer removal is disabled by configuration.");
-			}
-		} catch (Auth0Exception exception) {
-			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
-			throw new RuntimeException("Could not remove customer on Auth0 side!", exception);
-		}
-	}
-
-	private User updateUser(CustomerModel customer) {
+	private User updateUser(@NotNull CustomerModel customer) {
 		String customerId = customer.getUid();
 		try {
 			User user = Actions.getUser(customerId);
@@ -116,6 +90,34 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not synchronize roles for customer ID '{}'. Data may no be in sync and needs to be corrected manually!", user.getEmail());
 			throw new RuntimeException("Could not synchronize customer roles to Auth0!", exception);
+		}
+	}
+
+	@Override
+	public void remove(@NotNull CustomerModel customer) {
+		if (userService.isAnonymousUser(customer)) {
+			LOG.debug("Anonymous user removal is disabled by convention.");
+			return;
+		}
+
+		String customerId = customer.getUid();
+		try {
+			User user = Actions.getUser(customerId);
+			if (!isRemovalEnabled) {
+				LOG.debug("Customer removal is disabled by configuration.");
+				updateUserRoles(user, false);
+				return;
+			}
+
+			if (user == null) {
+				LOG.debug("User for provided customer ID '{}' does not exist! Removal not necessary.", customerId);
+			} else {
+				LOG.debug("User for provided customer ID '{}' exists: '{}'. Trigger user removal.", customerId, user.getId());
+				Actions.removeUser(user, customer);
+			}
+		} catch (Auth0Exception exception) {
+			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
+			throw new RuntimeException("Could not remove customer on Auth0 side!", exception);
 		}
 	}
 }

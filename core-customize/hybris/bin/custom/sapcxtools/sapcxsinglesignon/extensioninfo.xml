@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
-    <extension abstractclassprefix="Generated" classprefix="CxSingleSignOn" jaloLogicFree="true" name="sapcxsinglesignon" version="4.1.3-SNAPSHOT" usemaven="true">
+    <extension abstractclassprefix="Generated" classprefix="CxSingleSignOn" jaloLogicFree="true" name="sapcxsinglesignon" version="4.1.1" usemaven="true">
         <requires-extension name="sapcommercetoolkit"/>
         <requires-extension name="commercewebservices"/>
         <requires-extension name="oauth2"/>

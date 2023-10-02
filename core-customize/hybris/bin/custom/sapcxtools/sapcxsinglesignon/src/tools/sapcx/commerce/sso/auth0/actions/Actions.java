@@ -1,7 +1,6 @@
 package tools.sapcx.commerce.sso.auth0.actions;
 
 import com.auth0.exception.Auth0Exception;
-import com.auth0.json.auth.UserInfo;
 import com.auth0.json.mgmt.roles.Role;
 import com.auth0.json.mgmt.users.User;
 
@@ -18,10 +17,6 @@ public interface Actions {
 
 	static void removeRole(Role role, User user) throws Auth0Exception {
 		RemoveRoleAction.removeRole(role, user);
-	}
-
-	static UserInfo getUserInformation(String accessToken) throws Auth0Exception {
-		return FetchUserInformationAction.getUserInformation(accessToken);
 	}
 
 	static User getUser(String email) throws Auth0Exception {

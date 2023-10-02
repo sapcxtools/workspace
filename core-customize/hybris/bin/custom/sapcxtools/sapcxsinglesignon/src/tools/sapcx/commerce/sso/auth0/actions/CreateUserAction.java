@@ -19,11 +19,8 @@ class CreateUserAction implements SdkAction<User> {
 		return new CreateUserAction().execute(Map.of("customer", customer));
 	}
 
-	private Random randomPasswordGenerator;
-
 	private CreateUserAction() {
 		// Avoid instantiation
-		randomPasswordGenerator = new Random();
 	}
 
 	@Override
@@ -40,8 +37,7 @@ class CreateUserAction implements SdkAction<User> {
 			userInfo.setConnection(getCustomerConnection());
 			userInfo.setPassword(getRandomPassword());
 
-			user = fetch(managementAPI().users().create(userInfo));
-			return user;
+			return user = fetch(managementAPI().users().create(userInfo));
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Create user with ID '%s' failed!", customerId), exception);
 			throw exception;
@@ -51,6 +47,7 @@ class CreateUserAction implements SdkAction<User> {
 	}
 
 	private char[] getRandomPassword() {
+		Random randomPasswordGenerator = new Random();
 		byte[] password = new byte[32];
 		randomPasswordGenerator.nextBytes(password);
 		return new String(password).toCharArray();

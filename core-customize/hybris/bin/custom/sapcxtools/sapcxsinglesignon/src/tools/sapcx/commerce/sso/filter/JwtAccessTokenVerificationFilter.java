@@ -1,15 +1,11 @@
 package tools.sapcx.commerce.sso.filter;
 
-import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 
-import javax.annotation.Nonnull;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -46,38 +52,49 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Later in the filter chain, the Spring security chain will verify the access
  * token against the token store and use this token to authenticate the user.
  */
-public abstract class ExternalAccessTokenVerificationFilter extends OncePerRequestFilter {
-	public static final String REVALIDATE_TOKEN_PARAMETER = "revalidate_token";
-	private static final Logger LOG = LoggerFactory.getLogger(ExternalAccessTokenVerificationFilter.class);
+public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
+	private static final Logger LOG = LoggerFactory.getLogger(JwtAccessTokenVerificationFilter.class);
 
 	private OAuth2RequestFactory oAuth2RequestFactory;
 	private ClientDetailsService clientDetailsService;
 	private UserDetailsService userDetailsService;
 	private TokenStore tokenStore;
 	private String occClientId;
-	private int tokenExpiration;
 	private boolean enabled;
+	private String issuer;
+	private String audience;
+	private String customerIdField;
 	private TokenExtractor tokenExtractor;
+	private JwtDecoder jwtDecoder = null;
 
-	protected ExternalAccessTokenVerificationFilter(
+	public JwtAccessTokenVerificationFilter(
 			OAuth2RequestFactory oAuth2RequestFactory,
 			ClientDetailsService clientDetailsService,
 			UserDetailsService userDetailsService,
 			TokenStore tokenStore,
 			String occClientId,
-			int tokenExpiration,
-			boolean enabled) {
+			boolean enabled,
+			String issuer,
+			String audience,
+			String customerIdField) {
 		this.oAuth2RequestFactory = oAuth2RequestFactory;
 		this.clientDetailsService = clientDetailsService;
 		this.userDetailsService = userDetailsService;
 		this.tokenStore = tokenStore;
 		this.occClientId = occClientId;
-		this.tokenExpiration = tokenExpiration;
 		this.enabled = enabled;
+		this.issuer = issuer;
+		this.audience = audience;
+		this.customerIdField = customerIdField;
 	}
 
-	@Nonnull
-	protected abstract String getUserIdFromAccessToken(String accessTokenValue);
+	@Override
+	public void afterPropertiesSet() throws ServletException {
+		super.afterPropertiesSet();
+		if (enabled) {
+			this.tokenExtractor = new BearerTokenExtractor();
+		}
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -88,23 +105,13 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 
 			OAuth2AccessToken oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, false);
 			LOG.debug("OAuth2 AccessToken from token store (1st attempt, without lock): {} (expired? => {})", oAuth2AccessToken,
-					oAuth2AccessToken != null && oAuth2AccessToken.isExpired());
-
-			String revalidateToken = defaultIfBlank(request.getParameter(REVALIDATE_TOKEN_PARAMETER), "false");
-			if (oAuth2AccessToken != null && revalidateToken.equals("true")) {
-				synchronized (accessTokenValue.intern()) {
-					LOG.debug("Request revalidation of access token with request parameter: {}", REVALIDATE_TOKEN_PARAMETER);
-					tokenStore.removeAccessToken(oAuth2AccessToken);
-					LOG.debug("Access token removed from store: {}", accessTokenValue);
-					oAuth2AccessToken = null;
-				}
-			}
+					oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);
 
 			if (oAuth2AccessToken == null || oAuth2AccessToken.isExpired()) {
 				synchronized (accessTokenValue.intern()) {
 					oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, true);
 					LOG.debug("OAuth2 AccessToken from token store (2nd attempt, with lock): {} (expired? => {})", oAuth2AccessToken,
-							oAuth2AccessToken != null && oAuth2AccessToken.isExpired());
+							oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);
 				}
 			}
 		}
@@ -116,19 +123,44 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 		OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(accessTokenValue);
 		if (oAuth2AccessToken != null && !oAuth2AccessToken.isExpired()) {
 			return oAuth2AccessToken;
+		} else if (oAuth2AccessToken != null && oAuth2AccessToken.isExpired()) {
+			tokenStore.removeAccessToken(oAuth2AccessToken);
+			oAuth2AccessToken = null;
 		}
 
 		if (createIfMissing) {
-			String userId = getUserIdFromAccessToken(accessTokenValue);
-			if (userId != null) {
-				oAuth2AccessToken = storeAuthenticationForUser(accessTokenValue, occClientId, userId);
+			try {
+				Jwt decodedToken = decodeAccessToken(accessTokenValue);
+				String userId = decodedToken.getClaimAsString(customerIdField);
+				if (userId != null) {
+					LOG.debug("Mapped user ID using field '{}': '{}'", customerIdField, userId);
+					oAuth2AccessToken = storeAuthenticationForUser(userId, occClientId, decodedToken);
+				} else {
+					LOG.warn("No user ID found in access token for field: '{}'. Make sure your IDP configuration is correct!", customerIdField);
+				}
+			} catch (Exception e) {
+				LOG.debug(String.format("Invalid access token '%s'!", accessTokenValue), e);
 			}
 		}
 
 		return oAuth2AccessToken;
 	}
 
-	private OAuth2AccessToken storeAuthenticationForUser(String accessTokenValue, String oAuth2ClientId, String userId) {
+	protected Jwt decodeAccessToken(String accessTokenValue) throws JwtException {
+		if (jwtDecoder == null) {
+			initJwtDecoder();
+		}
+
+		try {
+			return jwtDecoder.decode(accessTokenValue);
+		} catch (JwtException e) {
+			LOG.debug("Retry with reinitialized decoder");
+			initJwtDecoder();
+			return jwtDecoder.decode(accessTokenValue);
+		}
+	}
+
+	private OAuth2AccessToken storeAuthenticationForUser(String userId, String oAuth2ClientId, Jwt decodedToken) {
 		assert isNotBlank(oAuth2ClientId);
 		assert isNotBlank(userId);
 
@@ -138,12 +170,11 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 		OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
 
 		// Username Password Auth Token
-		UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
-		UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(userId, null, userDetails.getAuthorities());
+		UsernamePasswordAuthenticationToken userToken = createUsernamePasswordAuthenticationToken(userId);
 
 		// Create access token and authentication for user
-		DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(accessTokenValue);
-		oAuth2AccessToken.setExpiration(calculateExpirationDate());
+		DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(decodedToken.getTokenValue());
+		oAuth2AccessToken.setExpiration(Date.from(decodedToken.getExpiresAt()));
 		OAuth2Authentication authentication = new OAuth2Authentication(oAuth2Request, userToken);
 
 		// Remove existing access token for same authentication
@@ -160,16 +191,29 @@ public abstract class ExternalAccessTokenVerificationFilter extends OncePerReque
 		return oAuth2AccessToken;
 	}
 
-	private Date calculateExpirationDate() {
-		if (tokenExpiration <= 0) {
-			return null;
+	private UsernamePasswordAuthenticationToken createUsernamePasswordAuthenticationToken(String userId) {
+		try {
+			UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+			return new UsernamePasswordAuthenticationToken(userId, null, userDetails.getAuthorities());
+		} catch (UsernameNotFoundException e) {
+			LOG.warn("Login attempt for unknown user '{}'!", userId);
+			throw new BadCredentialsException("Invalid credentials!");
 		}
-		return Date.from(Instant.now().plus(tokenExpiration, ChronoUnit.MINUTES));
 	}
 
-	@Override
-	public void afterPropertiesSet() throws ServletException {
-		super.afterPropertiesSet();
-		this.tokenExtractor = new BearerTokenExtractor();
+	protected void configureValidationForJwtDecoder(NimbusJwtDecoder decoder) {
+		OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
+		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+		OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+		decoder.setJwtValidator(withAudience);
+	}
+
+	private synchronized void initJwtDecoder() {
+		if (this.jwtDecoder == null) {
+			this.jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
+			if (this.jwtDecoder instanceof NimbusJwtDecoder decoder) {
+				configureValidationForJwtDecoder(decoder);
+			}
+		}
 	}
 }

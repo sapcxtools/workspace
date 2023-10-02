@@ -18,7 +18,31 @@ To activate the functionality, one needs to set the configuration parameters acc
 environment, especially the flags `sapcxsinglesignon.filter.enabled` and `sapcxsinglesignon.replication.enabled`
 which are set to `false` by default.
 
-In addition to the backend configuration, the composable storefront needs to be extended with
+Also, the IDP should be configured to use the SAP Commerce OCC endpoint as audience, and provide the following
+information within the access token, as they are required by the filter:
+
+- email and/or username (whatever field is configured as idfield)
+- given_name (first name for customer creation)
+- family_name (last name for customer creation)
+
+For example, using Auth0, the following post login handler is required:
+
+```
+/**
+* Handler that will be called during the execution of a PostLogin flow.
+*
+* @param {Event} event - Details about the user and the context in which they are logging in.
+* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+*/
+exports.onExecutePostLogin = async (event, api) => {
+  api.accessToken.setCustomClaim('email', event.user.email);
+  api.accessToken.setCustomClaim('username', event.user.username);
+  api.accessToken.setCustomClaim('given_name', event.user.given_name);
+  api.accessToken.setCustomClaim('family_name', event.user.family_name);
+};
+```
+
+In addition to the IDP and backend configuration, the composable storefront needs to be extended with
 configuration settings as within the following example:
 
 ```typescript
@@ -30,41 +54,24 @@ export const authCodeFlowConfig: AuthConfig = {
 		tokenEndpoint: '/oauth/token',
 		loginUrl: '/authorize',
 		revokeEndpoint: '/oauth/revoke',
-		logoutUrl: '/oidc/logout',
+        logoutUrl: '/oidc/logout',
 		userinfoEndpoint: '/userinfo',
 		OAuthLibConfig: {
 			redirectUri: 'https://www.<your-domain>.com',
-			postLogoutRedirectUri: 'https://www.<your-domain>.com',
+            postLogoutRedirectUri: 'https://www.<your-domain>.com',
 			responseType: 'code',
 			scope: 'openid profile email',
 			showDebugInformation: true,
 			disablePKCE: false,
+            customQueryParams: {
+                audience: 'https://api.<your-domain>.com/occ/v2/'
+            }
 		},
 	},
 };
 ```
 
-Our proposal is, to use the `sapcxenvconfig` extension to provide this environment specific configuration with the
-secured configuration provided by the SAP Commerce Cloud console. The example above can be configured like this:
-
-```properties
-sapcxenvconfig.frontend.authentication.client_id=<client id>
-sapcxenvconfig.frontend.authentication.client_secret=<client secret>
-sapcxenvconfig.frontend.authentication.baseUrl=https://<your-auth0-domain>
-sapcxenvconfig.frontend.authentication.tokenEndpoint=/oauth/token
-sapcxenvconfig.frontend.authentication.loginUrl=/authorize
-sapcxenvconfig.frontend.authentication.revokeEndpoint=/oauth/revoke
-sapcxenvconfig.frontend.authentication.logoutUrl=/oidc/logout
-sapcxenvconfig.frontend.authentication.userinfoEndpoint=/userinfo
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.redirectUri=https://www.<your-domain>.com
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.postLogoutRedirectUri=https://www.<your-domain>.com
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.responseType=code
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.scope=openid profile email
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.showDebugInformation=true
-sapcxenvconfig.frontend.authentication.OAuthLibConfig.disablePKCE=false
-```
-
-To avoid failing requests during the logout sequence, we also strongly recommend overlaying the standard logout
+To avoid failing requests during the logout sequence, we also strongly recommend to overlay the standard logout
 guard from the Spartacus project, with an implementation as follows here:
 
 ```typescript
@@ -84,7 +91,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable()
-export class CustomLogoutGuard extends LogoutGuard {
+export class KronosLogoutGuard extends LogoutGuard {
     constructor(
         protected auth: AuthService,
         protected cms: CmsService,
@@ -154,18 +161,18 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| sapcxsinglesignon.replication.enabled               | Boolean | specifies whether the replication is active or not (default: false) |
 | sapcxsinglesignon.filter.enabled                    | Boolean | specifies whether the filter is active or not (default: false) |
 | sapcxsinglesignon.filter.login.userClientId         | String  | the SAP Commerce client ID for your single page application (required) |
-| sapcxsinglesignon.filter.login.tokenExpiration      | String  | the token expiration period in minutes (default: 600 = 10 hours) |
-| sapcxsinglesignon.auth0.domain                      | String  | the registered auth0 domain, eg. dev-1234.eu.auth0.com (required) |
-| sapcxsinglesignon.auth0.auth.api.clientid           | String  | the auth0 client ID for your single page application (required) |
-| sapcxsinglesignon.auth0.auth.api.clientsecret       | String  | the auth0 client secret for your single page application (required) |
+| sapcxsinglesignon.filter.idp.issuer                 | String  | the registered issuer, eg. https://dev-1234.eu.auth0.com/ (required) |
+| sapcxsinglesignon.filter.idp.audience               | String  | the registered API, eg. https://localhost:9002/occ/v2/ (required) |
+| sapcxsinglesignon.filter.idp.claim.id               | String  | claim name used for user ID mapping (default: email) |
+| sapcxsinglesignon.replicate.creation.enabled        | Boolean | specifies whether the user creation is enabled or not (default: false) |
+| sapcxsinglesignon.replicate.removal.enabled         | Boolean | specifies whether the user removal is enabled or not (default: false) |
+| sapcxsinglesignon.auth0.management.api.audience     | String  | the audience for your machine-to-machine application (required) |
 | sapcxsinglesignon.auth0.management.api.clientid     | String  | the auth0 client ID for your machine-to-machine application (required) |
 | sapcxsinglesignon.auth0.management.api.clientsecret | String  | the auth0 client secret for your machine-to-machine application (required) |
 | sapcxsinglesignon.auth0.customer.connection         | String  | the authentication connection for customers (default: "Username-Password-Authentication") |
 | sapcxsinglesignon.auth0.customer.role               | String  | the role to assign to newly created customer accounts |
-| sapcxsinglesignon.auth0.customer.idfield            | String  | field name used for user ID mapping (default: email) |
 | sapcxsinglesignon.auth0.customer.useblockedstatus   | Boolean | specifies if the user shall be blocked when disabled in SAP Commerce (default: false) |
 
 ## License

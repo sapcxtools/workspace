@@ -13,9 +13,7 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 	private CustomerNameStrategy customerNameStrategy;
 	private boolean useBlockedStatusForDisabledCustomers;
 
-	public Auth0CustomerPopulator(
-			CustomerNameStrategy customerNameStrategy,
-			boolean useBlockedStatusForDisabledCustomers) {
+	public Auth0CustomerPopulator(CustomerNameStrategy customerNameStrategy, boolean useBlockedStatusForDisabledCustomers) {
 		this.customerNameStrategy = customerNameStrategy;
 		this.useBlockedStatusForDisabledCustomers = useBlockedStatusForDisabledCustomers;
 	}

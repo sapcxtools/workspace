@@ -2,7 +2,6 @@ package tools.sapcx.commerce.sso.auth0.actions;
 
 import java.util.Map;
 
-import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.mgmt.ManagementAPI;
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.Page;
@@ -14,15 +13,11 @@ import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
 @FunctionalInterface
-interface SdkAction<R> {
-	R execute(Map<String, Object> requestParameter) throws Auth0Exception;
+interface SdkAction<RESPONSE> {
+	RESPONSE execute(Map<String, Object> requestParameter) throws Auth0Exception;
 
 	default ManagementAPI managementAPI() throws Auth0Exception {
 		return getConfigurationService().getManagementAPI();
-	}
-
-	default AuthAPI authAPI() throws Auth0Exception {
-		return getConfigurationService().getAuthAPI();
 	}
 
 	default void submit(Request<?> request) throws Auth0Exception {

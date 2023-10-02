@@ -30,8 +30,7 @@ class UpdateUserAction implements SdkAction<User> {
 		try {
 			Converter<CustomerModel, User> customerConverter = getCustomerConverter();
 			User userInfo = customerConverter.convert(customer);
-			user = fetch(managementAPI().users().update(user.getId(), userInfo));
-			return user;
+			return user = fetch(managementAPI().users().update(user.getId(), userInfo));
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Search for user with ID '%s' failed!", customer.getUid()), exception);
 			throw exception;

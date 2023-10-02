@@ -7,6 +7,6 @@ import de.hybris.platform.core.model.user.CustomerModel;
 public class AllCustomerReplicationFilter implements Predicate<CustomerModel> {
 	@Override
 	public boolean test(CustomerModel customerModel) {
-		return customerModel != null;
+		return true;
 	}
 }
