@@ -211,8 +211,8 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	private synchronized void initJwtDecoder() {
 		if (this.jwtDecoder == null) {
 			this.jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
-			if (this.jwtDecoder instanceof NimbusJwtDecoder decoder) {
-				configureValidationForJwtDecoder(decoder);
+			if (this.jwtDecoder instanceof NimbusJwtDecoder) {
+				configureValidationForJwtDecoder((NimbusJwtDecoder) this.jwtDecoder);
 			}
 		}
 	}
