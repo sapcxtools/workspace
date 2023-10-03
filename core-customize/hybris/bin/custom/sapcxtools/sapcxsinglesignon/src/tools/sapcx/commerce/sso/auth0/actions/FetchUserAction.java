@@ -26,7 +26,8 @@ class FetchUserAction implements SdkAction<User> {
 		User user = null;
 		try {
 			UserFilter userById = new UserFilter().withQuery(userId);
-			return user = fetchFirst(managementAPI().users().list(userById));
+			user = fetchFirst(managementAPI().users().list(userById));
+			return user;
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Search for user with ID '%s' could not be executed!", userId), exception);
 			throw exception;

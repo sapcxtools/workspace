@@ -12,9 +12,14 @@ import de.hybris.platform.core.Registry;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
+/**
+ * Performs an action on the Auth0 SDK.
+ *
+ * @param <R> response type of the action
+ */
 @FunctionalInterface
-interface SdkAction<RESPONSE> {
-	RESPONSE execute(Map<String, Object> requestParameter) throws Auth0Exception;
+interface SdkAction<R> {
+	R execute(Map<String, Object> requestParameter) throws Auth0Exception;
 
 	default ManagementAPI managementAPI() throws Auth0Exception {
 		return getConfigurationService().getManagementAPI();
