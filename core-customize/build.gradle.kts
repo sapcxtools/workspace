@@ -18,13 +18,14 @@ repositories {
 }
 
 if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
+    val BASEURL = project.property("SAPCX_ARTEFACT_BASEURL") as String
     val USER = project.property("SAPCX_ARTEFACT_USER") as String
     val PASSWORD = project.property("SAPCX_ARTEFACT_PASSWORD") as String
     val AUTHORIZATION = Base64.getEncoder().encodeToString((USER + ":" + PASSWORD).toByteArray())
 
     val COMMERCE_VERSION = CCV2.manifest.commerceSuiteVersion
     tasks.register<Download>("downloadPlatform") {
-        src("http://artefacts.sapcx.tools/hybris-commerce-suite/${COMMERCE_VERSION}.zip")
+        src(BASEURL + "/hybris-commerce-suite/${COMMERCE_VERSION}.zip")
         dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-suite-${COMMERCE_VERSION}.zip"))
         header("Authorization", "Basic ${AUTHORIZATION}")
         overwrite(false)
@@ -41,7 +42,7 @@ if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ART
     if (CCV2.manifest.extensionPacks.any{"hybris-commerce-integrations".equals(it.name)}) {
         val INTEXTPACK_VERSION = CCV2.manifest.extensionPacks.first{"hybris-commerce-integrations".equals(it.name)}.version        
         tasks.register<Download>("downloadIntExtPack") {
-            src("http://artefacts.sapcx.tools/hybris-commerce-integrations/${INTEXTPACK_VERSION}.zip")
+            src(BASEURL + "/hybris-commerce-integrations/${INTEXTPACK_VERSION}.zip")
             dest(file("${DEPENDENCY_FOLDER}/hybris-commerce-integrations-${INTEXTPACK_VERSION}.zip"))
             header("Authorization", "Basic ${AUTHORIZATION}")
             overwrite(false)
