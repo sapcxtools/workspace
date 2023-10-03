@@ -13,6 +13,7 @@ on:
     branches: [main, develop]
   schedule:
     - cron: "0 15 * * 0,3"
+  workflow_dispatch:
 
 jobs:
   build-and-test:

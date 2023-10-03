@@ -11,6 +11,7 @@ on:
       - "core-customize/hybris/bin/custom/sapcxtools/**/external-dependencies.xml"
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
   dependency-check:
