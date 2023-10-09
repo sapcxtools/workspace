@@ -91,9 +91,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	@Override
 	public void afterPropertiesSet() throws ServletException {
 		super.afterPropertiesSet();
-		if (enabled) {
-			this.tokenExtractor = new BearerTokenExtractor();
-		}
+		this.tokenExtractor = new BearerTokenExtractor();
 	}
 
 	@Override
