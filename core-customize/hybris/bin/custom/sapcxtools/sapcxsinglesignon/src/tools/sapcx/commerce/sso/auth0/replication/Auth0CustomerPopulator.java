@@ -11,18 +11,15 @@ import de.hybris.platform.servicelayer.dto.converter.ConversionException;
 
 public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 	private CustomerNameStrategy customerNameStrategy;
-	private boolean useBlockedStatusForDisabledCustomers;
 
-	public Auth0CustomerPopulator(CustomerNameStrategy customerNameStrategy, boolean useBlockedStatusForDisabledCustomers) {
+	public Auth0CustomerPopulator(CustomerNameStrategy customerNameStrategy) {
 		this.customerNameStrategy = customerNameStrategy;
-		this.useBlockedStatusForDisabledCustomers = useBlockedStatusForDisabledCustomers;
 	}
 
 	@Override
 	public void populate(CustomerModel source, User target) throws ConversionException {
+		target.setUsername(source.getUid());
 		target.setEmail(source.getContactEmail());
-		target.setEmailVerified(target.getEmail() != null);
-
 		target.setName(source.getName());
 		target.setNickname(source.getCustomerID());
 
@@ -34,10 +31,6 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 			if (isNotBlank(nameParts[1])) {
 				target.setFamilyName(nameParts[1]);
 			}
-		}
-
-		if (useBlockedStatusForDisabledCustomers) {
-			target.setBlocked(!Boolean.FALSE.equals(source.isLoginDisabled()));
 		}
 	}
 }

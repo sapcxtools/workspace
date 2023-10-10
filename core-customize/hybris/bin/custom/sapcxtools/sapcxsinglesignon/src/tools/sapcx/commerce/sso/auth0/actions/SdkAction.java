@@ -54,6 +54,14 @@ interface SdkAction<R> {
 		return getConfigurationService().getCustomerConverter();
 	}
 
+	default boolean requireEmailVerification() {
+		return getConfigurationService().requireEmailVerification();
+	}
+
+	default boolean useBlockedStatusForDisabledCustomers() {
+		return getConfigurationService().useBlockedStatusForDisabledCustomers();
+	}
+
 	private SdkConfigurationService getConfigurationService() {
 		return Registry.getApplicationContext().getBean(SdkConfigurationService.class);
 	}

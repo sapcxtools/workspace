@@ -9,6 +9,7 @@ import com.auth0.json.mgmt.users.User;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,15 @@ class CreateUserAction implements SdkAction<User> {
 		try {
 			Converter<CustomerModel, User> customerConverter = getCustomerConverter();
 			User userInfo = customerConverter.convert(customer);
+
+			if (requireEmailVerification()) {
+				userInfo.setEmailVerified(false);
+				userInfo.setVerifyEmail(true);
+			}
+
+			if (useBlockedStatusForDisabledCustomers()) {
+				userInfo.setBlocked(BooleanUtils.isNotFalse(customer.isLoginDisabled()));
+			}
 
 			// Add one time information for creation process
 			userInfo.setConnection(getCustomerConnection());

@@ -173,6 +173,7 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 | sapcxsinglesignon.auth0.management.api.clientsecret | String  | the auth0 client secret for your machine-to-machine application (required) |
 | sapcxsinglesignon.auth0.customer.connection         | String  | the authentication connection for customers (default: "Username-Password-Authentication") |
 | sapcxsinglesignon.auth0.customer.role               | String  | the role to assign to newly created customer accounts |
+| sapcxsinglesignon.auth0.customer.requireemailverification | String | specifies if the user needs to verify their email (default: false) |
 | sapcxsinglesignon.auth0.customer.useblockedstatus   | Boolean | specifies if the user shall be blocked when disabled in SAP Commerce (default: false) |
 
 ## License

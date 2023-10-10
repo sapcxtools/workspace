@@ -20,7 +20,6 @@
             <list>
                 <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerPopulator">
                     <constructor-arg name="customerNameStrategy" ref="customerNameStrategy"/>
-                    <constructor-arg name="useBlockedStatusForDisabledCustomers" value="${sapcxsinglesignon.auth0.customer.useblockedstatus}"/>
                 </bean>
             </list>
         </property>
