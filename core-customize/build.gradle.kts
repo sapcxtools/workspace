@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
 }
 
-if (project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
+if (project.hasProperty("SAPCX_ARTEFACT_BASEURL") && project.hasProperty("SAPCX_ARTEFACT_USER") && project.hasProperty("SAPCX_ARTEFACT_PASSWORD")) {
     val BASEURL = project.property("SAPCX_ARTEFACT_BASEURL") as String
     val USER = project.property("SAPCX_ARTEFACT_USER") as String
     val PASSWORD = project.property("SAPCX_ARTEFACT_PASSWORD") as String
