@@ -18,10 +18,9 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 
 	@Override
 	public void populate(CustomerModel source, User target) throws ConversionException {
-		target.setUsername(source.getUid());
 		target.setEmail(source.getContactEmail());
-		target.setName(source.getName());
 		target.setNickname(source.getCustomerID());
+		target.setName(source.getName());
 
 		String[] nameParts = customerNameStrategy.splitName(source.getName());
 		if (nameParts.length == 2) {
