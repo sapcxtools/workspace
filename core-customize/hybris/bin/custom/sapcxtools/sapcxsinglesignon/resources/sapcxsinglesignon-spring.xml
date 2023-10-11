@@ -21,6 +21,9 @@
                 <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerPopulator">
                     <constructor-arg name="customerNameStrategy" ref="customerNameStrategy"/>
                 </bean>
+                <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerMetadataPopulator">
+                    <constructor-arg name="metadataPrefix" value="${sapcxsinglesignon.auth0.customer.metadata.prefix}"/>
+                </bean>
             </list>
         </property>
     </bean>
