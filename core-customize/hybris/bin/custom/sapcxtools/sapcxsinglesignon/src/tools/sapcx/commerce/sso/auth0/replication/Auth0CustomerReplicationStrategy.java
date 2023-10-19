@@ -38,32 +38,31 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 
 	@Override
 	public void replicate(@Nonnull CustomerModel customer) {
-		if (!isCreationEnabled) {
-			LOG.debug("Customer creation is disabled by configuration.");
-			return;
-		}
-
 		if (userService.isAnonymousUser(customer)) {
 			LOG.debug("Anonymous user replication is disabled by convention.");
 			return;
 		}
 
-		User user = updateUser(customer);
-		updateUserRoles(user, !customer.isLoginDisabled());
+		User user = createOrUpdateUser(customer);
+		if (user != null) {
+			updateUserRoles(user, !customer.isLoginDisabled());
+		}
 	}
 
-	private User updateUser(@NotNull CustomerModel customer) {
+	private User createOrUpdateUser(@NotNull CustomerModel customer) {
 		String customerId = customer.getUid();
 		try {
 			User user = Actions.getUser(customerId);
-			if (user == null) {
-				LOG.debug("User for provided customer ID '{}' does not exist.", customerId);
-				user = Actions.createUser(customer);
-			} else {
+			if (user != null) {
 				LOG.debug("User for provided customer ID '{}' exists: '{}'.", customerId, user.getId());
-				user = Actions.updateUser(user, customer);
+				return Actions.updateUser(user, customer);
+			} else if (!isCreationEnabled) {
+				LOG.debug("Customer creation is disabled by configuration.");
+				return null;
+			} else {
+				LOG.debug("User for provided customer ID '{}' does not exist.", customerId);
+				return Actions.createUser(customer);
 			}
-			return user;
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customerId);
 			throw new RuntimeException("Could not replicate customer to Auth0!", exception);
