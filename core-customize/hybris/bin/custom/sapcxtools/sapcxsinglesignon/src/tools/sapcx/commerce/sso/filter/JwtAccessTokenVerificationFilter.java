@@ -40,6 +40,8 @@ import org.springframework.security.oauth2.provider.authentication.TokenExtracto
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import tools.sapcx.commerce.sso.replication.CustomerReplicationStrategy;
+
 /**
  * This filter performs verification of an external access token.
  *
@@ -58,6 +60,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	private OAuth2RequestFactory oAuth2RequestFactory;
 	private ClientDetailsService clientDetailsService;
 	private UserDetailsService userDetailsService;
+	private CustomerReplicationStrategy customerReplicationStrategy;
 	private TokenStore tokenStore;
 	private String occClientId;
 	private boolean enabled;
@@ -71,6 +74,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 			OAuth2RequestFactory oAuth2RequestFactory,
 			ClientDetailsService clientDetailsService,
 			UserDetailsService userDetailsService,
+			CustomerReplicationStrategy customerReplicationStrategy,
 			TokenStore tokenStore,
 			String occClientId,
 			boolean enabled,
@@ -80,6 +84,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 		this.oAuth2RequestFactory = oAuth2RequestFactory;
 		this.clientDetailsService = clientDetailsService;
 		this.userDetailsService = userDetailsService;
+		this.customerReplicationStrategy = customerReplicationStrategy;
 		this.tokenStore = tokenStore;
 		this.occClientId = occClientId;
 		this.enabled = enabled;
@@ -167,26 +172,31 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 		TokenRequest tokenRequest = oAuth2RequestFactory.createTokenRequest(Collections.emptyMap(), clientDetails);
 		OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
 
-		// Username Password Auth Token
-		UsernamePasswordAuthenticationToken userToken = createUsernamePasswordAuthenticationToken(userId);
+		try {
+			// Username Password Auth Token
+			UsernamePasswordAuthenticationToken userToken = createUsernamePasswordAuthenticationToken(userId);
 
-		// Create access token and authentication for user
-		DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(decodedToken.getTokenValue());
-		oAuth2AccessToken.setExpiration(Date.from(decodedToken.getExpiresAt()));
-		OAuth2Authentication authentication = new OAuth2Authentication(oAuth2Request, userToken);
+			// Create access token and authentication for user
+			DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(decodedToken.getTokenValue());
+			oAuth2AccessToken.setExpiration(Date.from(decodedToken.getExpiresAt()));
+			OAuth2Authentication authentication = new OAuth2Authentication(oAuth2Request, userToken);
 
-		// Remove existing access token for same authentication
-		OAuth2AccessToken existingToken = tokenStore.getAccessToken(authentication);
-		if (existingToken != null) {
-			LOG.debug("Found another access token '{}' for the authentication, removing it from the token store.", existingToken.getValue());
-			tokenStore.removeAccessToken(existingToken);
+			// Remove existing access token for same authentication
+			OAuth2AccessToken existingToken = tokenStore.getAccessToken(authentication);
+			if (existingToken != null) {
+				LOG.debug("Found another access token '{}' for the authentication, removing it from the token store.", existingToken.getValue());
+				tokenStore.removeAccessToken(existingToken);
+			}
+
+			// Create the new access token for the user
+			tokenStore.storeAccessToken(oAuth2AccessToken, authentication);
+			LOG.debug("New access token has been created successfully!");
+
+			return oAuth2AccessToken;
+		} catch (BadCredentialsException e) {
+			customerReplicationStrategy.remove(userId);
+			throw e;
 		}
-
-		// Create the new access token for the user
-		tokenStore.storeAccessToken(oAuth2AccessToken, authentication);
-		LOG.debug("New access token has been created successfully!");
-
-		return oAuth2AccessToken;
 	}
 
 	private UsernamePasswordAuthenticationToken createUsernamePasswordAuthenticationToken(String userId) {

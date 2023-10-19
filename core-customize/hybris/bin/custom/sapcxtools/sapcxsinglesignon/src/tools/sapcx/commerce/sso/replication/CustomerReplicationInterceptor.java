@@ -40,7 +40,7 @@ public class CustomerReplicationInterceptor implements ValidateInterceptor<Custo
 		if (customer != null) {
 			try {
 				if (customerReplicationFilter.test(customer)) {
-					customerReplicationStrategy.remove(customer);
+					customerReplicationStrategy.remove(customer.getUid());
 				}
 			} catch (RuntimeException e) {
 				LOG.warn(String.format("Could not remove customer with ID '%s'! Account needs to be removed manually!", customer.getUid()), e);

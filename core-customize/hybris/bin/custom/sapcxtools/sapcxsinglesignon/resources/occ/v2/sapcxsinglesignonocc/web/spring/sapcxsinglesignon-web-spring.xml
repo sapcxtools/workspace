@@ -19,6 +19,7 @@
         <constructor-arg name="oAuth2RequestFactory" ref="oAuth2RequestFactory"/>
         <constructor-arg name="clientDetailsService" ref="oauthClientDetails"/>
         <constructor-arg name="userDetailsService" ref="wsUserDetailsService"/>
+        <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
         <constructor-arg name="tokenStore" ref="oauthTokenStore"/>
         <constructor-arg name="occClientId" value="${sapcxsinglesignon.filter.login.userClientId}"/>
         <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.enabled}" type="boolean"/>

@@ -31,7 +31,7 @@ public interface Actions {
 		return UpdateUserAction.updateUser(user, customer);
 	}
 
-	static void removeUser(User user, CustomerModel customer) throws Auth0Exception {
-		RemoveUserAction.removeUser(user, customer);
+	static void removeUser(User user, String customerId) throws Auth0Exception {
+		RemoveUserAction.removeUser(user, customerId);
 	}
 }

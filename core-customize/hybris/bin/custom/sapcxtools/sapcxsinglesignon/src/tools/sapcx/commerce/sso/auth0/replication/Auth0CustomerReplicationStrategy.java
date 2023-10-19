@@ -94,13 +94,12 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 	}
 
 	@Override
-	public void remove(@NotNull CustomerModel customer) {
-		if (userService.isAnonymousUser(customer)) {
+	public void remove(@NotNull String customerId) {
+		if (userService.isUserExisting(customerId) && userService.isAnonymousUser(userService.getUserForUID(customerId))) {
 			LOG.debug("Anonymous user removal is disabled by convention.");
 			return;
 		}
 
-		String customerId = customer.getUid();
 		try {
 			User user = Actions.getUser(customerId);
 			if (!isRemovalEnabled) {
@@ -113,7 +112,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 				LOG.debug("User for provided customer ID '{}' does not exist! Removal not necessary.", customerId);
 			} else {
 				LOG.debug("User for provided customer ID '{}' exists: '{}'. Trigger user removal.", customerId, user.getId());
-				Actions.removeUser(user, customer);
+				Actions.removeUser(user, customerId);
 			}
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
