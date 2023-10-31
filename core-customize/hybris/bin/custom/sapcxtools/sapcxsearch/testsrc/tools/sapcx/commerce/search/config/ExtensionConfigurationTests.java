@@ -11,8 +11,10 @@ public class ExtensionConfigurationTests {
 	@Test
 	public void extensionConfiguration() {
 		InstalledExtensionVerifier.verifier()
-				.requires("sapcxsearch")
 				.requires("sapcommercetoolkit")
+				.requires("backoffice")
+				.requires("solrfacetsearch")
+				.requires("solrfacetsearchbackoffice")
 				.verify();
 	}
 }

@@ -8,8 +8,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import de.hybris.platform.solrfacetsearch.config.FacetSearchConfig;
+import de.hybris.platform.solrfacetsearch.config.FacetSearchConfigService;
 import de.hybris.platform.solrfacetsearch.config.IndexOperation;
 import de.hybris.platform.solrfacetsearch.config.IndexedType;
+import de.hybris.platform.solrfacetsearch.config.exceptions.FacetConfigServiceException;
+import de.hybris.platform.solrfacetsearch.indexer.IndexerService;
 import de.hybris.platform.solrfacetsearch.indexer.exceptions.IndexerException;
 import de.hybris.platform.solrfacetsearch.indexer.strategies.IndexerStrategy;
 import de.hybris.platform.solrfacetsearch.indexer.strategies.IndexerStrategyFactory;
@@ -20,9 +23,23 @@ public class DefaultCxIndexerService implements CxIndexerService {
 	private static final Logger LOG = getLogger(DefaultCxIndexerService.class);
 
 	private final IndexerStrategyFactory indexerStrategyFactory;
+	private final FacetSearchConfigService facetSearchConfigService;
+	private final IndexerService indexerService;
 
-	public DefaultCxIndexerService(IndexerStrategyFactory indexerStrategyFactory) {
+	public DefaultCxIndexerService(
+			IndexerStrategyFactory indexerStrategyFactory,
+			FacetSearchConfigService facetSearchConfigService,
+			IndexerService indexerService) {
 		this.indexerStrategyFactory = indexerStrategyFactory;
+		this.facetSearchConfigService = facetSearchConfigService;
+		this.indexerService = indexerService;
+	}
+
+	@Override
+	public CxIndexer getSearchIndexer(String searchConfig, String indexedType) throws FacetConfigServiceException {
+		FacetSearchConfig config = facetSearchConfigService.getConfiguration(searchConfig);
+		IndexedType type = facetSearchConfigService.resolveIndexedType(config, indexedType);
+		return new DefaultCxIndexer(indexerService, config, type);
 	}
 
 	@Override
