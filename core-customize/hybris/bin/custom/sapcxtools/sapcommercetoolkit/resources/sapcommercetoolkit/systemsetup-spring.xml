@@ -6,6 +6,10 @@
 
 	<!-- Configurable System Setup -->
 	<bean id="sapcommercetoolkitSystemSetup" class="tools.sapcx.commerce.toolkit.setup.ToolkitSystemSetup">
+		<constructor-arg name="reliableSystemSetupExecutor" ref="sapcommercetoolkitSystemSetupExecutor"/>
+		<constructor-arg name="performSystemSetup" value="${sapcommercetoolkit.impeximport.environment.legacysystemsetup:true}"/>
+	</bean>
+	<bean id="sapcommercetoolkitSystemSetupExecutor" class="tools.sapcx.commerce.toolkit.setup.ReliableSystemSetupExecutor">
 		<property name="validationService" ref="validationService"/>
 		<property name="elementaryDataImporter" ref="elementaryDataImporter"/>
 		<property name="releasePatchesImporter" ref="releasePatchImporter"/>

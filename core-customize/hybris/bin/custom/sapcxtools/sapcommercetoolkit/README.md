@@ -10,28 +10,34 @@ The system setup mechanism makes use of the platform properties, that can be ext
 no longer have to provide your own annotated `@SystemSetup` class, but that you can contribute to a centralized system setup by defining 
 properties that follow a convention. Any extension in your project may contribute to the system setup process at different stages:
 
-| Stage         | Description |
-|---------------|-------------|
-| Elementary    | Imported only during initialization. This stage should contain import that are crucial for the system to work. |
-| Release Patch | Only imported once per system during the system update. The `SystemSetup` keeps track of the imported files and the current release version. |
-| Essential     | Always imported during initialization or update. This contains data that is maintained by the development team and needs to be updated with every release. |
-| Overlay       | Always imported during project data update. This contains data that overlays essentialdata imports from the standard extensions shipped by SAP. |
+| Stage         | Description                                                                                                                                                                                                     |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Elementary    | Imported only during initialization. This stage should contain import that are crucial for the system to work.                                                                                                  |
+| Release Patch | Only imported once per system during the system update. The `SystemSetup` keeps track of the imported files and the current release version.                                                                    |
+| Essential     | Always imported during initialization or update. This contains data that is maintained by the development team and needs to be updated with every release.                                                      |
+| Overlay       | Always imported during project data update. This contains data that overlays essentialdata imports from the standard extensions shipped by SAP.                                                                 |
 | Sample Data   | Only imported if activated or selected manually in the admin console. This contains data that is shipped by the development team but will be maintained on the platform, e.g. initial CMS pages and components. |
-| Test Data     | Only imported if activated or selected manually in the admin console. This contains data that is shipped and used primarly by the development team on local and DEV environments. |
+| Test Data     | Only imported if activated or selected manually in the admin console. This contains data that is shipped and used primarly by the development team on local and DEV environments.                               |
+
+Note: We recommend to deactivate the legacy system setup by setting the property `legacysystemsetup=false` in your `local.properties` file.
+You need to trigger the system setup process from within the system setup class of your project's core extension. This will ensure that all
+dependencies to SAP extensions are resolved correctly and you have the chance to overlay any impex configuration and import performed by the 
+default SAP extensions.
 
 ### Configuration parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| sapcommercetoolkit.impeximport.configuration.legacymode | Boolean | Flag for running all impex imports in legacy mode<br/>(default: `false`) | 
-| sapcommercetoolkit.impeximport.configuration.enablecodeexecution | Boolean | Flag for running all impex imports with code execution<br/>(default: `true`) | 
-| sapcommercetoolkit.impeximport.configuration.validationmode | String | Validation mode for running impex imports<br/>(default: `strict`) | 
-| sapcommercetoolkit.impeximport.configuration.defaultlocale | String | Default locale for running impex imports<br/>(default: `en`) |
-| sapcommercetoolkit.impeximport.environment.configurationfile | String | Path to the configuration file that is generated and maintained by the extension. This path must be shared between all cluster nodes!<br/>(default: `${HYBRIS_DATA_DIR}/sapcommercetoolkit/configuration.properties`) | 
-| sapcommercetoolkit.impeximport.environment.isdevelopment | Boolean | Flag for development environments. If an environment is flagged as development, all sample data and test data imports are performed.<br/>(default: `false`) |
-| sapcommercetoolkit.impeximport.environment.supportlocalizedfiles | Boolean | Add support for localized files for all activated languages.<br/>(default: `false`) |
-| sapcommercetoolkit.impeximport.environment.importsampledata | Boolean | If the flag is set to true, sample data imports are performed on this environment.<br/>(default: `false`) |
-| sapcommercetoolkit.impeximport.environment.importtestdata | Boolean | If the flag is set to true, test data imports are performed on this environment.<br/>(default: `false`) |
+| Parameter                                                        | Type    | Description                                                                                                                                                                                                           |
+|------------------------------------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sapcommercetoolkit.impeximport.configuration.legacymode          | Boolean | Flag for running all impex imports in legacy mode<br/>(default: `false`)                                                                                                                                              | 
+| sapcommercetoolkit.impeximport.configuration.enablecodeexecution | Boolean | Flag for running all impex imports with code execution<br/>(default: `true`)                                                                                                                                          | 
+| sapcommercetoolkit.impeximport.configuration.validationmode      | String  | Validation mode for running impex imports<br/>(default: `strict`)                                                                                                                                                     | 
+| sapcommercetoolkit.impeximport.configuration.defaultlocale       | String  | Default locale for running impex imports<br/>(default: `en`)                                                                                                                                                          |
+| sapcommercetoolkit.impeximport.environment.legacysystemsetup     | Booelan | Define if the legacy system setup mode shall be used. With legacy mode, the system setup is executed from within this extension. Otherwise, the project needs to trigger the system setup.<br/>(default: `true`)      | 
+| sapcommercetoolkit.impeximport.environment.configurationfile     | String  | Path to the configuration file that is generated and maintained by the extension. This path must be shared between all cluster nodes!<br/>(default: `${HYBRIS_DATA_DIR}/sapcommercetoolkit/configuration.properties`) | 
+| sapcommercetoolkit.impeximport.environment.isdevelopment         | Boolean | Flag for development environments. If an environment is flagged as development, all sample data and test data imports are performed.<br/>(default: `false`)                                                           |
+| sapcommercetoolkit.impeximport.environment.supportlocalizedfiles | Boolean | Add support for localized files for all activated languages.<br/>(default: `false`)                                                                                                                                   |
+| sapcommercetoolkit.impeximport.environment.importsampledata      | Boolean | If the flag is set to true, sample data imports are performed on this environment.<br/>(default: `false`)                                                                                                             |
+| sapcommercetoolkit.impeximport.environment.importtestdata        | Boolean | If the flag is set to true, test data imports are performed on this environment.<br/>(default: `false`)                                                                                                               |
 
 ### How to activate and use
 
@@ -132,14 +138,14 @@ spring.profiles.active=sapcommercetools-fake-localmails
 
 ### Configuration parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.method | String | The method for storing mails locally, either `file` or `database`<br/>(default: `file`) | 
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.directory | String | The directory to which the email files will be stored to<br/>(default: `${HYBRIS_LOG_DIR}/mails`) | 
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.filenamepattern | String | The pattern for the generated files. It can be adjusted with the following parameters: timestamp, datetime, subject, from, to, extension<br/>(default: `{timestamp}_{subject}.{extension}`) | 
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.extension | String | Specify the file extension for the generated local files, use whatever is supported by your email client<br/>(default: `eml`) | 
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.mediafolder | String | The media folder to place fake email media items into<br/>(default: `fake-emails`) | 
-| sapcommercetoolkit.fakes.htmlEmailService.localstorage.daysToKeepEmails | int | the number of days to keep local emails in the database<br/>(default: `7`) | 
+| Parameter                                                               | Type   | Description                                                                                                                                                                                 |
+|-------------------------------------------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.method           | String | The method for storing mails locally, either `file` or `database`<br/>(default: `file`)                                                                                                     | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.directory        | String | The directory to which the email files will be stored to<br/>(default: `${HYBRIS_LOG_DIR}/mails`)                                                                                           | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.filenamepattern  | String | The pattern for the generated files. It can be adjusted with the following parameters: timestamp, datetime, subject, from, to, extension<br/>(default: `{timestamp}_{subject}.{extension}`) | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.extension        | String | Specify the file extension for the generated local files, use whatever is supported by your email client<br/>(default: `eml`)                                                               | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.mediafolder      | String | The media folder to place fake email media items into<br/>(default: `fake-emails`)                                                                                                          | 
+| sapcommercetoolkit.fakes.htmlEmailService.localstorage.daysToKeepEmails | int    | the number of days to keep local emails in the database<br/>(default: `7`)                                                                                                                  | 
 
 ### Cleanup of stored email within database
 
