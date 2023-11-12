@@ -175,6 +175,7 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 | customer.metadata.prefix                            | String  | the prefix for application metadata for customers (required, default: commerce) |
 | sapcxsinglesignon.auth0.customer.role               | String  | the role to assign to newly created customer accounts |
 | sapcxsinglesignon.auth0.customer.requireemailverification | String | specifies if the user needs to verify their email (default: false) |
+| sapcxsinglesignon.auth0.customer.requirepasswordverification | String | specifies if the user needs to verify their password (default: false)             |
 | sapcxsinglesignon.auth0.customer.useblockedstatus   | Boolean | specifies if the user shall be blocked when disabled in SAP Commerce (default: false) |
 
 ## License

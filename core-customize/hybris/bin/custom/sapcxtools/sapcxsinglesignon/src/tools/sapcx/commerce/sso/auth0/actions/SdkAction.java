@@ -58,6 +58,10 @@ interface SdkAction<R> {
 		return getConfigurationService().requireEmailVerification();
 	}
 
+	default boolean requirePasswordVerification() {
+		return getConfigurationService().requirePasswordVerification();
+	}
+
 	default boolean useBlockedStatusForDisabledCustomers() {
 		return getConfigurationService().useBlockedStatusForDisabledCustomers();
 	}
