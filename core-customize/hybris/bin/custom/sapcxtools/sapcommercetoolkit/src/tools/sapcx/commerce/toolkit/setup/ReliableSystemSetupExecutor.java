@@ -11,6 +11,7 @@ import de.hybris.platform.core.initialization.SystemSetupContext;
 import de.hybris.platform.core.initialization.SystemSetupParameter;
 import de.hybris.platform.validation.services.ValidationService;
 
+import org.assertj.core.util.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -33,6 +34,9 @@ import org.springframework.context.ApplicationContextAware;
  */
 public final class ReliableSystemSetupExecutor implements ApplicationContextAware {
 	static final Logger LOG = LoggerFactory.getLogger(SystemSetupEnvironment.class);
+
+	@VisibleForTesting
+	static final String COCKPIT_CONFIGURATION_SERVICE = "cockpitConfigurationService";
 
 	private ApplicationContext applicationContext;
 	private ValidationService validationService;
@@ -70,7 +74,7 @@ public final class ReliableSystemSetupExecutor implements ApplicationContextAwar
 	 */
 	private void resetBackofficeConfiguration() {
 		try {
-			Object cockpitConfigurationService = applicationContext.getBean("cockpitConfigurationService");
+			Object cockpitConfigurationService = applicationContext.getBean(COCKPIT_CONFIGURATION_SERVICE);
 			cockpitConfigurationService.getClass().getMethod("resetToDefaults").invoke(cockpitConfigurationService);
 		} catch (BeansException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			// No bean found, no action required: Backoffice application not loaded!
