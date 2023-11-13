@@ -52,12 +52,14 @@ public class ToolkitSystemSetupTests {
 		setupImpexDataImporterForTesting(environment);
 		addEnvironmentConfiguration(false, false, false);
 
-		systemSetup = new ToolkitSystemSetup();
-		systemSetup.setValidationService(validationService);
-		systemSetup.setElementaryDataImporter(elementaryDataImporter);
-		systemSetup.setEssentialDataImporter(essentialDataImporter);
-		systemSetup.setReleasePatchesImporter(releasePatchesImporter);
-		systemSetup.setProjectDataImporters(Arrays.asList(sampleDataImporter, testDataImporter, releasePatchReRunImporter));
+		ReliableSystemSetupExecutor executor = new ReliableSystemSetupExecutor();
+		executor.setValidationService(validationService);
+		executor.setElementaryDataImporter(elementaryDataImporter);
+		executor.setEssentialDataImporter(essentialDataImporter);
+		executor.setReleasePatchesImporter(releasePatchesImporter);
+		executor.setProjectDataImporters(Arrays.asList(sampleDataImporter, testDataImporter, releasePatchReRunImporter));
+
+		systemSetup = new ToolkitSystemSetup(executor, true);
 	}
 
 	@Test
