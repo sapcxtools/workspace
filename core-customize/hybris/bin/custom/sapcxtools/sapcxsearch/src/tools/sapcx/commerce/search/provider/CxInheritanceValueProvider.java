@@ -13,14 +13,15 @@ import de.hybris.platform.solrfacetsearch.provider.FieldNameProvider;
 import de.hybris.platform.solrfacetsearch.provider.FieldValue;
 import de.hybris.platform.solrfacetsearch.provider.FieldValueProvider;
 import de.hybris.platform.variants.model.VariantProductModel;
+import org.apache.commons.math3.stat.descriptive.summary.Product;
 
 public class CxInheritanceValueProvider implements FieldValueProvider {
 	private FieldNameProvider fieldNameProvider;
 
 	@Override
 	public Collection<FieldValue> getFieldValues(IndexConfig indexConfig, IndexedProperty indexedProperty, Object o) throws FieldValueProviderException {
-		if (o instanceof ProductModel product) {
-			Object value = getInheritedValue(indexedProperty, product);
+		if (o instanceof ProductModel) {
+			Object value = getInheritedValue(indexedProperty, (ProductModel) o);
 			if (value != null) {
 				return createFieldValues(indexedProperty, value);
 			}

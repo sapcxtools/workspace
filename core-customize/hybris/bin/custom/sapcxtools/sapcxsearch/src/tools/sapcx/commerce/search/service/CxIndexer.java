@@ -4,6 +4,7 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.ItemModel;
@@ -81,6 +82,6 @@ public interface CxIndexer {
 		return emptyIfNull(items).stream()
 				.map(ItemModel::getPk)
 				.filter(Objects::nonNull)
-				.toList();
+				.collect(Collectors.toList());
 	}
 }
