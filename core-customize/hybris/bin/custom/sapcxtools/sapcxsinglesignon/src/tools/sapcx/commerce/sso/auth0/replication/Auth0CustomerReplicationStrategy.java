@@ -1,6 +1,8 @@
 package tools.sapcx.commerce.sso.auth0.replication;
 
-import javax.annotation.Nonnull;
+import static org.apache.commons.collections4.ListUtils.emptyIfNull;
+
+import java.util.List;
 
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.roles.Role;
@@ -10,34 +12,37 @@ import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.sapcx.commerce.sso.auth0.actions.Actions;
+import tools.sapcx.commerce.sso.replication.CustomerReplicationHook;
 import tools.sapcx.commerce.sso.replication.CustomerReplicationStrategy;
 
 public class Auth0CustomerReplicationStrategy implements CustomerReplicationStrategy {
 	private static final Logger LOG = LoggerFactory.getLogger(Auth0CustomerReplicationStrategy.class);
 
 	private UserService userService;
+	private List<CustomerReplicationHook> customerReplicationHooks;
 	private String auth0RoleForCustomers;
 	private boolean isCreationEnabled;
 	private boolean isRemovalEnabled;
 
 	public Auth0CustomerReplicationStrategy(
 			UserService userService,
+			List<CustomerReplicationHook> customerReplicationHooks,
 			String auth0RoleForCustomers,
 			boolean isCreationEnabled,
 			boolean isRemovalEnabled) {
 		this.userService = userService;
+		this.customerReplicationHooks = emptyIfNull(customerReplicationHooks);
 		this.auth0RoleForCustomers = auth0RoleForCustomers;
 		this.isCreationEnabled = isCreationEnabled;
 		this.isRemovalEnabled = isRemovalEnabled;
 	}
 
 	@Override
-	public void replicate(@Nonnull CustomerModel customer) {
+	public void replicate(CustomerModel customer) {
 		if (userService.isAnonymousUser(customer)) {
 			LOG.debug("Anonymous user replication is disabled by convention.");
 			return;
@@ -49,19 +54,23 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 		}
 	}
 
-	private User createOrUpdateUser(@NotNull CustomerModel customer) {
+	private User createOrUpdateUser(CustomerModel customer) {
 		String customerId = customer.getUid();
 		try {
 			User user = Actions.getUser(customerId);
 			if (user != null) {
 				LOG.debug("User for provided customer ID '{}' exists: '{}'.", customerId, user.getId());
-				return Actions.updateUser(user, customer);
+				User updatedUser = Actions.updateUser(user, customer);
+				customerReplicationHooks.forEach(hook -> hook.customerSuccessfullyUpdated(customer, updatedUser));
+				return updatedUser;
 			} else if (!isCreationEnabled) {
 				LOG.debug("Customer creation is disabled by configuration.");
 				return null;
 			} else {
 				LOG.debug("User for provided customer ID '{}' does not exist.", customerId);
-				return Actions.createUser(customer);
+				User createdUser = Actions.createUser(customer);
+				customerReplicationHooks.forEach(hook -> hook.customerSuccessfullyCreated(customer, createdUser));
+				return createdUser;
 			}
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customerId);
@@ -93,7 +102,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 	}
 
 	@Override
-	public void remove(@NotNull String customerId) {
+	public void remove(String customerId) {
 		if (userService.isUserExisting(customerId) && userService.isAnonymousUser(userService.getUserForUID(customerId))) {
 			LOG.debug("Anonymous user removal is disabled by convention.");
 			return;
@@ -112,6 +121,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 			} else {
 				LOG.debug("User for provided customer ID '{}' exists: '{}'. Trigger user removal.", customerId, user.getId());
 				Actions.removeUser(user, customerId);
+				customerReplicationHooks.forEach(hook -> hook.customerSuccessfullyRemoved(customerId));
 			}
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);

@@ -34,4 +34,12 @@ public interface Actions {
 	static void removeUser(User user, String customerId) throws Auth0Exception {
 		RemoveUserAction.removeUser(user, customerId);
 	}
+
+	static String getPasswordResetUrl(User user) throws Auth0Exception {
+		return getPasswordResetUrl(user, false);
+	}
+
+	static String getPasswordResetUrl(User user, boolean markEmailAsVerified) throws Auth0Exception {
+		return PasswordResetUrlAction.getPasswordResetUrl(user, markEmailAsVerified);
+	}
 }

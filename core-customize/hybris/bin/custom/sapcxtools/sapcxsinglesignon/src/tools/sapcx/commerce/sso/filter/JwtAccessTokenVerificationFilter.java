@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -56,6 +57,7 @@ import tools.sapcx.commerce.sso.replication.CustomerReplicationStrategy;
  */
 public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	private static final Logger LOG = LoggerFactory.getLogger(JwtAccessTokenVerificationFilter.class);
+	public static final String AUTHORIZED_PARTY_CLAIM = "azp";
 
 	private OAuth2RequestFactory oAuth2RequestFactory;
 	private ClientDetailsService clientDetailsService;
@@ -66,6 +68,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	private boolean enabled;
 	private String issuer;
 	private String audience;
+	private String clientId;
 	private String customerIdField;
 	private TokenExtractor tokenExtractor;
 	private JwtDecoder jwtDecoder = null;
@@ -80,6 +83,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 			boolean enabled,
 			String issuer,
 			String audience,
+			String clientId,
 			String customerIdField) {
 		this.oAuth2RequestFactory = oAuth2RequestFactory;
 		this.clientDetailsService = clientDetailsService;
@@ -90,6 +94,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 		this.enabled = enabled;
 		this.issuer = issuer;
 		this.audience = audience;
+		this.clientId = clientId;
 		this.customerIdField = customerIdField;
 	}
 
@@ -134,12 +139,13 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 		if (createIfMissing) {
 			try {
 				Jwt decodedToken = decodeAccessToken(accessTokenValue);
+				String authorizedParty = decodedToken.getClaimAsString(AUTHORIZED_PARTY_CLAIM);
 				String userId = decodedToken.getClaimAsString(customerIdField);
-				if (userId != null) {
+				if (StringUtils.equals(this.clientId, authorizedParty) && userId != null) {
 					LOG.debug("Mapped user ID using field '{}': '{}'", customerIdField, userId);
 					oAuth2AccessToken = storeAuthenticationForUser(userId, occClientId, decodedToken);
 				} else {
-					LOG.warn("No user ID found in access token for field: '{}'. Make sure your IDP configuration is correct!", customerIdField);
+					LOG.warn("No user ID found in access token for field: '{}' and the configured authorized party. Make sure your IDP configuration is correct!", customerIdField);
 				}
 			} catch (Exception e) {
 				LOG.debug(String.format("Invalid access token '%s'!", accessTokenValue), e);

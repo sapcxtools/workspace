@@ -16,6 +16,7 @@ public class SdkConfigurationService {
 	private static final Logger LOG = LoggerFactory.getLogger(SdkConfigurationService.class);
 	private static final String AUTH0_MANAGEMENT_API_DOMAIN = "sapcxsinglesignon.auth0.management.api.domain";
 	private static final String AUTH0_MANAGEMENT_API_AUDIENCE = "sapcxsinglesignon.auth0.management.api.audience";
+	private static final String AUTH0_AUTH_API_CLIENTID = "sapcxsinglesignon.auth0.auth.api.clientid";
 	private static final String AUTH0_MANAGEMENT_API_CLIENTID = "sapcxsinglesignon.auth0.management.api.clientid";
 	private static final String AUTH0_MANAGEMENT_API_CLIENTSECRET = "sapcxsinglesignon.auth0.management.api.clientsecret";
 	private static final String AUTH0_CUSTOMER_CONNECTION = "sapcxsinglesignon.auth0.customer.connection";
@@ -81,5 +82,9 @@ public class SdkConfigurationService {
 
 	public boolean useBlockedStatusForDisabledCustomers() {
 		return configurationService.getConfiguration().getBoolean(AUTH0_USE_BLOCKEDSTATUS, false);
+	}
+
+	public String getAuthClientId() {
+		return configurationService.getConfiguration().getString(AUTH0_AUTH_API_CLIENTID, null);
 	}
 }

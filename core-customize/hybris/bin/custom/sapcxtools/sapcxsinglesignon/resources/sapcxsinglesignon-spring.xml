@@ -45,8 +45,10 @@
     <alias name="cxAuth0CustomerReplicationStrategy" alias="customerReplicationStrategy"/>
     <bean id="cxAuth0CustomerReplicationStrategy" class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerReplicationStrategy">
         <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="customerReplicationHooks" ref="customerReplicationHooks"/>
         <constructor-arg name="auth0RoleForCustomers" value="${sapcxsinglesignon.auth0.customer.role}"/>
         <constructor-arg name="isCreationEnabled" value="${sapcxsinglesignon.replicate.creation.enabled}" type="boolean"/>
         <constructor-arg name="isRemovalEnabled" value="${sapcxsinglesignon.replicate.removal.enabled}" type="boolean"/>
     </bean>
+    <util:list id="cxCustomerReplicationHooks"></util:list>
 </beans>

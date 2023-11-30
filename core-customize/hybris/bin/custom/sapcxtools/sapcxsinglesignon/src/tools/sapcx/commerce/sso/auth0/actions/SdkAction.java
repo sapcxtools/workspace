@@ -66,6 +66,10 @@ interface SdkAction<R> {
 		return getConfigurationService().useBlockedStatusForDisabledCustomers();
 	}
 
+	default String getAuthClientId() {
+		return getConfigurationService().getAuthClientId();
+	}
+
 	private SdkConfigurationService getConfigurationService() {
 		return Registry.getApplicationContext().getBean(SdkConfigurationService.class);
 	}

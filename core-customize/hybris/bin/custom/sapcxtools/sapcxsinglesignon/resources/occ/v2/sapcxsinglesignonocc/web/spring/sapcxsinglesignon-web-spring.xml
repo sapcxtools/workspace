@@ -25,6 +25,7 @@
         <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.enabled}" type="boolean"/>
         <constructor-arg name="issuer" value="${sapcxsinglesignon.filter.idp.issuer}"/>
         <constructor-arg name="audience" value="${sapcxsinglesignon.filter.idp.audience}"/>
+        <constructor-arg name="clientId" value="${sapcxsinglesignon.filter.idp.clientId}"/>
         <constructor-arg name="customerIdField" value="${sapcxsinglesignon.filter.idp.claim.id}"/>
     </bean>
 </beans>

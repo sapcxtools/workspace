@@ -165,6 +165,7 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 | sapcxsinglesignon.filter.login.userClientId         | String  | the SAP Commerce client ID for your single page application (required) |
 | sapcxsinglesignon.filter.idp.issuer                 | String  | the registered issuer, eg. https://dev-1234.eu.auth0.com/ (required) |
 | sapcxsinglesignon.filter.idp.audience               | String  | the registered API, eg. https://localhost:9002/occ/v2/ (required) |
+| sapcxsinglesignon.filter.idp.clientid               | String  | the client ID of the application (required) |
 | sapcxsinglesignon.filter.idp.claim.id               | String  | claim name used for user ID mapping (default: email) |
 | sapcxsinglesignon.replicate.creation.enabled        | Boolean | specifies whether the user creation is enabled or not (default: false) |
 | sapcxsinglesignon.replicate.removal.enabled         | Boolean | specifies whether the user removal is enabled or not (default: false) |
