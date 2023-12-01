@@ -91,24 +91,20 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable()
-export class KronosLogoutGuard extends LogoutGuard {
+export class CustomLogoutGuard extends LogoutGuard {
     constructor(
         protected auth: AuthService,
         protected cms: CmsService,
         protected semanticPathService: SemanticPathService,
         protected protectedRoutes: ProtectedRoutesService,
         protected router: Router,
-        protected authRedirectService: AuthRedirectService,
         protected http: HttpClient,
         protected endpointsService: OccEndpointsService
     ) {
-        super(auth, cms, semanticPathService, protectedRoutes, router, authRedirectService);
+        super(auth, cms, semanticPathService, protectedRoutes, router);
     }
 
 	canActivate(): Observable<boolean | UrlTree> {
-		// Logout route should never be remembered by guard
-		this.authRedirectService.reportNotAuthGuard();
-
         /**
          * Note:
          * We must wait until the access token was revoked from the backend before
