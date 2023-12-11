@@ -5,7 +5,7 @@
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- Lightweight abstraction for session service local view execution -->
-	<bean id="cxLocalViewExecutor" class="tools.sapcx.commerce.toolkit.session.LocalViewExecutor">
+	<bean id="cxLocalViewExecutor" class="tools.sapcx.commerce.toolkit.session.CxLocalViewExecutor">
 		<constructor-arg name="sessionService" ref="sessionService"/>
 	</bean>
 </beans>
