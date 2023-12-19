@@ -121,6 +121,7 @@
             <list-view:column qualifier="title" hflex="true"/>
             <list-view:column qualifier="exportFormat" width="150" hflex="false"/>
             <list-view:column qualifier="compress" width="200" hflex="false"/>
+            <list-view:column qualifier="emailEmptyResult" width="200" hflex="false"/>
         </list-view:list-view>
     </context>
 
@@ -174,6 +175,12 @@
                         </editorArea:attribute>
                         <editorArea:attribute qualifier="emailRecipients"/>
                         <editorArea:attribute qualifier="compress">
+                            <editorArea:editor-parameter>
+                                <editorArea:name>showOptionalField</editorArea:name>
+                                <editorArea:value>false</editorArea:value>
+                            </editorArea:editor-parameter>
+                        </editorArea:attribute>
+                        <editorArea:attribute qualifier="emailEmptyResult">
                             <editorArea:editor-parameter>
                                 <editorArea:name>showOptionalField</editorArea:name>
                                 <editorArea:value>false</editorArea:value>

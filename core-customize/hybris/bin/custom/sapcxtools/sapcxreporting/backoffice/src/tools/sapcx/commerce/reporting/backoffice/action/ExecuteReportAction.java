@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.reporting.backoffice.action;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,8 +21,8 @@ import de.hybris.platform.servicelayer.dto.converter.Converter;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.zhtml.Filedownload;
-import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.Messagebox;
 
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.report.ReportService;
@@ -65,9 +67,10 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 		}
 
 		File media = reportFile.get();
-		try (FileInputStream inputStream = new FileInputStream(media)) {
+		try {
 			String extension = FilenameUtils.getExtension(media.getAbsolutePath());
-			Filedownload.save(inputStream, Files.probeContentType(media.toPath()), report.getTitle() + "." + extension);
+			String filename = defaultIfBlank(report.getTitle(), report.getId()) + "." + extension;
+			Filedownload.save(new FileInputStream(media), Files.probeContentType(media.toPath()), filename);
 			return success();
 		} catch (IOException e) {
 			LOG.error("Error reading media file for report " + report.getTitle(), e);

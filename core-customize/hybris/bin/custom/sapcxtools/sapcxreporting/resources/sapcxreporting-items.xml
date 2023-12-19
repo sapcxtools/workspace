@@ -72,7 +72,19 @@
                 </attribute>
                 <attribute qualifier="compress" type="java.lang.Boolean">
                     <persistence type="property" />
-                    <defaultvalue>Boolean.FALSE</defaultvalue>
+                    <model>
+                        <getter default="true" name="compress">
+                            <nullDecorator>java.lang.Boolean.FALSE</nullDecorator>
+                        </getter>
+                    </model>
+                </attribute>
+                <attribute qualifier="emailEmptyResult" type="java.lang.Boolean">
+                    <persistence type="property"/>
+                    <model>
+                        <getter default="true" name="emailEmptyResult">
+                            <nullDecorator>java.lang.Boolean.TRUE</nullDecorator>
+                        </getter>
+                    </model>
                 </attribute>
                 <attribute qualifier="parameters" type="QueryReportConfigurationParameterCollection">
                     <persistence type="property" />
