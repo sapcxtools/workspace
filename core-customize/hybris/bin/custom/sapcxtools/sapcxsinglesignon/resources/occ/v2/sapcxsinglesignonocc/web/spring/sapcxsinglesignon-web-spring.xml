@@ -8,26 +8,24 @@
 
     <context:component-scan base-package="tools.sapcx.commerce.sso.controller"/>
 
-    <!-- Additional filters before spring security chain -->
+    <!-- Additional filter before spring security chain -->
     <bean depends-on="commerceWebServicesFilterChainListV2" parent="listMergeDirective">
         <property name="beforeBeanNames" value="springSecurityFilterChain"/>
-        <property name="add" ref="auth0AccessTokenVerificationFilter"/>
+        <property name="add" ref="cxAccessTokenVerificationFilter"/>
     </bean>
 
-    <alias name="cxAuth0AccessTokenVerificationFilter" alias="auth0AccessTokenVerificationFilter"/>
-    <bean id="cxAuth0AccessTokenVerificationFilter" parent="externalAccessTokenVerificationFilter"
-          class="tools.sapcx.commerce.sso.auth0.filter.Auth0AccessTokenVerificationFilter">
-        <constructor-arg name="customerIdField" value="${sapcxsinglesignon.auth0.customer.idfield}"/>
-    </bean>
-
-    <bean id="externalAccessTokenVerificationFilter" abstract="true"
-          class="tools.sapcx.commerce.sso.filter.ExternalAccessTokenVerificationFilter">
+    <alias name="jwtAccessTokenVerificationFilter" alias="cxAccessTokenVerificationFilter"/>
+    <bean id="jwtAccessTokenVerificationFilter" class="tools.sapcx.commerce.sso.filter.JwtAccessTokenVerificationFilter">
+        <constructor-arg name="oAuth2RequestFactory" ref="oAuth2RequestFactory"/>
         <constructor-arg name="clientDetailsService" ref="oauthClientDetails"/>
         <constructor-arg name="userDetailsService" ref="wsUserDetailsService"/>
-        <constructor-arg name="oAuth2RequestFactory" ref="oAuth2RequestFactory"/>
+        <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
         <constructor-arg name="tokenStore" ref="oauthTokenStore"/>
         <constructor-arg name="occClientId" value="${sapcxsinglesignon.filter.login.userClientId}"/>
-        <constructor-arg name="tokenExpiration" value="${sapcxsinglesignon.filter.login.tokenExpiration}"/>
         <constructor-arg name="enabled" value="${sapcxsinglesignon.filter.enabled}" type="boolean"/>
+        <constructor-arg name="issuer" value="${sapcxsinglesignon.filter.idp.issuer}"/>
+        <constructor-arg name="audience" value="${sapcxsinglesignon.filter.idp.audience}"/>
+        <constructor-arg name="clientId" value="${sapcxsinglesignon.filter.idp.clientId}"/>
+        <constructor-arg name="customerIdField" value="${sapcxsinglesignon.filter.idp.claim.id}"/>
     </bean>
 </beans>

@@ -1,7 +1,6 @@
 package tools.sapcx.commerce.sso.auth0.actions;
 
 import com.auth0.exception.Auth0Exception;
-import com.auth0.json.auth.UserInfo;
 import com.auth0.json.mgmt.roles.Role;
 import com.auth0.json.mgmt.users.User;
 
@@ -16,8 +15,8 @@ public interface Actions {
 		AssignRoleAction.assignRole(role, user);
 	}
 
-	static UserInfo getUserInformation(String accessToken) throws Auth0Exception {
-		return FetchUserInformationAction.getUserInformation(accessToken);
+	static void removeRole(Role role, User user) throws Auth0Exception {
+		RemoveRoleAction.removeRole(role, user);
 	}
 
 	static User getUser(String email) throws Auth0Exception {
@@ -32,7 +31,15 @@ public interface Actions {
 		return UpdateUserAction.updateUser(user, customer);
 	}
 
-	static void removeUser(User user, CustomerModel customer) throws Auth0Exception {
-		RemoveUserAction.removeUser(user, customer);
+	static void removeUser(User user, String customerId) throws Auth0Exception {
+		RemoveUserAction.removeUser(user, customerId);
+	}
+
+	static String getPasswordResetUrl(User user) throws Auth0Exception {
+		return getPasswordResetUrl(user, false);
+	}
+
+	static String getPasswordResetUrl(User user, boolean markEmailAsVerified) throws Auth0Exception {
+		return PasswordResetUrlAction.getPasswordResetUrl(user, markEmailAsVerified);
 	}
 }

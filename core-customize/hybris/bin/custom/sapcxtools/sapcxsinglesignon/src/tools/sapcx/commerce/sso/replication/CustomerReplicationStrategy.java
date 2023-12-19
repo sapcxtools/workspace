@@ -7,5 +7,5 @@ import de.hybris.platform.core.model.user.CustomerModel;
 public interface CustomerReplicationStrategy {
 	void replicate(@Nonnull CustomerModel customer);
 
-	void remove(@Nonnull CustomerModel customer);
+	void remove(@Nonnull String customerId);
 }

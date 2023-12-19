@@ -48,20 +48,18 @@ public class SynchronousImpExDataImportExecutor implements ImpExDataImportExecut
 
 		String logPrefix = ">> Import of file [" + file + "] -> ";
 		try (final InputStream resourceAsStream = resourceLoader.getResource(file).getInputStream()) {
-			if (resourceAsStream != null) {
-				getLogger().info(context, logPrefix + "STARTED.");
+			getLogger().info(context, logPrefix + "STARTED.");
 
-				final ImportConfig importConfig = createImportConfiguration(resourceAsStream, fileEncoding);
-				final ImportResult importResult = importService.importData(importConfig);
-				if (importResult.isError()) {
-					getLogger().error(context, logPrefix + "FAILED!");
-				} else {
-					getLogger().info(context, logPrefix + "SUCCESSFUL!");
-				}
+			final ImportConfig importConfig = createImportConfiguration(resourceAsStream, fileEncoding);
+			final ImportResult importResult = importService.importData(importConfig);
+			if (importResult.isError()) {
+				getLogger().error(context, logPrefix + "FAILED!");
+			} else {
+				getLogger().info(context, logPrefix + "SUCCESSFUL!");
+			}
 
-				if (isMainImportFile) {
-					processLocalizedImpExFiles(context, file, fileEncoding);
-				}
+			if (isMainImportFile) {
+				processLocalizedImpExFiles(context, file, fileEncoding);
 			}
 		} catch (FileNotFoundException e) {
 			if (isMainImportFile) {

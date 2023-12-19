@@ -109,6 +109,13 @@ public class ReportGeneratorJobPerformable extends AbstractJobPerformable<Report
 		Optional<File> zipFile = Optional.empty();
 		try {
 			GenericSearchResult searchResult = genericSearchService.search(query, params);
+			if (searchResult.hasError()) {
+				LOG.warn(String.format("Error executing query '%s' for report '%s'", query, report.getTitle()));
+				return false;
+			} else if (searchResult.getResultRows() == 0 && !report.getEmailEmptyResult()) {
+				LOG.info(String.format("No results found for report '%s', skip sending.", report.getTitle()));
+				return true;
+			}
 
 			reportFile = reportService.getReportFile(queryConfigurationConverter.convert(report), searchResult);
 

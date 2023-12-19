@@ -25,6 +25,7 @@ import tools.sapcx.commerce.reporting.search.GenericSearchResultHeader;
 public class ExcelReportGenerator implements ReportGenerator {
 	private static final Logger LOG = LoggerFactory.getLogger(ExcelReportGenerator.class);
 	private static final String EXCEL_EXTENSION = "xlsx";
+	private static final int ALTERNATING_LINE_BASE = 2;
 
 	@Override
 	public boolean createReport(QueryFileConfigurationData report, GenericSearchResult result, File file) {
@@ -157,6 +158,6 @@ public class ExcelReportGenerator implements ReportGenerator {
 	}
 
 	private boolean isAlternatingLine(int rowIndex) {
-		return rowIndex % 2 == 0;
+		return rowIndex % ALTERNATING_LINE_BASE == 0;
 	}
 }

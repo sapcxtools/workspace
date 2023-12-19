@@ -1,6 +1,8 @@
 package tools.sapcx.commerce.toolkit.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,8 @@ import de.hybris.platform.core.initialization.SystemSetupParameter;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
 
 import tools.sapcx.commerce.toolkit.constants.ToolkitConstants;
 import tools.sapcx.commerce.toolkit.impex.executor.ImpExDataImportExecutor;
@@ -28,6 +32,7 @@ import tools.sapcx.commerce.toolkit.testing.testdoubles.core.ValidationServiceSp
 @UnitTest
 public class ToolkitSystemSetupTests {
 	private List<String> importedFiles = new ArrayList<>();
+	private ApplicationContext applicationContext;
 	private ValidationServiceSpy validationService;
 	private SystemSetupEnvironment environment;
 	private ConfigurationServiceFake configurationServiceFake;
@@ -44,6 +49,9 @@ public class ToolkitSystemSetupTests {
 
 	@Before
 	public void setUp() throws Exception {
+		applicationContext = mock(ApplicationContext.class);
+		when(applicationContext.getBean(ReliableSystemSetupExecutor.COCKPIT_CONFIGURATION_SERVICE)).thenThrow(new NoSuchBeanDefinitionException("Bean not found!"));
+
 		validationService = new ValidationServiceSpy();
 		environment = new SystemSetupEnvironment();
 		configurationServiceFake = new ConfigurationServiceFake();
@@ -52,12 +60,15 @@ public class ToolkitSystemSetupTests {
 		setupImpexDataImporterForTesting(environment);
 		addEnvironmentConfiguration(false, false, false);
 
-		systemSetup = new ToolkitSystemSetup();
-		systemSetup.setValidationService(validationService);
-		systemSetup.setElementaryDataImporter(elementaryDataImporter);
-		systemSetup.setEssentialDataImporter(essentialDataImporter);
-		systemSetup.setReleasePatchesImporter(releasePatchesImporter);
-		systemSetup.setProjectDataImporters(Arrays.asList(sampleDataImporter, testDataImporter, releasePatchReRunImporter));
+		ReliableSystemSetupExecutor executor = new ReliableSystemSetupExecutor();
+		executor.setApplicationContext(applicationContext);
+		executor.setValidationService(validationService);
+		executor.setElementaryDataImporter(elementaryDataImporter);
+		executor.setEssentialDataImporter(essentialDataImporter);
+		executor.setReleasePatchesImporter(releasePatchesImporter);
+		executor.setProjectDataImporters(Arrays.asList(sampleDataImporter, testDataImporter, releasePatchReRunImporter));
+
+		systemSetup = new ToolkitSystemSetup(executor, true);
 	}
 
 	@Test

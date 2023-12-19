@@ -2,7 +2,6 @@ package tools.sapcx.commerce.sso.auth0.actions;
 
 import java.util.Map;
 
-import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.mgmt.ManagementAPI;
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.Page;
@@ -13,16 +12,17 @@ import de.hybris.platform.core.Registry;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
+/**
+ * Performs an action on the Auth0 SDK.
+ *
+ * @param <R> response type of the action
+ */
 @FunctionalInterface
 interface SdkAction<R> {
 	R execute(Map<String, Object> requestParameter) throws Auth0Exception;
 
 	default ManagementAPI managementAPI() throws Auth0Exception {
 		return getConfigurationService().getManagementAPI();
-	}
-
-	default AuthAPI authAPI() throws Auth0Exception {
-		return getConfigurationService().getAuthAPI();
 	}
 
 	default void submit(Request<?> request) throws Auth0Exception {
@@ -52,6 +52,22 @@ interface SdkAction<R> {
 
 	default Converter<CustomerModel, User> getCustomerConverter() {
 		return getConfigurationService().getCustomerConverter();
+	}
+
+	default boolean requireEmailVerification() {
+		return getConfigurationService().requireEmailVerification();
+	}
+
+	default boolean requirePasswordVerification() {
+		return getConfigurationService().requirePasswordVerification();
+	}
+
+	default boolean useBlockedStatusForDisabledCustomers() {
+		return getConfigurationService().useBlockedStatusForDisabledCustomers();
+	}
+
+	default String getAuthClientId() {
+		return getConfigurationService().getAuthClientId();
 	}
 
 	private SdkConfigurationService getConfigurationService() {

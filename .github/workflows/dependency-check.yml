@@ -11,6 +11,7 @@ on:
       - "core-customize/hybris/bin/custom/sapcxtools/**/external-dependencies.xml"
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
   dependency-check:
@@ -29,18 +30,20 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Set up cache for SAP artifacts
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: sap-artifacts-cache-${{ hashFiles('core-customize/manifest.json') }}
           path: dependencies
       - name: SAP download config
         env:
+          SAPCX_ARTEFACT_BASEURL: ${{ secrets.SAPCX_ARTEFACT_BASEURL }}
           SAPCX_ARTEFACT_USER: ${{ secrets.SAPCX_ARTEFACT_USER }}
           SAPCX_ARTEFACT_PASSWORD: ${{ secrets.SAPCX_ARTEFACT_PASSWORD }}
         shell: bash
         run: |
           mkdir -p ${HOME}/.gradle
           echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          echo "SAPCX_ARTEFACT_BASEURL=${SAPCX_ARTEFACT_BASEURL}" >> ${HOME}/.gradle/gradle.properties
           echo "SAPCX_ARTEFACT_USER=${SAPCX_ARTEFACT_USER}" >> ${HOME}/.gradle/gradle.properties
           echo "SAPCX_ARTEFACT_PASSWORD=${SAPCX_ARTEFACT_PASSWORD}" >> ${HOME}/.gradle/gradle.properties
       - name: SAP Commerce environment

@@ -27,6 +27,8 @@ config factory, typically in the `custom-config.module.ts` module file:
 
 ```typescript
 // ... among other imports
+import { Meta } from '@angular/platform-browser';
+import { XhrFactory } from '@angular/common';
 import { provideConfigFactory } from "@spartacus/core";
 import { securedConfigChunkFromBackend } from "./sapcxenvconfig";
 
@@ -34,7 +36,7 @@ import { securedConfigChunkFromBackend } from "./sapcxenvconfig";
     // ...
    	providers: [
         // ... all others, the following line should be the last provider
-        provideConfigFactory(securedConfigChunkFromBackend, []),
+        provideConfigFactory(securedConfigChunkFromBackend, [Meta, XhrFactory]),
     ],
 })
 ```
@@ -43,27 +45,50 @@ The imported file `sapcxenvconfig.ts` should be created next to the `custom-conf
 contains the following content (complete file shown):
 
 ```typescript
-import { Config } from "@spartacus/core";
-import { environment } from "src/environments/environment";
+import { XhrFactory } from '@angular/common';
+import { Meta } from '@angular/platform-browser';
+import { Config, OCC_BASE_URL_META_TAG_NAME, OCC_BASE_URL_META_TAG_PLACEHOLDER } from '@spartacus/core';
+import { environment } from 'src/environments/environment';
 
-export function securedConfigChunkFromBackend(): Config {
-	try {
-		let request = new window.XMLHttpRequest();
-		request.open("GET", environment.occBaseUrl + "/occ/v2/" + environment.defaultBaseSite + "/configuration", false);
-		request.send();
+export function securedConfigChunkFromBackend(meta: Meta, xhrFactory: XhrFactory): Config {
+    try {
+        let occBaseUrl = getOccBaseUrl(meta);
+        let request = xhrFactory.build();
+        request.open('GET', occBaseUrl + '/occ/v2/' + environment.defaultBaseSite + '/configuration', false);
+        request.send();
 
-		if (request.status == 200) {
-			let response = JSON.parse(request.responseText);
-			let envId = response.environmentId;
-			let envName = response.environmentName;
-            
-            window.console && console.log("Fetched frontend configuration for environment: "+ envName +" (ID: " + envId + ")");
-			return JSON.parse(response.config);
-		}
-	} catch (e) {
-		window.console && console.log("Error during fetch of frontend configuration: ", e);
-	}
-	return {};
+        if (request.status == 200) {
+            let response = JSON.parse(request.responseText);
+            return JSON.parse(response.config);
+        } else {
+            return {};
+        }
+    } catch (e) {
+        return {};
+    }
+}
+
+function getOccBaseUrl(meta: Meta) {
+    let occBaseUrl = meta.getTag("name='" + OCC_BASE_URL_META_TAG_NAME + "'")?.getAttribute("content");
+    if (occBaseUrl !== undefined && occBaseUrl != OCC_BASE_URL_META_TAG_PLACEHOLDER) {
+        return occBaseUrl;
+    } else if (environment.occBaseUrl !== undefined) {
+        return environment.occBaseUrl;
+    } else {
+        let frontendHost = window.location.hostname;
+        let firstSegment = frontendHost.split('.')[0];
+        let remainingSegments = frontendHost.split('.').slice(1).join('.');
+
+        let apiFirstSegment = 'api';
+        if (firstSegment == 'wwwd1') {
+            apiFirstSegment = 'apid1';
+        } else if (firstSegment == 'wwws1') {
+            apiFirstSegment = 'apis1';
+        }
+
+        let apiHost = apiFirstSegment + '.' + remainingSegments;
+        return window.location.protocol + '//' + apiHost;
+    }
 }
 ```
 
@@ -138,6 +163,9 @@ sapcxenvconfig.frontend.toplevel.enabled=true
   }
 }
 ```
+
+Another example for configuring OAuth with Auth0 within the frontend can be found in the documentation of the
+`sapcxenvconfig` extension.
 
 ## License
 

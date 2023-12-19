@@ -14,13 +14,16 @@ import org.slf4j.LoggerFactory;
 
 public class SdkConfigurationService {
 	private static final Logger LOG = LoggerFactory.getLogger(SdkConfigurationService.class);
-	private static final String AUTH0_DOMAIN = "sapcxsinglesignon.auth0.domain";
+	private static final String AUTH0_MANAGEMENT_API_DOMAIN = "sapcxsinglesignon.auth0.management.api.domain";
+	private static final String AUTH0_MANAGEMENT_API_AUDIENCE = "sapcxsinglesignon.auth0.management.api.audience";
 	private static final String AUTH0_AUTH_API_CLIENTID = "sapcxsinglesignon.auth0.auth.api.clientid";
-	private static final String AUTH0_AUTH_API_CLIENTSECRET = "sapcxsinglesignon.auth0.auth.api.clientsecret";
 	private static final String AUTH0_MANAGEMENT_API_CLIENTID = "sapcxsinglesignon.auth0.management.api.clientid";
 	private static final String AUTH0_MANAGEMENT_API_CLIENTSECRET = "sapcxsinglesignon.auth0.management.api.clientsecret";
 	private static final String AUTH0_CUSTOMER_CONNECTION = "sapcxsinglesignon.auth0.customer.connection";
 	private static final String AUTH0_CUSTOMER_ID_FIELD = "sapcxsinglesignon.auth0.customer.idfield";
+	private static final String AUTH0_REQUIRE_EMAIL_VERIFICATiON = "sapcxsinglesignon.auth0.customer.requireemailverification";
+	private static final String AUTH0_REQUIRE_PASSWORD_VERIFICATiON = "sapcxsinglesignon.auth0.customer.requirepasswordverification";
+	private static final String AUTH0_USE_BLOCKEDSTATUS = "sapcxsinglesignon.auth0.customer.useblockedstatus";
 
 	private ConfigurationService configurationService;
 	private Converter<CustomerModel, User> customerConverter;
@@ -28,11 +31,6 @@ public class SdkConfigurationService {
 	public SdkConfigurationService(ConfigurationService configurationService, Converter<CustomerModel, User> customerConverter) {
 		this.configurationService = configurationService;
 		this.customerConverter = customerConverter;
-	}
-
-	public AuthAPI getAuthAPI() {
-		LOG.debug("Create new Auth0 AuthAPI.", getAudience());
-		return AuthAPI.newBuilder(getDomain(), getAuthClientId(), getAuthClientSecret()).build();
 	}
 
 	public ManagementAPI getManagementAPI() throws Auth0Exception {
@@ -47,19 +45,11 @@ public class SdkConfigurationService {
 	}
 
 	private String getAudience() {
-		return String.format("https://%s/api/v2/", getDomain());
+		return configurationService.getConfiguration().getString(AUTH0_MANAGEMENT_API_AUDIENCE);
 	}
 
 	private String getDomain() {
-		return configurationService.getConfiguration().getString(AUTH0_DOMAIN);
-	}
-
-	private String getAuthClientId() {
-		return configurationService.getConfiguration().getString(AUTH0_AUTH_API_CLIENTID);
-	}
-
-	private String getAuthClientSecret() {
-		return configurationService.getConfiguration().getString(AUTH0_AUTH_API_CLIENTSECRET);
+		return configurationService.getConfiguration().getString(AUTH0_MANAGEMENT_API_DOMAIN);
 	}
 
 	public String getManagementClientId() {
@@ -80,5 +70,21 @@ public class SdkConfigurationService {
 
 	public Converter<CustomerModel, User> getCustomerConverter() {
 		return customerConverter;
+	}
+
+	public boolean requireEmailVerification() {
+		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_EMAIL_VERIFICATiON, false);
+	}
+
+	public boolean requirePasswordVerification() {
+		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_PASSWORD_VERIFICATiON, false);
+	}
+
+	public boolean useBlockedStatusForDisabledCustomers() {
+		return configurationService.getConfiguration().getBoolean(AUTH0_USE_BLOCKEDSTATUS, false);
+	}
+
+	public String getAuthClientId() {
+		return configurationService.getConfiguration().getString(AUTH0_AUTH_API_CLIENTID, null);
 	}
 }

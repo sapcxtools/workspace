@@ -1,5 +1,7 @@
 package tools.sapcx.commerce.reporting.backoffice.action;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,17 +16,19 @@ import com.hybris.cockpitng.actions.ActionContext;
 import com.hybris.cockpitng.actions.ActionResult;
 import com.hybris.cockpitng.actions.CockpitAction;
 
+import de.hybris.platform.servicelayer.dto.converter.Converter;
+
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.zhtml.Filedownload;
-import org.zkoss.zhtml.Messagebox;
+import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.Messagebox;
 
 import tools.sapcx.commerce.reporting.model.QueryReportConfigurationModel;
 import tools.sapcx.commerce.reporting.report.ReportService;
 import tools.sapcx.commerce.reporting.report.data.QueryFileConfigurationData;
+import tools.sapcx.commerce.reporting.search.FlexibleSearchGenericSearchService;
 import tools.sapcx.commerce.reporting.search.GenericSearchResult;
-import tools.sapcx.commerce.reporting.search.GenericSearchService;
 
 public class ExecuteReportAction implements CockpitAction<QueryReportConfigurationModel, Object> {
 	private static final Logger LOG = LoggerFactory.getLogger(ExecuteReportAction.class);
@@ -33,35 +37,40 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 	private static final String REPORT_GENERATE_ERROR = "executereport.errors.generation";
 	private static final String FILE_READ_ERROR = "executereport.errors.fileread";
 
-	@Resource
-	private GenericSearchService genericFlexibleSearch;
+	@Resource(name = "cxGenericSearchService")
+	private FlexibleSearchGenericSearchService flexibleSearchService;
 
-	@Resource
+	@Resource(name = "cxReportService")
 	private ReportService dataReportService;
+
+	@Resource(name = "queryConfigurationConverter")
+	private Converter<QueryReportConfigurationModel, QueryFileConfigurationData> queryConfigurationConverter;
 
 	@Override
 	public ActionResult<Object> perform(ActionContext<QueryReportConfigurationModel> actionContext) {
 		QueryReportConfigurationModel report = actionContext.getData();
-		QueryFileConfigurationData queryFileConfigurationData = new QueryFileConfigurationData();
+
 		String query = report.getSearchQuery();
 		Map<String, Object> params = dataReportService.getReportParameters(report);
 
 		LOG.debug("Executing query {} with params {}", query, params);
-		GenericSearchResult searchResult = genericFlexibleSearch.search(query, params);
+		GenericSearchResult searchResult = flexibleSearchService.search(query, params);
 
 		if (searchResult.hasError()) {
 			return error(MessageFormat.format(actionContext.getLabel(SEARCH_ERROR), searchResult.getError()));
 		}
 
+		QueryFileConfigurationData queryFileConfigurationData = queryConfigurationConverter.convert(report);
 		Optional<File> reportFile = dataReportService.getReportFile(queryFileConfigurationData, searchResult);
 		if (!reportFile.isPresent()) {
 			return error(actionContext.getLabel(REPORT_GENERATE_ERROR));
 		}
 
 		File media = reportFile.get();
-		try (FileInputStream inputStream = new FileInputStream(media)) {
+		try {
 			String extension = FilenameUtils.getExtension(media.getAbsolutePath());
-			Filedownload.save(inputStream, Files.probeContentType(media.toPath()), report.getTitle() + "." + extension);
+			String filename = defaultIfBlank(report.getTitle(), report.getId()) + "." + extension;
+			Filedownload.save(new FileInputStream(media), Files.probeContentType(media.toPath()), filename);
 			return success();
 		} catch (IOException e) {
 			LOG.error("Error reading media file for report " + report.getTitle(), e);

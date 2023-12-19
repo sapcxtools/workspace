@@ -19,10 +19,8 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 	@Override
 	public void populate(CustomerModel source, User target) throws ConversionException {
 		target.setEmail(source.getContactEmail());
-		target.setEmailVerified(target.getEmail() != null);
-
-		target.setName(source.getName());
 		target.setNickname(source.getCustomerID());
+		target.setName(source.getName());
 
 		String[] nameParts = customerNameStrategy.splitName(source.getName());
 		if (nameParts.length == 2) {
@@ -33,7 +31,5 @@ public class Auth0CustomerPopulator implements Populator<CustomerModel, User> {
 				target.setFamilyName(nameParts[1]);
 			}
 		}
-
-		target.setBlocked(!Boolean.FALSE.equals(source.isLoginDisabled()));
 	}
 }

@@ -21,6 +21,9 @@
                 <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerPopulator">
                     <constructor-arg name="customerNameStrategy" ref="customerNameStrategy"/>
                 </bean>
+                <bean class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerMetadataPopulator">
+                    <constructor-arg name="metadataPrefix" value="${sapcxsinglesignon.auth0.customer.metadata.prefix}"/>
+                </bean>
             </list>
         </property>
     </bean>
@@ -29,18 +32,23 @@
     <alias name="cxCustomerReplicationInterceptor" alias="customerReplicationInterceptor"/>
     <bean id="cxCustomerReplicationInterceptor" class="tools.sapcx.commerce.sso.replication.CustomerReplicationInterceptor">
         <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
+        <constructor-arg name="customerReplicationFilter" ref="customerReplicationFilter"/>
     </bean>
     <bean id="cxCustomerReplicationInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
         <property name="interceptor" ref="customerReplicationInterceptor"/>
         <property name="typeCode" value="Customer"/>
     </bean>
+    <alias name="cxAllCustomerReplicationFilter" alias="customerReplicationFilter"/>
+    <bean id="cxAllCustomerReplicationFilter" class="tools.sapcx.commerce.sso.replication.AllCustomerReplicationFilter"/>
 
     <!-- Customer Replication Strategy -->
     <alias name="cxAuth0CustomerReplicationStrategy" alias="customerReplicationStrategy"/>
     <bean id="cxAuth0CustomerReplicationStrategy" class="tools.sapcx.commerce.sso.auth0.replication.Auth0CustomerReplicationStrategy">
         <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="customerReplicationHooks" ref="cxCustomerReplicationHooks"/>
         <constructor-arg name="auth0RoleForCustomers" value="${sapcxsinglesignon.auth0.customer.role}"/>
-        <constructor-arg name="isReplicationEnabled" value="${sapcxsinglesignon.replication.enabled}" type="boolean"/>
-        <constructor-arg name="isRemovalEnabled" value="${sapcxsinglesignon.removal.enabled}" type="boolean"/>
+        <constructor-arg name="isCreationEnabled" value="${sapcxsinglesignon.replicate.creation.enabled}" type="boolean"/>
+        <constructor-arg name="isRemovalEnabled" value="${sapcxsinglesignon.replicate.removal.enabled}" type="boolean"/>
     </bean>
+    <util:list id="cxCustomerReplicationHooks"></util:list>
 </beans>

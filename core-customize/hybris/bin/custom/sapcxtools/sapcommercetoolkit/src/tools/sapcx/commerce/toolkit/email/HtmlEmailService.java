@@ -45,10 +45,25 @@ public interface HtmlEmailService {
 	 */
 	String sendEmailInternal(HtmlEmail email) throws EmailException;
 
+	/**
+	 * Returns an {@link InternetAddress} for the given string representation of an email address.
+	 *
+	 * @param emailAddress string representation of an email address
+	 * @return the internet address
+	 * @throws EmailException if address cannot be parsed
+	 */
 	default InternetAddress getInternetAddress(String emailAddress) throws EmailException {
 		return getInternetAddress(emailAddress, null);
 	}
 
+	/**
+	 * Returns an {@link InternetAddress} for the given string representation of an email address.
+	 *
+	 * @param emailAddress string representation of an email address
+	 * @param displayName a display name for the email address
+	 * @return the internet address
+	 * @throws EmailException if address cannot be parsed
+	 */
 	default InternetAddress getInternetAddress(String emailAddress, String displayName) throws EmailException {
 		try {
 			InternetAddress address = new InternetAddress(emailAddress);

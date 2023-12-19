@@ -51,12 +51,12 @@ public class ConfigurableBackofficeLocaleService extends BackofficeLocaleService
 	@Override
 	public List<Locale> getAllUILocales() {
 		if (this.uiLocales == null) {
-			this.initializeUILocales();
+			this.cxInitializeUILocales();
 		}
 		return this.uiLocales;
 	}
 
-	private synchronized void initializeUILocales() {
+	private synchronized void cxInitializeUILocales() {
 		if (this.uiLocales == null) {
 			Map<String, Locale> allLocales = getAllSupportedLocales().stream()
 					.collect(Collectors.toMap(Locale::toString, Function.identity()));

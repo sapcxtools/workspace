@@ -13,6 +13,7 @@ on:
     branches: [main, develop]
   schedule:
     - cron: "0 15 * * 0,3"
+  workflow_dispatch:
 
 jobs:
   compatibility:
@@ -20,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["2205.12"]
+        version: ["2205.20"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -32,7 +33,7 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Set up cache for SAP artifacts
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: sap-artifacts-cache-${{ hashFiles('core-customize/manifest.json') }}-${{ matrix.version }}
           path: dependencies
@@ -41,12 +42,14 @@ jobs:
           sed -i 's/\"commerceSuiteVersion\": \"[^\"]*\"/\"commerceSuiteVersion\": \"${{ matrix.version }}\"/' core-customize/manifest.json
       - name: SAP download config
         env:
+          SAPCX_ARTEFACT_BASEURL: ${{ secrets.SAPCX_ARTEFACT_BASEURL }}
           SAPCX_ARTEFACT_USER: ${{ secrets.SAPCX_ARTEFACT_USER }}
           SAPCX_ARTEFACT_PASSWORD: ${{ secrets.SAPCX_ARTEFACT_PASSWORD }}
         shell: bash
         run: |
           mkdir -p ${HOME}/.gradle
           echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          echo "SAPCX_ARTEFACT_BASEURL=${SAPCX_ARTEFACT_BASEURL}" >> ${HOME}/.gradle/gradle.properties
           echo "SAPCX_ARTEFACT_USER=${SAPCX_ARTEFACT_USER}" >> ${HOME}/.gradle/gradle.properties
           echo "SAPCX_ARTEFACT_PASSWORD=${SAPCX_ARTEFACT_PASSWORD}" >> ${HOME}/.gradle/gradle.properties
       - name: SAP Commerce environment

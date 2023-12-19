@@ -33,8 +33,7 @@
     </context>
 
     <context type="SolrIndexerConfigurableOperationWizard" component="create-wizard">
-        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="solrIndexerConfigurableOperationWizard"
-                 title="create.title(ctx.TYPE_CODE)">
+        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="solrIndexerConfigurableOperationWizard" title="create.title(ctx.TYPE_CODE)">
             <wz:prepare id="prepare">
                 <wz:initialize property="newItem" type="SolrIndexerConfigurableCronJob" />
                 <wz:assign property="newItem.facetSearchConfig" value="currentContext.facetSearchConfig" />
