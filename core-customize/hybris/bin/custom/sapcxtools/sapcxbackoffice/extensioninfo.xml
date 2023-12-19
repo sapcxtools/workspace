@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
-    <extension abstractclassprefix="Generated" classprefix="CxBackoffice" jaloLogicFree="true" name="sapcxbackoffice" version="4.1.3-SNAPSHOT" usemaven="true">
+    <extension abstractclassprefix="Generated" classprefix="CxBackoffice" jaloLogicFree="true"
+        name="sapcxbackoffice" version="4.2.0" usemaven="true">
         <requires-extension name="sapcommercetoolkit"/>
         <requires-extension name="backoffice"/>
 
