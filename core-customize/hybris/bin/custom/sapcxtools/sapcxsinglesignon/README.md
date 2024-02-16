@@ -163,6 +163,7 @@ This can be easily done using the `modifyPopulatorList` bean notation:
 | sapcxsinglesignon.filter.idp.audience               | String  | the registered API, eg. https://localhost:9002/occ/v2/ (required) |
 | sapcxsinglesignon.filter.idp.clientid               | String  | the client ID of the application (required) |
 | sapcxsinglesignon.filter.idp.claim.id               | String  | claim name used for user ID mapping (default: email) |
+| sapcxsinglesignon.replicate.enabled                 | Boolean | specifies whether the replication is active or not (default: false)                       |
 | sapcxsinglesignon.replicate.creation.enabled        | Boolean | specifies whether the user creation is enabled or not (default: false) |
 | sapcxsinglesignon.replicate.removal.enabled         | Boolean | specifies whether the user removal is enabled or not (default: false) |
 | sapcxsinglesignon.auth0.management.api.audience     | String  | the audience for your machine-to-machine application (required) |
