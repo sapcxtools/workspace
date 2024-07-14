@@ -21,8 +21,8 @@ public class SdkConfigurationService {
 	private static final String AUTH0_MANAGEMENT_API_CLIENTSECRET = "sapcxsinglesignon.auth0.management.api.clientsecret";
 	private static final String AUTH0_CUSTOMER_CONNECTION = "sapcxsinglesignon.auth0.customer.connection";
 	private static final String AUTH0_CUSTOMER_ID_FIELD = "sapcxsinglesignon.auth0.customer.idfield";
-	private static final String AUTH0_REQUIRE_EMAIL_VERIFICATiON = "sapcxsinglesignon.auth0.customer.requireemailverification";
-	private static final String AUTH0_REQUIRE_PASSWORD_VERIFICATiON = "sapcxsinglesignon.auth0.customer.requirepasswordverification";
+	private static final String AUTH0_REQUIRE_EMAIL_VERIFICATION = "sapcxsinglesignon.auth0.customer.requireemailverification";
+	private static final String AUTH0_REQUIRE_PASSWORD_VERIFICATION = "sapcxsinglesignon.auth0.customer.requirepasswordverification";
 	private static final String AUTH0_USE_BLOCKEDSTATUS = "sapcxsinglesignon.auth0.customer.useblockedstatus";
 
 	private ConfigurationService configurationService;
@@ -73,11 +73,11 @@ public class SdkConfigurationService {
 	}
 
 	public boolean requireEmailVerification() {
-		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_EMAIL_VERIFICATiON, false);
+		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_EMAIL_VERIFICATION, false);
 	}
 
 	public boolean requirePasswordVerification() {
-		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_PASSWORD_VERIFICATiON, false);
+		return configurationService.getConfiguration().getBoolean(AUTH0_REQUIRE_PASSWORD_VERIFICATION, false);
 	}
 
 	public boolean useBlockedStatusForDisabledCustomers() {
