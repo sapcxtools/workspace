@@ -81,6 +81,11 @@ jobs:
             mkdir -p "$HYBRIS_LOG_DIR/junit"
             touch "$HYBRIS_LOG_DIR/junit/jacoco-integration.exec"
           fi
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Coverage Report
         env:
           TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -100,8 +105,3 @@ jobs:
           else
             ./codecov -f $HYBRIS_LOG_DIR/junit/jacoco.xml -Z --build $GITHUB_RUN_ID --tag GITHUB_REF_NAME -t $TOKEN
           fi
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
