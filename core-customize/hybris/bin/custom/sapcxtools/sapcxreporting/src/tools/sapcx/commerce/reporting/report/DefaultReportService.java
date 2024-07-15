@@ -4,6 +4,7 @@ import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,8 +60,10 @@ public class DefaultReportService implements ReportService {
 		}
 
 		if (!reportWasGenerated) {
-			if (!file.delete()) {
-				LOG.warn("Error deleting temporary report file at: " + file.getAbsolutePath());
+			try {
+				Files.delete(file.toPath());
+			} catch (IOException e) {
+				LOG.warn("Error deleting temporary report file at: " + file.getAbsolutePath(), e);
 			}
 			file = null;
 		}

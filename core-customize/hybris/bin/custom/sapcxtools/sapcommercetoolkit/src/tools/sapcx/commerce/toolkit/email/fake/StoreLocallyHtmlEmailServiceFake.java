@@ -194,8 +194,8 @@ public class StoreLocallyHtmlEmailServiceFake implements HtmlEmailService {
 	}
 
 	private String getMediaCode(HtmlEmail email, MimeMessage mimeMessage) throws MessagingException {
-		if (email.getMimeMessage() != null && email.getMimeMessage().getMessageID() != null) {
-			return email.getMimeMessage().getMessageID();
+		if (mimeMessage != null && mimeMessage.getMessageID() != null) {
+			return mimeMessage.getMessageID();
 		} else {
 			Date sentDate = email.getSentDate() != null ? email.getSentDate() : new Date();
 			String timestamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(sentDate);

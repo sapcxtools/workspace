@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.sapcx.commerce.sso.auth0.actions.Actions;
+import tools.sapcx.commerce.sso.replication.CustomerReplicationException;
 import tools.sapcx.commerce.sso.replication.CustomerReplicationHook;
 import tools.sapcx.commerce.sso.replication.CustomerReplicationStrategy;
 
@@ -74,7 +75,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 			}
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not replicate customer with ID '{}'. Data may no be in sync and needs to be corrected manually!", customerId);
-			throw new RuntimeException("Could not replicate customer to Auth0!", exception);
+			throw new CustomerReplicationException("Could not replicate customer to Auth0!", exception);
 		}
 	}
 
@@ -97,7 +98,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 			return role;
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not synchronize roles for customer ID '{}'. Data may no be in sync and needs to be corrected manually!", user.getEmail());
-			throw new RuntimeException("Could not synchronize customer roles to Auth0!", exception);
+			throw new CustomerReplicationException("Could not synchronize customer roles to Auth0!", exception);
 		}
 	}
 
@@ -125,7 +126,7 @@ public class Auth0CustomerReplicationStrategy implements CustomerReplicationStra
 			}
 		} catch (Auth0Exception exception) {
 			LOG.debug("Could not remove customer with ID '{}'! Account needs to be removed manually!", customerId);
-			throw new RuntimeException("Could not remove customer on Auth0 side!", exception);
+			throw new CustomerReplicationException("Could not remove customer on Auth0 side!", exception);
 		}
 	}
 }

@@ -76,8 +76,10 @@ public class ExecuteReportAction implements CockpitAction<QueryReportConfigurati
 			LOG.error("Error reading media file for report " + report.getTitle(), e);
 			return error(actionContext.getLabel(FILE_READ_ERROR));
 		} finally {
-			if (!media.delete()) {
-				LOG.warn("Error deleting temporary media file at: " + media.getAbsolutePath());
+			try {
+				Files.delete(media.toPath());
+			} catch (IOException e) {
+				LOG.warn("Error deleting temporary media file at: " + media.getAbsolutePath(), e);
 			}
 		}
 	}
