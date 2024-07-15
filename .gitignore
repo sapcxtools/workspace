@@ -1,6 +1,7 @@
 # IDE & gradle files
 build/
 consolestorage/
+/certificates
 /dependencies
 /cloud-extension-pack/
 .gradle/
