@@ -19,6 +19,6 @@ jobs:
           java-version: "17"
           cache: "gradle"
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v3
+        uses: gradle/actions/wrapper-validation@v3
       - name: Verify code conventions
         run: ./gradlew spotlessCheck
