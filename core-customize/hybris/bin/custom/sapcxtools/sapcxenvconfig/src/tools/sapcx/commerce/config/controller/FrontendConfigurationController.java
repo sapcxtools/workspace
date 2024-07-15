@@ -14,7 +14,6 @@ import tools.sapcx.commerce.config.frontend.FrontendConfigurationService;
 
 @RestController
 @RequestMapping(value = "/{baseSiteId}/configuration")
-// @CacheControl(directive = CacheControlDirective.PUBLIC, maxAge = 360)
 public class FrontendConfigurationController {
 	@Resource
 	private FrontendConfigurationService frontendConfigurationService;

@@ -1,6 +1,8 @@
 package tools.sapcx.commerce.config.frontend;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tools.sapcx.commerce.config.frontend.EnvironmentSpecificFrontendConfigurationService.ENVIRONMENT_ID_CONFIGURATION_KEY;
+import static tools.sapcx.commerce.config.frontend.EnvironmentSpecificFrontendConfigurationService.ENVIRONMENT_NAME_CONFIGURATION_KEY;
 import static tools.sapcx.commerce.config.frontend.EnvironmentSpecificFrontendConfigurationService.FRONTEND_CONFIGURATION_PREFIX;
 
 import java.util.Map;
@@ -94,6 +96,15 @@ public class EnvironmentSpecificFrontendConfigurationServiceTests {
 
 		assertThat(frontendConfiguration1).isEqualTo(frontendConfiguration2);
 		assertThat(end1 - start1).isGreaterThanOrEqualTo(end2 - start2);
+	}
+
+	@Test
+	public void withEnvironmentConfiguration_shouldReturnEnvironmentMetadata() {
+		setupService(Map.of(
+				ENVIRONMENT_ID_CONFIGURATION_KEY, "ID",
+				ENVIRONMENT_NAME_CONFIGURATION_KEY, "NAME"));
+		assertThat(service.getEnvironmentId()).isEqualTo("ID");
+		assertThat(service.getEnvironmentName()).isEqualTo("NAME");
 	}
 
 	private void setupService(Map<String, String> properties) {
