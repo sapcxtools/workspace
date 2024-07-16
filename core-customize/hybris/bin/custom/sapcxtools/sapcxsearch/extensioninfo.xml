@@ -3,7 +3,6 @@
     <extension abstractclassprefix="Generated" classprefix="CxSearch" jaloLogicFree="true"
         name="sapcxsearch" version="4.2.1-SNAPSHOT" usemaven="true">
         <requires-extension name="sapcommercetoolkit"/>
-        <requires-extension name="backoffice"/>
         <requires-extension name="solrfacetsearch"/>
         <requires-extension name="solrfacetsearchbackoffice"/>
 
