@@ -44,8 +44,8 @@ public class CxReferencedItemDelegatingValueResolver implements ValueResolver<It
 				resolveWithDelegate(inputDocument, indexerBatchContext, indexedProperty, referencedItem, delegate);
 			} else if (referencedObject instanceof Collection) {
 				for (Object element : (Collection) referencedObject) {
-					if (element instanceof ItemModel referencedItem) {
-						resolveWithDelegate(inputDocument, indexerBatchContext, indexedProperty, referencedItem, delegate);
+					if (element instanceof ItemModel) {
+						resolveWithDelegate(inputDocument, indexerBatchContext, indexedProperty, (ItemModel) element, delegate);
 					}
 				}
 			}

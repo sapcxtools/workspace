@@ -45,7 +45,8 @@ public class CxReferencedItemDelegatingFieldValueProvider implements FieldValueP
 			if (referencedObject instanceof ItemModel) {
 				final ItemModel referencedItem = (ItemModel) referencedObject;
 				return getFieldValuesFromDelegate(indexConfig, indexedProperty, referencedItem, delegate);
-			} else if (referencedObject instanceof Collection<?> elements) {
+			} else if (referencedObject instanceof Collection<?>) {
+				final Collection<?> elements = (Collection<?>) referencedObject;
 				final Collection<FieldValue> fieldValues = new ArrayList<>();
 				for (Object element : elements) {
 					fieldValues.addAll(getFieldValuesFromDelegate(indexConfig, indexedProperty, element, delegate));
