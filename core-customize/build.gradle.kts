@@ -90,8 +90,33 @@ mapOf(
     }
 }
 
-tasks.register<WriteProperties>("generateLocalDeveloperProperties") {
+tasks.register<Exec>("symlinkLocalSSOConfiguration") {
+    val link = "95-local.properties"
+    val path = file("hybris/config/cloud/local-sso.properties").relativeTo(localConfig)
+
+    if (project.file("../certificates/local.cxdev.me.p12").exists() &&
+        project.file("../certificates/cxdev_eu_auth0_com-metadata.xml").exists()) {
+
+        if (Os.isFamily(Os.FAMILY_UNIX)) {
+            commandLine("sh", "-c", "ln -sfn ${path} ${link}")
+        } else {
+            // https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
+            val windowsPath = path.toString().replace("[/]".toRegex(), "\\")
+            commandLine("cmd", "/c", """mklink /d "${link}" "${windowsPath}" """)
+        }
+    } else {
+        if (Os.isFamily(Os.FAMILY_UNIX)) {
+            commandLine("sh", "-c", "unlink ${link}")
+        } else {
+            commandLine("cmd", "/c", """rmdir "${link}" """)
+        }
+    }
+    workingDir(localConfig)
     dependsOn(symlinkConfigTask)
+}
+
+tasks.register<WriteProperties>("generateLocalDeveloperProperties") {
+    dependsOn("symlinkLocalSSOConfiguration")
     comment = "my.properties - add your own local development configuration parameters here"
     outputFile = project.file("hybris/config/local-config/99-local.properties")
     onlyIf {
