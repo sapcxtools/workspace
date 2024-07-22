@@ -90,12 +90,12 @@ mapOf(
     }
 }
 
-tasks.register<Exec>("symlinkLocalSSOConfiguration") {
-    val link = "95-local.properties"
-    val path = file("hybris/config/cloud/local-sso.properties").relativeTo(localConfig)
+if (project.file("../certificates/local.cxdev.me.p12").exists() &&
+    project.file("../certificates/cxdev_eu_auth0_com-metadata.xml").exists()) {
 
-    if (project.file("../certificates/local.cxdev.me.p12").exists() &&
-        project.file("../certificates/cxdev_eu_auth0_com-metadata.xml").exists()) {
+    val symlinkTask = tasks.register<Exec>("symlinkLocalSSOConfiguration") {
+        val link = "95-local.properties"
+        val path = file("hybris/config/cloud/local-sso.properties").relativeTo(localConfig)
 
         if (Os.isFamily(Os.FAMILY_UNIX)) {
             commandLine("sh", "-c", "ln -sfn ${path} ${link}")
@@ -104,19 +104,33 @@ tasks.register<Exec>("symlinkLocalSSOConfiguration") {
             val windowsPath = path.toString().replace("[/]".toRegex(), "\\")
             commandLine("cmd", "/c", """mklink /d "${link}" "${windowsPath}" """)
         }
-    } else {
+
+        workingDir(localConfig)
+        dependsOn("generateLocalProperties")
+    }
+    symlinkConfigTask.configure {
+        dependsOn(symlinkTask)
+    }
+} else if (file("95-local.properties").relativeTo(localConfig).exists()) {
+    val unlinkTask = tasks.register<Exec>("unlinkLocalSSOConfiguration") {
+        val link = "95-local.properties"
+        
         if (Os.isFamily(Os.FAMILY_UNIX)) {
             commandLine("sh", "-c", "unlink ${link}")
         } else {
             commandLine("cmd", "/c", """rmdir "${link}" """)
         }
+
+        workingDir(localConfig)
+        dependsOn("generateLocalProperties")
     }
-    workingDir(localConfig)
-    dependsOn(symlinkConfigTask)
+    symlinkConfigTask.configure {
+        dependsOn(unlinkTask)
+    }
 }
 
 tasks.register<WriteProperties>("generateLocalDeveloperProperties") {
-    dependsOn("symlinkLocalSSOConfiguration")
+    dependsOn(symlinkConfigTask)
     comment = "my.properties - add your own local development configuration parameters here"
     outputFile = project.file("hybris/config/local-config/99-local.properties")
     onlyIf {
