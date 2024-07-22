@@ -43,7 +43,7 @@ public class ClassificationServiceFake implements ClassificationService {
 
 	@Override
 	public Feature getFeature(ItemModel item, ClassAttributeAssignmentModel assignment) {
-		return (item instanceof ProductModel product) ? getFeature(product, assignment) : null;
+		return (item instanceof ProductModel) ? getFeature((ProductModel) item, assignment) : null;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ClassificationServiceFake implements ClassificationService {
 				.collect(Collectors.toSet());
 		return new FeatureList(getFeatures(product).getFeatures().stream()
 				.filter(feature -> keys.contains(key(feature.getClassAttributeAssignment())))
-				.toList());
+				.collect(Collectors.toList()));
 	}
 
 	@Override

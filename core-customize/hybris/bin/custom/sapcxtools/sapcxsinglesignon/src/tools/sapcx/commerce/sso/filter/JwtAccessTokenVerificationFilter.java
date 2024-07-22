@@ -108,7 +108,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		Authentication accessToken = tokenExtractor.extract(request);
 		if (enabled && accessToken != null) {
-			String accessTokenValue = accessToken.getPrincipal().toString();
+			String accessTokenValue = accessToken.getPrincipal().toString().intern();
 			LOG.debug("Access token extracted from request: {}", accessTokenValue);
 
 			OAuth2AccessToken oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, false);
@@ -116,7 +116,7 @@ public class JwtAccessTokenVerificationFilter extends OncePerRequestFilter {
 					oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);
 
 			if (oAuth2AccessToken == null || oAuth2AccessToken.isExpired()) {
-				synchronized (accessTokenValue.intern()) {
+				synchronized (accessTokenValue) {
 					oAuth2AccessToken = fetchFromTokenStore(accessTokenValue, true);
 					LOG.debug("OAuth2 AccessToken from token store (2nd attempt, with lock): {} (expired? => {})", oAuth2AccessToken,
 							oAuth2AccessToken != null ? oAuth2AccessToken.isExpired() : false);

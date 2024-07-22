@@ -16,15 +16,20 @@ public class CustomerReplicationInterceptor implements ValidateInterceptor<Custo
 
 	private CustomerReplicationStrategy customerReplicationStrategy;
 	private Predicate<CustomerModel> customerReplicationFilter;
+	private boolean enabled;
 
-	public CustomerReplicationInterceptor(CustomerReplicationStrategy customerReplicationStrategy, Predicate<CustomerModel> customerReplicationFilter) {
+	public CustomerReplicationInterceptor(
+			CustomerReplicationStrategy customerReplicationStrategy,
+			Predicate<CustomerModel> customerReplicationFilter,
+			boolean enabled) {
 		this.customerReplicationStrategy = customerReplicationStrategy;
 		this.customerReplicationFilter = customerReplicationFilter;
+		this.enabled = enabled;
 	}
 
 	@Override
 	public void onValidate(CustomerModel customer, InterceptorContext interceptorContext) {
-		if (customer != null) {
+		if (enabled && customer != null) {
 			try {
 				if (customerReplicationFilter.test(customer)) {
 					customerReplicationStrategy.replicate(customer);
@@ -37,7 +42,7 @@ public class CustomerReplicationInterceptor implements ValidateInterceptor<Custo
 
 	@Override
 	public void onRemove(CustomerModel customer, InterceptorContext interceptorContext) throws InterceptorException {
-		if (customer != null) {
+		if (enabled && customer != null) {
 			try {
 				if (customerReplicationFilter.test(customer)) {
 					customerReplicationStrategy.remove(customer.getUid());

@@ -20,17 +20,17 @@ jobs:
       matrix:
         extension: ["sapcommercetoolkit", "sapcxbackoffice", "sapcxreporting", "sapcxsearch", "sapcxenvconfig", "sapcxsinglesignon"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "adopt"
           java-version: "17"
           cache: "gradle"
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
       - name: Set up cache for SAP artifacts
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: sap-artifacts-cache-${{ hashFiles('core-customize/manifest.json') }}
           path: dependencies

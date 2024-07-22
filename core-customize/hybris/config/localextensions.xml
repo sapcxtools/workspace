@@ -3,6 +3,10 @@
   <extensions>
     <path dir="${HYBRIS_BIN_DIR}"/>
 
+    <!-- Single Sign-On extension   -->
+    <extension name="samlsinglesignon"/>
+    <extension name="samlssobackoffice"/>
+
     <!-- SAP CX Tools -->
     <extension name="sapcxtemplate"/>
     <extension name="sapcommercetoolkit"/>

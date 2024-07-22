@@ -37,8 +37,15 @@ public class Auth0CustomerMetadataPopulator implements Populator<CustomerModel, 
 		return isTrue(address.getContactAddress());
 	}
 
-	protected Map<String, Object> convertAddressToMetadata(AddressModel address) {
+	private Map<String, Object> convertAddressToMetadata(AddressModel address) {
 		Map<String, Object> metadata = new HashMap<>(16);
+		addStandardContactFields(address, metadata);
+		addStandardAddressFields(address, metadata);
+		addStandardTelecommunicationFields(address, metadata);
+		return metadata;
+	}
+
+	protected void addStandardContactFields(AddressModel address, Map<String, Object> metadata) {
 		if (address.getTitle() != null) {
 			metadata.put(getKey("contact_title"), address.getTitle().getCode());
 		}
@@ -48,6 +55,9 @@ public class Auth0CustomerMetadataPopulator implements Populator<CustomerModel, 
 		if (address.getDepartment() != null) {
 			metadata.put(getKey("contact_department"), address.getDepartment());
 		}
+	}
+
+	protected void addStandardAddressFields(AddressModel address, Map<String, Object> metadata) {
 		if (address.getLine1() != null) {
 			metadata.put(getKey("contact_streetname"), address.getLine1());
 		}
@@ -78,6 +88,9 @@ public class Auth0CustomerMetadataPopulator implements Populator<CustomerModel, 
 		if (address.getPobox() != null) {
 			metadata.put(getKey("contact_pobox"), address.getPobox());
 		}
+	}
+
+	protected void addStandardTelecommunicationFields(AddressModel address, Map<String, Object> metadata) {
 		if (address.getCellphone() != null) {
 			metadata.put(getKey("contact_cellphone"), address.getCellphone());
 		}
@@ -90,7 +103,6 @@ public class Auth0CustomerMetadataPopulator implements Populator<CustomerModel, 
 		if (address.getFax() != null) {
 			metadata.put(getKey("contact_fax"), address.getFax());
 		}
-		return metadata;
 	}
 
 	private String getKey(String fieldName) {

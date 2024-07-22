@@ -53,7 +53,8 @@ class CreateUserAction implements SdkAction<User> {
 				userInfo.setVerifyPassword(true);
 			}
 
-			return user = fetch(managementAPI().users().create(userInfo));
+			user = fetch(managementAPI().users().create(userInfo));
+			return user;
 		} catch (Auth0Exception exception) {
 			LOG.debug(String.format("Create user with ID '%s' failed!", customerId), exception);
 			throw exception;

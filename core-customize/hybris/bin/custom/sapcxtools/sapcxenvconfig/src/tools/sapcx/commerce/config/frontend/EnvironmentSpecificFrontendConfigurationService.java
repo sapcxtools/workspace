@@ -10,8 +10,8 @@ import de.hybris.platform.servicelayer.config.ConfigurationService;
 import pl.jalokim.propertiestojson.util.PropertiesToJsonConverterBuilder;
 
 public class EnvironmentSpecificFrontendConfigurationService implements FrontendConfigurationService {
-	private static final String ENVIRONMENT_ID_CONFIGURATION_KEY = "sapcxenvconfig.environment.id";
-	private static final String ENVIRONMENT_NAME_CONFIGURATION_KEY = "sapcxenvconfig.environment.name";
+	static final String ENVIRONMENT_ID_CONFIGURATION_KEY = "sapcxenvconfig.environment.id";
+	static final String ENVIRONMENT_NAME_CONFIGURATION_KEY = "sapcxenvconfig.environment.name";
 	static final String FRONTEND_CONFIGURATION_PREFIX = "sapcxenvconfig.frontend";
 
 	private ConfigurationService configurationService;

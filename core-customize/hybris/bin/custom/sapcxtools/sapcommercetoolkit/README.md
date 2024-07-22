@@ -4,6 +4,25 @@ The `sapcommercetoolkit` extension improves the SAP Commerce developer experienc
 maintenance & operation of the platform, including data imports (essential, initial, sample & test), handling of emails, and a feature to
 run unit tests without bootstrapping the platform, incl. a series of test doubles and builders that make writing unit tests easier.
 
+## Model Service Exception Logging
+The model service itself does not log its errors and exceptions, which typically is fine, as those are handled or logged in the call stack.
+Nevertheless, there are situations in which this is difficult and hard to operate, e.g. in case of running a catalog synchronisation. Due
+to missing logging statements within the catalog sync worker, no errors are logged and it is almost impossible to find and analyse errors.
+
+With this implementation, the logging can be enhanced to print all errors and exceptions with level `DEBUG`.  
+
+### How to activate and use
+Example: To enable better logging for catalog synchronization failures, one has to do the following steps:
+
+1) Activate the spring profile 'sapcommercetools-modelservice-failurelogging'
+2) Reduce the logging level of the following loggers to DEBUG
+- `tools.sapcx.commerce.toolkit.model.FailureLoggingModelService`
+- `de.hybris.platform.servicelayer.internal.model.impl.DefaultModelService`
+3) Set the following properties:
+- `synchronization.itemcopycreator.stacktraces=true`
+- `cronjob.logtofile.threshold=DEBUG`
+4) Then restart your instance and sync to see what's happening under the hood.
+
 ## Optimized system setup
 
 The system setup mechanism makes use of the platform properties, that can be extended with by extension. The core principle is, that you 

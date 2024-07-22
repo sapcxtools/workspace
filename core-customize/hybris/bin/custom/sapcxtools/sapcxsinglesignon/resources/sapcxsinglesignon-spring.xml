@@ -33,6 +33,7 @@
     <bean id="cxCustomerReplicationInterceptor" class="tools.sapcx.commerce.sso.replication.CustomerReplicationInterceptor">
         <constructor-arg name="customerReplicationStrategy" ref="customerReplicationStrategy"/>
         <constructor-arg name="customerReplicationFilter" ref="customerReplicationFilter"/>
+        <constructor-arg name="enabled" value="${sapcxsinglesignon.replicate.enabled}" type="boolean"/>
     </bean>
     <bean id="cxCustomerReplicationInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
         <property name="interceptor" ref="customerReplicationInterceptor"/>
