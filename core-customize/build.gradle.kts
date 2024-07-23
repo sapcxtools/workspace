@@ -67,65 +67,61 @@ tasks.register<WriteProperties>("generateLocalProperties") {
 }
 
 val symlinkConfigTask = tasks.register("symlinkConfig")
+val hybrisConfig = file("hybris/config")
 val localConfig = file("hybris/config/local-config")
+val homeDirectory = file(project.gradle.gradleUserHomeDir.parent)
 mapOf(
-    "10-local.properties" to file("hybris/config/cloud/common.properties"),
-    "20-local.properties" to file("hybris/config/cloud/persona/development.properties"),
-    "50-local.properties" to file("hybris/config/cloud/local-dev.properties")
+    "10-local.properties" to "cloud/common.properties",
+    "20-local.properties" to "cloud/persona/development.properties",
+    "50-local.properties" to "cloud/local-dev.properties",
+    "90-local.properties" to "local/90-local.properties",
+    "91-local.properties" to "local/91-local.properties",
+    "92-local.properties" to "local/92-local.properties",
+    "93-local.properties" to "local/93-local.properties",
+    "94-local.properties" to "local/94-local.properties",
+    "95-local.properties" to "local/95-local.properties",
+    "96-local.properties" to "local/96-local.properties",
+    "97-local.properties" to "local/97-local.properties",
+    "98-local.properties" to "local/98-local.properties"
 ).forEach{
-    val symlinkTask = tasks.register<Exec>("symlink${it.key}") {
-        val path = it.value.relativeTo(localConfig)
-        if (Os.isFamily(Os.FAMILY_UNIX)) {
-            commandLine("sh", "-c", "ln -sfn ${path} ${it.key}")
-        } else {
-            // https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
-            val windowsPath = path.toString().replace("[/]".toRegex(), "\\")
-            commandLine("cmd", "/c", """mklink /d "${it.key}" "${windowsPath}" """)
+    val link = it.key
+    var path = file(hybrisConfig.absolutePath + "/" + it.value)
+    if (!path.exists()) {
+        path = file(homeDirectory.absolutePath + "/.sap-commerce/local-config/" + it.key)
+    }
+    
+    if (path.exists()) {
+        val symlinkTask = tasks.register<Exec>("symlink-${link}") {
+            val relPath = path.relativeTo(localConfig)
+            println("rel path: " + relPath)
+
+            if (Os.isFamily(Os.FAMILY_UNIX)) {
+                commandLine("sh", "-c", "ln -sfn ${relPath} ${link}")
+            } else {
+                // https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
+                val windowsPath = relPath.toString().replace("[/]".toRegex(), "\\")
+                commandLine("cmd", "/c", """mklink "${link}" "${windowsPath}" """)
+            }
+            workingDir(localConfig)
+            dependsOn("generateLocalProperties")
         }
-        workingDir(localConfig)
-        dependsOn("generateLocalProperties")
-    }
-    symlinkConfigTask.configure {
-        dependsOn(symlinkTask)
-    }
-}
-
-if (project.file("../certificates/local.cxdev.me.p12").exists() &&
-    project.file("../certificates/cxdev_eu_auth0_com-metadata.xml").exists()) {
-
-    val symlinkTask = tasks.register<Exec>("symlinkLocalSSOConfiguration") {
-        val link = "95-local.properties"
-        val path = file("hybris/config/cloud/local-sso.properties").relativeTo(localConfig)
-
-        if (Os.isFamily(Os.FAMILY_UNIX)) {
-            commandLine("sh", "-c", "ln -sfn ${path} ${link}")
-        } else {
-            // https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
-            val windowsPath = path.toString().replace("[/]".toRegex(), "\\")
-            commandLine("cmd", "/c", """mklink /d "${link}" "${windowsPath}" """)
+        symlinkConfigTask.configure {
+            dependsOn(symlinkTask)
         }
-
-        workingDir(localConfig)
-        dependsOn("generateLocalProperties")
-    }
-    symlinkConfigTask.configure {
-        dependsOn(symlinkTask)
-    }
-} else if (file("95-local.properties").relativeTo(localConfig).exists()) {
-    val unlinkTask = tasks.register<Exec>("unlinkLocalSSOConfiguration") {
-        val link = "95-local.properties"
-        
-        if (Os.isFamily(Os.FAMILY_UNIX)) {
-            commandLine("sh", "-c", "unlink ${link}")
-        } else {
-            commandLine("cmd", "/c", """rmdir "${link}" """)
+    } else {
+        // Unlink if no longer existing
+        val unlinkTask = tasks.register<Exec>("unlink-${link}") {
+            if (Os.isFamily(Os.FAMILY_UNIX)) {
+                commandLine("sh", "-c", "rm -f ${link}")
+            } else {
+                commandLine("cmd", "/c", "del /q ${link}")
+            }
+            workingDir(localConfig)
+            dependsOn("generateLocalProperties")
         }
-
-        workingDir(localConfig)
-        dependsOn("generateLocalProperties")
-    }
-    symlinkConfigTask.configure {
-        dependsOn(unlinkTask)
+        symlinkConfigTask.configure {
+            dependsOn(unlinkTask)
+        }
     }
 }
 
