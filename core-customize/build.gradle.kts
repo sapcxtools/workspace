@@ -93,8 +93,6 @@ mapOf(
     if (path.exists()) {
         val symlinkTask = tasks.register<Exec>("symlink-${link}") {
             val relPath = path.relativeTo(localConfig)
-            println("rel path: " + relPath)
-
             if (Os.isFamily(Os.FAMILY_UNIX)) {
                 commandLine("sh", "-c", "ln -sfn ${relPath} ${link}")
             } else {
