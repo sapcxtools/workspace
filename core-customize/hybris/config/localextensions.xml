@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <hybrisconfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="resources/schemas/extensions.xsd">
   <extensions>
-    <path dir="${HYBRIS_BIN_DIR}"/>
+    <!-- Auto-Load all CX DEV Tools Extensions -->
+    <path dir="${HYBRIS_BIN_DIR}/custom/cxdevtools" autoload="true" depth="1"/>
 
-    <!-- CX DEV Tools -->
-    <extension name="cxdevbackoffice"/>
-    <extension name="cxdevenvconfig"/>
-    <extension name="cxdevproxy"/>
-    <extension name="cxdevreporting"/>
-    <extension name="cxdevtoolkit"/>
+    <!-- Auto-Load all Project Extensions -->
+    <path dir="${HYBRIS_BIN_DIR}/custom/project" autoload="true" depth="1"/>
 
-    <!-- Required for local search server -->
-    <extension name="solrserver"/>
+    <!-- Register Standard Extension Directories -->
+    <path dir="${HYBRIS_BIN_DIR}/platform" autoload="false"/>
+    <path dir="${HYBRIS_BIN_DIR}/modules" autoload="false"/>
   </extensions>
 </hybrisconfig>

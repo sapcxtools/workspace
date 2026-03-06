@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+    <extension name="myfacades" jaloLogicFree="true" usemaven="true" abstractclassprefix="Generated" classprefix="MyFacades">
+        <requires-extension name="mycore"/>
+
+        <coremodule packageroot="sap.commerce.project.facades" generated="true" manager="sap.commerce.project.facades.jalo.MyfacadesManager"/>
+    </extension>
+</extensioninfo>

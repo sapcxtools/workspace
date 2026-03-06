@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+	<!--
+		Modelling of Data items for integration of 3rd party applications
+	 	
+		NOTE:
+		This file should not be used for typical Data, Dto, or WsDto items.
+		Please use myfacades or myocc instead!
+	-->
+</beans>

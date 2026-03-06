@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Field mappings -->
+    <!-- Example:
+    <bean parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+        <property name="destClass" value="de.hybris.platform.b2bwebservicescommons.dto.company.OrgCustomerCreationWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="department" value="department"/>
+                <entry key="unit" value="orgUnit"/>
+                <entry key="locked" value="locked"/>
+            </map>
+        </property>
+    </bean>
+    -->
+</beans>

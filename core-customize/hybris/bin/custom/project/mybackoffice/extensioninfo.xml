@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+    <extension name="mybackoffice" jaloLogicFree="true" usemaven="true" abstractclassprefix="Generated" classprefix="MyBackoffice">
+        <requires-extension name="backoffice"/>
+        <requires-extension name="mycore"/>
+        
+        <!--PLACEHOLDER_FOR_SASS_REGISTRATION-->
+        
+        <coremodule packageroot="sap.commerce.project.backoffice" generated="true" manager="de.hybris.platform.jalo.extension.GenericManager"/>
+        <meta key="backoffice-module" value="true"/>
+    </extension>
+</extensioninfo>
