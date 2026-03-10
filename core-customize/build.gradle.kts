@@ -70,7 +70,7 @@ hybris {
     // The platform itself is always extracted.
     // When this mode is enabled, the bootstrapInclude configuration property is ignored.
     sparseBootstrap {
-        enabled = true
+        enabled = false
         alwaysIncluded = listOf<String>("solrserver")
     }
 }
