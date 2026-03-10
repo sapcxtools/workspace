@@ -1,0 +1,43 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$secondaryLang = $config-project.mydata.import.defaults.languages.optional1
+$contentCatalogId = $config-project.mydata.import.defaults.catalog.content.id
+$contentCatalogEditVersion = $config-project.mydata.import.defaults.catalog.content.versions.edit
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.project.data.constants.MyDataConstants&/mydata/assets/
+
+# -----------------------------------------------------------------------
+# 1. PAGE CREATION
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ContentPage ; $contentCV[unique=true] ; uid[unique=true] ; name ; masterTemplate(uid,$contentCV) ; label ; defaultPage[default='true'] ; approvalStatus(code)[default='approved']
+                          ; ; faq ; FAQ Page ; SimpleContentTemplate ; /faq ;
+
+# -----------------------------------------------------------------------
+# 2. PAGE SPECIFIC COMPONENTS
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE CMSParagraphComponent ; $contentCV[unique=true] ; uid[unique=true] ; name ; content[lang=$primaryLang] ; content[lang=$secondaryLang]
+                                    ; ; FAQTextComponent ; FAQ Text Component ; "<div class='faq-content'><h1>Frequently Asked Questions</h1><p>Here you find answers to common questions about our industrial robots.</p></div>" ; "<div class='faq-content'><h1>Häufig gestellte Fragen</h1><p>Hier finden Sie Antworten auf häufige Fragen zu unseren Industrierobotern.</p></div>"
+
+# -----------------------------------------------------------------------
+# 3. PAGE SPECIFIC CONTENT SLOTS & MAPPING
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ContentSlot ; $contentCV[unique=true] ; uid[unique=true] ; name ; active ; cmsComponents(uid, $contentCV)
+                          ; ; FAQContentSlot ; FAQ Content Slot ; true ; FAQTextComponent
+
+# -----------------------------------------------------------------------
+# 4. BIND SLOTS TO PAGE
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ContentSlotForPage ; $contentCV[unique=true] ; uid[unique=true] ; position[unique=true] ; page(uid,$contentCV)[unique=true] ; contentSlot(uid,$contentCV)[unique=true]
+                                 ; ; Section1-faq ; Section1 ; faq ; FAQContentSlot

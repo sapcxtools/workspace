@@ -1,0 +1,9 @@
+Data-Locale,UUID,OrgID,SapPublicKey,Partner role,Billing,Shipping,Unloading,Contact,AdrBook,Company Name,Street,Number,Postal Code,City,Country
+,ADDR_1001_RE,ORG_1001,ORG_1001|ADDR_1001_RE|KNA1|RE,RE,true,false,false,false,true,Solo Robotics Main,Robo Street,1,10115,Berlin,DE
+,ADDR_1001_WE,ORG_1001,ORG_1001|ADDR_1001_WE|KNA1|WE,WE,false,true,false,false,true,Solo Robotics Main,Robo Street,1,10115,Berlin,DE
+,ADDR_2000_RE,ORG_2000,ORG_2000|ADDR_2000_RE|KNA1|RE,RE,true,false,false,false,true,Future Mfg Headquarters,Future Avenue,100,20095,Hamburg,DE
+,ADDR_2000_WE,ORG_2000,ORG_2000|ADDR_2000_WE|KNA1|WE,WE,false,true,false,false,true,Future Mfg Headquarters,Future Avenue,100,20095,Hamburg,DE
+,ADDR_2001_RE,ORG_2001,ORG_2001|ADDR_2001_RE|KNA1|RE,RE,true,false,false,false,true,Plant Hamburg,Future Avenue,100,20095,Hamburg,DE
+,ADDR_2001_WE,ORG_2001,ORG_2001|ADDR_2001_WE|KNA1|WE,WE,false,true,false,false,true,Plant Hamburg,Future Avenue,100,20095,Hamburg,DE
+,ADDR_2002_RE,ORG_2002,ORG_2002|ADDR_2002_RE|KNA1|RE,RE,true,false,false,false,true,Plant Dresden,Industry Road,5,01067,Dresden,DE
+,ADDR_2002_WE,ORG_2002,ORG_2002|ADDR_2002_WE|KNA1|WE,WE,false,true,false,false,true,Plant Dresden,Industry Road,5,01067,Dresden,DE

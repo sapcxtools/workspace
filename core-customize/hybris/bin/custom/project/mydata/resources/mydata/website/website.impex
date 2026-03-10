@@ -1,0 +1,34 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-project.mydata.import.defaults.currency.primary
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$secondaryLang = $config-project.mydata.import.defaults.languages.optional1
+$siteId = $config-project.mydata.import.defaults.site.id
+$siteName = $config-project.mydata.import.defaults.site.name
+$storeId = $config-project.mydata.import.defaults.store.id
+$storeName = $config-project.mydata.import.defaults.store.name
+$requiresAuthentication = $config-project.mydata.import.defaults.requiresauthentication
+$enableRegistration = $config-project.mydata.import.defaults.enableregistration
+$productCatalogId = $config-project.mydata.import.defaults.catalog.product.id
+
+# -----------------------------------------------------------------------
+# DYNAMIC ENUM VALUES FOR CmsSiteContext
+# -----------------------------------------------------------------------
+INSERT_UPDATE CmsSiteContext ; code[unique=true] ; name[lang=$primaryLang] ; name[lang=$secondaryLang]
+                             ; LANGUAGE          ; Language                ; Sprache
+                             ; CURRENCY          ; Currency                ; Währung
+                             ; THEME             ; Theme                   ; Theme
+
+# -----------------------------------------------------------------------
+# CMS Site
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE CMSSite; uid[unique = true]; name[lang = $primaryLang]; defaultLanguage(isocode); stores(uid); requiresAuthentication  ; enableRegistration; defaultCatalog(id); channel(code)
+                     ; $siteId           ; $siteName                ; $primaryLang            ; $storeId   ; $requiresAuthentication ; $enableRegistration; $productCatalogId; B2B

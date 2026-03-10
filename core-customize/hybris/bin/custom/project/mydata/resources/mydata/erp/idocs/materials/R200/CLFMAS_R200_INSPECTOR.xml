@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLFMAS02>
+    <IDOC BEGIN="1">
+        <EDI_DC40 SEGMENT="1">
+            <TABNAM>EDI_DC40</TABNAM>
+            <DIRECT>1</DIRECT>
+            <IDOCTYP>CLFMAS02</IDOCTYP>
+            <MESTYP>CLFMAS</MESTYP>
+            <SNDPOR>SAP_ERP</SNDPOR>
+            <SNDPRT>LS</SNDPRT>
+            <SNDPRN>S4HANA_PRD</SNDPRN>
+            <RCVPOR>CPI</RCVPOR>
+            <RCVPRT>LS</RCVPRT>
+            <RCVPRN>COMMERCE_CLOUD</RCVPRN>
+        </EDI_DC40>
+        <E1OCLFM SEGMENT="1">
+            <OBJEK>R200_INSPECTOR</OBJEK>
+            <MAFID>O</MAFID>
+            <KLART>001</KLART>
+            <CLASS>ROBOT_GENERAL</CLASS>
+            <STATU>1</STATU>
+            <E1AUSPM SEGMENT="1">
+                <ATNAM>MAX_SPEED</ATNAM>
+                <ATWRT>2.5</ATWRT>
+            </E1AUSPM>
+
+            <E1AUSPM SEGMENT="1">
+                <ATNAM>PROTECTION_CLASS</ATNAM>
+                <ATWRT>IP67</ATWRT>
+            </E1AUSPM>
+        </E1OCLFM>
+    </IDOC>
+</CLFMAS02>

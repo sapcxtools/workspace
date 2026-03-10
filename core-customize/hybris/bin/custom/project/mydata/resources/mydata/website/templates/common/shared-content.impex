@@ -1,0 +1,56 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$secondaryLang = $config-project.mydata.import.defaults.languages.optional1
+$contentCatalogId = $config-project.mydata.import.defaults.catalog.content.id
+$contentCatalogEditVersion = $config-project.mydata.import.defaults.catalog.content.versions.edit
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.project.data.constants.MyDataConstants&/mydata/assets/
+
+# -----------------------------------------------------------------------
+# 1. HEADER COMPONENTS
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE SimpleBannerComponent ; $contentCV[unique=true] ; uid[unique=true] ; name
+                                    ; ; SiteLogoComponent ; Site Logo Component
+
+INSERT_UPDATE CMSSiteContextComponent ; $contentCV[unique=true] ; uid[unique=true] ; name ; context(code)
+                                      ; ; LanguageComponent ; Language Context Switcher ; LANGUAGE
+                                      ; ; CurrencyComponent ; Currency Context Switcher ; CURRENCY
+                                      ; ; ThemeComponent    ; Theme Context Switcher    ; THEME
+
+INSERT_UPDATE MiniCartComponent ; $contentCV[unique=true] ; uid[unique=true] ; name ; totalDisplay(code) ; shownProductCount
+                                ; ; MiniCartComponent ; Mini Cart Component ; TOTAL ; 3
+
+INSERT_UPDATE MyAccountSideNavigationComponent ; $contentCV[unique=true] ; uid[unique=true] ; name
+                                               ; ; MyAccountComponent ; My Account Menu Component
+
+# -----------------------------------------------------------------------
+# 2. FOOTER COMPONENTS
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE CMSLinkComponent ; $contentCV[unique=true] ; uid[unique=true] ; name ; target(code)[default='sameWindow'] ; url
+                               ; ; ContactLinkComponent  ; Contact Link  ; ; /contact
+                               ; ; ImprintLinkComponent  ; Imprint Link  ; ; /imprint
+
+# Copyright Text (Redaktioneller Inhalt -> Zweisprachig über Makros gepflegt)
+INSERT_UPDATE CMSParagraphComponent ; $contentCV[unique=true] ; uid[unique=true] ; name ; content[lang=$primaryLang] ; content[lang=$secondaryLang]
+                                    ; ; FooterCopyrightComponent ; Footer Copyright Component ; "© 2026 Future Robotics Demo. All rights reserved." ; "© 2026 Future Robotics Demo. Alle Rechte vorbehalten."
+
+# -----------------------------------------------------------------------
+# 3. SHARED CONTENT SLOTS
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ContentSlot ; $contentCV[unique=true] ; uid[unique=true] ; name ; active ; cmsComponents(uid, $contentCV)
+                          ; ; SiteLogoSlot      ; Shared Site Logo Slot      ; true ; SiteLogoComponent
+                          ; ; SiteContextSlot   ; Shared Site Context Slot   ; true ; LanguageComponent, CurrencyComponent, ThemeComponent
+                          ; ; MiniCartSlot      ; Shared Mini Cart Slot      ; true ; MiniCartComponent
+                          ; ; HeaderLinksSlot   ; Shared Header Links Slot   ; true ; MyAccountComponent
+                          ; ; FooterSlot        ; Shared Footer Slot         ; true ; ContactLinkComponent, ImprintLinkComponent, FooterCopyrightComponent

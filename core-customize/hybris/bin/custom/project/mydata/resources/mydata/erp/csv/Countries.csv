@@ -1,0 +1,37 @@
+﻿Data-Locale,Isocode,Active,Name
+de,DE,true,Deutschland
+en,DE,true,Germany
+es,DE,true,Alemania
+ja,DE,true,ドイツ
+pt,DE,true,Alemanha
+zh,DE,true,德国
+de,US,true,Vereinigte Staaten
+en,US,true,United States
+es,US,true,Estados Unidos
+ja,US,true,アメリカ合衆国
+pt,US,true,Estados Unidos
+zh,US,true,美国
+de,ES,false,Spanien
+en,ES,false,Spain
+es,ES,false,España
+ja,ES,false,スペイン
+pt,ES,false,Espanha
+zh,ES,false,西班牙
+de,JP,false,Japan
+en,JP,false,Japan
+es,JP,false,Japón
+ja,JP,false,日本
+pt,JP,false,Japão
+zh,JP,false,日本
+de,CN,false,China
+en,CN,false,China
+es,CN,false,China
+ja,CN,false,中国
+pt,CN,false,China
+zh,CN,false,中国
+de,GB,true,Vereinigtes Königreich
+en,GB,true,United Kingdom
+es,GB,true,Reino Unido
+ja,GB,true,イギリス
+pt,GB,true,Reino Unido
+zh,GB,true,英国

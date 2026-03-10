@@ -1,0 +1,180 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import me.cxdev.commerce.toolkit.impex.ImpExLineFilters;"
+"#% import sap.commerce.project.data.constants.MyDataConstants;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-project.mydata.import.defaults.currency.primary
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$optionalLang1 = $config-project.mydata.import.defaults.languages.optional1
+$optionalLang2 = $config-project.mydata.import.defaults.languages.optional2
+$optionalLang3 = $config-project.mydata.import.defaults.languages.optional3
+$optionalLang4 = $config-project.mydata.import.defaults.languages.optional4
+$optionalLang5 = $config-project.mydata.import.defaults.languages.optional5
+$optionalLang6 = $config-project.mydata.import.defaults.languages.optional6
+$optionalLang7 = $config-project.mydata.import.defaults.languages.optional7
+$optionalLang8 = $config-project.mydata.import.defaults.languages.optional8
+$optionalLang9 = $config-project.mydata.import.defaults.languages.optional9
+$siteId = $config-project.mydata.import.defaults.site.id
+$siteName = $config-project.mydata.import.defaults.site.name
+$storeId = $config-project.mydata.import.defaults.store.id
+$storeName = $config-project.mydata.import.defaults.store.name
+$productCatalogId = $config-project.mydata.import.defaults.catalog.product.id
+$productCatalogName = $config-project.mydata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-project.mydata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-project.mydata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.project.data.constants.MyDataConstants&/mydata/assets/
+
+# -----------------------------------------------------------------------
+# Materials
+# 1: Data-Locale
+# 2: Material ID
+# 3: Product hierarchy
+# 4: EAN
+# 5: Unit
+# 6: Name
+# 7: Description
+# 8: Catalog Picture
+# 9: Schematic Picture
+# 10: Media Folder
+# 11: Media Format
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE MediaFolder;;;;;;;;;; qualifier[unique = true];;;;;;;;;;; path
+"#% beforeEach:
+    line.put(21, ""$siteId/"" + line.get(10));
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 10);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE MediaFormat;;;;;;;;;;; qualifier[unique = true];;;;;;;;;; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(11));
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 11);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# PRIMARY IMAGE (catalog, only if available)
+INSERT_UPDATE MediaContainer;;;;;;;;;;;;;;;;;;;; $productCV; qualifier[unique = true]; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(10) + ""/"" + line.get(8));
+    line.put(22, line.get(6) + "" ("" + line.get(8) + "")"");
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 8);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Media;;;;;; altText;; realFileName;; folder(qualifier); mediaFormat(qualifier);;;;;;;;; $productCV; code[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(10) + ""/"" + line.get(8));
+    String filePath = ""/mydata/assets/"" + line.get(10) + ""/"" + line.get(8);
+    if (MyDataConstants.class.getResourceAsStream(filePath) != null) {
+        line.put(22, ""$mediaResourcePath"" + line.get(10) + ""/"" + line.get(8));
+    } else {
+        line.put(22, """");
+    }
+    line.put(23, ""image/"" + FilenameUtils.getExtension(line.get(8)));
+    line.put(24, line.get(10) + ""/"" + line.get(8));
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 8);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# SECONDARY IMAGE (schematic, only if available)
+INSERT_UPDATE MediaContainer;;;;;;;;;;;;;;;;;;;; $productCV; qualifier[unique = true]; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(10) + ""/"" + line.get(9));
+    line.put(22, line.get(6) + "" ("" + line.get(9) + "")"");
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 9);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Media;;;;;; altText;;; realFileName; folder(qualifier); mediaFormat(qualifier);;;;;;;;; $productCV; code[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(10) + ""/"" + line.get(9));
+    String filePath = ""/mydata/assets/"" + line.get(10) + ""/"" + line.get(9);
+    if (MyDataConstants.class.getResourceAsStream(filePath) != null) {
+        line.put(22, ""$mediaResourcePath"" + line.get(10) + ""/"" + line.get(9));
+    } else {
+        line.put(22, """");
+    }
+    line.put(23, ""image/"" + FilenameUtils.getExtension(line.get(9)));
+    line.put(24, line.get(10) + ""/"" + line.get(9));
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");
+    ImpExLineFilters.filterIfBlank(line, 9);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# PRODUCT - PRIMARY LANGUAGE (Includes Structural Data)
+INSERT_UPDATE Product;; code[unique = true]; supercategories(code, $productCV); ean; unit(code); name[lang = $primaryLang]; description[lang = $primaryLang];;;;;;;;;;;;; $productCV; picture(code, $productCV); thumbnail(code, $productCV); galleryImages(qualifier, $productCV)[collection-delimiter = |]; approvalStatus(code)[default='approved']
+"#% beforeEach:
+    line.put(21, line.get(10) + ""/"" + line.get(8));
+    line.put(22, line.get(10) + ""/"" + line.get(8));
+    line.put(23, line.get(10) + ""/"" + line.get(8) + ""|"" + line.get(10) + ""/"" + line.get(9));
+    ImpExLineFilters.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# PRODUCT - OPTIONAL LANGUAGES (Only updating localized fields)
+$lang=$primaryLang
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang1
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang2
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang3
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang4
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang5
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang6
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang7
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang8
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang=$optionalLang9
+INSERT_UPDATE Product;; code[unique = true]; name[lang = $lang]; description[lang = $lang];;;;;;;;;;;;;;;; $productCV
+"#% beforeEach:
+    ImpExLineFilters.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Materials.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"

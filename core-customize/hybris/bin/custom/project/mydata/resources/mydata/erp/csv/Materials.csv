@@ -1,0 +1,19 @@
+Data-Locale,Material ID,Product hierarchy,EAN,Unit,Name,Description,Catalog Picture,Schematic Picture,Media Folder,Media Format
+en,R200_INSPECTOR,00100015,4012345000018,PCE,R200 Inspector - Industrial Quality Robot,R200 Inspector - Industrial Quality Robot,R200_INSPECTOR_catalog.png,R200_INSPECTOR_schematic.png,product-images,ProductImage_480x480
+de,R200_INSPECTOR,00100015,4012345000018,PCE,R200 Inspector - Industrie-Qualitätsroboter,R200 Inspector - Industrie-Qualitätsroboter,R200_INSPECTOR_catalog.png,R200_INSPECTOR_schematic.png,product-images,ProductImage_480x480
+en,RCHAS-200,00200020,4012345000025,PCE,Chassis Frame R200,Chassis Frame R200,RCHAS-200_catalog.png,,product-images,ProductImage_480x480
+de,RCHAS-200,00200020,4012345000025,PCE,Chassis Rahmen R200,Chassis Rahmen R200,RCHAS-200_catalog.png,,product-images,ProductImage_480x480
+en,RMOT-M,00200020,4012345000032,PCE,Drive Motor Medium,Drive Motor Medium,RMOT-M_catalog.png,,product-images,ProductImage_480x480
+de,RMOT-M,00200020,4012345000032,PCE,Antriebsmotor Medium,Antriebsmotor Medium,RMOT-M_catalog.png,,product-images,ProductImage_480x480
+en,RWHL-OMNI,00200020,4012345000049,PCE,Omni Wheels,Omni Wheels,RWHL-OMNI_catalog.png,,product-images,ProductImage_480x480
+de,RWHL-OMNI,00200020,4012345000049,PCE,Omni-Räder,Omni-Räder,RWHL-OMNI_catalog.png,,product-images,ProductImage_480x480
+en,RBAT-15,00200010,4012345000056,PCE,Battery Pack 15kWh,Battery Pack 15kWh,RBAT-15_catalog.png,,product-images,ProductImage_480x480
+de,RBAT-15,00200010,4012345000056,PCE,Batteriepaket 15kWh,Batteriepaket 15kWh,RBAT-15_catalog.png,,product-images,ProductImage_480x480
+en,RCTRL-AI1,00200010,4012345000063,PCE,AI Control Board,AI Control Board,RCTRL-AI1_catalog.png,,product-images,ProductImage_480x480
+de,RCTRL-AI1,00200010,4012345000063,PCE,AI Steuerungsplatine,AI Steuerungsplatine,RCTRL-AI1_catalog.png,,product-images,ProductImage_480x480
+en,RSEN-LID,00200010,4012345000070,PCE,Lidar Sensor,Lidar Sensor,RSEN-LID_catalog.png,,product-images,ProductImage_480x480
+de,RSEN-LID,00200010,4012345000070,PCE,Lidar Sensor,Lidar Sensor,RSEN-LID_catalog.png,,product-images,ProductImage_480x480
+en,RSEN-VIS,00200010,4012345000087,PCE,Visual Camera Sensor,Visual Camera Sensor,RSEN-VIS_catalog.png,,product-images,ProductImage_480x480
+de,RSEN-VIS,00200010,4012345000087,PCE,Visueller Kamerasensor,Visueller Kamerasensor,RSEN-VIS_catalog.png,,product-images,ProductImage_480x480
+en,RARM-PREC,00200020,4012345000094,PCE,Precision Manipulator Arm,Precision Manipulator Arm,RARM-PREC_catalog.png,,product-images,ProductImage_480x480
+de,RARM-PREC,00200020,4012345000094,PCE,Präzisions-Greifarm,Präzisions-Greifarm,RARM-PREC_catalog.png,,product-images,ProductImage_480x480

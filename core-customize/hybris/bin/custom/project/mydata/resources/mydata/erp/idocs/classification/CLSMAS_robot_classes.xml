@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLSMAS04>
+    <IDOC BEGIN="1">
+        <EDI_DC40 SEGMENT="1">
+            <TABNAM>EDI_DC40</TABNAM>
+            <DIRECT>1</DIRECT>
+            <IDOCTYP>CLSMAS04</IDOCTYP>
+            <MESTYP>CLSMAS</MESTYP>
+            <SNDPOR>SAP_ERP</SNDPOR>
+            <SNDPRT>LS</SNDPRT>
+            <SNDPRN>S4HANA_PRD</SNDPRN>
+            <RCVPOR>CPI</RCVPOR>
+            <RCVPRT>LS</RCVPRT>
+            <RCVPRN>COMMERCE_CLOUD</RCVPRN>
+        </EDI_DC40>
+        <E1KLAHM SEGMENT="1">
+            <KLART>001</KLART>
+            <CLASS>ROBOT_GENERAL</CLASS>
+            <STATU>1</STATU>
+            <E1KLARM SEGMENT="1">
+                <SPRAS_ISO>EN</SPRAS_ISO>
+                <KATCH>General Robot Specifications</KATCH>
+            </E1KLARM>
+            <E1KLARM SEGMENT="1">
+                <SPRAS_ISO>DE</SPRAS_ISO>
+                <KATCH>Allgemeine Roboterspezifikationen</KATCH>
+            </E1KLARM>
+
+            <E1KSMLM SEGMENT="1">
+                <ATNAM>MAX_SPEED</ATNAM>
+                <POSNR>010</POSNR>
+            </E1KSMLM>
+
+            <E1KSMLM SEGMENT="1">
+                <ATNAM>PROTECTION_CLASS</ATNAM>
+                <POSNR>020</POSNR>
+            </E1KSMLM>
+        </E1KLAHM>
+
+        <E1CABNM SEGMENT="1">
+            <ATNAM>MAX_SPEED</ATNAM>
+            <ATFOR>NUM</ATFOR>
+            <MSEHI>M/S</MSEHI>
+            <E1CABTM SEGMENT="1">
+                <SPRAS_ISO>EN</SPRAS_ISO>
+                <ATBEZ>Maximum Speed</ATBEZ>
+            </E1CABTM>
+            <E1CABTM SEGMENT="1">
+                <SPRAS_ISO>DE</SPRAS_ISO>
+                <ATBEZ>Maximale Geschwindigkeit</ATBEZ>
+            </E1CABTM>
+        </E1CABNM>
+
+        <E1CABNM SEGMENT="1">
+            <ATNAM>PROTECTION_CLASS</ATNAM>
+            <ATFOR>CHAR</ATFOR>
+            <E1CABTM SEGMENT="1">
+                <SPRAS_ISO>EN</SPRAS_ISO>
+                <ATBEZ>Protection Class</ATBEZ>
+            </E1CABTM>
+            <E1CABTM SEGMENT="1">
+                <SPRAS_ISO>DE</SPRAS_ISO>
+                <ATBEZ>Schutzklasse</ATBEZ>
+            </E1CABTM>
+        </E1CABNM>
+    </IDOC>
+</CLSMAS04>

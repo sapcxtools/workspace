@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MATMAS05>
+    <IDOC BEGIN="1">
+        <EDI_DC40 SEGMENT="1">
+            <TABNAM>EDI_DC40</TABNAM>
+            <DIRECT>1</DIRECT>
+            <IDOCTYP>MATMAS05</IDOCTYP>
+            <MESTYP>MATMAS</MESTYP>
+            <SNDPOR>SAP_ERP</SNDPOR>
+            <SNDPRT>LS</SNDPRT>
+            <SNDPRN>S4HANA_PRD</SNDPRN>
+            <RCVPOR>CPI</RCVPOR>
+            <RCVPRT>LS</RCVPRT>
+            <RCVPRN>COMMERCE_CLOUD</RCVPRN>
+        </EDI_DC40>
+        <E1MARAM SEGMENT="1">
+            <MATNR>R200_INSPECTOR</MATNR>
+            <MTART>KMAT</MTART>
+            <MBRSH>M</MBRSH>
+            <MATKL>ROBOTICS</MATKL>
+            <PRDHA>00100015</PRDHA>
+            <MEINS>PCE</MEINS>
+            <BRGEW>125.000</BRGEW>
+            <NTGEW>120.000</NTGEW>
+            <GEWEI>KGM</GEWEI>
+            <E1MAKTM SEGMENT="1">
+                <SPRAS_ISO>EN</SPRAS_ISO>
+                <MAKTX>R200 Inspector - Industrial Quality Robot</MAKTX>
+            </E1MAKTM>
+            <E1MAKTM SEGMENT="1">
+                <SPRAS_ISO>DE</SPRAS_ISO>
+                <MAKTX>R200 Inspector - Industrie-Qualitätsroboter</MAKTX>
+            </E1MAKTM>
+
+            <E1MARMM SEGMENT="1">
+                <MEINH>PCE</MEINH>
+                <UMREZ>1</UMREZ>
+                <UMREN>1</UMREN>
+            </E1MARMM>
+
+            <E1MARCM SEGMENT="1">
+                <WERKS>1000</WERKS>
+            </E1MARCM>
+        </E1MARAM>
+    </IDOC>
+</MATMAS05>

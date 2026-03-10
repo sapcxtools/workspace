@@ -1,0 +1,28 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import me.cxdev.commerce.toolkit.impex.ImpExLineFilters;"
+"#% import sap.commerce.project.data.constants.MyDataConstants;"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$productCatalogId = $config-project.mydata.import.defaults.catalog.product.id
+$productCatalogEditVersion = $config-project.mydata.import.defaults.catalog.product.versions.edit
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+
+# -----------------------------------------------------------------------
+# Bill of Materials (Product References)
+# 1: Data-Locale
+# 2: Source Product
+# 3: Target Product
+# 4: Reference Type
+# 5: Quantity
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ProductReference;; source(code, $productCV)[unique = true]; target(code, $productCV)[unique = true]; referenceType(code); quantity; active[default = true]; preselected[default = false]
+"#% beforeEach:
+    ImpExLineFilters.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/MaterialsBOM.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"

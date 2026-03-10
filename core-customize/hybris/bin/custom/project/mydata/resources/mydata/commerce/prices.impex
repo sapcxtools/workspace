@@ -1,0 +1,59 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import me.cxdev.commerce.toolkit.impex.ImpExLineFilters;"
+"#% import sap.commerce.project.data.constants.MyDataConstants;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-project.mydata.import.defaults.currency.primary
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$optionalLang1 = $config-project.mydata.import.defaults.languages.optional1
+$optionalLang2 = $config-project.mydata.import.defaults.languages.optional2
+$optionalLang3 = $config-project.mydata.import.defaults.languages.optional3
+$optionalLang4 = $config-project.mydata.import.defaults.languages.optional4
+$optionalLang5 = $config-project.mydata.import.defaults.languages.optional5
+$optionalLang6 = $config-project.mydata.import.defaults.languages.optional6
+$optionalLang7 = $config-project.mydata.import.defaults.languages.optional7
+$optionalLang8 = $config-project.mydata.import.defaults.languages.optional8
+$optionalLang9 = $config-project.mydata.import.defaults.languages.optional9
+$siteId = $config-project.mydata.import.defaults.site.id
+$siteName = $config-project.mydata.import.defaults.site.name
+$storeId = $config-project.mydata.import.defaults.store.id
+$storeName = $config-project.mydata.import.defaults.store.name
+$productCatalogId = $config-project.mydata.import.defaults.catalog.product.id
+$productCatalogName = $config-project.mydata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-project.mydata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-project.mydata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-project.mydata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-project.mydata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-project.mydata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$mediaResourcePath = jar:sap.commerce.project.data.constants.MyDataConstants&/mydata/assets/
+
+# -----------------------------------------------------------------------
+# Prices
+# 1: Data-Locale
+# 2: Material ID
+# 3: Net
+# 4: Price
+# 5: Currency
+# 6: Unit
+# 7: Unit factor
+# 8: Minimum quantity
+# 9: Product group
+# 10: Customer group
+# -----------------------------------------------------------------------
+INSERT_UPDATE PriceRow;; productId[unique = true]; net[default = false]; price; currency(isocode); unit(code); unitFactor; minqtd; pg(code); ug(code)
+"#% beforeEach:
+    line.put(21, line.get(2));
+    ImpExLineFilters.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(MyDataConstants.class.getResourceAsStream(""/mydata/erp/csv/Prices.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"

@@ -1,0 +1,19 @@
+﻿Data-Locale,Code,Name,SAP Code,Symbol,Active,Conversion,Digits
+de,EUR,Euro,EUR,€,true,1,2
+en,EUR,Euro,EUR,€,true,1,2
+es,EUR,Euro,EUR,€,true,1,2
+ja,EUR,ユーロ,EUR,€,true,1,2
+pt,EUR,Euro,EUR,€,true,1,2
+zh,EUR,欧元,EUR,€,true,1,2
+de,USD,US-Dollar,USD,$,true,1.15,2
+en,USD,US Dollar,USD,$,true,1.15,2
+es,USD,Dólar estadounidense,USD,$,true,1.15,2
+ja,USD,米ドル,USD,$,true,1.15,2
+pt,USD,Dólar americano,USD,$,true,1.15,2
+zh,USD,美元,USD,$,true,1.15,2
+de,GBP,Britisches Pfund,GBP,£,true,0.85,2
+en,GBP,British Pound,GBP,£,true,0.85,2
+es,GBP,Libra esterlina,GBP,£,true,0.85,2
+ja,GBP,英ポンド,GBP,£,true,0.85,2
+pt,GBP,Libra esterlina,GBP,£,true,0.85,2
+zh,GBP,英镑,GBP,£,true,0.85,2

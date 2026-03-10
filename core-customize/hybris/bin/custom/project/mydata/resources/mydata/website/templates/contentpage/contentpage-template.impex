@@ -1,0 +1,41 @@
+# -----------------------------------------------------------------------
+# BeanShell imports & Locale setup
+# -----------------------------------------------------------------------
+"#% impex.setLocale(Locale.ENGLISH);"
+
+# -----------------------------------------------------------------------
+# DEFAULT MACROS
+# -----------------------------------------------------------------------
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryLang = $config-project.mydata.import.defaults.languages.primary
+$secondaryLang = $config-project.mydata.import.defaults.languages.optional1
+$contentCatalogId = $config-project.mydata.import.defaults.catalog.content.id
+$contentCatalogEditVersion = $config-project.mydata.import.defaults.catalog.content.versions.edit
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.project.data.constants.MyDataConstants&/mydata/assets/
+
+# -----------------------------------------------------------------------
+# 1. PAGE TEMPLATE
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE PageTemplate ; $contentCV[unique=true] ; uid[unique=true] ; name ; frontendTemplateName ; restrictedPageTypes(code) ; active[default=true]
+                           ; ; SimpleContentTemplate ; Simple Content Template ; contentPage ; ContentPage
+
+# -----------------------------------------------------------------------
+# 2. GLOBAL SLOTS MAPPING FOR THIS TEMPLATE
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE ContentSlotForTemplate ; $contentCV[unique=true] ; uid[unique=true] ; position[unique=true] ; pageTemplate(uid, $contentCV)[unique=true] ; contentSlot(uid, $contentCV)[unique=true] ; allowOverwrite
+                                     ; ; SiteLogo-Content      ; SiteLogo      ; SimpleContentTemplate   ; SiteLogoSlot      ; true
+                                     ; ; SiteContext-Content   ; SiteContext   ; SimpleContentTemplate   ; SiteContextSlot   ; true
+                                     ; ; MiniCart-Content      ; MiniCart      ; SimpleContentTemplate   ; MiniCartSlot      ; true
+                                     ; ; HeaderLinks-Content   ; HeaderLinks   ; SimpleContentTemplate   ; HeaderLinksSlot   ; true
+                                     ; ; Footer-Content        ; Footer        ; SimpleContentTemplate   ; FooterSlot        ; true
+
+# -----------------------------------------------------------------------
+# 3. TEMPLATE SPECIFIC SLOTS (Names)
+# -----------------------------------------------------------------------
+# Spartacus nutzt bei Standard-Content-Pages häufig "Section1" oder "CenterContent" als Inhaltsbereich.
+
+INSERT_UPDATE ContentSlotName ; name[unique=true] ; template(uid,$contentCV)[unique=true] ; validComponentTypes(code) ; compTypeGroup(code)
+                              ; Section1 ; SimpleContentTemplate ; ; wide

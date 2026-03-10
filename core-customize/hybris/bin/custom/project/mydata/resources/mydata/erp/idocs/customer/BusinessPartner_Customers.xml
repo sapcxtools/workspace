@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<B2B_CUSTOMER_MASTER>
+    <B2BCustomer>
+        <CustomerID>CUST_1001</CustomerID>
+        <CompanyName>Solo Robotics Services</CompanyName>
+        <B2BUnit>
+            <UnitID>ORG_1001</UnitID>
+            <UnitName>Solo Robotics Main</UnitName>
+            <ParentUnit></ParentUnit>
+        </B2BUnit>
+        <Addresses>
+            <Address>
+                <AddressID>ADDR_1001</AddressID>
+                <Street>Robo Street 1</Street>
+                <City>Berlin</City>
+                <PostalCode>10115</PostalCode>
+                <Country>DE</Country>
+            </Address>
+        </Addresses>
+        <Contacts>
+            <Contact>
+                <Email>owner@solorobotics.com</Email>
+                <FirstName>Max</FirstName>
+                <LastName>Mustermann</LastName>
+                <Roles>
+                    <Role>b2badmingroup</Role>
+                </Roles>
+            </Contact>
+        </Contacts>
+    </B2BCustomer>
+
+    <B2BCustomer>
+        <CustomerID>CUST_2001</CustomerID>
+        <CompanyName>Future Manufacturing Group</CompanyName>
+
+        <B2BUnit>
+            <UnitID>ORG_2000</UnitID>
+            <UnitName>Future Mfg Headquarters</UnitName>
+            <ParentUnit></ParentUnit>
+        </B2BUnit>
+
+        <B2BUnit>
+            <UnitID>ORG_2001</UnitID>
+            <UnitName>Plant Hamburg</UnitName>
+            <ParentUnit>ORG_2000</ParentUnit>
+        </B2BUnit>
+        <B2BUnit>
+            <UnitID>ORG_2002</UnitID>
+            <UnitName>Plant Dresden</UnitName>
+            <ParentUnit>ORG_2000</ParentUnit>
+        </B2BUnit>
+
+        <Addresses>
+            <Address>
+                <AddressID>ADDR_2000</AddressID>
+                <Street>Future Avenue 100</Street>
+                <City>Hamburg</City>
+                <PostalCode>20095</PostalCode>
+                <Country>DE</Country>
+            </Address>
+            <Address>
+                <AddressID>ADDR_2002</AddressID>
+                <Street>Industry Road 5</Street>
+                <City>Dresden</City>
+                <PostalCode>01067</PostalCode>
+                <Country>DE</Country>
+            </Address>
+        </Addresses>
+
+        <Contacts>
+            <Contact>
+                <Email>director@futuremfg.com</Email>
+                <FirstName>Sarah</FirstName>
+                <LastName>Connor</LastName>
+                <AssignedUnit>ORG_2000</AssignedUnit>
+                <Roles>
+                    <Role>b2badmingroup</Role>
+                </Roles>
+            </Contact>
+
+            <Contact>
+                <Email>buyer@futuremfg.com</Email>
+                <FirstName>John</FirstName>
+                <LastName>Smith</LastName>
+                <AssignedUnit>ORG_2000</AssignedUnit>
+                <Roles>
+                    <Role>b2bapprovergroup</Role>
+                    <Role>b2bmanagergroup</Role>
+                </Roles>
+            </Contact>
+
+            <Contact>
+                <Email>lead.hamburg@futuremfg.com</Email>
+                <FirstName>Hans</FirstName>
+                <LastName>Meier</LastName>
+                <AssignedUnit>ORG_2001</AssignedUnit>
+                <Roles>
+                    <Role>b2bcustomergroup</Role>
+                </Roles>
+            </Contact>
+
+            <Contact>
+                <Email>lead.dresden@futuremfg.com</Email>
+                <FirstName>Anna</FirstName>
+                <LastName>Schmidt</LastName>
+                <AssignedUnit>ORG_2002</AssignedUnit>
+                <Roles>
+                    <Role>b2bcustomergroup</Role>
+                </Roles>
+            </Contact>
+        </Contacts>
+    </B2BCustomer>
+</B2B_CUSTOMER_MASTER>

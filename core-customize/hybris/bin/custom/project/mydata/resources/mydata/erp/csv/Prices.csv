@@ -1,0 +1,12 @@
+Data-Locale,Material ID,Net,Price,Currency,Unit,Unit Factor,Minimum Qty,ProductGroup,CustomerGroup
+,R200_INSPECTOR,true,72500.00,EUR,PCE,1,1,,
+,RCHAS-200,true,5000.00,EUR,PCE,1,1,,
+,RMOT-M,true,850.00,EUR,PCE,1,1,,
+,RWHL-OMNI,true,250.00,EUR,PCE,1,1,,
+,RBAT-15,true,6500.00,EUR,PCE,1,1,,
+,RBAT-15,true,5850.00,EUR,PCE,1,1,,PRICE_LIST_A
+,RCTRL-AI1,true,3200.00,EUR,PCE,1,1,,
+,RSEN-LID,true,4200.00,EUR,PCE,1,1,,
+,RSEN-LID,true,3780.00,EUR,PCE,1,1,,PRICE_LIST_A
+,RSEN-VIS,true,1800.00,EUR,PCE,1,1,,
+,RARM-PREC,true,12500.00,EUR,PCE,1,1,,

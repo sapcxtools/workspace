@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BOMMAT04>
+    <IDOC BEGIN="1">
+        <EDI_DC40 SEGMENT="1">
+            <TABNAM>EDI_DC40</TABNAM>
+            <DIRECT>1</DIRECT>
+            <IDOCTYP>BOMMAT04</IDOCTYP>
+            <MESTYP>BOMMAT</MESTYP>
+            <SNDPOR>SAP_ERP</SNDPOR>
+            <SNDPRT>LS</SNDPRT>
+            <SNDPRN>S4HANA_PRD</SNDPRN>
+            <RCVPOR>CPI</RCVPOR>
+            <RCVPRT>LS</RCVPRT>
+            <RCVPRN>COMMERCE_CLOUD</RCVPRN>
+        </EDI_DC40>
+
+        <E1STZUM SEGMENT="1">
+            <MATNR>R200_INSPECTOR</MATNR>
+            <WERKS>1000</WERKS>
+            <STLAN>5</STLAN>
+            <DATUV>20260101</DATUV>
+            <STSTU>1</STSTU>
+            <E1STPOM SEGMENT="1">
+                <POSNR>0010</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RCHAS-200</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0020</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RMOT-M</IDNRK>
+                <MENGE>4.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0030</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RWHL-OMNI</IDNRK>
+                <MENGE>4.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0040</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RBAT-15</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0050</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RCTRL-AI1</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0060</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RSEN-LID</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0070</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RSEN-VIS</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+            <E1STPOM SEGMENT="1">
+                <POSNR>0080</POSNR>
+                <POSTP>L</POSTP>
+                <IDNRK>RARM-PREC</IDNRK>
+                <MENGE>1.000</MENGE>
+                <MEINS>PCE</MEINS>
+            </E1STPOM>
+
+        </E1STZUM>
+    </IDOC>
+</BOMMAT04>
