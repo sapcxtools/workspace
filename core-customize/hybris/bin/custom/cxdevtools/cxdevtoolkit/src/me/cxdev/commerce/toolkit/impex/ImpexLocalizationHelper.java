@@ -9,11 +9,23 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ImpexLocalizationHelper {
-	private static final Logger LOG = LoggerFactory.getLogger(ImpexLocalizationHelper.class);
+public class ImpExLineFilters {
+	private static final Logger LOG = LoggerFactory.getLogger(ImpExLineFilters.class);
 
 	public static boolean languageSupported(final String isocode) {
 		return LanguageUtils.isLanguagePresent(isocode);
+	}
+
+	public static void filterBlankLine(HashMap<Integer, String> valueLine) {
+		if (valueLine.values().stream().allMatch(StringUtils::isBlank)) {
+			valueLine.clear();
+		}
+	}
+
+	public static void filterIfBlank(HashMap<Integer, String> valueLine, Integer column) {
+		if (!valueLine.containsKey(column) || StringUtils.isBlank(valueLine.get(column))) {
+			valueLine.clear();
+		}
 	}
 
 	public static boolean languageSupported(final String isocode, String languages) {
