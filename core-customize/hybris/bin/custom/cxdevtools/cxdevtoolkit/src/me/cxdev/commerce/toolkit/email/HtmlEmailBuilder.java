@@ -34,7 +34,7 @@ public class HtmlEmailBuilder {
 
 	private String subject;
 	private String body;
-	private String templateName;
+	private String templateHtml;
 	private Map<String, Object> contextParameters;
 	private Locale templateLocale;
 
@@ -114,9 +114,8 @@ public class HtmlEmailBuilder {
 		return this;
 	}
 
-	public HtmlEmailBuilder template(String template, Locale locale) {
-		this.templateName = template;
-		this.templateLocale = locale;
+	public HtmlEmailBuilder template(String template) {
+		this.templateHtml = template;
 		return templateParameter(Map.of());
 	}
 
@@ -130,6 +129,11 @@ public class HtmlEmailBuilder {
 			this.contextParameters = new HashMap<>();
 		}
 		this.contextParameters.putAll(parameters);
+		return this;
+	}
+
+	public HtmlEmailBuilder templateLocale(Locale templateLocale) {
+		this.templateLocale = templateLocale;
 		return this;
 	}
 
@@ -176,12 +180,15 @@ public class HtmlEmailBuilder {
 			throw new EmailException("Cannot create email without recipients. Please provide at least one valid email address!");
 		}
 
-		if (StringUtils.isBlank(body) && StringUtils.isBlank(templateName)) {
+		if (StringUtils.isBlank(body) && StringUtils.isBlank(templateHtml)) {
 			throw new EmailException("Cannot create email without content. There must be a configuration for either body or template!");
 		}
 
-		if (StringUtils.isNotBlank(body) && StringUtils.isNotBlank(templateName)) {
+		if (StringUtils.isNotBlank(body) && StringUtils.isNotBlank(templateHtml)) {
 			throw new EmailException("Cannot create email without ambiguous content. There must be a configuration for either body or template, not both!");
+		}
+		if (templateHtml != null && templateLocale == null) {
+			throw new EmailException("Email creation failed: missing configuration for templateLocale.");
 		}
 	}
 
@@ -201,11 +208,11 @@ public class HtmlEmailBuilder {
 	}
 
 	private void processMessageContent(HtmlEmail htmlEmail, HtmlEmailGenerator htmlEmailGenerator) throws EmailException {
-		if (templateName != null && templateLocale != null) {
+		if (templateHtml != null) {
 			templateParameter("subject", subject);
 			templateParameter("recipients", emptyIfNull(toAddresses));
 			templateParameter("ccRecipients", emptyIfNull(ccAddresses));
-			body = htmlEmailGenerator.processTemplate(templateName, contextParameters, templateLocale);
+			body = htmlEmailGenerator.processTemplate(templateHtml, contextParameters, templateLocale);
 		}
 
 		htmlEmail.setSubject(subject);

@@ -88,7 +88,8 @@ public interface HtmlEmailGenerator {
 			Map<String, Object> templateParameters, Locale locale) throws EmailException {
 		return newHtmlEmail()
 				.subject(subject)
-				.template(template, locale)
+				.template(template)
+				.templateLocale(locale)
 				.templateParameter(templateParameters)
 				.custom(builder -> emptyIfNull(to).forEach(builder::to))
 				.custom(builder -> emptyIfNull(cc).forEach(builder::cc))
