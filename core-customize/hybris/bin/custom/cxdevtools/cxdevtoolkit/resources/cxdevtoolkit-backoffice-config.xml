@@ -18,6 +18,9 @@
     <context component="explorer-tree" merge-by="module">
         <explorer-tree:explorer-tree>
             <explorer-tree:navigation-node id="cxdevtools_treenode_main" position="999">
+                <explorer-tree:navigation-node id="cxdevtools_treenode_email" position="499">
+                    <explorer-tree:type-node code="ThymeleafEmailTemplate" id="typenode_ThymeleafEmailTemplate"/>
+                </explorer-tree:navigation-node>
                 <explorer-tree:navigation-node id="cxdevtools_treenode_fakemail" position="500">
                     <explorer-tree:type-node code="LocallyStoredEmail" id="cxdevtools_typenode_storedemail"/>
                 </explorer-tree:navigation-node>
@@ -76,6 +79,36 @@
                     <editorArea:attribute qualifier="description" position="2"/>
                     <editorArea:attribute qualifier="realFileName" position="3"/>
                 </editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>
+
+    <!-- editor-area for ThymeleafEmailTemplate -->
+    <context merge-by="type" parent="GenericItem" type="ThymeleafEmailTemplate" component="base">
+        <y:base>
+            <y:labels>
+                <y:label>'Email Template'  + (code != null ? '' + ': ' + code : '')</y:label>
+            </y:labels>
+        </y:base>
+    </context>
+
+    <context merge-by="type" parent="GenericItem" type="ThymeleafEmailTemplate" component="editor-area">
+        <editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+            <editorArea:tab name="hmc.tab.common">
+
+                <editorArea:section name="hmc.properties">
+                    <editorArea:attribute qualifier="code"/>
+                </editorArea:section>
+
+                <editorArea:section name="thymeleaf.template.content" columns="1">
+                    <editorArea:attribute qualifier="template" editor="com.hybris.cockpitng.editor.localized(com.hybris.cockpitng.editor.defaulttext)">
+                        <editorArea:editor-parameter>
+                            <editorArea:name>rows</editorArea:name>
+                            <editorArea:value>15</editorArea:value>
+                        </editorArea:editor-parameter>
+                    </editorArea:attribute>
+                </editorArea:section>
+
             </editorArea:tab>
         </editorArea:editorArea>
     </context>
