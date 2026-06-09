@@ -121,16 +121,49 @@ the configuration file `systemsetup-spring.xml` and inspect the project data imp
 
 ## Centralized HtmlEmail handling
 
-The main purpose of these services is, to provide a simple way of sending emails to the customers, without making use of the `CMSComponents`
-like with the standard way of mailing within the SAP Commerce Cloud, provided by the `acceleratorservices` extension. The implementation
-makes use of the [Thymeleaf rendering engine](https://www.thymeleaf.org/), i.e. you are able to define your mails as thymeleaf templates
-and provide localized messages to it.
+The main purpose of these services is to provide a simple way of sending emails without relying on CMSComponents, as
+required by the standard SAP Commerce Cloud acceleratorservices approach. The implementation uses the Thymeleaf
+rendering engine.
 
-The `HtmlEmailGenerator` services (registered as bean with name `thymeleafHtmlEmailGenerator` and alias `htmlEmailGenerator`) should be used
-to create `HtmlEmail` objects, whenever you want to send an email, e.g. from Workflows or from EventListeners. The class provides a simple 
-and an enhanced mechanism to create `HtmlEmail` objects. The simple way takes a `String` as a body and sets it as HTML body for the email.
-The enhanced mechanism takes a template name and context parameters. The template is resolves from the classpath and the template engine is
-executed with the provided context parameters.
+### Template resolution
+
+Email templates are stored as localized `ThymeleafEmailTemplate` items in the database and can be managed via
+Backoffice (under *CX DEV Tools → Email*) or Impex.
+
+At runtime, `EmailTemplateResolverService` (impl: `DatabaseEmailTemplateResolverService`) resolves the matching
+`ThymeleafEmailTemplate` by `code` and locale, and passes the localized HTML content to `HtmlEmailBuilder` for
+Thymeleaf rendering.
+
+### Impex import
+
+Templates can be created or updated via Impex:
+
+  ```impex
+  INSERT_UPDATE ThymeleafEmailTemplate; code[unique = true]; template[lang = de]              ; template[lang = en]
+                                      ; contact                    ; "<!DOCTYPE html>
+  <html>
+      <body>
+          <p th:text=""'Name: ' + $d{firstName} + ' ' + $d{lastName}""></p>
+          <p th:text=""'E-Mail: ' + $d{email}""></p>
+      </body>
+  </html>"                                                                                             ;
+  ```
+
+**Impex workaround for Thymeleaf expressions:** Impex interprets `${...}` as its own variable syntax. To work around
+this:
+
+- Define the macro `$d=$` at the top of the Impex file. This causes `$d{...}` to be resolved to `${...}` during
+  import.
+- Use `$d{...}` instead of `${...}` for all Thymeleaf expressions in the file.
+- Escape all double quotes inside HTML values by doubling them (`"` → `""`).
+
+
+### HtmlEmailGenerator (programmatic use)
+
+The `HtmlEmailGenerator` bean (`thymeleafHtmlEmailGenerator` / alias `htmlEmailGenerator`) remains available for
+programmatic email creation, e.g. from Workflows or EventListeners. It provides a simple mode (plain HTML string as
+body) and an enhanced mode (template code + locale + context parameters).
+
 
 ### How to activate and use
 
