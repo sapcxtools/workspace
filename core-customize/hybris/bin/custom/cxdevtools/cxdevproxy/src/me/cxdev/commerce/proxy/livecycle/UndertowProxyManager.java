@@ -62,28 +62,28 @@ public class UndertowProxyManager implements SmartLifecycle, InitializingBean, D
 	private static final Logger LOG = LoggerFactory.getLogger(UndertowProxyManager.class);
 
 	// Spring Injected Properties
-	private boolean enabled;
+	private boolean enabled = false;
 
 	// SSL Properties
-	private boolean sslEnabled;
+	private boolean sslEnabled = true;
 	private String sslKeystorePath;
 	private String sslKeystorePassword;
 	private String sslKeystoreAlias;
 
 	// Server Binding Properties
-	private String serverBindAddress;
-	private String serverHostname;
-	private String serverProtocol;
-	private int serverPort;
+	private String serverBindAddress = "0.0.0.0";
+	private String serverHostname = "localhost";
+	private String serverProtocol = "https";
+	private int serverPort = 8080;
 
 	// Proxy Target Properties
-	private String frontendProtocol;
-	private String frontendHostname;
-	private int frontendPort;
+	private String frontendProtocol = "http";
+	private String frontendHostname = "localhost";
+	private int frontendPort = 4200;
 	private String frontendRulesFilePath;
-	private String backendProtocol;
-	private String backendHostname;
-	private int backendPort;
+	private String backendProtocol = "https";
+	private String backendHostname = "localhost";
+	private int backendPort = 9002;
 	private String backendRulesFilePath;
 	private String backendContexts;
 
@@ -198,28 +198,33 @@ public class UndertowProxyManager implements SmartLifecycle, InitializingBean, D
 			return;
 		}
 
-		if (!sslEnabled) {
-			this.serverProtocol = "http";
-			LOG.info("SSL is disabled. Forcing server protocol to 'http'.");
-		}
-
+		this.serverProtocol = sslEnabled ? "https" : "http";
 		LOG.info("Starting embedded Undertow proxy (Protocol: {})...", this.serverProtocol);
 
 		try {
+			XnioSsl frontendSslContext = "https".equalsIgnoreCase(frontendProtocol) ? createTrustAllXnioSsl(frontendHostname) : null;
 			String frontendUrl = frontendProtocol + "://" + frontendHostname + ":" + frontendPort;
 			LoadBalancingProxyClient frontendClient = new LoadBalancingProxyClient()
-					.addHost(new URI(frontendUrl), createTrustAllXnioSsl(frontendHostname))
+					.addHost(new URI(frontendUrl), frontendSslContext)
 					.setConnectionsPerThread(20);
 
+			XnioSsl backendSslContext = "https".equalsIgnoreCase(backendProtocol) ? createTrustAllXnioSsl(backendHostname) : null;
 			String backendUrl = backendProtocol + "://" + backendHostname + ":" + backendPort;
 			LoadBalancingProxyClient backendClient = new LoadBalancingProxyClient()
-					.addHost(new URI(backendUrl), createTrustAllXnioSsl(backendHostname))
+					.addHost(new URI(backendUrl), backendSslContext)
 					.setConnectionsPerThread(20);
 
-			HttpHandler baseFrontendHandler = ProxyHandler.builder().setProxyClient(frontendClient).build();
+			HttpHandler baseFrontendHandler = ProxyHandler.builder()
+					.setProxyClient(frontendClient)
+					.setReuseXForwarded(true)
+					.build();
 			HttpHandler finalFrontendHandler = applyRules(frontendHandlersRef.get(), baseFrontendHandler);
 
-			HttpHandler baseBackendHandler = ProxyHandler.builder().setProxyClient(backendClient).setMaxRequestTime(30000).build();
+			HttpHandler baseBackendHandler = ProxyHandler.builder()
+					.setProxyClient(backendClient)
+					.setMaxRequestTime(30000)
+					.setReuseXForwarded(true)
+					.build();
 			HttpHandler finalBackendHandler = applyRules(backendHandlersRef.get(), baseBackendHandler);
 
 			List<String> activeBackendContexts = determineBackendContexts();
@@ -450,10 +455,6 @@ public class UndertowProxyManager implements SmartLifecycle, InitializingBean, D
 
 	public void setServerHostname(String serverHostname) {
 		this.serverHostname = serverHostname;
-	}
-
-	public void setServerProtocol(String serverProtocol) {
-		this.serverProtocol = serverProtocol;
 	}
 
 	public void setServerPort(int serverPort) {
