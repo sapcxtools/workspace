@@ -132,8 +132,8 @@ public class HtmlEmailBuilder {
 		return this;
 	}
 
-	public HtmlEmailBuilder templateLocale(Locale templateLocale) {
-		this.templateLocale = templateLocale;
+	public HtmlEmailBuilder locale(Locale locale) {
+		this.templateLocale = locale;
 		return this;
 	}
 
@@ -188,7 +188,7 @@ public class HtmlEmailBuilder {
 			throw new EmailException("Cannot create email without ambiguous content. There must be a configuration for either body or template, not both!");
 		}
 		if (templateHtml != null && templateLocale == null) {
-			throw new EmailException("Email creation failed: missing configuration for templateLocale.");
+			throw new EmailException("Email creation failed: missing configuration for locale.");
 		}
 	}
 

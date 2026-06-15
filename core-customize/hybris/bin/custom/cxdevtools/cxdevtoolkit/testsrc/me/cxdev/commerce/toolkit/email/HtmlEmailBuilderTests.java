@@ -142,7 +142,7 @@ public class HtmlEmailBuilderTests {
 		HtmlEmail htmlEmail = builder
 				.subject("custom subject for email")
 				.template("templateName")
-				.templateLocale(Locale.ENGLISH)
+				.locale(Locale.ENGLISH)
 				.to("requires-at-least-one-to-address@localhost")
 				.build();
 

@@ -19,7 +19,7 @@
         <explorer-tree:explorer-tree>
             <explorer-tree:navigation-node id="cxdevtools_treenode_main" position="999">
                 <explorer-tree:navigation-node id="cxdevtools_treenode_email" position="499">
-                    <explorer-tree:type-node code="ThymeleafEmailTemplate" id="typenode_ThymeleafEmailTemplate"/>
+                    <explorer-tree:type-node code="ThymeleafEmailTemplate" id="cxdevtools_typenode_ThymeleafEmailTemplate"/>
                 </explorer-tree:navigation-node>
                 <explorer-tree:navigation-node id="cxdevtools_treenode_fakemail" position="500">
                     <explorer-tree:type-node code="LocallyStoredEmail" id="cxdevtools_typenode_storedemail"/>
@@ -100,7 +100,7 @@
                     <editorArea:attribute qualifier="code"/>
                 </editorArea:section>
 
-                <editorArea:section name="thymeleaf.template.content" columns="1">
+                <editorArea:section name="cxdevtools_section_ThymeleafEmailTemplate_content" columns="1">
                     <editorArea:attribute qualifier="template" editor="com.hybris.cockpitng.editor.localized(com.hybris.cockpitng.editor.defaulttext)">
                         <editorArea:editor-parameter>
                             <editorArea:name>rows</editorArea:name>

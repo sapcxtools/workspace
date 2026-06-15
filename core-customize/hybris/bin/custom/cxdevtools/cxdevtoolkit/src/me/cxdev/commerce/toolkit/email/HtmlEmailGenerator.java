@@ -89,7 +89,7 @@ public interface HtmlEmailGenerator {
 		return newHtmlEmail()
 				.subject(subject)
 				.template(template)
-				.templateLocale(locale)
+				.locale(locale)
 				.templateParameter(templateParameters)
 				.custom(builder -> emptyIfNull(to).forEach(builder::to))
 				.custom(builder -> emptyIfNull(cc).forEach(builder::cc))

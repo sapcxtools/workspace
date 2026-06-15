@@ -1,7 +1,6 @@
 package me.cxdev.commerce.toolkit.email.dao.impl;
 
-import javassist.NotFoundException;
-
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.search.FlexibleSearchQuery;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.search.SearchResult;
@@ -22,14 +21,13 @@ public class DatabaseEmailTemplateResolverDao implements EmailTemplateResolverDa
 		this.flexibleSearchService = flexibleSearchService;
 	}
 
-	public ThymeleafEmailTemplateModel searchTemplate(String templateName) throws NotFoundException {
+	public ThymeleafEmailTemplateModel searchTemplate(String templateName) throws UnknownIdentifierException {
 		FlexibleSearchQuery query = new FlexibleSearchQuery(QUERY);
 		query.addQueryParameter("templateName", templateName);
 		LOG.debug(String.format("Searching for email template with template name: %s", templateName));
 		final SearchResult<ThymeleafEmailTemplateModel> result = flexibleSearchService.search(query);
 		if (result.getResult().isEmpty()) {
-			LOG.error(String.format("No email template found for template name: %s", templateName));
-			throw new NotFoundException(String.format("No email template found for template name: %s", templateName));
+			throw new UnknownIdentifierException(String.format("No email template found for template name: %s", templateName));
 		}
 		return result.getResult().getFirst();
 	}
