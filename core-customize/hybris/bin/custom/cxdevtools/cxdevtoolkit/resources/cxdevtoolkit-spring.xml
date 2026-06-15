@@ -6,4 +6,15 @@
     <import resource="cxdevtoolkit/systemsetup-spring.xml"/>
     <import resource="cxdevtoolkit/thymeleafemails-spring.xml"/>
     <import resource="cxdevtoolkit/thymeleafemails-fake-spring.xml"/>
+
+    <alias name="databaseEmailTemplateResolverService" alias="emailTemplateResolverService"/>
+    <bean name="databaseEmailTemplateResolverService"
+          class="me.cxdev.commerce.toolkit.email.service.impl.DatabaseEmailTemplateResolverService">
+        <constructor-arg name="emailTemplateResolverDao" ref="emailTemplateResolverDao"/>
+    </bean>
+
+    <alias name="defaultEmailTemplateDao" alias="emailTemplateResolverDao"/>
+    <bean name="defaultEmailTemplateDao" class="me.cxdev.commerce.toolkit.email.dao.impl.DatabaseEmailTemplateResolverDao">
+        <constructor-arg name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
 </beans>

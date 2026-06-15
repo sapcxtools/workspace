@@ -13,5 +13,39 @@
                 </attribute>
             </attributes>
         </itemtype>
+        <itemtype code="ThymeleafEmailTemplate">
+            <deployment table="thymeleafemailtemplate" typecode="31141"/>
+            <attributes>
+                <attribute qualifier="code" type="java.lang.String">
+                    <persistence type="property"/>
+                    <modifiers read="true" write="true" unique="true"/>
+                </attribute>
+                <attribute qualifier="template" type="localized:java.lang.String">
+                    <persistence type="property">
+                        <columntype>
+                            <value>HYBRIS.LONG_STRING</value>
+                        </columntype>
+                        <columntype database="mysql">
+                            <value>TEXT</value>
+                        </columntype>
+                        <columntype database="oracle">
+                            <value>CLOB</value>
+                        </columntype>
+                        <columntype database="sqlserver">
+                            <value>TEXT</value>
+                        </columntype>
+                        <columntype database="sap">
+                            <value>NCLOB</value>
+                        </columntype>
+                    </persistence>
+                    <modifiers read="true" write="true"/>
+                </attribute>
+            </attributes>
+            <indexes>
+                <index name="code" unique="true">
+                    <key attribute="code"/>
+                </index>
+            </indexes>
+        </itemtype>
     </itemtypes>
 </items>
