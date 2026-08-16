@@ -34,7 +34,7 @@ INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                 ; fiel
                                        ; requestWarranty_serial_number     ; TEXT         ; Seriennummer       ; Geben Sie die Seriennummer der betroffenen Maschine oder Komponente an.           ;
                                        ; requestWarranty_operating_hours   ; NUMBER         ; Betriebsstunden    ; Geben Sie die ungefähre Anzahl der Betriebsstunden zum Zeitpunkt des Ausfalls an. ;
                                        ; requestWarranty_failure_type      ; RADIO          ; Fehlerart          ; Wählen Sie die Kategorie aus, die den gemeldeten Fehler am besten beschreibt.     ;
-                                       ; requestWarranty_issue_description ; TEXTAREA         ; Fehlerbeschreibung ; Beschreiben Sie den Fehler sowie die Auswirkungen möglichst detailliert.          ; Pumpe verliert nach dem Start den Druck
+                                       ; requestWarranty_issue_description ; TEXTAREA         ; Fehlerbeschreibung ; Beschreiben Sie den Fehler sowie die Auswirkungen möglichst detailliert.          ; Roboter verliert nach dem Start Leistung
 
 INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                        ; label[lang = $lang]
                                             ; requestWarranty_failure_type_mechanical  ; Mechanischer Defekt
@@ -61,7 +61,7 @@ INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                  
                                             ; requestTechnicalSupport_option_ST             ; "Wartungs-/Servicetechniker"
                                             ; requestTechnicalSupport_option_asap           ; "So schnell wie möglich"
                                             ; requestTechnicalSupport_option_control        ; "Kontrolle"
-                                            ; requestTechnicalSupport_option_pump_group     ; "Pumpengruppe"
+                                            ; requestTechnicalSupport_option_pump_group     ; "Robotergruppe"
                                             ; requestTechnicalSupport_option_closing_unit   ; "Schließkörper"
                                             ; requestTechnicalSupport_option_injection_unit ; "Einspritzsystem"
                                             ; requestTechnicalSupport_option_other          ; "Andere"

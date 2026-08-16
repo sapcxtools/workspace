@@ -20,4 +20,4 @@ UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]     
                             ;                          ; $pageId-faqMenuParagraph ; "<h2>DUMMY TEXT</h2>"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
-                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the CX FAQ Page</h2>"
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the Roboterwelten FAQ Page</h2>"

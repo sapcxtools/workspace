@@ -17,4 +17,4 @@ UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = 
                   ;                          ; $pageId           ; "Homepage"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
-                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the CX Customer Portal</h2>"
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the Roboterwelten Portal</h2>"

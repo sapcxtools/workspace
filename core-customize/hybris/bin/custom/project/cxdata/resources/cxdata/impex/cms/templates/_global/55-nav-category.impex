@@ -21,25 +21,25 @@ INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; n
 
 ##---- level 4. children of CxCategoryNavNode ----##
 INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]      ; name                        ; parent(uid, $contentCV)
-                               ;                          ; AxialFlowPumpsNavNode   ; Axial Flow Pumps Category   ; CxCategoryNavNode
-                               ;                          ; RadialFlowPumpsNavNode  ; Radial Flow Pumps Category  ; CxCategoryNavNode
-                               ;                          ; SideChannelPumpsNavNode ; Side Channel Pumps Category ; CxCategoryNavNode
-                               ;                          ; DiaphragmPumpsNavNode   ; Diaphragm Pumps Category    ; CxCategoryNavNode
-                               ;                          ; RotaryLobePumpsNavNode  ; Rotary Lobe Pumps Category  ; CxCategoryNavNode
+                               ;                          ; ServiceRobotsNavNode   ; Service Robots Category   ; CxCategoryNavNode
+                               ;                          ; IndustrialRobotsNavNode  ; Industrial Robots Category  ; CxCategoryNavNode
+                               ;                          ; AutonomousRobotsNavNode ; Autonomous Robots Category ; CxCategoryNavNode
+                               ;                          ; CollaborativeRobotsNavNode   ; Collaborative Robots Category    ; CxCategoryNavNode
+                               ;                          ; EducationRobotsNavNode  ; Education Robots Category  ; CxCategoryNavNode
                                ;                          ; SparepartsNavNode       ; Spareparts Category         ; CxCategoryNavNode
 ## entries of the above navigation nodes ##
 INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]           ; name                                     ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
-                                ;                          ; AxialFlowPumpsNavNodeEntry   ; Axial Flow Pumps Navigation Node Entry   ; AxialFlowPumpsNavNode          ; AxialFlowPumpsCategoryLink
-                                ;                          ; RadialFlowPumpsNavNodeEntry  ; Radial Flow Pumps Navigation Node Entry  ; RadialFlowPumpsNavNode         ; RadialFlowPumpsCategoryLink
-                                ;                          ; SideChannelPumpsNavNodeEntry ; Side Channel Pumps Navigation Node Entry ; SideChannelPumpsNavNode        ; SideChannelPumpsCategoryLink
-                                ;                          ; DiaphragmPumpsNavNodeEntry   ; Diaphragm Pumps Navigation Node Entry    ; DiaphragmPumpsNavNode          ; DiaphragmPumpsCategoryLink
-                                ;                          ; RotaryLobePumpsNavNodeEntry  ; Rotary Lobe Pumps Navigation Node Entry  ; RotaryLobePumpsNavNode         ; RotaryLobePumpsCategoryLink
+                                ;                          ; ServiceRobotsNavNodeEntry   ; Service Robots Navigation Node Entry   ; ServiceRobotsNavNode          ; ServiceRobotsCategoryLink
+                                ;                          ; IndustrialRobotsNavNodeEntry  ; Industrial Robots Navigation Node Entry  ; IndustrialRobotsNavNode         ; IndustrialRobotsCategoryLink
+                                ;                          ; AutonomousRobotsNavNodeEntry ; Autonomous Robots Navigation Node Entry ; AutonomousRobotsNavNode        ; AutonomousRobotsCategoryLink
+                                ;                          ; CollaborativeRobotsNavNodeEntry   ; Collaborative Robots Navigation Node Entry    ; CollaborativeRobotsNavNode          ; CollaborativeRobotsCategoryLink
+                                ;                          ; EducationRobotsNavNodeEntry  ; Education Robots Navigation Node Entry  ; EducationRobotsNavNode         ; EducationRobotsCategoryLink
                                 ;                          ; SparepartsNavNodeEntry       ; Spareparts Navigation Node Entry         ; SparepartsNavNode              ; SparepartsCategoryLink
 ## links of the above navigation nodes ##
 INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]           ; name                             ; url                                                             ; target(code)[default = 'sameWindow']
-                              ;                          ; AxialFlowPumpsCategoryLink   ; Axial Flow Pumps Category Link   ; /Pumps/Centrifugal-pumps/Axial-flow-pumps/c/10010100            ;
-                              ;                          ; RadialFlowPumpsCategoryLink  ; Radial Flow Pumps Category Link  ; /Pumps/Centrifugal-pumps/Radial-flow-pumps/c/10010200           ;
-                              ;                          ; SideChannelPumpsCategoryLink ; Side Channel Pumps Category Link ; /Pumps/Centrifugal-pumps/Side-channel-pumps/c/10010300          ;
-                              ;                          ; DiaphragmPumpsCategoryLink   ; Diaphragm Pumps Category Link    ; /Pumps/Positive-displacement-pumps/Diaphragm-pumps/c/10020100   ;
-                              ;                          ; RotaryLobePumpsCategoryLink  ; Rotary Lobe Pumps Category Link  ; /Pumps/Positive-displacement-pumps/Rotary-lobe-pumps/c/10020200 ;
+                              ;                          ; ServiceRobotsCategoryLink   ; Service Robots Category Link   ; /c/10010100            ;
+                              ;                          ; IndustrialRobotsCategoryLink  ; Industrial Robots Category Link  ; /c/10010200           ;
+                              ;                          ; AutonomousRobotsCategoryLink ; Autonomous Robots Category Link ; /c/10010300          ;
+                              ;                          ; CollaborativeRobotsCategoryLink   ; Collaborative Robots Category Link    ; /c/10020100   ;
+                              ;                          ; EducationRobotsCategoryLink  ; Education Robots Category Link  ; /c/10020200 ;
                               ;                          ; SparepartsCategoryLink       ; Spareparts Category Link         ; /c/20000000                                                     ;

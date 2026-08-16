@@ -17,4 +17,4 @@ UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = 
                   ;                          ; $pageId           ; "Imprint"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
-                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the CX Imprint Page</h2>"
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Welcome to the Roboterwelten Imprint Page</h2>"

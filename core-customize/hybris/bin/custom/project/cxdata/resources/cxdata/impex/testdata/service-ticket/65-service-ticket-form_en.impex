@@ -33,7 +33,7 @@ INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                 ; fiel
                                        ; requestWarranty_serial_number     ; TEXT           ; "Serial Number"       ; "Enter the serial number of the affected machine or component."                 ;
                                        ; requestWarranty_operating_hours   ; NUMBER         ; "Operating Hours"     ; "Specify the approximate operating hours at the time of failure."               ;
                                        ; requestWarranty_failure_type      ; RADIO          ; "Type of Failure"     ; "Select the category that best describes the reported issue."                   ;
-                                       ; requestWarranty_issue_description ; TEXTAREA       ; "Failure Description" ; "Provide a detailed description of the failure, including symptoms and impact." ; "Pump loses pressure after startup"
+                                       ; requestWarranty_issue_description ; TEXTAREA       ; "Failure Description" ; "Provide a detailed description of the failure, including symptoms and impact." ; "Robot loses performance after startup"
 
 INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                        ; label[lang = $lang]
                                             ; requestWarranty_failure_type_mechanical  ; "Mechanical Failure"
@@ -60,7 +60,7 @@ INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                  
                                             ; requestTechnicalSupport_option_ST             ; "Maintenance/Service Technician"
                                             ; requestTechnicalSupport_option_asap           ; "As soon as possible"
                                             ; requestTechnicalSupport_option_control        ; "Control"
-                                            ; requestTechnicalSupport_option_pump_group     ; "Pump group"
+                                            ; requestTechnicalSupport_option_pump_group     ; "Robot group"
                                             ; requestTechnicalSupport_option_closing_unit   ; "Closing unit"
                                             ; requestTechnicalSupport_option_injection_unit ; "Injection unit"
                                             ; requestTechnicalSupport_option_other          ; "Other"

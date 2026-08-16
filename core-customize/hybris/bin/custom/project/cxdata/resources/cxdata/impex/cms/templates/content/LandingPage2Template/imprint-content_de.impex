@@ -17,4 +17,4 @@ UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = 
                   ;                          ; $pageId           ; "Impressum"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
-                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Willkommen auf der CX Impressums Seite</h2>"
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Willkommen auf der Roboterwelten Impressumsseite</h2>"

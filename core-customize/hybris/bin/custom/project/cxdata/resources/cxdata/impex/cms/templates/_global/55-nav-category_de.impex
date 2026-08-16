@@ -13,9 +13,9 @@ $lang = de
 
 UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]      ; title[lang = $lang]
                         ;                          ; CxCategoryNavNode      ; "Kategorien"
-                        ;                          ; AxialFlowPumpsNavNode   ; "Axialpumpen"
-                        ;                          ; RadialFlowPumpsNavNode  ; "Radialpumpen"
-                        ;                          ; SideChannelPumpsNavNode ; "Seitenkanalpumpen"
-                        ;                          ; DiaphragmPumpsNavNode   ; "Membranpumpen"
-                        ;                          ; RotaryLobePumpsNavNode  ; "Drehkolbenpumpen"
+                        ;                          ; ServiceRobotsNavNode   ; "Service-Roboter"
+                        ;                          ; IndustrialRobotsNavNode  ; "Industrie-Roboter"
+                        ;                          ; AutonomousRobotsNavNode ; "Autonome Roboter"
+                        ;                          ; CollaborativeRobotsNavNode   ; "Kollaborative Roboter"
+                        ;                          ; EducationRobotsNavNode  ; "Lernroboter"
                         ;                          ; SparepartsNavNode       ; "Ersatzteile"

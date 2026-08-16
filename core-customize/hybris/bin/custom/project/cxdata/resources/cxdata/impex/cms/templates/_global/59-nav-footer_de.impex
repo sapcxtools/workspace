@@ -28,7 +28,7 @@ UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]    ; link
                        ;                          ; ContactUsLink         ; "Kontakt"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]          ; content[lang = $lang]
-                            ;                          ; NoticeTextParagraph         ; "<div class=""cx-notice"">© CX, Inc. Alle Rechte vorbehalten 2026</div>"
+                            ;                          ; NoticeTextParagraph         ; "<div class=""cx-notice"">© Roboterwelten. Alle Rechte vorbehalten 2026</div>"
 
 UPDATE FooterNavigationComponent; $contentCV[unique = true]; uid[unique = true]        ; notice[lang = $lang][translator = de.hybris.platform.acceleratorservices.dataimport.batch.converter.CopyrightTranslator, dateFormat = yyyy]
                                 ;                          ; FooterNavigationComponent ; "Copyright © {0} SAP SE or an SAP affiliate company. All rights reserved."

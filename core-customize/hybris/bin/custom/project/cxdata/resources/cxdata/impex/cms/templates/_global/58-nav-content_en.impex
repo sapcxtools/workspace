@@ -13,6 +13,6 @@ $lang = en
 
 UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]   ; title[lang = $lang]
                         ;                          ; CxDashboardNavNode  ; "Dashboard"
-                        ;                          ; CxMyPumpsNavNode    ; "My Pumps"
+                        ;                          ; CxMyRobotsNavNode    ; "My Robots"
                         ;                          ; CxQuickOrderNavNode ; "Quick Order"
                         ;                          ; CxOrdersNavNode     ; "Order History"

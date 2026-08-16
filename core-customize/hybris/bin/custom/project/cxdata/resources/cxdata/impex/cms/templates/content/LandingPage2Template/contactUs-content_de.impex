@@ -17,5 +17,5 @@ UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = 
                   ;                          ; $pageId           ; "Kontakt"
 
 UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
-                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Willkommen im CX Kontakt Bereich</h2>"
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Willkommen im Roboterwelten Kontaktbereich</h2>"
                             ;                          ; $pageId-ParagraphComponent   ; "Kontaktieren Sie uns über das untenstehende Formular oder senden Sie uns eine E-Mail an support@yourcompany.com. Unser Team wird sich so schnell wie möglich bei Ihnen melden."
