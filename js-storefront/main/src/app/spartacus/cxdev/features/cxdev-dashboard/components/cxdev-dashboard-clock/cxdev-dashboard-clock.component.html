@@ -1,0 +1,12 @@
+<hgroup>
+	<h3>{{ 'dashboard.clock.headline' | cxTranslate }}</h3>
+</hgroup>
+
+<ul class="cxdev-clock-list">
+	@for (timezone of timezones(); track timezone) {
+		<li>
+			<span class="cxdev-clock-label">{{ labelFor(timezone) }}</span>
+			<span class="cxdev-clock-time">{{ timeFor(timezone) }}</span>
+		</li>
+	}
+</ul>

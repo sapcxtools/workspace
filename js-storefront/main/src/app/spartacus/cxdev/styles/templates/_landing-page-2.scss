@@ -1,0 +1,18 @@
+@use '../utils';
+
+cx-page-layout.LandingPage2Template {
+	> .Section2A {
+		@extend utils, .content-a !optional;
+		flex-direction: row;
+	}
+
+	> .Section2B {
+		@extend utils, .content-b !optional;
+		flex-direction: row;
+	}
+
+	> .Section4 {
+		@extend utils, .content-default !optional;
+		display: flex;
+	}
+}

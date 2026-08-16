@@ -1,0 +1,122 @@
+@use '../variables/breakpoints' as bp;
+
+cx-product-list-item {
+	display: block;
+	padding: var(--spacing-xl);
+	border-bottom: 1px solid var(--color-border-subtle);
+
+	.row {
+		display: grid;
+		grid-template-columns: var(--size-650) 1fr;
+		gap: var(--spacing-xl);
+
+		div:nth-child(2) {
+			display: grid;
+			grid-template-areas: 'name price' 'desc addToCart' 'desc configureProduct';
+			grid-template-columns: 1fr auto;
+			grid-template-rows: min-content min-content;
+			gap: var(--spacing-xs);
+
+			.cx-product-name {
+				grid-area: name;
+			}
+
+			.cx-product-no-review {
+				display: none;
+			}
+
+			.cx-product-price {
+				grid-area: price;
+				font-size: var(--font-size-lg);
+				font-weight: var(--font-weight-bold);
+				color: var(--color-primary);
+			}
+
+			.row,
+			.row > div {
+				display: contents;
+			}
+
+			.cx-product-summary {
+				grid-area: desc;
+			}
+
+			cx-add-to-cart {
+				grid-area: addToCart;
+			}
+
+			cx-configure-product {
+				grid-area: configureProduct;
+			}
+		}
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		padding: 0;
+		border-bottom: 0;
+
+		> .row {
+			display: contents;
+		}
+
+		> .row > div:first-child,
+		> .row > div:first-child > a,
+		> .row > div:first-child cx-media,
+		> .row > div:nth-child(2),
+		> .row > div:nth-child(2) > .row,
+		> .row > div:nth-child(2) > .row > div,
+		.cx-product-image-container,
+		h2.cx-product-name,
+		h2.cx-product-name a,
+		.cx-product-price-container,
+		.cx-product-price,
+		cx-add-to-cart,
+		cx-configure-product {
+			min-width: 0;
+		}
+
+		> .row > div:nth-child(2) {
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacing-sm);
+		}
+
+		> .row > div:nth-child(2) > .row,
+		> .row > div:nth-child(2) > .row > div {
+			display: contents;
+		}
+
+		h2.cx-product-name {
+			margin: 0;
+			font-size: inherit;
+			line-height: inherit;
+		}
+
+		h2.cx-product-name a {
+			display: block;
+			word-break: normal;
+			overflow-wrap: break-word;
+			hyphens: auto;
+		}
+
+		.cx-product-price {
+			font-size: var(--font-size-lg);
+			font-weight: var(--font-weight-bold);
+			color: var(--color-primary);
+		}
+
+		.cx-product-summary,
+		.cx-product-rating,
+		.cx-product-no-review,
+		cx-star-rating {
+			display: none;
+		}
+
+		cx-add-to-cart {
+			width: 100%;
+		}
+	}
+}

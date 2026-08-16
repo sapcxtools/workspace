@@ -1,0 +1,23 @@
+<hgroup>
+	<h3>{{ 'dashboard.weather.headline' | cxTranslate }}</h3>
+</hgroup>
+
+@if (!hasLocation()) {
+	<p class="cxdev-weather-message">{{ 'dashboard.weather.noLocation' | cxTranslate }}</p>
+} @else {
+	@if (weather(); as weather) {
+		<div class="cxdev-weather">
+			<span class="cxdev-weather-icon">{{ condition()?.icon }}</span>
+			<span class="cxdev-weather-temperature">{{ weather.temperature }} °C</span>
+			<span class="cxdev-weather-condition">
+				{{ 'dashboard.weather.conditions.' + (condition()?.key ?? 'clear') | cxTranslate }}
+			</span>
+			<span class="cxdev-weather-wind">
+				{{ 'dashboard.weather.wind' | cxTranslate }}: {{ weather.windSpeed }} km/h
+			</span>
+		</div>
+	} @else if (loadError()) {
+		<p class="cxdev-weather-message">{{ 'dashboard.weather.loadError' | cxTranslate }}</p>
+	}
+	<p class="cxdev-weather-location">{{ location() }}</p>
+}

@@ -1,0 +1,33 @@
+@if (editMode()) {
+	<button
+		class="reorder-toggle"
+		data-reorder-handle
+		[attr.aria-label]="'dashboard.widget.reorder' | cxTranslate">
+		<cx-icon [type]="iconType.SORT"></cx-icon>
+	</button>
+	<button
+		class="remove-toggle"
+		(click)="remove()"
+		[attr.aria-label]="'dashboard.widget.remove' | cxTranslate">
+		<cx-icon [type]="iconType.TRASH"></cx-icon>
+	</button>
+	<button
+		class="settings-toggle"
+		(click)="openSettings()"
+		[attr.aria-label]="'dashboard.widgetSettings.open' | cxTranslate">
+		<cx-icon [type]="iconType.PENCIL"></cx-icon>
+	</button>
+}
+
+<div class="widget-content">
+	<ng-container
+		[cxdevComponentWrapper]="{
+			flexType: config().widget.contentComponentType,
+			uid: config().widget.contentComponentUid,
+			content: { context: 'widget', widgetSettingsKey: widgetSettingsKey() },
+		}"
+		[cxdevComponentWrapperType]="dataAcquisitionType"></ng-container>
+</div>
+
+<button class="resize-x" (mousedown)="startResize($event, 'horizontal')"></button>
+<button class="resize-y" (mousedown)="startResize($event, 'vertical')"></button>

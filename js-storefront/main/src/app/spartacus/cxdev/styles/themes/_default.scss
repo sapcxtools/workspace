@@ -1,0 +1,29 @@
+/* CXDEV brand theme — light (default) */
+:root {
+	color-scheme: light;
+
+	/*
+	    THEME PALETTE
+	    Every theme defines exactly this set of custom properties.
+	    All semantic tokens (variables/_color.scss) derive from them.
+	*/
+	--color-surface-1: #ffffff;
+	--color-surface-2: #f6f8fa;
+	--color-surface-3: #e9edf1;
+
+	--color-text-1: #1f2a37;
+	--color-text-2: #5b6b7b;
+	--color-text-3: #93a1af;
+
+	--color-border-1: #c6d0da;
+	--color-border-2: #e3e9ee;
+
+	--color-primary: #008cff;
+	--color-on-primary: #ffffff;
+	--color-accent: #0064b6;
+
+	--color-danger: #e5484d;
+	--color-warning: #f1c100;
+	--color-success: #437e35;
+	--color-info: #008cff;
+}

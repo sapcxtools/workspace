@@ -1,0 +1,23 @@
+@if (facet.values && facet.visible) {
+	<strong>{{ facet.name }}</strong>
+	<span class="facetClearLink">
+		@if (showClearLink()) {
+			<a (click)="clearFacet()" class="link cursor-pointer">
+				<cx-icon class="fas fa-times"></cx-icon>
+			</a>
+		}
+	</span>
+	<form>
+		@for (value of facet.values; track value.name) {
+			<label>
+				{{ value.name }} ({{ value.count }})
+				<input
+					type="checkbox"
+					name="checkboxfacet"
+					[checked]="value.selected"
+					(change)="onSubmit(value)"
+					[attr.testdata-id]="'checkboxfacet-' + value.name" />
+			</label>
+		}
+	</form>
+}

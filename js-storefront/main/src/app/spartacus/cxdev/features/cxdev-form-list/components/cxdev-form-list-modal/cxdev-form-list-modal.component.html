@@ -1,0 +1,14 @@
+<div class="modal-dialog modal-dialog-centered modal-xl cxdev-form-list-modal" role="dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4>{{ headline() }}</h4>
+			<button class="btn btn-round btn-interaction-icon" (click)="close()" aria-label="Close">
+				<cx-icon [type]="iconType.CLOSE"></cx-icon>
+			</button>
+		</div>
+
+		<div class="modal-body">
+			<cxdev-form-list [formIds]="formIds()" />
+		</div>
+	</div>
+</div>

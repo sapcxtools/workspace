@@ -1,0 +1,62 @@
+html:has(cxdev-root.cxdev-theme-tokyo-night),
+html:has(cxdev-root.cxdev-theme-tokyo-night-light) {
+	/* shared shape personality: sharp corners */
+	--radius-button: 0;
+	--radius-input: 0;
+	--radius-card: 0;
+	--radius-global-message: 0;
+	--radius-active-facet: 0;
+	--radius-image: 0;
+	--radius-account-navigation: 0;
+	--radius-dashboard-widget: 0;
+}
+
+/* Tokyo Night — dark */
+html:has(cxdev-root.cxdev-theme-tokyo-night) {
+	color-scheme: dark;
+
+	--color-surface-1: #1a1b26;
+	--color-surface-2: #1f2335;
+	--color-surface-3: #292e42;
+
+	--color-text-1: #c0caf5;
+	--color-text-2: #a9b1d6;
+	--color-text-3: #565f89;
+
+	--color-border-1: #3b4261;
+	--color-border-2: #292e42;
+
+	--color-primary: #7aa2f7;
+	--color-on-primary: #1a1b26;
+	--color-accent: #bb9af7;
+
+	--color-danger: #f7768e;
+	--color-warning: #e0af68;
+	--color-success: #9ece6a;
+	--color-info: #7dcfff;
+}
+
+/* Tokyo Night — light (Day) */
+html:has(cxdev-root.cxdev-theme-tokyo-night-light) {
+	color-scheme: light;
+
+	--color-surface-1: #e1e2e7;
+	--color-surface-2: #e9eaf0;
+	--color-surface-3: #d0d5e3;
+
+	--color-text-1: #343b58;
+	--color-text-2: #6172b0;
+	--color-text-3: #848cb5;
+
+	--color-border-1: #a8aecb;
+	--color-border-2: #c4c8da;
+
+	--color-primary: #2e7de9;
+	--color-on-primary: #e1e2e7;
+	--color-accent: #9854f1;
+
+	--color-danger: #f52a65;
+	--color-warning: #b15c00;
+	--color-success: #587539;
+	--color-info: #007197;
+}

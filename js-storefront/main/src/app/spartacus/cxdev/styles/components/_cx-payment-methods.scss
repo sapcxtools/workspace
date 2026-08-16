@@ -1,0 +1,12 @@
+cx-payment-methods {
+	.cx-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+
+	.cx-existing {
+		display: flex;
+		gap: var(--spacing-md);
+	}
+}

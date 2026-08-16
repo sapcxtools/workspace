@@ -1,0 +1,56 @@
+@use '../utils';
+@use '../variables/breakpoints' as bp;
+
+cx-page-layout.CompanyPageTemplate {
+	container-type: inline-size;
+	display: block;
+
+	> .BodyContent {
+		@extend utils, .content-default !optional;
+		display: flex;
+		gap: var(--spacing-md);
+
+		> * {
+			flex: 1 1 100%;
+			margin-bottom: var(--spacing-xl);
+		}
+
+		&:has(> cx-banner) {
+			flex-wrap: wrap;
+
+			> cx-banner {
+				display: flex;
+				flex-direction: column;
+				flex: 0 0 calc((100% - 3 * var(--spacing-md)) / 4);
+				background-color: var(--color-background-raised);
+				border-radius: var(--radius-card);
+				padding: var(--spacing-md);
+				text-align: center;
+				gap: var(--spacing-md);
+
+				cx-media img {
+					max-width: 100%;
+					height: auto;
+					margin: 0 auto;
+				}
+			}
+		}
+
+		@container (width < #{bp.$breakpoint-md}) {
+			&:has(> cx-page-slot > cx-banner) {
+				> cx-page-slot {
+					display: grid;
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+					gap: var(--spacing-md);
+					align-items: stretch;
+					width: 100%;
+
+					> cx-banner {
+						min-width: 0;
+						height: 100%;
+					}
+				}
+			}
+		}
+	}
+}

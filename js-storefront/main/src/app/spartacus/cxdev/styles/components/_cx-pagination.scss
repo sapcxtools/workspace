@@ -1,0 +1,18 @@
+@use '../elements/elements';
+
+cx-pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--spacing-md);
+
+	a {
+		color: var(--color-text-body);
+		font-weight: var(--font-weight-semibold);
+		padding: var(--padding-button);
+
+		&.current {
+			@extend elements, .btn-secondary !optional;
+		}
+	}
+}

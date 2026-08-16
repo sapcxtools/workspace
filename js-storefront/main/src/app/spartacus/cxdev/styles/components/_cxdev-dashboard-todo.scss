@@ -1,0 +1,71 @@
+cxdev-dashboard-todo {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: var(--spacing-xs);
+
+	hgroup {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.cxdev-todo-list {
+		flex: 1;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 0;
+		gap: var(--spacing-xxs);
+		overflow-y: auto;
+
+		li {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--spacing-xs);
+			padding: var(--spacing-xxs) 0;
+
+			label {
+				flex: 1;
+				flex-direction: row;
+				gap: var(--spacing-xs);
+				font-size: var(--font-size-sm);
+				cursor: pointer;
+
+				input {
+					margin-top: 0;
+				}
+			}
+
+			&.done .cxdev-todo-text {
+				text-decoration: line-through;
+				color: var(--color-text-muted);
+			}
+
+			> button {
+				all: unset;
+				display: grid;
+				place-content: center;
+				width: var(--size-sm);
+				height: var(--size-sm);
+				color: var(--color-text-muted);
+				font-size: var(--font-size-xs);
+				cursor: pointer;
+				opacity: 0;
+
+				&:hover {
+					color: var(--color-danger);
+				}
+			}
+
+			&:hover > button,
+			> button:focus-visible {
+				opacity: 1;
+			}
+		}
+	}
+
+	.cxdev-todo-input {
+		flex: none;
+	}
+}

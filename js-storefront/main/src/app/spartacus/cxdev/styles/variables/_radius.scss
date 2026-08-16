@@ -1,0 +1,73 @@
+/* primitive radius tokens */
+
+@property --radius-100 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 2px;
+}
+
+@property --radius-200 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 4px;
+}
+
+@property --radius-300 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 6px;
+}
+
+@property --radius-400 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 8px;
+}
+
+@property --radius-500 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 10px;
+}
+
+@property --radius-600 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 12px;
+}
+
+@property --radius-700 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 14px;
+}
+
+@property --radius-800 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 16px;
+}
+
+@property --radius-round {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 50%;
+}
+
+@property --radius-pill {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 1in;
+}
+
+:root {
+	/* semantic radius tokens */
+	--radius-xxs: var(--radius-100);
+	--radius-xs: var(--radius-200);
+	--radius-sm: var(--radius-300);
+	--radius-md: var(--radius-400);
+	--radius-lg: var(--radius-500);
+	--radius-xl: var(--radius-600);
+	--radius-xxl: var(--radius-700);
+	--radius-xxxl: var(--radius-800);
+}

@@ -1,0 +1,37 @@
+<div class="modal-dialog modal-dialog-centered cxdev-widget-selector-modal" role="dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4>{{ 'dashboard.widgetSelector.headline' | cxTranslate }}</h4>
+			<button
+				class="btn btn-round btn-interaction-icon"
+				(click)="close()"
+				[attr.aria-label]="'dashboard.widgetSelector.close' | cxTranslate">
+				<cx-icon [type]="iconType.CLOSE"></cx-icon>
+			</button>
+		</div>
+
+		<div class="modal-body">
+			@if (items().length) {
+				<ul class="cxdev-widget-selector-list">
+					@for (item of items(); track item.widget.code) {
+						<li>
+							<button
+								class="cxdev-widget-selector-item"
+								[disabled]="!item.addable"
+								(click)="select(item)">
+								<span>{{ item.widget.displayName }}</span>
+								@if (!item.addable) {
+									<small>{{ 'dashboard.widgetSelector.alreadyAdded' | cxTranslate }}</small>
+								}
+							</button>
+						</li>
+					}
+				</ul>
+			} @else {
+				<p class="cxdev-widget-selector-empty">
+					{{ 'dashboard.widgetSelector.empty' | cxTranslate }}
+				</p>
+			}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,3 @@
+@if (order$ | async; as order) {
+<a [href]="order.trackingUrl"> {{ 'order.trackingUrl' | cxTranslate }}</a>
+}

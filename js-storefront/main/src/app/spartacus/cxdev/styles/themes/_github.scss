@@ -1,0 +1,49 @@
+/* GitHub — dark (Primer) */
+html:has(cxdev-root.cxdev-theme-github-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #0d1117;
+	--color-surface-2: #161b22;
+	--color-surface-3: #21262d;
+
+	--color-text-1: #f0f6fc;
+	--color-text-2: #9198a1;
+	--color-text-3: #6e7681;
+
+	--color-border-1: #3d444d;
+	--color-border-2: #30363d;
+
+	--color-primary: #238636;
+	--color-on-primary: #ffffff;
+	--color-accent: #4493f8;
+
+	--color-danger: #f85149;
+	--color-warning: #d29922;
+	--color-success: #3fb950;
+	--color-info: #58a6ff;
+}
+
+/* GitHub — light (Primer) */
+html:has(cxdev-root.cxdev-theme-github-light) {
+	color-scheme: light;
+
+	--color-surface-1: #ffffff;
+	--color-surface-2: #f6f8fa;
+	--color-surface-3: #eaeef2;
+
+	--color-text-1: #1f2328;
+	--color-text-2: #59636e;
+	--color-text-3: #818b98;
+
+	--color-border-1: #d0d7de;
+	--color-border-2: #d8dee4;
+
+	--color-primary: #1f883d;
+	--color-on-primary: #ffffff;
+	--color-accent: #0969da;
+
+	--color-danger: #d1242f;
+	--color-warning: #9a6700;
+	--color-success: #1a7f37;
+	--color-info: #0969da;
+}

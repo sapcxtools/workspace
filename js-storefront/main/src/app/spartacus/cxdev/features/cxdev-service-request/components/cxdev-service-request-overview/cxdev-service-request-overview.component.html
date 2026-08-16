@@ -1,0 +1,88 @@
+@let searchResult = serviceRequestsOverviewSource$ | async;
+
+@if (searchResult) {
+	<div class="overview-layout">
+		<aside class="status-sidebar" aria-labelledby="service-request-filters-title">
+			@if (searchResult.facets.length) {
+				<cxdev-facet-display [searchResult]="serviceRequestsOverviewSource$"></cxdev-facet-display>
+			} @else {
+				<p>{{ 'serviceRequests.noFilters' | cxTranslate }}</p>
+			}
+		</aside>
+
+		<div class="overview-content">
+			@if (searchResult.pagination; as pagination) {
+				@let currentPage = pagination.currentPage ?? 0;
+				@let totalPages = pagination.totalPages ?? 0;
+				@let pageSize = pagination.pageSize ?? 0;
+				@let totalResults = pagination.totalResults ?? 0;
+
+				<div class="overview-header">
+					<p>
+						{{ 'serviceRequests.countLabel' | cxTranslate }}:
+						{{ totalResults }}
+					</p>
+
+					<p>{{ currentPage + 1 }} / {{ totalPages }} ( {{ pageSize }} / Seite )</p>
+				</div>
+
+				@if (searchResult.results.length > 0) {
+					<div class="request-list-wrapper">
+						<ul class="request-list">
+							<li class="request-header">
+								<div>{{ 'serviceRequests.code' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.type' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.title' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.customer' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.description' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.created' | cxTranslate }}</div>
+								<div>{{ 'serviceRequests.status' | cxTranslate }}</div>
+							</li>
+
+							@for (req of searchResult.results; track req.code) {
+								<li class="request-item">
+									<div>
+										<a
+											[routerLink]="
+												{
+													cxRoute: 'serviceRequestDetail',
+													params: { id: req.code },
+												} | cxUrl
+											">
+											{{ req.code }}
+										</a>
+
+										@if (req.isNew) {
+											<span class="new-badge">
+												{{ 'serviceRequests.new' | cxTranslate }}
+											</span>
+										}
+									</div>
+
+									<div>{{ req.type }}</div>
+									<div>{{ req.title }}</div>
+									<div>{{ req.customer?.firstName }} {{ req.customer?.lastName }}</div>
+									<div>{{ req.description }}</div>
+									<div>{{ req.creationTime | date: 'yyyy/MM/dd' }}</div>
+									<div>
+										<span class="status-badge" [attr.data-status]="req.status">
+											{{ req.status }}
+										</span>
+									</div>
+								</li>
+							}
+						</ul>
+					</div>
+				} @else {
+					<p>{{ 'serviceRequests.empty' | cxTranslate }}</p>
+				}
+
+				<cx-pagination
+					[pagination]="pagination"
+					(viewPageEvent)="onPageChange($event)"></cx-pagination>
+			}
+		</div>
+	</div>
+} @else {
+	<p>{{ 'serviceRequests.loading' | cxTranslate }}</p>
+}

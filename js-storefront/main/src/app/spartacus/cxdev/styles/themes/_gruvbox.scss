@@ -1,0 +1,49 @@
+/* Gruvbox — dark */
+html:has(cxdev-root.cxdev-theme-gruvbox-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #282828;
+	--color-surface-2: #32302f;
+	--color-surface-3: #3c3836;
+
+	--color-text-1: #ebdbb2;
+	--color-text-2: #bdae93;
+	--color-text-3: #928374;
+
+	--color-border-1: #504945;
+	--color-border-2: #3c3836;
+
+	--color-primary: #fe8019;
+	--color-on-primary: #282828;
+	--color-accent: #fabd2f;
+
+	--color-danger: #fb4934;
+	--color-warning: #fabd2f;
+	--color-success: #b8bb26;
+	--color-info: #83a598;
+}
+
+/* Gruvbox — light */
+html:has(cxdev-root.cxdev-theme-gruvbox-light) {
+	color-scheme: light;
+
+	--color-surface-1: #fbf1c7;
+	--color-surface-2: #f2e5bc;
+	--color-surface-3: #ebdbb2;
+
+	--color-text-1: #3c3836;
+	--color-text-2: #504945;
+	--color-text-3: #7c6f64;
+
+	--color-border-1: #d5c4a1;
+	--color-border-2: #ebdbb2;
+
+	--color-primary: #af3a03;
+	--color-on-primary: #fbf1c7;
+	--color-accent: #b57614;
+
+	--color-danger: #9d0006;
+	--color-warning: #b57614;
+	--color-success: #79740e;
+	--color-info: #076678;
+}

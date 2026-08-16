@@ -1,0 +1,33 @@
+@use '../variables/breakpoints' as *;
+
+cx-page-layout.CartPageTemplate {
+	--content-b-width: calc(var(--content-width) / 3.5);
+	--content-a-width: calc(var(--content-width) - var(--content-b-width));
+	padding-top: var(--spacing-xxl);
+
+	> cx-page-slot.CenterRightContentSlot {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		grid-column: var(--content-grid-span-content-default);
+		padding: var(--spacing-md);
+		background-color: var(--color-background-raised);
+		border-radius: var(--radius-card);
+
+		height: fit-content;
+
+		@container (width >= #{$breakpoint-lg}) {
+			grid-column: var(--content-grid-span-content-b);
+		}
+	}
+
+	> cx-page-slot.TopContent {
+		grid-column: var(--content-grid-span-content-default);
+
+		@container (width >= #{$breakpoint-lg}) {
+			grid-column: var(--content-grid-span-content-a);
+			margin-right: var(--spacing-xl);
+		}
+	}
+}

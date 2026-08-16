@@ -1,0 +1,158 @@
+@use '../variables/breakpoints' as bp;
+
+cxdev-widget {
+	box-sizing: content-box;
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: var(--cxdev-widget-background-color, var(--color-background-elevated));
+	border: 1px solid var(--color-border-subtle);
+	border-radius: var(--radius-dashboard-widget);
+
+	grid-row: span var(--row-span, 1);
+	grid-column: span var(--column-span, 1);
+
+	@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+		grid-row: span 1 !important;
+		grid-column: span 2 !important;
+	}
+
+	.widget-content {
+		width: 100%;
+		height: 100%;
+
+		padding: var(--spacing-md);
+
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	&.edit-mode {
+		border-color: transparent;
+		outline: var(--spacing-xxs) dashed var(--color-border-strong);
+
+		> button {
+			display: block;
+		}
+
+		> .widget-content * {
+			pointer-events: none;
+		}
+
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: var(--color-background);
+			opacity: 0.6;
+			z-index: var(--z-index-10);
+		}
+	}
+
+	&.is-resizing {
+		outline-color: var(--color-primary);
+		outline-offset: 0;
+
+		.widget-content {
+			pointer-events: none;
+		}
+	}
+
+	&[data-reordering] {
+		box-shadow: var(--shadow-lg, 0 1rem 2rem rgb(0 0 0 / 20%));
+		cursor: grabbing;
+		opacity: 1;
+	}
+
+	&[data-reordering]:after {
+		cursor: grabbing;
+	}
+
+	> button {
+		all: unset;
+		display: none;
+		position: absolute;
+		width: var(--size-xs);
+		height: var(--size-md);
+		background-color: var(--color-border-strong);
+		border-radius: 100%;
+		cursor: ew-resize;
+		z-index: var(--z-index-20);
+
+		&.edit {
+			display: none;
+			top: 0;
+			right: 0;
+			width: var(--size-sm);
+			height: var(--size-sm);
+			transform: translate(-50%, 50%);
+		}
+
+		&.resize-x {
+			right: 0;
+			bottom: 50%;
+			transform: translate(calc(50% + 2.25px), 50%);
+		}
+
+		&.resize-y {
+			right: 50%;
+			bottom: 0;
+			transform: translate(50%, calc(50% + 2.25px));
+			width: var(--size-md);
+			height: var(--size-xs);
+			cursor: ns-resize;
+		}
+
+		&.reorder-toggle,
+		&.remove-toggle,
+		&.settings-toggle {
+			display: grid;
+			place-content: center;
+			top: 0;
+			left: 0;
+			width: var(--size-md);
+			height: var(--size-md);
+			transform: translate(50%, 50%);
+			cursor: pointer;
+
+			color: var(--color-background);
+		}
+
+		&.reorder-toggle {
+			touch-action: none;
+			cursor: grab;
+		}
+
+		&.reorder-toggle:active {
+			cursor: grabbing;
+		}
+
+		&.reorder-toggle:focus-visible {
+			outline: 2px solid var(--color-primary);
+			outline-offset: 2px;
+		}
+
+		&.settings-toggle {
+			left: auto;
+			right: var(--size-md);
+		}
+
+		&.remove-toggle {
+			left: auto;
+			right: calc(var(--size-md) * 2.25);
+		}
+
+		&.remove-toggle:hover {
+			background-color: var(--color-danger, var(--color-primary));
+		}
+
+		&:active,
+		&:hover {
+			background-color: var(--color-primary);
+		}
+	}
+}

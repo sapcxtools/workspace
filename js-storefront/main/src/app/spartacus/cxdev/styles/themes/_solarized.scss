@@ -1,0 +1,56 @@
+/* Solarized — dark */
+html:has(cxdev-root.cxdev-theme-solarized-dark),
+html:has(cxdev-root.cxdev-theme-solarized-light) {
+	/* shared shape personality */
+	--radius-button: var(--radius-pill);
+	--radius-input: var(--radius-pill);
+	--radius-card: var(--radius-sm);
+	--radius-global-message: var(--radius-pill);
+	--radius-active-facet: var(--radius-pill);
+	--radius-image: var(--radius-sm);
+	--radius-account-navigation: var(--radius-sm);
+
+	--color-danger: #dc322f;
+	--color-warning: #b58900;
+	--color-success: #859900;
+	--color-info: #268bd2;
+}
+
+html:has(cxdev-root.cxdev-theme-solarized-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #002b36;
+	--color-surface-2: #073642;
+	--color-surface-3: #0e4a5a;
+
+	--color-text-1: #93a1a1;
+	--color-text-2: #839496;
+	--color-text-3: #586e75;
+
+	--color-border-1: #2a5a66;
+	--color-border-2: #0e4a5a;
+
+	--color-primary: #268bd2;
+	--color-on-primary: #fdf6e3;
+	--color-accent: #2aa198;
+}
+
+/* Solarized — light */
+html:has(cxdev-root.cxdev-theme-solarized-light) {
+	color-scheme: light;
+
+	--color-surface-1: #fdf6e3;
+	--color-surface-2: #eee8d5;
+	--color-surface-3: #e3dcc4;
+
+	--color-text-1: #586e75;
+	--color-text-2: #657b83;
+	--color-text-3: #93a1a1;
+
+	--color-border-1: #cbc4ad;
+	--color-border-2: #e0d9c3;
+
+	--color-primary: #268bd2;
+	--color-on-primary: #fdf6e3;
+	--color-accent: #2aa198;
+}

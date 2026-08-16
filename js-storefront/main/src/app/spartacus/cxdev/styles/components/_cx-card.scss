@@ -1,0 +1,21 @@
+cx-card {
+	display: block;
+	border-radius: var(--radius-card);
+	background-color: var(--color-background-raised);
+	padding: var(--padding-card);
+	width: fit-content;
+
+	.card-header,
+	.cx-card-title {
+		display: block;
+		font-size: var(--font-size-300);
+		font-weight: var(--font-weight-semibold);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.cx-card-actions {
+		display: flex;
+		gap: var(--spacing-sm);
+		margin-top: var(--spacing-sm);
+	}
+}

@@ -1,0 +1,38 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-family-title);
+}
+
+p,
+span,
+li,
+a {
+	font-family: var(--font-family-body);
+}
+
+label {
+	font-size: var(--font-size-xxs);
+}
+
+input {
+	font-size: var(--font-size-3);
+}
+
+h1 {
+	margin-bottom: var(--spacing-md);
+}
+
+h2 {
+	margin-bottom: var(--spacing-sm);
+}
+
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: var(--spacing-xs);
+}

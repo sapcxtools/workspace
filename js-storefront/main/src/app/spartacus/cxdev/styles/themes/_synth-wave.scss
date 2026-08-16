@@ -1,0 +1,24 @@
+/* SynthWave '84 — dark only */
+html:has(cxdev-root.cxdev-theme-synth-wave) {
+	color-scheme: dark;
+
+	--color-surface-1: #241b2f;
+	--color-surface-2: #2a2139;
+	--color-surface-3: #34294f;
+
+	--color-text-1: #f2eef7;
+	--color-text-2: #b8a8cc;
+	--color-text-3: #848bbd;
+
+	--color-border-1: #495495;
+	--color-border-2: #34294f;
+
+	--color-primary: #ff7edb;
+	--color-on-primary: #241b2f;
+	--color-accent: #36f9f6;
+
+	--color-danger: #fe4450;
+	--color-warning: #fede5e;
+	--color-success: #72f1b8;
+	--color-info: #36f9f6;
+}

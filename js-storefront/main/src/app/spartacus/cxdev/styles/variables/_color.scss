@@ -1,0 +1,112 @@
+:root {
+	/* ============================================================
+	   SEMANTIC COLOR TOKENS
+	   ------------------------------------------------------------
+	   All tokens below derive from the theme palette. A theme file
+	   (styles/themes/*) defines ONLY the palette:
+
+	     color-scheme        light | dark
+	     --color-surface-1   page background
+	     --color-surface-2   raised surfaces: cards, header, footer, nav
+	     --color-surface-3   emphasis fills: hover, table heads, chips
+	     --color-text-1      headings & body (high emphasis)
+	     --color-text-2      secondary text
+	     --color-text-3      muted text, placeholders, disabled
+	     --color-border-1    strong borders (inputs, interactive)
+	     --color-border-2    subtle borders (dividers, cards)
+	     --color-primary     brand / interactive (buttons, focus)
+	     --color-on-primary  text on primary
+	     --color-accent      secondary accent (links, highlights)
+	     --color-danger --color-warning --color-success --color-info
+
+	   Components consume the semantic tokens below — never the
+	   palette directly and never raw color values.
+	   ============================================================ */
+
+	/* TEXT */
+	--color-text-body: var(--color-text-1);
+	--color-text-secondary: var(--color-text-2);
+	--color-text-muted: var(--color-text-3);
+	--color-text-link: var(--color-accent);
+
+	/* BACKGROUNDS — elevation scale */
+	--color-background: var(--color-surface-1);
+	--color-background-raised: var(--color-surface-2);
+	--color-background-emphasis: var(--color-surface-3);
+	/* one step above "raised": light themes return to the page color,
+	   dark themes step up one more surface */
+	--color-background-elevated: light-dark(var(--color-surface-1), var(--color-surface-3));
+
+	/* BORDERS */
+	--color-border-strong: var(--color-border-1);
+	--color-border-subtle: var(--color-border-2);
+	--color-border-highlight: var(--color-primary);
+
+	/* STATUS
+	   --color-<status>            raw palette color: icons, borders, solid fills
+	   --color-text-<status>       readable text on page/tint backgrounds
+	   --color-background-<status> soft solid tint for badges & messages */
+	--color-text-danger: light-dark(
+		oklch(from var(--color-danger) 45% c h),
+		oklch(from var(--color-danger) 80% c h)
+	);
+	--color-text-warning: light-dark(
+		oklch(from var(--color-warning) 50% c h),
+		oklch(from var(--color-warning) 85% c h)
+	);
+	--color-text-success: light-dark(
+		oklch(from var(--color-success) 45% c h),
+		oklch(from var(--color-success) 80% c h)
+	);
+	--color-text-info: light-dark(
+		oklch(from var(--color-info) 45% c h),
+		oklch(from var(--color-info) 80% c h)
+	);
+
+	--tint-strength: 16%;
+	--color-background-danger: color-mix(
+		in oklab,
+		var(--color-danger) var(--tint-strength),
+		var(--color-background-raised)
+	);
+	--color-background-warning: color-mix(
+		in oklab,
+		var(--color-warning) var(--tint-strength),
+		var(--color-background-raised)
+	);
+	--color-background-success: color-mix(
+		in oklab,
+		var(--color-success) var(--tint-strength),
+		var(--color-background-raised)
+	);
+	--color-background-info: color-mix(
+		in oklab,
+		var(--color-info) var(--tint-strength),
+		var(--color-background-raised)
+	);
+	--color-background-accent: color-mix(
+		in oklab,
+		var(--color-accent) var(--tint-strength),
+		var(--color-background-raised)
+	);
+
+	/* COMPONENT TOKENS */
+
+	/* buttons */
+	--color-button-primary-background: var(--color-primary);
+	--color-button-primary-text: var(--color-on-primary);
+	--color-button-secondary-background: transparent;
+	--color-button-secondary-text: var(--color-primary);
+
+	/* inputs */
+	--color-input-border: var(--color-border-strong);
+	--color-input-background: var(--color-background);
+	--color-input-text: var(--color-text-body);
+	--color-input-placeholder: var(--color-text-muted);
+
+	/* modal backdrop */
+	--color-backdrop: oklch(
+		from light-dark(var(--color-surface-1), var(--color-surface-3)) l c h /
+			var(--alpha-modal-backdrop)
+	);
+}

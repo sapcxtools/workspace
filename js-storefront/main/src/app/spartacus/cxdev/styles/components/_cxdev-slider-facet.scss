@@ -1,0 +1,20 @@
+cxdev-slider-facet {
+	margin-top: var(--spacing-md);
+	.facetClearLink {
+		float: right;
+		a {
+			cursor: pointer;
+		}
+	}
+
+	.ngx-slider .ngx-slider-pointer {
+		background-color: var(--color-primary);
+		&.ngx-slider-active::after {
+			background-color: #fff;
+		}
+	}
+
+	.ngx-slider .ngx-slider-selection {
+		background-color: var(--color-primary);
+	}
+}

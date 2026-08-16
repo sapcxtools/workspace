@@ -1,0 +1,151 @@
+@use '../variables/breakpoints' as bp;
+
+cx-order-history,
+cxdev-order-history {
+	container-type: inline-size;
+	display: block;
+	border-radius: var(--radius-card);
+
+	.cx-order-history-sort {
+		margin-bottom: var(--spacing-md);
+
+		cx-sorting {
+			width: var(--min-width-select);
+		}
+	}
+
+	table {
+		width: 100%;
+
+		tbody {
+			td {
+				padding: var(--spacing-xl) var(--spacing-md);
+			}
+		}
+	}
+
+	nav {
+		display: flex;
+		gap: var(--spacing-sm);
+		justify-content: space-between;
+		margin-bottom: var(--spacing-md);
+
+		a.btn-secondary {
+			padding-left: var(--spacing-sm);
+			padding-right: var(--spacing-sm);
+		}
+	}
+
+	h3 {
+		margin-bottom: var(--spacing-md);
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		table {
+			thead {
+				display: none;
+			}
+
+			tbody {
+				display: flex;
+				flex-direction: column;
+				gap: var(--spacing-sm);
+
+				tr {
+					display: grid;
+					grid-template-areas:
+						'orderId status'
+						'costCenter costCenter'
+						'placed total';
+					grid-template-columns: 1fr auto;
+					border-bottom: none;
+					gap: var(--spacing-sm);
+					background-color: var(--color-background-raised);
+					border-radius: var(--radius-lg);
+					padding: var(--spacing-sm);
+
+					td {
+						display: flex;
+						flex-direction: column;
+						padding: 0;
+						width: 100%;
+						gap: var(--spacing-xs);
+
+						.cx-order-history-label {
+							display: block;
+						}
+
+						&.cx-order-history-code {
+							grid-area: orderId;
+							flex-direction: row;
+							font-weight: bold;
+							color: var(--color-text-body);
+							gap: 0;
+						}
+
+						&.cx-order-history-status {
+							grid-area: status;
+							justify-content: flex-end;
+
+							.cx-order-history-label {
+								display: none;
+							}
+
+							.cx-order-history-value {
+								display: inline-block;
+								padding: var(--spacing-xs) var(--spacing-sm);
+								border-radius: var(--radius-sm);
+								background-color: var(--color-background);
+								color: var(--color-text-body);
+								font-size: var(--font-size-xxs);
+								text-transform: uppercase;
+								text-align: center;
+								font-weight: bold;
+								line-height: 1;
+
+								&.created {
+									color: var(--color-text-success);
+									background-color: var(--color-background-success);
+									border: 1px solid var(--color-success);
+								}
+							}
+						}
+
+						&.cx-order-history-cost-center {
+							grid-area: costCenter;
+							.cx-order-history-label {
+								display: none;
+							}
+						}
+
+						&.cx-order-history-placed {
+							grid-area: placed;
+							font-size: var(--font-size-xxs);
+							color: var(--color-text-secondary);
+							font-weight: var(--font-weight-semibold);
+
+							.cx-order-history-label {
+								text-transform: uppercase;
+							}
+						}
+
+						&.cx-order-history-total {
+							grid-area: total;
+							font-size: var(--font-size-xxs);
+							color: var(--color-text-secondary);
+							font-weight: var(--font-weight-semibold);
+
+							.cx-order-history-label {
+								text-transform: uppercase;
+							}
+						}
+
+						&.cx-order-history-po {
+							display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,35 @@
+cxdev-form-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+		border-left: 1px solid var(--color-border-subtle);
+		padding-left: var(--spacing-md);
+	}
+
+	fieldset {
+		legend {
+			font-size: var(--font-size-xxs);
+		}
+	}
+
+	label:has(input[type='radio']) {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		font-size: var(--font-size-xxs);
+
+		input[type='radio'] {
+			width: auto;
+		}
+	}
+	label:has(input[type='checkbox']) {
+		input[type='checkbox'] {
+			order: -1;
+		}
+	}
+}

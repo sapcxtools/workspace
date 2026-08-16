@@ -1,0 +1,49 @@
+/* Material Theme — Oceanic (dark) */
+html:has(cxdev-root.cxdev-theme-material-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #263238;
+	--color-surface-2: #2e3c43;
+	--color-surface-3: #314549;
+
+	--color-text-1: #eeffff;
+	--color-text-2: #b0bec5;
+	--color-text-3: #546e7a;
+
+	--color-border-1: #425b67;
+	--color-border-2: #314549;
+
+	--color-primary: #80cbc4;
+	--color-on-primary: #263238;
+	--color-accent: #82aaff;
+
+	--color-danger: #f07178;
+	--color-warning: #ffcb6b;
+	--color-success: #c3e88d;
+	--color-info: #89ddff;
+}
+
+/* Material Theme — Lighter */
+html:has(cxdev-root.cxdev-theme-material-light) {
+	color-scheme: light;
+
+	--color-surface-1: #fafafa;
+	--color-surface-2: #f1f3f4;
+	--color-surface-3: #e7eaec;
+
+	--color-text-1: #37474f;
+	--color-text-2: #546e7a;
+	--color-text-3: #90a4ae;
+
+	--color-border-1: #cfd8dc;
+	--color-border-2: #e1e6e9;
+
+	--color-primary: #39adb5;
+	--color-on-primary: #ffffff;
+	--color-accent: #6182b8;
+
+	--color-danger: #e53935;
+	--color-warning: #f6a434;
+	--color-success: #91b859;
+	--color-info: #6182b8;
+}

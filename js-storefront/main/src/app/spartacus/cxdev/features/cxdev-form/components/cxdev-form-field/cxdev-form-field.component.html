@@ -1,0 +1,64 @@
+@switch (field().fieldType) {
+	@case ('select') {
+		<label [formGroup]="formGroup()">
+			{{ field().label }} {{ field().required ? '*' : '' }}
+			<select
+				[name]="field().id"
+				[formControlName]="field().id"
+				[required]="field().required || false">
+				@for (option of field().formFieldValues; track option.id) {
+					<option [value]="option.id">
+						{{ option.label }}
+					</option>
+				}
+			</select>
+		</label>
+	}
+	@case ('textarea') {
+		<label [formGroup]="formGroup()">
+			{{ field().label }} {{ field().required ? '*' : '' }}
+			<textarea
+				[name]="field().id"
+				[formControlName]="field().id"
+				[placeholder]="field().placeholder || field().description || ''"
+				[required]="field().required || false"></textarea>
+		</label>
+	}
+	@case ('radio') {
+		<fieldset>
+			<legend>{{ field().label }} {{ field().required ? '*' : '' }}</legend>
+			@for (option of field().formFieldValues; track option.id) {
+				<label [formGroup]="formGroup()">
+					<input
+						[type]="field().fieldType"
+						[name]="field().id"
+						[value]="option.id"
+						[formControlName]="field().id"
+						[required]="field().required || false"
+						[checked]="field().defaultValue === option.id" />
+					{{ option.label }}
+				</label>
+			}
+		</fieldset>
+	}
+	@default {
+		<label [formGroup]="formGroup()">
+			{{ field().label }} {{ field().required ? '*' : '' }}
+			<input
+				[type]="field().fieldType"
+				[name]="field().id"
+				[formControlName]="field().id"
+				[placeholder]="field().placeholder || field().description || ''"
+				[required]="field().required || false" />
+		</label>
+	}
+}
+<cx-form-errors [control]="formGroup().get(field().id)"></cx-form-errors>
+
+@if (childFields() && childFormGroup(); as childGroup) {
+	<section>
+		@for (childField of childFields(); track childField.id) {
+			<cxdev-form-field [field]="childField" [formGroup]="childGroup"></cxdev-form-field>
+		}
+	</section>
+}

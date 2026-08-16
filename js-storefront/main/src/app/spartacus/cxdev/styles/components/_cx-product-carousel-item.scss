@@ -1,0 +1,21 @@
+cx-product-carousel-item,
+cx-carousel-scrolling .item {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+	background-color: var(--color-background-raised);
+	border-radius: var(--radius-card);
+	padding: var(--spacing-md);
+
+	a {
+		cx-media {
+			img {
+				aspect-ratio: 1 / 1;
+				width: 100%;
+				object-fit: contain;
+				object-position: center;
+				mix-blend-mode: multiply; // remove white background from images;
+			}
+		}
+	}
+}

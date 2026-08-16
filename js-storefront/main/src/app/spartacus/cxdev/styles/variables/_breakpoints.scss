@@ -1,0 +1,48 @@
+@property --breakpoint-xs {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 320px;
+}
+
+@property --breakpoint-sm {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 576px;
+}
+
+@property --breakpoint-md {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 768px;
+}
+
+@property --breakpoint-lg {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 992px;
+}
+
+@property --breakpoint-xl {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 1200px;
+}
+
+@property --breakpoint-xxl {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 1400px;
+}
+
+@property --max-content-width {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 1400px;
+}
+
+$breakpoint-xs: 320px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;

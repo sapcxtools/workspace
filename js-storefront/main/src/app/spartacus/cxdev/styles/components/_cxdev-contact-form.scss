@@ -1,0 +1,13 @@
+cxdev-contact-form {
+	width: 100%;
+	max-width: var(--max-width-form);
+
+	textarea {
+		min-height: var(--size-xl);
+		max-height: none;
+	}
+
+	button[type='submit'] {
+		margin-top: var(--spacing-md);
+	}
+}

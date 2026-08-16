@@ -1,0 +1,26 @@
+cxdev-dashboard-notepad {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: var(--spacing-xs);
+
+	hgroup {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.cxdev-notepad-text {
+		flex: 1;
+		resize: none;
+		border: none;
+		background-color: transparent;
+		padding: 0;
+		font-size: var(--font-size-sm);
+		line-height: 1.5;
+
+		&:active,
+		&:focus,
+		&:focus-visible {
+			outline: none;
+		}
+	}
+}

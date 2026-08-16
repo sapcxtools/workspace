@@ -1,0 +1,85 @@
+@use 'variables/breakpoints' as bp;
+
+/* CONTENT GRID */
+:root {
+	--content-grid-span-content-default: content-a-start / content-end;
+	--content-grid-span-content-a: content-a-start / content-b-start;
+	--content-grid-span-content-b: content-b-start / content-end;
+	--content-grid-span-full-width: full-width-start / full-width-end;
+	--content-grid-span-breakout: breakout-start / breakout-end;
+}
+
+.content-default {
+	grid-column: var(--content-grid-span-content-default);
+}
+
+.content-a {
+	grid-column: var(--content-grid-span-content-a);
+	display: flex;
+	flex-direction: column;
+}
+
+.content-b {
+	grid-column: var(--content-grid-span-content-b);
+	display: flex;
+	flex-direction: column;
+}
+
+.content-breakout {
+	grid-column: var(--content-grid-span-breakout);
+}
+
+.content-full-width {
+	grid-column: var(--content-grid-span-full-width);
+}
+
+.content-grid {
+	--container-max-width: var(--breakpoint-xxl);
+	--container-margin: var(--spacing-xl);
+	--container-padding: calc((var(--breakpoint-xxl) - var(--max-content-width)) / 2);
+	--container-width: clamp(
+		calc(var(--size-xl) * 2 + var(--size-lg)),
+		calc(100% - (2 * var(--container-margin))),
+		var(--container-max-width)
+	);
+	--content-width: calc(var(--container-width) - (2 * var(--container-padding)));
+	--content-a-width: calc(var(--content-width) / 2);
+	--content-b-width: calc(var(--content-width) / 2);
+
+	row-gap: var(--spacing-xl);
+
+	container-type: inline-size;
+	display: grid;
+	grid-template-columns:
+		[full-width-start] auto
+		[breakout-start] var(--container-padding)
+		[content-a-start] var(--content-a-width)
+		[content-b-start] var(--content-b-width)
+		[content-end] var(--container-padding)
+		[breakout-end] auto
+		[full-width-end];
+
+	/* 
+        |full-width-start | breakout-start | content-a | content-b | content-end | breakout-end | full-width-end
+         auto             | padding        |   50%     |   50%     | padding     | auto         | auto   
+        |-----------------|----------------|-----------|-----------|-------------|--------------|---------------
+    */
+
+	> *,
+	> .content-default {
+		@extend .content-default;
+	}
+	> .content-breakout {
+		@extend .content-breakout;
+	}
+	> .content-full-width {
+		@extend .content-full-width;
+	}
+}
+
+@container (width < #{bp.$breakpoint-lg}) {
+	.content-a,
+	.content-b {
+		grid-column: var(--content-grid-span-content-default);
+	}
+}

@@ -1,0 +1,29 @@
+@use '../variables/breakpoints' as bp;
+
+cxdev-widget {
+	&:has(cxdev-dashboard-spacer) {
+		border: none;
+		background-color: transparent;
+	}
+
+	&.edit-mode {
+		cxdev-dashboard-spacer {
+			display: block;
+			height: 100%;
+			background-image: repeating-linear-gradient(
+				-45deg,
+				transparent,
+				transparent var(--spacing-sm),
+				var(--color-border-subtle) var(--spacing-sm),
+				var(--color-border-subtle) calc(var(--spacing-sm) + 1px)
+			);
+			border-radius: var(--radius-sm);
+		}
+	}
+
+	@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+		&:has(cxdev-dashboard-spacer) {
+			display: none;
+		}
+	}
+}

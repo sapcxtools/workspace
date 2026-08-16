@@ -1,0 +1,9 @@
+cxdev-range-facet {
+	margin-top: var(--spacing-md);
+	.facetClearLink {
+		float: right;
+		a {
+			cursor: pointer;
+		}
+	}
+}

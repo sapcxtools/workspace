@@ -1,0 +1,39 @@
+cx-order-summary {
+	h3 {
+		margin-bottom: var(--spacing-xl);
+	}
+	.cx-summary-partials {
+		.cx-summary-row {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			gap: var(--spacing-md);
+			margin-bottom: var(--spacing-md);
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			&.cx-summary-total {
+				font-weight: var(--font-weight-bold);
+			}
+
+			.cx-summary-label {
+				flex: 1 1 auto;
+				width: auto;
+				max-width: none;
+				min-width: 0;
+				padding: 0;
+			}
+
+			.cx-summary-amount {
+				flex: 0 0 auto;
+				width: auto;
+				max-width: none;
+				padding: 0;
+				text-align: end;
+				white-space: nowrap;
+			}
+		}
+	}
+}

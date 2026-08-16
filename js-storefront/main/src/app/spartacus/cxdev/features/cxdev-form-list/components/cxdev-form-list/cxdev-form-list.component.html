@@ -1,0 +1,20 @@
+<menu>
+	@for (form of forms(); track form.id) {
+		<button [class.active]="selectedFormId() === form.id" (click)="selectForm(form.id!)">
+			<strong>{{ form.title }}</strong>
+			<sub>{{ form.description }}</sub>
+			<cx-icon [type]="iconType.CARET_RIGHT"></cx-icon>
+		</button>
+	}
+</menu>
+
+<article>
+	@if (forms().length > 1) {
+		<button class="btn btn-secondary btn-round btn-interaction-icon" (click)="selectForm('')">
+			<cx-icon [type]="iconType.CARET_LEFT"></cx-icon>
+		</button>
+	}
+	@for (form of forms(); track form.id) {
+		<cxdev-form [formId]="form.id!" [class.active]="selectedFormId() === form.id" />
+	}
+</article>

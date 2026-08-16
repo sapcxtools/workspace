@@ -1,0 +1,97 @@
+/* primitive typography tokens */
+
+@property --font-weight-regular {
+	syntax: '<integer>';
+	inherits: false;
+	initial-value: 400;
+}
+
+@property --font-weight-medium {
+	syntax: '<integer>';
+	inherits: false;
+	initial-value: 500;
+}
+
+@property --font-weight-semibold {
+	syntax: '<integer>';
+	inherits: false;
+	initial-value: 600;
+}
+
+@property --font-weight-bold {
+	syntax: '<integer>';
+	inherits: false;
+	initial-value: 700;
+}
+
+@property --font-size-1 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 12px;
+}
+
+@property --font-size-2 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 14px;
+}
+
+@property --font-size-3 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 16px;
+}
+
+@property --font-size-4 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 20px;
+}
+
+@property --font-size-5 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 24px;
+}
+
+@property --font-size-6 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 32px;
+}
+
+@property --font-size-7 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 48px;
+}
+
+@property --font-size-8 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 72px;
+}
+
+@property --font-family-body {
+	syntax: '*';
+	inherits: true;
+	initial-value: 'Roboto', sans-serif;
+}
+
+@property --font-family-title {
+	syntax: '*';
+	inherits: true;
+	initial-value: 'Noto Sans', sans-serif;
+}
+
+:root {
+	/* semantic font size tokens */
+	--font-size-xxs: var(--font-size-1);
+	--font-size-xs: var(--font-size-2);
+	--font-size-sm: var(--font-size-3);
+	--font-size-md: var(--font-size-4);
+	--font-size-lg: var(--font-size-5);
+	--font-size-xl: var(--font-size-6);
+	--font-size-xxl: var(--font-size-7);
+	--font-size-xxxl: var(--font-size-8);
+}

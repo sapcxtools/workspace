@@ -1,0 +1,23 @@
+cx-order-confirmation-shipping {
+	display: none;
+
+	.cx-review-shipping-summary {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: var(--spacing-xxl);
+		padding: var(--padding-card);
+		background-color: var(--color-background-raised);
+		border-radius: var(--radius-card);
+
+		margin-bottom: var(--spacing-xxl);
+
+		div {
+			display: contents;
+
+			cx-card {
+				background-color: transparent;
+				padding: 0;
+			}
+		}
+	}
+}

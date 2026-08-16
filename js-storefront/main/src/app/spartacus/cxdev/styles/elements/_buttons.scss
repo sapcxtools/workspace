@@ -1,0 +1,75 @@
+button,
+.btn,
+.button,
+.btn-primary,
+.btn-secondary,
+.btn-tertiary,
+.btn-disabled,
+.btn-inverted {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-xs);
+	padding: var(--padding-button);
+	border: 1px solid transparent;
+	border-radius: var(--radius-button);
+	background-color: var(--color-button-primary-background);
+	color: var(--color-button-primary-text);
+	cursor: pointer;
+	text-align: center;
+
+	&-secondary,
+	&-tertiary {
+		background-color: var(--color-button-secondary-background);
+		color: var(--color-button-secondary-text);
+		border-color: currentColor;
+	}
+
+	&-inverted {
+		background-color: var(--color-background);
+		color: var(--color-primary);
+	}
+
+	&[class*='remove'],
+	&[class*='clear'],
+	&[class*='delete'] {
+		color: var(--color-danger);
+		border-color: currentColor;
+	}
+
+	&-disabled,
+	&[disabled] {
+		background-color: var(--color-background-emphasis);
+		color: var(--color-text-muted);
+		border-color: transparent;
+		cursor: not-allowed;
+	}
+}
+
+.btn-block {
+	width: 100%;
+}
+
+.btn-round,
+button.close {
+	border-radius: var(--radius-round);
+	aspect-ratio: 1 / 1;
+	padding: 0;
+	width: var(--size-md);
+	height: var(--size-md);
+	display: grid;
+	place-content: center;
+}
+
+.btn-interaction-icon,
+button.close {
+	border-width: 2px;
+	border-color: var(--color-border-strong);
+	color: var(--color-text-secondary);
+	background-color: var(--color-background-raised);
+
+	&:hover {
+		border-color: var(--color-primary);
+		color: var(--color-primary);
+	}
+}

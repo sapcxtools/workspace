@@ -1,0 +1,49 @@
+/* Nord — dark (Polar Night) */
+html:has(cxdev-root.cxdev-theme-nord) {
+	color-scheme: dark;
+
+	--color-surface-1: #2e3440;
+	--color-surface-2: #3b4252;
+	--color-surface-3: #434c5e;
+
+	--color-text-1: #eceff4;
+	--color-text-2: #d8dee9;
+	--color-text-3: #7b88a1;
+
+	--color-border-1: #4c566a;
+	--color-border-2: #434c5e;
+
+	--color-primary: #88c0d0;
+	--color-on-primary: #2e3440;
+	--color-accent: #81a1c1;
+
+	--color-danger: #bf616a;
+	--color-warning: #ebcb8b;
+	--color-success: #a3be8c;
+	--color-info: #5e81ac;
+}
+
+/* Nord — light (Snow Storm) */
+html:has(cxdev-root.cxdev-theme-nord-light) {
+	color-scheme: light;
+
+	--color-surface-1: #eceff4;
+	--color-surface-2: #e5e9f0;
+	--color-surface-3: #d8dee9;
+
+	--color-text-1: #2e3440;
+	--color-text-2: #4c566a;
+	--color-text-3: #7b88a1;
+
+	--color-border-1: #c2c9d6;
+	--color-border-2: #d8dee9;
+
+	--color-primary: #5e81ac;
+	--color-on-primary: #eceff4;
+	--color-accent: #5e81ac;
+
+	--color-danger: #bf616a;
+	--color-warning: #d08770;
+	--color-success: #a3be8c;
+	--color-info: #81a1c1;
+}

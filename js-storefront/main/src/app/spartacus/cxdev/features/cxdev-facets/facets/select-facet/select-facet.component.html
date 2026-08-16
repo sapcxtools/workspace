@@ -1,0 +1,20 @@
+@if (!!_facet.values) {
+	<strong [id]="'facet_' + _facet.name">{{ _facet.name }}</strong>
+	<span class="facetClearLink">
+		@if (selectedOption) {
+			<a (click)="clearFacet()" class="link cursor-pointer">
+				<cx-icon class="fas fa-times"></cx-icon>
+			</a>
+		}
+	</span>
+	<ng-select
+		(change)="onSubmit($event)"
+		[searchable]="$any(_facet).facetDisplayType === FacetDisplayType.AUTOCOMPLETE"
+		[clearable]="false"
+		[aria-labelledby]="'facet_' + _facet.name"
+		[ngModel]="selectedOption">
+		@for (option of _facet.values; track option) {
+			<ng-option [value]="option">{{ option.name }}</ng-option>
+		}
+	</ng-select>
+}

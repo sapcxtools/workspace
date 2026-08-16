@@ -1,0 +1,179 @@
+@use '../variables/breakpoints' as bp;
+
+cx-page-layout.ProductDetailsPageTemplate {
+	container-type: inline-size;
+	display: block;
+
+	cx-page-slot.Summary {
+		display: grid;
+		grid-template-areas:
+			'image intro'
+			'image summary'
+			'image addToCart'
+			'image configureProduct'
+			'image .';
+		grid-template-columns: 40% 1fr;
+		grid-template-rows: auto auto auto auto auto 1fr;
+		column-gap: var(--spacing-xxxl);
+		row-gap: var(--spacing-xl);
+		width: var(--max-content-width);
+		margin: 0 auto;
+		justify-content: start;
+
+		@container (width < #{bp.$breakpoint-lg}) {
+			grid-template-areas:
+				'image'
+				'intro'
+				'summary'
+				'addToCart'
+				'configureProduct'
+				'.';
+			grid-template-columns: minmax(0, 1fr);
+			width: 100%;
+			max-width: 100%;
+			column-gap: 0;
+			padding-inline: var(--spacing-md);
+			box-sizing: border-box;
+		}
+
+		cx-product-images {
+			grid-area: image;
+		}
+
+		cx-product-intro,
+		cx-product-summary,
+		cx-add-to-cart {
+			width: 100%;
+			min-width: 0;
+		}
+
+		cx-add-to-cart {
+			max-width: var(--size-xxxl);
+		}
+
+		cx-product-intro {
+			grid-area: intro;
+			display: flex;
+			justify-content: flex-start;
+			font-size: var(--font-size-md);
+
+			.rating {
+				display: none;
+			}
+
+			.code {
+				display: inline-flex;
+				align-items: center;
+				width: fit-content;
+				color: var(--color-text-secondary);
+				font-size: var(--font-size-xs);
+				font-weight: var(--font-weight-medium);
+				text-transform: uppercase;
+			}
+		}
+
+		cx-product-summary {
+			grid-area: summary;
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacing-sm);
+			font-size: var(--font-size-md);
+
+			.price {
+				font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-xxl));
+				font-weight: var(--font-weight-bold);
+				line-height: 1;
+				color: var(--color-primary);
+			}
+
+			.summary {
+				margin: 0;
+				max-width: 28ch;
+				color: var(--color-text-body);
+				font-family: var(--font-family-title);
+				font-size: clamp(var(--font-size-lg), 3vw, var(--font-size-xl));
+				font-weight: var(--font-weight-semibold);
+				line-height: 1.15;
+			}
+		}
+
+		cx-add-to-cart {
+			grid-area: addToCart;
+			display: block;
+			padding: var(--spacing-md);
+			border: 1px solid var(--color-border-subtle);
+			border-radius: var(--radius-card);
+			background: var(--color-background-raised);
+
+			form {
+				width: 100%;
+				max-width: none;
+				gap: var(--spacing-md);
+			}
+
+			.quantity {
+				display: flex;
+				flex-direction: column;
+				gap: var(--spacing-xs);
+
+				> label {
+					color: var(--color-text-secondary);
+					font-size: var(--font-size-xs);
+					font-weight: var(--font-weight-semibold);
+					text-transform: uppercase;
+				}
+			}
+
+			.cx-counter-stock {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--spacing-md);
+			}
+
+			.info {
+				display: inline-flex;
+				align-items: center;
+				width: fit-content;
+				padding: var(--spacing-xs) var(--spacing-sm);
+				border-radius: var(--radius-pill);
+				background: var(--color-background-success);
+				color: var(--color-text-success);
+				font-size: var(--font-size-sm);
+				font-weight: var(--font-weight-semibold);
+			}
+
+			button[type='submit'] {
+				width: 100%;
+			}
+		}
+
+		cx-configure-product {
+			grid-area: configureProduct;
+		}
+
+		cxdev-form-list-cms {
+			grid-column: 2;
+			button {
+				width: 100%;
+				max-width: var(--size-xxxl);
+			}
+
+			> h2 {
+				display: none;
+			}
+
+			@container (width < #{bp.$breakpoint-lg}) {
+				grid-column: 1;
+			}
+		}
+
+		> *:empty {
+			display: none;
+		}
+	}
+
+	cx-page-slot {
+		margin-bottom: var(--spacing-xxl);
+	}
+}

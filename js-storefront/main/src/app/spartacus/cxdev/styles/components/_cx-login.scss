@@ -1,0 +1,121 @@
+@use '../elements/elements';
+@use '../variables/breakpoints' as bp;
+
+cx-login {
+	display: block;
+	position: relative;
+
+	> a {
+		@extend elements, .btn-secondary !optional;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	&:hover {
+		cx-page-slot.HeaderLinks cx-navigation {
+			display: block;
+		}
+	}
+
+	cx-page-slot.HeaderLinks {
+		cx-navigation {
+			display: none;
+			position: absolute;
+			top: 100%;
+			right: 50%;
+			transform: translateX(50%);
+			background-color: transparent;
+			padding-top: var(--spacing-md);
+
+			cx-navigation-ui {
+				nav {
+					background-color: var(--color-background-raised);
+					border: 1px solid var(--color-border-strong);
+					border-radius: var(--radius-account-navigation);
+					padding: var(--spacing-md);
+
+					ul {
+						list-style-type: none;
+						padding: 0;
+
+						li {
+							padding: var(--spacing-sm) 0;
+							border-bottom: 1px solid var(--color-border-strong);
+
+							button {
+								display: none;
+							}
+
+							&:last-child {
+								border-bottom: none;
+							}
+
+							a {
+								white-space: nowrap;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+	cx-login {
+		cx-page-slot.HeaderLinks cx-navigation {
+			position: relative;
+			display: block;
+
+			cx-navigation-ui {
+				nav {
+					background-color: transparent;
+					border: none;
+					border-radius: 0;
+					padding: 0;
+
+					ul {
+						list-style: none;
+						padding: 0;
+					}
+
+					ul li:first-child {
+						padding: 0;
+						border-bottom: 1px solid var(--color-border-subtle);
+
+						button {
+							all: unset;
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							width: 100%;
+							padding: var(--spacing-md) 0;
+							font-weight: var(--font-weight-bold);
+							color: var(--color-text-body);
+							box-sizing: border-box;
+							cursor: pointer;
+
+							cx-icon {
+								margin-left: auto;
+							}
+						}
+
+						&:not(.is-open) {
+							.wrapper {
+								display: none;
+							}
+						}
+
+						&.is-open {
+							.wrapper {
+								display: block;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

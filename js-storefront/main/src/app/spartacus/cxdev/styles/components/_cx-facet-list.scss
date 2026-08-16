@@ -1,0 +1,56 @@
+@use '../elements/elements';
+
+cx-facet-list {
+	display: block;
+	padding: var(--padding-card);
+	background-color: var(--color-background-raised);
+	border-radius: var(--radius-card);
+
+	.inner {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-xl);
+
+		.list-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.cx-facet-list-footer {
+			padding: var(--spacing-md) 0;
+		}
+
+		cx-tab {
+			.accordian {
+				display: flex;
+				flex-direction: column;
+				gap: var(--spacing-md);
+
+				cx-tab-panel {
+					cx-facet {
+						div {
+							display: flex;
+							flex-direction: column;
+							gap: var(--spacing-sm);
+
+							a {
+								> span {
+									display: flex;
+									justify-content: space-between;
+									width: 100%;
+								}
+							}
+
+							.more {
+								button {
+									@extend elements, .btn-secondary !optional;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

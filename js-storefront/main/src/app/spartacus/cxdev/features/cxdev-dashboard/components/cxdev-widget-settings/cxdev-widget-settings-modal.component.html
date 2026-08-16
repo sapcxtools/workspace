@@ -1,0 +1,27 @@
+<div class="modal-dialog modal-dialog-centered cxdev-widget-settings-modal" role="dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>{{ 'dashboard.widgetSettings.headline' | cxTranslate }}</h3>
+			<button
+				class="btn btn-round btn-interaction-icon"
+				(click)="close()"
+				[attr.aria-label]="'dashboard.widgetSettings.close' | cxTranslate">
+				<cx-icon [type]="iconType.CLOSE"></cx-icon>
+			</button>
+		</div>
+
+		<div class="modal-body">
+			@if (config()) {
+				<ng-container
+					*ngComponentOutlet="
+						genericSettingsComponent;
+						injector: settingsInjector()
+					"></ng-container>
+			}
+
+			@if (settingsComponent(); as component) {
+				<ng-container *ngComponentOutlet="component; injector: settingsInjector()"></ng-container>
+			}
+		</div>
+	</div>
+</div>

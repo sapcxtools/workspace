@@ -1,0 +1,28 @@
+@if (searchResult$ | async; as model) {
+	@if (model.facets; as facets) {
+		<h3>{{ 'facets.filter' | cxTranslate }}</h3>
+		@if (showClearAllLink(model)) {
+			<a (click)="clearAll(model)" class="facets-clearalllink">{{
+				'facets.clearAllLink' | cxTranslate
+			}}</a>
+		}
+		<div class="facet-container">
+			@for (facet of facets; track facet.name) {
+				@if ($any(facet).facetDisplayType === FacetDisplayType.CHECKBOX) {
+					<cxdev-checkbox-facet [facet]="facet"></cxdev-checkbox-facet>
+				} @else if ($any(facet).facetDisplayType === FacetDisplayType.RADIO) {
+					<cxdev-radio-facet [facet]="facet"></cxdev-radio-facet>
+				} @else if (
+					$any(facet).facetDisplayType === FacetDisplayType.SELECT ||
+					$any(facet).facetDisplayType === FacetDisplayType.AUTOCOMPLETE
+				) {
+					<cxdev-select-facet [facet]="facet"></cxdev-select-facet>
+				} @else if ($any(facet).facetDisplayType === FacetDisplayType.RANGE) {
+					<cxdev-range-facet [facet]="$any(facet)"></cxdev-range-facet>
+				} @else if ($any(facet).facetDisplayType === FacetDisplayType.SLIDER) {
+					<cxdev-slider-facet [facet]="$any(facet)"></cxdev-slider-facet>
+				}
+			}
+		</div>
+	}
+}

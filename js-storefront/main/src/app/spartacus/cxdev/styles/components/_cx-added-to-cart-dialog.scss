@@ -1,0 +1,140 @@
+cx-added-to-cart-dialog {
+	.cx-dialog-row {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-xl);
+	}
+
+	cx-cart-item {
+		.cx-compact {
+			display: flex;
+			gap: var(--spacing-xl);
+			width: 100%;
+
+			cx-media img {
+				width: var(--size-xl);
+			}
+
+			.cx-info {
+				flex: 1 1 auto;
+				min-width: 0;
+				display: flex;
+				flex-direction: column;
+
+				.cx-info-container {
+					display: flex;
+					flex-wrap: wrap;
+					gap: var(--spacing-md);
+
+					> *:first-child {
+						flex: 1 1 100%;
+					}
+
+					> *:empty {
+						display: none;
+					}
+
+					.cx-total {
+						flex: 1 1 100%;
+
+						.cx-value {
+							text-decoration: underline;
+						}
+					}
+				}
+
+				.cx-name {
+					font-size: var(--font-size-md);
+					font-weight: var(--font-weight-bold);
+				}
+
+				.cx-code {
+					font-size: var(--font-size-sm);
+					color: var(--color-text-secondary);
+				}
+
+				.cx-price,
+				.cx-quantity,
+				.cx-total {
+					display: inline-flex;
+					flex-direction: column;
+					vertical-align: top;
+					gap: var(--spacing-xs);
+				}
+
+				.cx-price,
+				.cx-total {
+					.cx-label {
+						font-size: var(--font-size-xs);
+						color: var(--color-text-secondary);
+						font-weight: var(--font-weight-regular);
+					}
+
+					.cx-value {
+						font-size: var(--font-size-md);
+						font-weight: var(--font-weight-bold);
+						color: var(--color-primary);
+					}
+				}
+
+				.cx-quantity {
+					.cx-label {
+						font-size: var(--font-size-xs);
+						color: var(--color-text-secondary);
+					}
+				}
+
+				.cx-actions {
+					display: flex;
+					justify-content: flex-end;
+					margin-top: var(--spacing-md);
+				}
+			}
+		}
+	}
+
+	.cx-dialog-separator {
+		border: 1px solid var(--color-border-subtle);
+		margin-block: var(--spacing-xs);
+	}
+
+	.cx-dialog-actions {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+
+		> div:not(.cx-dialog-buttons) {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: var(--spacing-sm) var(--spacing-md);
+
+			.cx-value {
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		.cx-dialog-buttons {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			gap: var(--spacing-md);
+			padding-inline: var(--spacing-xs);
+
+			> * {
+				flex: 1 1 0;
+				min-width: var(--size-lg);
+			}
+		}
+
+		.cx-dialog-total {
+			div:last-child {
+				font-size: var(--font-size-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+	}
+}

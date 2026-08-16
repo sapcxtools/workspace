@@ -1,0 +1,74 @@
+cx-split-view {
+	display: flex;
+
+	cx-view {
+		position: relative;
+		flex: 1 1 100%;
+		padding: var(--spacing-xl) var(--spacing-md);
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+
+		&[position='2'] {
+			border-top: 1px solid var(--color-border-strong);
+		}
+
+		.header {
+			position: relative;
+
+			> div {
+				display: flex;
+				align-items: center;
+				gap: var(--spacing-md);
+				justify-content: space-between;
+			}
+
+			.title-bar {
+				align-items: flex-start;
+
+				.actions {
+					display: flex;
+					align-items: center;
+					gap: var(--spacing-sm);
+					flex-wrap: wrap;
+
+					> * {
+						white-space: nowrap;
+					}
+				}
+			}
+
+			.close {
+				position: absolute;
+				top: calc(-1 * (var(--spacing-lg) + var(--size-xs)));
+				right: calc(-1 * var(--spacing-lg));
+			}
+
+			[id$='_title'] + button {
+				cx-icon {
+					pointer-events: none;
+				}
+			}
+		}
+
+		.main,
+		.main section.details {
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacing-sm);
+
+			.link-list {
+				display: flex;
+				gap: var(--spacing-sm);
+			}
+		}
+	}
+
+	> :not(router-outlet, cx-view) {
+		width: 50%;
+		display: block;
+		padding: var(--padding-card);
+		background-color: var(--color-background-raised);
+		border-radius: var(--radius-card);
+	}
+}

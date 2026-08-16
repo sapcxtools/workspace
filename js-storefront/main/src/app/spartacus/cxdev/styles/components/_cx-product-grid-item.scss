@@ -1,0 +1,15 @@
+cx-product-grid-item {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+
+	.cx-product-price {
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-bold);
+		color: var(--color-primary);
+	}
+
+	cx-add-to-cart {
+		width: 100%;
+	}
+}

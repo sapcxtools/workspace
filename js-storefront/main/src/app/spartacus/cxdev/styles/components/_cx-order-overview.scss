@@ -1,0 +1,52 @@
+@use '../variables/breakpoints' as bp;
+
+cx-order-overview {
+	container-type: inline-size;
+	display: block;
+
+	.cx-order-summary {
+		.container {
+			display: grid;
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			gap: var(--spacing-xxl);
+			padding: var(--padding-card);
+			background-color: var(--color-background-raised);
+			border-radius: var(--radius-card);
+
+			> * {
+				min-width: 0;
+			}
+
+			.cx-summary-card {
+				display: contents;
+
+				cx-card,
+				.card-body,
+				.cx-card,
+				.cx-card-title,
+				.cx-card-label,
+				.cx-card-label-bold,
+				.cx-card-paragraph-title,
+				.cx-card-paragraph-text {
+					min-width: 0;
+					overflow-wrap: anywhere;
+					word-break: break-word;
+				}
+
+				cx-card {
+					background-color: transparent;
+					padding: 0;
+				}
+
+				cx-order-overview-delivery-date:empty {
+					display: none;
+				}
+			}
+
+			@container (width < #{bp.$breakpoint-md}) {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: var(--spacing-lg);
+			}
+		}
+	}
+}

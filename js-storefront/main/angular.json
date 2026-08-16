@@ -1,0 +1,131 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "cxdev": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "none",
+          "type": "component",
+          "addTypeToClassName": true,
+          "skipTests": true,
+          "prefix": ""
+        },
+        "@schematics/angular:directive": {
+          "type": "directive",
+          "addTypeToClassName": true,
+          "skipTests": true,
+          "prefix": ""
+        },
+        "@schematics/angular:service": {
+          "type": "service",
+          "addTypeToClassName": true,
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "typeSeparator": "."
+        },
+        "@schematics/angular:interceptor": {
+          "typeSeparator": "."
+        },
+        "@schematics/angular:module": {
+          "typeSeparator": "."
+        },
+        "@schematics/angular:pipe": {
+          "typeSeparator": ".",
+          "skipTests": true
+        },
+        "@schematics/angular:resolver": {
+          "typeSeparator": "."
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "cxdev",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@spartacus/smartedit/assets",
+                "output": "assets/"
+              }
+            ],
+            "styles": [
+              "src/app/spartacus/cxdev/styles/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["node_modules/"],
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "3.5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "cxdev:build:production"
+            },
+            "development": {
+              "buildTarget": "cxdev:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@spartacus/smartedit/assets",
+                "output": "assets/"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

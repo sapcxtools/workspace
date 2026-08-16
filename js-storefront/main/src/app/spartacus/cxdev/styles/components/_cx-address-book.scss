@@ -1,0 +1,13 @@
+cx-address-book {
+	.cx-address-deck {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-md);
+		align-items: stretch;
+		margin-top: var(--spacing-md);
+
+		cx-card {
+			height: 100%;
+		}
+	}
+}

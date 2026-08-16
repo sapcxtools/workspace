@@ -1,0 +1,28 @@
+cx-footer-navigation {
+	cx-navigation-ui {
+		nav {
+			ul {
+				display: flex;
+				justify-content: center;
+				list-style: none;
+				padding: 0;
+				gap: var(--spacing-md);
+
+				li {
+					span[role='heading'] {
+						display: block;
+						margin-bottom: var(--spacing-md);
+						font-weight: var(--font-weight-bold);
+					}
+
+					.wrapper {
+						ul {
+							flex-direction: column;
+							gap: var(--spacing-xs);
+						}
+					}
+				}
+			}
+		}
+	}
+}

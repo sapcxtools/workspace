@@ -1,0 +1,61 @@
+/* primitive spacing tokens */
+
+@property --spacing-100 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 2px;
+}
+
+@property --spacing-200 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 4px;
+}
+
+@property --spacing-300 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 8px;
+}
+
+@property --spacing-400 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 16px;
+}
+
+@property --spacing-500 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 24px;
+}
+
+@property --spacing-600 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 32px;
+}
+
+@property --spacing-700 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 48px;
+}
+
+@property --spacing-800 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 64px;
+}
+
+:root {
+	/* semantic spacing tokens */
+	--spacing-xxs: var(--spacing-100);
+	--spacing-xs: var(--spacing-200);
+	--spacing-sm: var(--spacing-300);
+	--spacing-md: var(--spacing-400);
+	--spacing-lg: var(--spacing-500);
+	--spacing-xl: var(--spacing-600);
+	--spacing-xxl: var(--spacing-700);
+	--spacing-xxxl: var(--spacing-800);
+}

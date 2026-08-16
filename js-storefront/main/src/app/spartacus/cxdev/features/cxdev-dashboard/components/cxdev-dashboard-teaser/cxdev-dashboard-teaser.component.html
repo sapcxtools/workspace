@@ -1,0 +1,10 @@
+@if (component.data$ | async; as data) {
+	<a [routerLink]="data.url ?? ''">
+		<figure class="icon-wrapper">
+			<cx-media [container]="data.icon"></cx-media>
+			<cx-icon [type]="iconTypes.LINK_OUT"></cx-icon>
+		</figure>
+		<h3>{{ data.headline }}</h3>
+		<p>{{ data.description }}</p>
+	</a>
+}

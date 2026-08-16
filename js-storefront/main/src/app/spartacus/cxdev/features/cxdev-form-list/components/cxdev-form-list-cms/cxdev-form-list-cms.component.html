@@ -1,0 +1,27 @@
+@if (formIds().length) {
+	@if (data().headline) {
+		<h2>{{ data().headline }}</h2>
+	}
+	@if (data().description) {
+		<p>{{ data().description }}</p>
+	}
+
+	@switch (viewMode()) {
+		@case (CxdevFormListViewMode.INLINE) {
+			<cxdev-form-list [formIds]="formIds()" />
+		}
+		@case (CxdevFormListViewMode.TOGGLE_INLINE) {
+			<button class="btn btn-secondary" (click)="toggleInline()">
+				{{ data().toggleText }}
+			</button>
+			@if (isInlineVisible()) {
+				<cxdev-form-list [formIds]="formIds()" />
+			}
+		}
+		@case (CxdevFormListViewMode.TOGGLE_MODAL) {
+			<button class="btn btn-secondary" (click)="openModal()">
+				{{ data().toggleText }}
+			</button>
+		}
+	}
+}

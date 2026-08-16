@@ -1,0 +1,24 @@
+/* CXDEV brand theme — dark */
+html:has(cxdev-root.cxdev-theme-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #15191e;
+	--color-surface-2: #1c2127;
+	--color-surface-3: #262d35;
+
+	--color-text-1: #e8ecf1;
+	--color-text-2: #a5b0bc;
+	--color-text-3: #6b7684;
+
+	--color-border-1: #3a4551;
+	--color-border-2: #2a323b;
+
+	--color-primary: #3ba3ff;
+	--color-on-primary: #0c1a28;
+	--color-accent: #7ec3ff;
+
+	--color-danger: #f2555a;
+	--color-warning: #f0b429;
+	--color-success: #5fae4e;
+	--color-info: #4aa8ff;
+}

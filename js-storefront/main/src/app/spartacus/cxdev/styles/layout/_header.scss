@@ -1,0 +1,165 @@
+@use '../variables/breakpoints' as bp;
+
+#cx-header {
+	position: sticky;
+	top: 0;
+	left: 0;
+	height: var(--height-header);
+	isolation: isolate;
+	z-index: var(--z-index-header);
+
+	> cx-page-layout.header {
+		height: 100%;
+		display: grid;
+		align-items: center;
+
+		grid-template-areas:
+			'. SiteLogo SiteLinks SiteContext SiteLogin MiniCart .'
+			'divider divider divider divider divider divider divider'
+			'. NavigationBar NavigationBar NavigationBar SearchBox SearchBox .';
+
+		grid-template-columns: var(--padding-header) 1fr auto auto auto auto var(--padding-header);
+		grid-template-rows: 1fr 1px var(--height-navigation);
+
+		background-color: var(--color-background);
+		border-bottom: 1px solid var(--color-border-subtle);
+
+		&:before {
+			content: '';
+			grid-area: divider;
+			background-color: var(--color-border-subtle);
+			height: 100%;
+		}
+
+		.PreHeader {
+			display: none;
+		}
+
+		.SiteLogo {
+			grid-area: SiteLogo;
+			margin-right: var(--gap-header);
+
+			cx-banner {
+				img {
+					max-height: var(--size-lg);
+				}
+			}
+		}
+
+		.SiteLinks {
+			grid-area: SiteLinks;
+			display: flex;
+			gap: var(--spacing-md);
+			margin-right: var(--gap-header);
+
+			a {
+				color: var(--color-text-body);
+
+				&:hover {
+					color: var(--color-text-link);
+					text-decoration: none;
+				}
+			}
+		}
+
+		.SiteContext {
+			grid-area: SiteContext;
+			margin-right: var(--gap-header);
+			display: flex;
+			gap: var(--spacing-md);
+		}
+
+		.SiteLogin {
+			grid-area: SiteLogin;
+			margin-right: var(--gap-header);
+		}
+
+		.MiniCart {
+			grid-area: MiniCart;
+		}
+
+		.NavigationBar {
+			grid-area: NavigationBar;
+			margin-right: var(--gap-header);
+		}
+
+		.SearchBox {
+			grid-area: SearchBox;
+			justify-self: end;
+		}
+	}
+
+	> cx-page-layout.navigation {
+		display: none;
+	}
+}
+
+@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+	:root {
+		--height-header: calc(var(--size-md) + var(--spacing-lg));
+	}
+
+	#cx-header {
+		> cx-page-layout.header {
+			grid-template-areas: '. PreHeader SiteLogo . SearchBox MiniCart .';
+			grid-template-columns: var(--padding-header) auto auto 1fr auto auto var(--padding-header);
+			grid-template-rows: 1fr;
+
+			&::before {
+				display: none;
+			}
+
+			.PreHeader {
+				display: flex;
+				align-items: center;
+				grid-area: PreHeader;
+				margin-right: var(--spacing-sm);
+			}
+
+			.SiteLogo {
+				cx-banner img {
+					max-height: calc(var(--height-header) - 2 * var(--spacing-sm));
+				}
+			}
+
+			.SearchBox {
+				margin-right: var(--spacing-sm);
+			}
+
+			.NavigationBar,
+			.SiteLinks,
+			.SiteContext,
+			.SiteLogin {
+				display: none;
+			}
+		}
+
+		> cx-page-layout.navigation {
+			display: none;
+		}
+
+		&.is-expanded > cx-page-layout.navigation {
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacing-lg);
+			position: fixed;
+			top: var(--height-header);
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow-y: auto;
+			background-color: var(--color-background-raised);
+			border-top: 1px solid var(--color-border-subtle);
+			z-index: var(--z-index-80);
+			padding: var(--spacing-lg) var(--padding-header);
+			pointer-events: none;
+
+			> cx-page-slot {
+				display: block;
+				position: relative;
+				z-index: 1;
+				pointer-events: auto;
+			}
+		}
+	}
+}

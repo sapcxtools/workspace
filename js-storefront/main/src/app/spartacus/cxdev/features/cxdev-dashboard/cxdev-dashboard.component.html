@@ -1,0 +1,99 @@
+<nav>
+	<ul>
+		@for (config of visibleConfigs(); track config.code) {
+			<li>
+				<button
+					(click)="setSelectedConfig(config)"
+					[class.active]="config.code === dashboardConfig().code"
+					[class.inactive]="config.active === false">
+					{{
+						config.code === dashboardConfig().code
+							? (dashboardConfig().name ?? config.name)
+							: config.name
+					}}
+
+					@if (!config.active) {
+						<cx-icon [type]="iconType.EYE_SLASH"></cx-icon>
+					}
+				</button>
+			</li>
+		}
+		<li>
+			<button (click)="createConfig()" [attr.aria-label]="'dashboard.createConfig' | cxTranslate">
+				+
+			</button>
+		</li>
+	</ul>
+	<button (click)="toggleEditMode()">
+		@if (editMode()) {
+			{{ 'dashboard.editMode.exit' | cxTranslate }}
+			<cx-icon [type]="iconType.SUCCESS"></cx-icon>
+		} @else {
+			{{ 'dashboard.editMode.enter' | cxTranslate }}
+			<!-- <cx-icon [type]="iconType.PENCIL"></cx-icon> -->
+		}
+	</button>
+</nav>
+
+@if (editMode()) {
+	<menu class="toolbar">
+		<input
+			type="text"
+			[value]="dashboardConfig().name ?? ''"
+			(input)="updateConfigName($any($event.target).value)"
+			class="config-name-input" />
+
+		<label class="config-active-label">
+			<input
+				type="checkbox"
+				[checked]="dashboardConfig().active !== false"
+				(change)="updateConfigActive($any($event.target).checked)" />
+			{{ 'dashboard.editMode.visible' | cxTranslate }}
+		</label>
+
+		<button (click)="openWidgetSelector()" class="btn-secondary">
+			{{ 'dashboard.widgetSelector.open' | cxTranslate }}
+		</button>
+
+		<button
+			(click)="moveConfig('up')"
+			[disabled]="!canMoveUp()"
+			class="btn-secondary btn-icon"
+			[attr.aria-label]="'dashboard.moveUp' | cxTranslate">
+			<cx-icon [type]="iconType.CARET_LEFT"></cx-icon>
+		</button>
+
+		<button
+			(click)="moveConfig('down')"
+			[disabled]="!canMoveDown()"
+			class="btn-secondary btn-icon"
+			[attr.aria-label]="'dashboard.moveDown' | cxTranslate">
+			<cx-icon [type]="iconType.CARET_RIGHT"></cx-icon>
+		</button>
+
+		<button
+			(click)="deleteConfig()"
+			[disabled]="!canDeleteSelectedConfig()"
+			class="btn-secondary btn-danger">
+			<cx-icon [type]="iconType.TRASH"></cx-icon>
+			{{ 'dashboard.editMode.delete' | cxTranslate }}
+		</button>
+	</menu>
+}
+
+<section class="dashboard-views">
+	<article
+		class="dashboard-view"
+		[cxdevReorder]="editMode()"
+		(reordered)="onWidgetsReordered($event)"
+		(sortingChange)="sorting.set($event)">
+		@for (widgetConfig of visibleWidgets(); track trackWidgetConfig(widgetConfig)) {
+			<cxdev-widget
+				[attr.data-key]="trackWidgetConfig(widgetConfig)"
+				[config]="widgetConfig"
+				[editMode]="editMode()"
+				(resized)="onWidgetResized(widgetConfig, $event)"
+				(removed)="removeWidget(widgetConfig)"></cxdev-widget>
+		}
+	</article>
+</section>

@@ -1,0 +1,39 @@
+@if (_facet) {
+	<strong>{{ _facet.name }}</strong>
+	<span class="facetClearLink">
+		@if (showClearLink()) {
+			<a (click)="clearFacet()" class="link cursor-pointer">
+				<cx-icon class="fas fa-times"></cx-icon>
+			</a>
+		}
+	</span>
+
+	<form [formGroup]="facetForm">
+		<label>
+			<span class="from">{{ 'facets.from' | cxTranslate }}</span>
+			<input
+				[type]="_facet.type === FacetRangeType.LONG ? 'date' : 'number'"
+				name="from"
+				class="form-control from"
+				#rangeFrom
+				formControlName="from"
+				[min]="min"
+				[max]="max"
+				required
+				(change)="onChange()" />
+		</label>
+		<label>
+			<span class="to">{{ 'facets.to' | cxTranslate }}</span>
+			<input
+				[type]="_facet.type === FacetRangeType.LONG ? 'date' : 'number'"
+				name="to"
+				class="form-control to"
+				#rangeTo
+				formControlName="to"
+				[min]="min"
+				[max]="max"
+				required
+				(change)="onChange()" />
+		</label>
+	</form>
+}

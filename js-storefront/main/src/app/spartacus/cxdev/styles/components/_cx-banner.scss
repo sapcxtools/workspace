@@ -1,0 +1,11 @@
+cx-banner {
+	display: block;
+	width: fit-content;
+	position: relative;
+
+	cx-generic-link a {
+		display: block;
+		position: absolute;
+		inset: 0 0 0 0;
+	}
+}

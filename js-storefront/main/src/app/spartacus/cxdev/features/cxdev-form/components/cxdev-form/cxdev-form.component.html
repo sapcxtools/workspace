@@ -1,0 +1,21 @@
+<form [formGroup]="formGroup()" (ngSubmit)="submit()">
+	<h2>{{ formData().title }}</h2>
+	<legend>
+		{{ formData().description }}
+	</legend>
+	@for (field of formData().formFields; track field.id) {
+		<cxdev-form-field [field]="field" [formGroup]="formGroup()"></cxdev-form-field>
+	}
+
+	<div class="button-group">
+		<button type="submit" [disabled]="formGroup().invalid">
+			{{ formData().submitMessage || 'common.submit' | cxTranslate }}
+		</button>
+		<button
+			class="btn btn-round btn-interaction-icon reset-form"
+			[title]="'forms.clear' | cxTranslate"
+			(click)="resetForm()">
+			<cx-icon [type]="iconType.TRASH"></cx-icon>
+		</button>
+	</div>
+</form>

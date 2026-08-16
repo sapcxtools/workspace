@@ -1,0 +1,156 @@
+@use '../variables/breakpoints' as bp;
+
+cx-product-images {
+	container-type: inline-size;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+
+	> cx-media {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+
+		img {
+			display: block;
+			width: 100%;
+			max-width: 100%;
+			height: auto;
+			object-fit: contain;
+		}
+	}
+
+	.thumbs {
+		--product-thumb-size: clamp(
+			calc(var(--size-xl) - var(--spacing-md)),
+			36vw,
+			calc(var(--size-xl) + var(--spacing-xl))
+		);
+
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+
+		.carousel-panel {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr) auto;
+			width: 100%;
+			max-width: 100%;
+			min-width: 0;
+			overflow: hidden;
+
+			.slide .item,
+			.carousel-items .item {
+				flex: 0 0 var(--product-thumb-size);
+				width: var(--product-thumb-size);
+				height: var(--product-thumb-size);
+				aspect-ratio: 1 / 1;
+				padding: 0;
+				background: transparent;
+			}
+		}
+
+		.slides,
+		.carousel-items {
+			min-width: 0;
+			max-width: 100%;
+		}
+
+		.slides,
+		.carousel-items {
+			overflow: hidden;
+		}
+
+		.slide {
+			display: flex;
+			gap: var(--spacing-md);
+			width: 100%;
+
+			&:not(.active) {
+				display: none;
+			}
+		}
+
+		.item,
+		cx-media {
+			min-width: 0;
+		}
+
+		cx-media {
+			display: block;
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 1 / 1;
+			background-color: var(--color-background-raised);
+			border-radius: var(--radius-card);
+			padding: var(--spacing-md);
+			box-sizing: border-box;
+
+			picture {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+
+			img {
+				display: block;
+				width: 100%;
+				max-width: 100%;
+				height: 100%;
+				aspect-ratio: 1 / 1;
+				object-fit: cover;
+				mix-blend-mode: multiply;
+			}
+		}
+	}
+
+	cx-product-image-zoom-trigger {
+		display: none;
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		> cx-media img {
+			max-height: 70vh;
+		}
+
+		.thumbs {
+			width: min(100%, calc((var(--product-thumb-size) * 2) + var(--spacing-md)));
+
+			.carousel-panel {
+				grid-template-areas:
+					'thumbs thumbs'
+					'previous next';
+				grid-template-columns: 1fr 1fr;
+				gap: var(--spacing-sm);
+				overflow: hidden;
+			}
+
+			.slides,
+			.carousel-items {
+				grid-area: thumbs;
+			}
+
+			.previous {
+				grid-area: previous;
+				justify-self: end;
+			}
+
+			.next {
+				grid-area: next;
+				justify-self: start;
+			}
+
+			.previous,
+			.next {
+				min-width: calc(var(--size-md) + var(--spacing-md));
+				width: calc(var(--size-md) + var(--spacing-md));
+				padding-inline: 0;
+			}
+		}
+	}
+}

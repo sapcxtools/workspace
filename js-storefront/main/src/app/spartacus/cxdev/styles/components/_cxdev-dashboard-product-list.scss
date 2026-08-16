@@ -1,0 +1,82 @@
+@use '../variables/breakpoints' as bp;
+
+cxdev-dashboard-product-list {
+	container-type: inline-size;
+	display: block;
+
+	hgroup {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: var(--spacing-md);
+	}
+
+	ul {
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0;
+		overflow: auto hidden;
+
+		li {
+			display: flex;
+			flex-direction: column;
+			padding: 0 var(--spacing-xs);
+			align-items: center;
+
+			cx-media {
+				height: 35%;
+				width: 35%;
+			}
+
+			p {
+				color: var(--color-text-secondary);
+				font-size: var(--font-size-xs);
+				text-align: center;
+			}
+		}
+	}
+
+	.product-link {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-decoration: none;
+		color: inherit;
+		width: 100%;
+		height: 100%;
+	}
+
+	.product-link:hover {
+		cursor: pointer;
+		opacity: 0.9;
+	}
+
+	@media (max-width: calc(#{bp.$breakpoint-md} - 1px)) {
+		ul {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: var(--spacing-md);
+			justify-content: initial;
+			align-items: stretch;
+			overflow: visible;
+
+			li {
+				min-width: 0;
+				padding: 0;
+
+				cx-media {
+					width: 100%;
+					height: auto;
+				}
+
+				p {
+					width: 100%;
+					overflow-wrap: anywhere;
+				}
+			}
+		}
+	}
+}

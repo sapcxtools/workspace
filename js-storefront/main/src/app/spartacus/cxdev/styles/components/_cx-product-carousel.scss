@@ -1,0 +1,99 @@
+@use '../variables/breakpoints' as bp;
+
+cx-product-carousel,
+cx-product-references,
+cx-carousel-scrolling {
+	container-type: inline-size;
+	display: block;
+
+	.carousel-panel {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: auto;
+		gap: var(--spacing-md);
+		align-items: center;
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+
+		button.previouse,
+		button.next {
+		}
+
+		.carousel-items {
+			--column-count: 4;
+			--visible-elements: 4;
+			--item-gap: var(--spacing-md);
+			--item-width: calc(
+				(100% - ((var(--visible-elements) - 1) * var(--item-gap))) / var(--visible-elements)
+			);
+
+			display: flex;
+			flex-wrap: nowrap;
+			gap: var(--item-gap);
+			min-width: 100%;
+			overflow: hidden;
+			scroll-behavior: smooth;
+
+			.carousel-items-start {
+				display: none;
+			}
+
+			.item {
+				flex: 0 0 var(--item-width);
+			}
+		}
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		.carousel-panel {
+			grid-template-areas:
+				'items items'
+				'previous next';
+			grid-template-columns: 1fr 1fr;
+			gap: var(--spacing-sm);
+
+			.slides,
+			.carousel-items {
+				grid-area: items;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			.slide {
+				display: flex;
+				gap: var(--spacing-md);
+				width: 100%;
+
+				.item {
+					flex: 0 0 calc((100% - var(--spacing-md)) / 2);
+					width: calc((100% - var(--spacing-md)) / 2);
+					min-width: 0;
+				}
+			}
+
+			.carousel-items .item {
+				flex: 0 0 calc((100% - var(--spacing-md)) / 2);
+				width: calc((100% - var(--spacing-md)) / 2);
+				min-width: 0;
+			}
+
+			.previous {
+				grid-area: previous;
+				justify-self: end;
+			}
+
+			.next {
+				grid-area: next;
+				justify-self: start;
+			}
+
+			.previous,
+			.next {
+				min-width: var(--size-lg);
+				width: var(--size-lg);
+				padding-inline: 0;
+			}
+		}
+	}
+}

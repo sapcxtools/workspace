@@ -1,0 +1,10 @@
+<h2>
+	{{ 'newsOverview.overviewTitle' | cxTranslate }}
+</h2>
+<cxdev-news mode="all" (hasNewsChange)="hasNews = $event" />
+
+@if (hasNews === false) {
+	<p class="empty-message">
+		{{ 'newsOverview.emptyOverview' | cxTranslate }}
+	</p>
+}

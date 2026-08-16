@@ -1,0 +1,43 @@
+cx-saved-cart-details-overview {
+	.cx-cart-summary {
+		.container {
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			gap: var(--spacing-xxl);
+			padding: var(--padding-card);
+			background-color: var(--color-background-raised);
+			border-radius: var(--radius-card);
+
+			.cx-summary-card {
+				display: contents;
+
+				cx-card {
+					background-color: transparent;
+					padding: 0;
+				}
+
+				.cx-edit-container {
+					display: flex;
+					gap: var(--spacing-sm);
+
+					button.cx-edit-cart {
+						all: unset;
+						display: flex;
+						align-items: flex-start;
+						width: var(--size-sm);
+						height: var(--size-sm);
+						background: var(--color-button-secondary-background);
+						border-radius: var(--radius-round);
+						display: grid;
+						place-content: center;
+						transform: translate(25%, -25%);
+						font-size: var(--font-size-xxs);
+						color: var(--color-button-secondary-text);
+						cursor: pointer;
+						border: 1px solid var(--color-border-subtle);
+					}
+				}
+			}
+		}
+	}
+}

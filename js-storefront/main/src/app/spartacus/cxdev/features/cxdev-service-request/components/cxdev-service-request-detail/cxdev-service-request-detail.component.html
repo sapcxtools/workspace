@@ -1,0 +1,57 @@
+@if (serviceRequestDetails$ | async; as req) {
+	<div class="service-request-detail">
+		<aside class="service-summary" aria-label="Service request summary">
+			<div class="summary-item">
+				<span class="summary-label">{{ 'serviceRequests.id' | cxTranslate }}</span>
+				<span class="summary-value id-value">{{ req.code }}</span>
+			</div>
+
+			<div class="summary-item">
+				<span class="summary-label">{{ 'serviceRequests.title' | cxTranslate }}</span>
+				<span class="summary-value">{{ req.title }}</span>
+			</div>
+
+			@if (req.type) {
+				<div class="summary-item">
+					<span class="summary-label">{{ 'serviceRequests.type' | cxTranslate }}</span>
+					<span class="summary-value">{{ req.type }}</span>
+				</div>
+			}
+
+			@if (req.customer) {
+				<div class="summary-item">
+					<span class="summary-label">{{ 'serviceRequests.customer' | cxTranslate }}</span>
+					<span class="summary-value"
+						>{{ req.customer.firstName }} {{ req.customer.lastName }}</span
+					>
+				</div>
+			}
+
+			@if (req.machines?.[0]; as firstMachine) {
+				<div class="summary-item">
+					<span class="summary-label">{{ 'serviceRequests.equipment' | cxTranslate }}</span>
+					<span class="summary-value">{{ firstMachine.name }}</span>
+				</div>
+			}
+
+			@if (req.status) {
+				<div class="summary-item">
+					<span class="summary-label">{{ 'serviceRequests.status' | cxTranslate }}</span>
+					<span class="status-badge" [attr.data-status]="req.status">{{ req.status }}</span>
+				</div>
+			}
+
+			<div class="summary-item">
+				<span class="summary-label">{{ 'serviceRequests.createdOn' | cxTranslate }}</span>
+				<span class="summary-value">{{ req.creationTime | date: 'yyyy/MM/dd' }}</span>
+			</div>
+		</aside>
+
+		<section class="service-content" aria-label="Service request details">
+			<h2>{{ 'serviceRequests.issueDescription' | cxTranslate }}</h2>
+			<p class="service-message">{{ req.description }}</p>
+		</section>
+	</div>
+} @else {
+	<p>{{ 'serviceRequests.loading' | cxTranslate }}</p>
+}

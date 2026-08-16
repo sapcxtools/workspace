@@ -1,0 +1,62 @@
+@use '../utils';
+
+cx-storefront {
+	display: grid;
+	grid-template-areas:
+		'skipLink'
+		'header'
+		'bottomHeader'
+		'main'
+		'footer';
+	grid-template-rows: auto var(--height-header) min-content 1fr auto;
+	min-height: 100vh;
+
+	> cx-skip-link {
+		grid-area: skipLink;
+		visibility: hidden;
+		height: 0px;
+	}
+
+	> header {
+		grid-area: header;
+	}
+
+	.BottomHeaderSlot {
+		@extend utils, .content-grid !optional;
+		grid-area: bottomHeader;
+
+		> * {
+			@extend utils, .content-default !optional;
+		}
+	}
+
+	> main {
+		grid-area: main;
+		margin-bottom: var(--spacing-xxl);
+
+		&:focus {
+			outline: none;
+		}
+
+		cx-page-layout {
+			@extend utils, .content-grid !optional;
+
+			> cx-page-slot {
+				@extend utils, .content-full-width !optional;
+				@extend utils, .content-grid !optional;
+
+				> * {
+					@extend utils, .content-default !optional;
+				}
+
+				&:empty {
+					display: none;
+				}
+			}
+		}
+	}
+
+	> footer {
+		grid-area: footer;
+	}
+}

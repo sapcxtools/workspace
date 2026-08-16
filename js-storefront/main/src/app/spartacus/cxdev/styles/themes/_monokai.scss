@@ -1,0 +1,24 @@
+/* Monokai — dark only */
+html:has(cxdev-root.cxdev-theme-monokai) {
+	color-scheme: dark;
+
+	--color-surface-1: #272822;
+	--color-surface-2: #2e2f28;
+	--color-surface-3: #3e3d32;
+
+	--color-text-1: #f8f8f2;
+	--color-text-2: #c0c1b5;
+	--color-text-3: #75715e;
+
+	--color-border-1: #57584f;
+	--color-border-2: #3e3d32;
+
+	--color-primary: #a6e22e;
+	--color-on-primary: #272822;
+	--color-accent: #66d9ef;
+
+	--color-danger: #f92672;
+	--color-warning: #fd971f;
+	--color-success: #a6e22e;
+	--color-info: #66d9ef;
+}

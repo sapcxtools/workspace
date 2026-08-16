@@ -1,0 +1,135 @@
+@use '../utils';
+@use '../variables/breakpoints' as bp;
+
+cxdev-dashboard {
+	@extend utils, .content-grid !optional;
+	isolation: isolate;
+	grid-column: var(--content-grid-span-full-width) !important;
+	background-color: var(--color-background-raised);
+	padding: var(--spacing-lg) 0 var(--spacing-xxxl) 0;
+	row-gap: var(--spacing-md);
+
+	> nav {
+		@extend utils, .content-default !optional;
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: var(--spacing-sm);
+		border-bottom: 1px solid var(--color-border-subtle);
+
+		ul {
+			list-style: none;
+			display: flex;
+			margin: 0;
+			padding: 0;
+			gap: var(--spacing-sm);
+			overflow-x: auto;
+			scrollbar-width: none;
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+
+		button {
+			all: unset;
+			padding: var(--spacing-sm);
+			color: var(--color-text-secondary);
+			cursor: pointer;
+			border-bottom: 2px solid transparent;
+			white-space: nowrap;
+
+			&.active,
+			&:hover {
+				color: var(--color-primary);
+				border-color: var(--color-primary);
+			}
+		}
+	}
+
+	> menu {
+		display: flex;
+		align-items: center;
+		padding: 0;
+		margin: 0;
+		gap: var(--spacing-sm);
+		flex-wrap: wrap;
+	}
+
+	> .dashboard-views {
+		@extend utils, .content-default !optional;
+		container-type: inline-size;
+
+		.dashboard-view {
+			width: 100cqw;
+			--grid-gap: var(--spacing-md);
+			--grid-cols: 6;
+			--rowHeight: calc((100cqi / var(--grid-cols)) - (var(--grid-gap)));
+
+			display: grid;
+			position: relative;
+
+			grid-template-columns: repeat(var(--grid-cols), 1fr);
+			grid-auto-rows: var(--rowHeight);
+			gap: var(--grid-gap);
+
+			@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+				--grid-cols: 1;
+				--rowHeight: calc((100cqi / var(--grid-cols)) - (var(--grid-gap)));
+			}
+
+			> [data-reorder-placeholder] {
+				box-sizing: border-box;
+				display: block;
+				grid-column: span var(--column-span, 1);
+				grid-row: span var(--row-span, 1);
+				border: 1px solid transparent;
+				outline: var(--spacing-xxs) dashed var(--color-primary);
+				border-radius: var(--radius-dashboard-widget);
+				background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+			}
+		}
+	}
+}
+
+cxdev-widget-selector-modal {
+	.cxdev-widget-selector-list {
+		list-style: none;
+		display: grid;
+		gap: var(--spacing-sm);
+		margin: 0;
+		padding: 0;
+	}
+
+	.cxdev-widget-selector-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		gap: var(--spacing-md);
+		padding: var(--spacing-sm) var(--spacing-md);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: var(--radius-dashboard-widget);
+		background-color: var(--color-background-elevated);
+		color: var(--color-text-primary);
+		cursor: pointer;
+
+		&:hover:not(:disabled) {
+			border-color: var(--color-primary);
+		}
+
+		&:disabled {
+			color: var(--color-text-disabled, var(--color-text-secondary));
+			cursor: not-allowed;
+			opacity: 0.65;
+		}
+
+		small {
+			color: var(--color-text-secondary);
+		}
+	}
+
+	.cxdev-widget-selector-empty {
+		margin: 0;
+		color: var(--color-text-secondary);
+	}
+}

@@ -1,0 +1,15 @@
+@use '../utils';
+
+cx-page-layout.ProductGridPageTemplate {
+	--content-a-width: calc(var(--content-width) / 4);
+	--content-b-width: calc(var(--content-width) - var(--content-a-width));
+
+	> cx-page-slot.ProductLeftRefinements {
+		@extend utils, .content-a !optional;
+		margin-right: var(--spacing-xl);
+	}
+
+	> cx-page-slot.ProductGridSlot {
+		@extend utils, .content-b !optional;
+	}
+}

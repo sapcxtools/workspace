@@ -1,0 +1,40 @@
+cxdev-dashboard-clock {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: var(--spacing-xs);
+
+	hgroup {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.cxdev-clock-list {
+		flex: 1;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin: 0;
+		padding: 0;
+		gap: var(--spacing-md);
+		overflow-y: auto;
+
+		li {
+			display: flex;
+			flex-direction: column;
+			align-items: baseline;
+			gap: var(--spacing-xs);
+
+			.cxdev-clock-time {
+				font-size: var(--font-size-xl);
+				font-weight: var(--font-weight-semibold);
+			}
+
+			.cxdev-clock-label {
+				flex: 1;
+				font-size: var(--font-size-xs);
+				color: var(--color-text-secondary);
+			}
+		}
+	}
+}

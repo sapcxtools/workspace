@@ -1,0 +1,49 @@
+cxdev-registration-form {
+	max-width: var(--max-width-form);
+	margin: 0 auto;
+
+	.cxdev-name-row {
+		display: flex;
+		gap: var(--size-xs);
+	}
+
+	.cxdev-name-col {
+		flex: 1 1 0;
+	}
+
+	.cxdev-details {
+		margin: var(--size-xxs) 0 var(--size-xxs);
+
+		> label {
+			display: block;
+			margin-top: var(--size-xxs);
+		}
+	}
+
+	.cxdev-terms-wrapper {
+		display: flex;
+		align-items: flex-start;
+		margin-top: var(--size-xxs);
+		margin-bottom: var(--size-xs);
+	}
+
+	.cxdev-terms-label {
+		display: block;
+		input[type='checkbox'] {
+			margin-right: var(--size-xxs);
+		}
+	}
+
+	.cxdev-terms-text {
+		a {
+			color: var(--color-text-link);
+			&::after {
+				color: var(--color-text-body);
+				content: '*';
+			}
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}

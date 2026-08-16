@@ -1,0 +1,28 @@
+<hgroup>
+	<h3>{{ 'dashboard.todo.headline' | cxTranslate }}</h3>
+</hgroup>
+
+<ul class="cxdev-todo-list">
+	@for (item of items(); track $index) {
+		<li [class.done]="item.done">
+			<label>
+				<input type="checkbox" [checked]="item.done" (change)="toggleItem($index)" />
+				<span class="cxdev-todo-text">{{ item.text }}</span>
+			</label>
+			<button
+				class="btn-secondary btn-icon"
+				(click)="removeItem($index)"
+				[attr.aria-label]="'dashboard.todo.remove' | cxTranslate">
+				✕
+			</button>
+		</li>
+	}
+</ul>
+
+<input
+	#todoInput
+	type="text"
+	class="cxdev-todo-input"
+	(keyup.enter)="addItem(todoInput)"
+	[placeholder]="'dashboard.todo.placeholder' | cxTranslate"
+	[attr.aria-label]="'dashboard.todo.placeholder' | cxTranslate" />

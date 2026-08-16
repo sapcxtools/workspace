@@ -1,0 +1,32 @@
+cxdev-form {
+	display: block;
+	width: 100%;
+	max-width: var(--max-width-form);
+	background-color: var(--color-background-raised);
+	padding: var(--padding-card);
+	border-radius: var(--radius-card);
+	border: 1px solid var(--color-border-subtle);
+
+	textarea {
+		min-height: var(--size-xl);
+		max-height: none;
+	}
+
+	.button-group {
+		margin-top: var(--spacing-md);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-md);
+
+		.reset-form {
+			&:hover {
+				color: var(--color-text-danger);
+				border-color: var(--color-border-danger);
+			}
+		}
+
+		[type='submit'] {
+			width: 100%;
+		}
+	}
+}

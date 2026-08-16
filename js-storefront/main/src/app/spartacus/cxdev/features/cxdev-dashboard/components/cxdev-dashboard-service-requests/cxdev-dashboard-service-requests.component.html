@@ -1,0 +1,34 @@
+<hgroup>
+	<h3>{{ 'dashboard.serviceRequest.headline' | cxTranslate }}</h3>
+	<ng-container
+		[cxdevComponentWrapper]="{
+			uid: 'CxdevAllFormsListComponent',
+			flexType: 'CxdevFormListComponent',
+		}"
+		[cxdevComponentWrapperType]="dataAquisitionType">
+	</ng-container>
+</hgroup>
+@if (serviceRequestsCount$ | async; as count) {
+	<ul>
+		<li>
+			<a
+				[routerLink]="{ cxRoute: 'serviceRequestOverview' } | cxUrl"
+				[queryParams]="{ query: ':date-desc:status:OPEN' }"
+				aria-labelledby="open-tickets"
+				class="cxdev-service-requests-link">
+				<span class="cxdev-service-requests-count highlighted">{{ count.openRequests }}</span>
+				<span id="open-tickets">{{ 'dashboard.serviceRequest.open' | cxTranslate }}</span>
+			</a>
+		</li>
+		<li>
+			<a
+				[routerLink]="{ cxRoute: 'serviceRequestOverview' } | cxUrl"
+				[queryParams]="{ query: ':date-desc:status:COMPLETED' }"
+				aria-labelledby="closed-tickets"
+				class="cxdev-service-requests-link">
+				<span class="cxdev-service-requests-count">{{ count.closedRequests }}</span>
+				<span id="closed-tickets">{{ 'dashboard.serviceRequest.closed' | cxTranslate }}</span>
+			</a>
+		</li>
+	</ul>
+}

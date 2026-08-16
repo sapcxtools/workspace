@@ -1,0 +1,117 @@
+@use '../variables/breakpoints' as bp;
+
+cx-invoices-list {
+	display: block;
+	container-type: inline-size;
+
+	.cx-invoices-list-table {
+		table-layout: fixed;
+	}
+
+	.cx-invoices-list-code,
+	.cx-invoices-list-date,
+	.cx-invoices-list-monetary,
+	.cx-invoices-list-attachment,
+	.cx-invoices-list-value {
+		min-width: 0;
+	}
+
+	.cx-invoices-list-value {
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.cx-invoices-list-attachment-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+		max-width: 100%;
+		white-space: normal;
+	}
+
+	.cx-invoices-list-sort {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+		margin-bottom: var(--spacing-md);
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		.cx-invoices-list-sort {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.cx-invoices-list-form-group,
+		.cx-invoices-list-pagination {
+			width: 100%;
+		}
+
+		table {
+			thead {
+				display: none;
+			}
+
+			tbody {
+				display: flex;
+				flex-direction: column;
+				gap: var(--spacing-sm);
+
+				tr {
+					display: grid;
+					grid-template-areas:
+						'code date'
+						'net total'
+						'attachment attachment';
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+					border-bottom: 0;
+
+					td {
+						display: flex;
+						flex-direction: column;
+						gap: var(--spacing-xs);
+						padding: var(--spacing-sm);
+						background-color: var(--color-background-raised);
+					}
+				}
+			}
+		}
+
+		.cx-invoices-list-label {
+			display: block;
+			font-size: var(--font-size-xxs);
+			font-weight: var(--font-weight-semibold);
+			text-transform: uppercase;
+			color: var(--color-text-secondary);
+		}
+
+		.cx-invoices-list-code {
+			grid-area: code;
+			border-top-left-radius: var(--radius-lg);
+		}
+
+		.cx-invoices-list-date {
+			grid-area: date;
+			border-top-right-radius: var(--radius-lg);
+		}
+
+		td.cx-invoices-list-monetary:nth-child(3) {
+			grid-area: net;
+		}
+
+		td.cx-invoices-list-monetary:nth-child(4) {
+			grid-area: total;
+		}
+
+		.cx-invoices-list-attachment {
+			grid-area: attachment;
+			border-bottom-left-radius: var(--radius-lg);
+			border-bottom-right-radius: var(--radius-lg);
+		}
+
+		.cx-invoices-list-attachment-btn {
+			justify-content: flex-start;
+		}
+	}
+}

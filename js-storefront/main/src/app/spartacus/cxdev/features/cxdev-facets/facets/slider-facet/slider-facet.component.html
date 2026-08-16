@@ -1,0 +1,18 @@
+@if (!!_facet) {
+	@if (min < max) {
+		<strong [id]="'facet_' + _facet.name">{{ _facet.name }}</strong>
+		<span class="facetClearLink">
+			@if (showClearLink()) {
+				<a (click)="clearFacet()" class="link cursor-pointer">
+					<cx-icon class="fas fa-times"></cx-icon>
+				</a>
+			}
+		</span>
+		<ngx-slider
+			[(value)]="from"
+			[(highValue)]="to"
+			[options]="options"
+			(userChange)="onSubmit($event)"
+			aria-labelledby="'facet_' + facet.name"></ngx-slider>
+	}
+}

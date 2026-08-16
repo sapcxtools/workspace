@@ -1,0 +1,49 @@
+/* One Dark Pro (Atom) */
+html:has(cxdev-root.cxdev-theme-one-dark) {
+	color-scheme: dark;
+
+	--color-surface-1: #282c34;
+	--color-surface-2: #2c313a;
+	--color-surface-3: #353b45;
+
+	--color-text-1: #d7dae0;
+	--color-text-2: #abb2bf;
+	--color-text-3: #5c6370;
+
+	--color-border-1: #4b5263;
+	--color-border-2: #3b4048;
+
+	--color-primary: #61afef;
+	--color-on-primary: #282c34;
+	--color-accent: #c678dd;
+
+	--color-danger: #e06c75;
+	--color-warning: #e5c07b;
+	--color-success: #98c379;
+	--color-info: #61afef;
+}
+
+/* One Light (Atom) */
+html:has(cxdev-root.cxdev-theme-one-light) {
+	color-scheme: light;
+
+	--color-surface-1: #fafafa;
+	--color-surface-2: #f0f0f1;
+	--color-surface-3: #e5e5e6;
+
+	--color-text-1: #383a42;
+	--color-text-2: #696c77;
+	--color-text-3: #a0a1a7;
+
+	--color-border-1: #c9c9ca;
+	--color-border-2: #dbdbdc;
+
+	--color-primary: #4078f2;
+	--color-on-primary: #ffffff;
+	--color-accent: #a626a4;
+
+	--color-danger: #e45649;
+	--color-warning: #c18401;
+	--color-success: #50a14f;
+	--color-info: #0184bc;
+}

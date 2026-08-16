@@ -1,0 +1,32 @@
+@use '../utils';
+@use '../variables/breakpoints' as bp;
+
+cx-page-layout.MultiStepCheckoutSummaryPageTemplate {
+	--content-b-width: calc(var(--content-width) / 3.5);
+	--content-a-width: calc(var(--content-width) - var(--content-b-width));
+	padding-top: var(--spacing-xxl);
+
+	> cx-page-slot.BodyContent {
+		@extend utils, .content-a !optional;
+		margin-right: var(--spacing-xl);
+
+		@media (max-width: calc(#{bp.$breakpoint-md} - 1px)) {
+			margin-right: 0;
+		}
+
+		cx-checkout-progress-mobile-top,
+		cx-checkout-progress-mobile-bottom {
+			display: none;
+		}
+	}
+
+	> cx-page-slot.SideContent {
+		@extend utils, .content-b !optional;
+
+		padding: var(--spacing-md);
+		background-color: var(--color-background-raised);
+		border-radius: var(--radius-card);
+
+		height: fit-content;
+	}
+}

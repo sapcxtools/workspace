@@ -1,0 +1,29 @@
+cxdev-dashboard-teaser {
+	display: block;
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	a {
+		color: var(--color-text-body);
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		.icon-wrapper {
+			display: flex;
+			justify-content: space-between;
+
+			margin-bottom: auto;
+			cx-icon {
+				color: var(--color-text-secondary);
+			}
+			cx-media {
+				border: 1px solid;
+				border-radius: var(--radius-sm);
+				width: var(--size-lg);
+				padding: var(--spacing-xxs);
+			}
+		}
+	}
+}

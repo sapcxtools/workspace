@@ -1,0 +1,63 @@
+cxdev-dashboard-weather {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: var(--spacing-xs);
+
+	hgroup {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.cxdev-weather {
+		flex: 1;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-areas:
+			'icon temperature'
+			'icon condition'
+			'icon wind';
+		align-content: center;
+		column-gap: var(--spacing-md);
+
+		.cxdev-weather-icon {
+			grid-area: icon;
+			align-self: center;
+			font-size: var(--font-size-xxl);
+			line-height: 1;
+		}
+
+		.cxdev-weather-temperature {
+			grid-area: temperature;
+			font-size: var(--font-size-xl);
+			font-weight: var(--font-weight-semibold);
+			line-height: 1.2;
+		}
+
+		.cxdev-weather-condition {
+			grid-area: condition;
+			font-size: var(--font-size-sm);
+		}
+
+		.cxdev-weather-wind {
+			grid-area: wind;
+			font-size: var(--font-size-xs);
+			color: var(--color-text-secondary);
+		}
+	}
+
+	.cxdev-weather-message {
+		flex: 1;
+		display: grid;
+		place-content: center;
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--color-text-muted);
+	}
+
+	.cxdev-weather-location {
+		margin: 0;
+		text-align: center;
+		font-size: var(--font-size-xs);
+		color: var(--color-text-secondary);
+	}
+}

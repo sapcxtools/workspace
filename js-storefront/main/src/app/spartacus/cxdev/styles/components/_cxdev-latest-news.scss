@@ -1,0 +1,18 @@
+cxdev-latest-news {
+	.overview-link-wrapper {
+		display: flex;
+		justify-content: center;
+		margin-top: var(--spacing-md);
+	}
+
+	.overview-link {
+		color: var(--color-text-link, var(--color-primary));
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-semibold);
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}

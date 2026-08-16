@@ -1,0 +1,9 @@
+<hgroup>
+	<h3>{{ 'dashboard.notepad.headline' | cxTranslate }}</h3>
+</hgroup>
+<textarea
+	class="cxdev-notepad-text"
+	[value]="text()"
+	(blur)="onBlur($any($event.target).value)"
+	[placeholder]="'dashboard.notepad.placeholder' | cxTranslate"
+	[attr.aria-label]="'dashboard.notepad.headline' | cxTranslate"></textarea>

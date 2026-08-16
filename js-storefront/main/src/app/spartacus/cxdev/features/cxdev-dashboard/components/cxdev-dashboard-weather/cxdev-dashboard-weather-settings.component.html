@@ -1,0 +1,16 @@
+@if (location()) {
+	<p class="cxdev-weather-settings-current">
+		{{ 'dashboard.weather.currentLocation' | cxTranslate }}: <strong>{{ location() }}</strong>
+	</p>
+}
+
+<input
+	type="text"
+	[disabled]="searching()"
+	(keyup.enter)="searchLocation($any($event.target).value)"
+	[placeholder]="'dashboard.weather.searchPlaceholder' | cxTranslate"
+	[attr.aria-label]="'dashboard.weather.searchPlaceholder' | cxTranslate" />
+
+@if (notFound()) {
+	<p class="cxdev-widget-settings-message">{{ 'dashboard.weather.notFound' | cxTranslate }}</p>
+}

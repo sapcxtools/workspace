@@ -1,0 +1,15 @@
+@if (hasNews === true) {
+	<h2>
+		{{ 'news.headline' | cxTranslate }}
+	</h2>
+}
+
+<cxdev-news mode="latest" (hasNewsChange)="hasNews = $event" />
+
+@if (hasNews === true) {
+	<div class="overview-link-wrapper">
+		<a routerLink="/news" class="overview-link">
+			{{ 'news.showAllLink' | cxTranslate }}
+		</a>
+	</div>
+}

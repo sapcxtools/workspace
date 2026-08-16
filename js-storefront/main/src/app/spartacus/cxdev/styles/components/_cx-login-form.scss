@@ -1,0 +1,29 @@
+cx-login-form {
+	display: block;
+	width: min(100%, var(--size-xxxl));
+	justify-self: center;
+	margin-block: var(--spacing-xxxl);
+
+	.cx-password-input-wrapper {
+		position: relative;
+
+		cx-password-visibility-toggle {
+			display: block;
+			position: absolute;
+			right: var(--spacing-md);
+			top: 50%;
+			transform: translateY(-50%);
+		}
+	}
+
+	+ cx-paragraph,
+	~ cx-link.cx-organization-user-register-button {
+		width: min(100%, var(--size-xxxl));
+		justify-self: center;
+	}
+
+	+ cx-paragraph {
+		margin: var(--spacing-md) 0 var(--spacing-xs) 0;
+		font-size: var(--font-size-xs);
+	}
+}

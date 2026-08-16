@@ -1,0 +1,32 @@
+import { NgModule } from '@angular/core';
+import { CmsConfig, I18nConfig, provideConfig } from '@spartacus/core';
+import {
+	documentFlowTranslationsEn,
+	orderDocumentFlowTranslationChunksConfig,
+} from '@spartacus/order/document-flow/assets';
+import {
+	ORDER_DOCUMENT_FLOW_FEATURE,
+	OrderDocumentFlowRootModule,
+} from '@spartacus/order/document-flow/root';
+
+@NgModule({
+	declarations: [],
+	imports: [OrderDocumentFlowRootModule],
+	providers: [
+		provideConfig(<CmsConfig>{
+			featureModules: {
+				[ORDER_DOCUMENT_FLOW_FEATURE]: {
+					module: () =>
+						import('@spartacus/order/document-flow').then((m) => m.OrderDocumentFlowModule),
+				},
+			},
+		}),
+		provideConfig(<I18nConfig>{
+			i18n: {
+				resources: { en: documentFlowTranslationsEn },
+				chunks: orderDocumentFlowTranslationChunksConfig,
+			},
+		}),
+	],
+})
+export class OrderDocumentFlowFeatureModule {}

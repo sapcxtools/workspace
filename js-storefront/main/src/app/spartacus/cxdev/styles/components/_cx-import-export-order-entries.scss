@@ -1,0 +1,9 @@
+cx-import-export-order-entries {
+	display: flex;
+	justify-content: flex-start;
+	gap: var(--spacing-md);
+
+	cx-export-order-entries {
+		display: none;
+	}
+}

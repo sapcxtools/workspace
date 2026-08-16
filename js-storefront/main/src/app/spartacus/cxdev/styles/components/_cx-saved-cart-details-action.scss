@@ -1,0 +1,7 @@
+cx-saved-cart-details-action {
+	> .row {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-md);
+	}
+}

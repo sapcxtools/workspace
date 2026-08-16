@@ -1,0 +1,14 @@
+cxdev-facet-display {
+	h3 {
+		display: inline;
+	}
+	.facets-clearalllink {
+		float: right;
+		cursor: pointer;
+	}
+	.facet-container {
+		margin-top: var(--spacing-md);
+		display: flex;
+		flex-direction: column;
+	}
+}

@@ -1,0 +1,13 @@
+{
+  "applications": [
+    {
+      "name": "CXDEV",
+      "path": "main",
+      "enabledRepositories": ["spartacus-6"],
+      "csr": {
+        "webroot": "dist/cxdev/browser/"
+      }
+    }
+  ],
+  "nodeVersion": "22"
+}

@@ -1,0 +1,48 @@
+@if (news$ | async; as newsItems) {
+	@if (newsItems.length > 0) {
+		<ul>
+			@for (news of newsItems; track news.id ?? $index) {
+				<li>
+					<article>
+						<div class="image-wrapper">
+							@if (news.teaserImage; as teaserImage) {
+								<cx-media
+									[container]="teaserImage"
+									[alt]="news.title || teaserImage.altText || 'News Teaser Image'">
+								</cx-media>
+							} @else {
+								<div class="image-placeholder" aria-hidden="true"></div>
+							}
+						</div>
+
+						<div class="content">
+							@if (news.creationTime) {
+								<time [attr.datetime]="news.creationTime">
+									{{ news.creationTime | date: 'dd.MM.yyyy' }}
+								</time>
+							}
+
+							@if (news.title) {
+								<h3>
+									{{ news.title }}
+								</h3>
+							}
+
+							@if (news.shortDescription) {
+								<p>
+									{{ news.shortDescription }}
+								</p>
+							}
+
+							@if (news.url?.trim()) {
+								<a [href]="news.url" target="_blank" rel="noopener noreferrer">
+									{{ 'news.seeMoreLink' | cxTranslate }}
+								</a>
+							}
+						</div>
+					</article>
+				</li>
+			}
+		</ul>
+	}
+}

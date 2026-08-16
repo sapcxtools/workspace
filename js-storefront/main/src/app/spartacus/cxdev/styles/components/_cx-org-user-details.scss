@@ -1,0 +1,25 @@
+cx-org-user-details {
+	cx-view {
+		min-width: 0;
+
+		.details {
+			min-width: 0;
+
+			ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			.property,
+			.value,
+			a,
+			.orgUnit,
+			li {
+				min-width: 0;
+				overflow-wrap: anywhere;
+				word-break: break-word;
+			}
+		}
+	}
+}

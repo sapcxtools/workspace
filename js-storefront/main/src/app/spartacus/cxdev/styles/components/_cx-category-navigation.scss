@@ -1,0 +1,175 @@
+@use '../variables/breakpoints' as bp;
+
+cx-category-navigation {
+	cx-navigation-ui {
+		nav {
+			> ul {
+				display: flex;
+				list-style: none;
+				padding: 0;
+
+				.back {
+					display: none;
+				}
+
+				> li {
+					height: var(--height-navigation);
+					display: flex;
+					align-items: center;
+					padding-right: var(--spacing-md);
+					font-weight: var(--font-weight-bold);
+					gap: var(--spacing-xs);
+
+					> button {
+						all: unset;
+						cursor: pointer;
+
+						cx-icon {
+							margin-left: var(--spacing-xs);
+						}
+					}
+
+					&:last-child {
+						padding-right: 0;
+					}
+
+					a {
+						color: var(--color-text-body);
+
+						&:hover {
+							color: var(--color-text-link);
+							text-decoration: none;
+						}
+					}
+
+					.wrapper {
+						display: none;
+						position: absolute;
+						top: 100%;
+						left: 0;
+						padding: var(--spacing-md) calc(var(--padding-header));
+						width: 100%;
+						background-color: var(--color-background-raised);
+						border-bottom: 1px solid var(--color-border-subtle);
+
+						ul {
+							padding: 0;
+							list-style: none;
+							display: flex;
+							flex-direction: column;
+							gap: var(--spacing-sm);
+
+							li {
+								.wrapper {
+									display: block;
+								}
+							}
+						}
+					}
+
+					&:hover {
+						.wrapper {
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: calc(#{bp.$breakpoint-lg} - 1px)) {
+	cx-category-navigation {
+		cx-navigation-ui {
+			nav {
+				> ul {
+					flex-direction: column;
+					flex-wrap: wrap;
+
+					> li {
+						height: auto;
+						padding: 0;
+						flex-wrap: wrap;
+						width: 100%;
+						border-bottom: 1px solid var(--color-border-subtle);
+
+						> cx-generic-link {
+							flex: 1 1 auto;
+							min-width: 0;
+
+							a {
+								display: block;
+								padding: var(--spacing-md) 0;
+								font-weight: var(--font-weight-bold);
+							}
+						}
+
+						> button {
+							flex: 0 0 auto;
+							display: flex;
+							align-items: center;
+							justify-content: flex-end;
+							margin-left: auto;
+							padding: var(--spacing-md) 0 var(--spacing-md) var(--spacing-md);
+							font-weight: var(--font-weight-bold);
+
+							cx-icon {
+								margin-left: auto;
+								transition: transform 0.2s ease;
+							}
+						}
+
+						&:not(:has(> cx-generic-link)) > button {
+							width: 100%;
+							padding-left: 0;
+							justify-content: space-between;
+						}
+
+						&.is-open > button cx-icon {
+							transform: rotate(180deg);
+						}
+
+						.wrapper {
+							position: static;
+							display: none;
+							width: 100%;
+							flex-basis: 100%;
+							margin-bottom: var(--spacing-md);
+							padding: var(--spacing-xs) var(--spacing-md);
+							background-color: var(--color-background);
+							border: 1px solid var(--color-border-subtle);
+							border-radius: var(--radius-card);
+							box-shadow: none;
+
+							ul {
+								gap: 0;
+							}
+
+							li {
+								border-bottom: 1px solid var(--color-border-subtle);
+
+								&:last-child {
+									border-bottom: none;
+								}
+							}
+
+							a {
+								display: block;
+								padding: var(--spacing-sm) 0;
+								text-decoration: none;
+							}
+						}
+
+						&:hover .wrapper {
+							display: none;
+						}
+
+						&.is-open .wrapper {
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+}

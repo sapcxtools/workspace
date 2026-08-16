@@ -1,0 +1,19 @@
+@use '../elements/elements';
+
+cx-mini-cart {
+	a {
+		@extend elements, .btn-primary !optional;
+
+		.total {
+			display: none;
+		}
+
+		cx-icon {
+			margin-right: var(--spacing-xs);
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}

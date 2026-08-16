@@ -1,0 +1,29 @@
+cx-cart-quick-order-form {
+	.cx-cart-quick-order-form-title {
+		margin-bottom: var(--spacing-md);
+		font-weight: var(--font-weight-bold);
+	}
+
+	.cx-cart-quick-order-form-container {
+		display: grid;
+		grid-template-areas: 'id qty' 'add add';
+		grid-template-columns: 1fr 25%;
+		gap: var(--spacing-sm);
+
+		.cx-cart-quick-order-form-productID {
+			grid-area: id;
+		}
+
+		.cx-cart-quick-order-form-qty {
+			grid-area: qty;
+		}
+
+		button {
+			grid-area: add;
+		}
+	}
+	label {
+		flex-direction: row;
+		margin-bottom: var(--spacing-xs);
+	}
+}

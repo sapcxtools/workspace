@@ -1,12 +1,7 @@
 {
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
   "recommendations": [
-    // Angular Language Service
-    "Angular.ng-template",
-    // Debugger for Chrome
-    "msjsdiag.debugger-for-chrome",
-    // The ng lint command uses TSLint under the hood.
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    // Prettier - Code formatter
-    "esbenp.prettier-vscode"
+    "angular.ng-template",
+    "vunguyentuan.vscode-css-variables"
   ]
 }

@@ -1,0 +1,22 @@
+cx-delivery-address {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+
+	.cx-checkout-body {
+		display: flex;
+		align-items: stretch;
+		gap: var(--spacing-md);
+
+		.cx-delivery-address-card,
+		.cx-delivery-address-card-inner {
+			height: 100%;
+		}
+	}
+
+	.cx-checkout-btns {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-sm);
+	}
+}

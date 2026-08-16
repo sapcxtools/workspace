@@ -1,0 +1,16 @@
+cxdev-checkbox-facet {
+	margin-top: var(--spacing-md);
+	.facetClearLink {
+		float: right;
+		a {
+			cursor: pointer;
+		}
+	}
+	form {
+		margin: var(--spacing-sm) 0 var(--spacing-md) 0;
+		label:has(input[type='checkbox']) {
+			flex-direction: row-reverse;
+			justify-content: flex-end;
+		}
+	}
+}

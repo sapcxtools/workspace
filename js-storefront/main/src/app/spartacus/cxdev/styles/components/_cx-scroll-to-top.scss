@@ -1,0 +1,12 @@
+cx-scroll-to-top {
+	position: fixed;
+	bottom: var(--spacing-xl);
+	right: var(--spacing-md);
+	z-index: var(--z-index-scroll-to-top);
+	transform: translateY(200%);
+	transition: transform 0.3s ease-in-out;
+
+	&.display {
+		transform: translateY(0);
+	}
+}

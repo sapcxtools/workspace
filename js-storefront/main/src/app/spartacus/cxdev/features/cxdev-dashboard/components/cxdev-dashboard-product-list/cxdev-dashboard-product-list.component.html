@@ -1,0 +1,26 @@
+@if (data$ | async; as data) {
+	<hgroup>
+		<h3>{{ 'dashboard.equipment.headline' | cxTranslate }}</h3>
+		<a [routerLink]="'c/99999999'" class="btn btn-secondary">{{
+			data.linkText || ('dashboard.equipment.linktext' | cxTranslate)
+		}}</a>
+	</hgroup>
+
+	@if (equipment$ | async; as equipment) {
+		<ul>
+			@for (product of equipment.products; track product.code) {
+				<li>
+					<a [routerLink]="['/p', product.code]" class="product-link">
+						<cx-media
+							class="cx-product-image"
+							[container]="product.images ? product.images['PRIMARY'] : undefined"
+							format="thumbnail"
+							[alt]="product.name || product.summary || ''"></cx-media>
+						<h4>{{ product.code }}</h4>
+						<p>{{ product.name || product.summary || '' }}</p>
+					</a>
+				</li>
+			}
+		</ul>
+	}
+}

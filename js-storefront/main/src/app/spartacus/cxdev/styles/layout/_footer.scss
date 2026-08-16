@@ -1,0 +1,20 @@
+@use '../utils';
+
+footer {
+	padding: var(--spacing-xxxl) 0;
+	background-color: var(--color-background-raised);
+
+	cx-page-slot.Footer {
+		@extend utils, .content-grid !optional;
+
+		> * {
+			@extend utils, .content-default !optional;
+		}
+	}
+}
+
+.cx-notice {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+}

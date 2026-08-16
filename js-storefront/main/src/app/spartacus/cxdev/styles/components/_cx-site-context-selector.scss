@@ -1,0 +1,24 @@
+cx-site-context-selector {
+	label {
+		flex-direction: row;
+		align-items: center;
+
+		span {
+			display: none;
+		}
+
+		select {
+			font-size: var(--font-size-3);
+			font-weight: var(--font-weight-bold);
+
+			&:focus,
+			&:active {
+				outline: none;
+			}
+		}
+
+		cx-icon.cx-icon {
+			display: none;
+		}
+	}
+}

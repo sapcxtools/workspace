@@ -1,0 +1,32 @@
+@use '../elements/elements';
+@use '../variables/breakpoints' as bp;
+
+cx-add-to-saved-cart {
+	container-type: inline-size;
+	display: block;
+
+	.cx-add-to-saved-cart-container {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: var(--spacing-sm);
+
+		a,
+		button {
+			@extend elements, .btn-secondary !optional;
+		}
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		.cx-add-to-saved-cart-container {
+			flex-direction: column;
+			align-items: stretch;
+			width: 100%;
+
+			a,
+			button {
+				width: 100%;
+			}
+		}
+	}
+}

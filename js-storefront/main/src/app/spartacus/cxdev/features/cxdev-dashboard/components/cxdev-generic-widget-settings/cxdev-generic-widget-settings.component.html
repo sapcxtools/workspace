@@ -1,0 +1,46 @@
+<section class="cxdev-generic-widget-settings" aria-labelledby="cxdev-generic-widget-settings-title">
+	<div class="cxdev-widget-settings-section-header">
+		<h4 id="cxdev-generic-widget-settings-title">
+			{{ 'dashboard.widgetSettings.appearance' | cxTranslate }}
+		</h4>
+	</div>
+
+	<div class="cxdev-widget-setting-group">
+		<div class="cxdev-widget-setting-label">
+			<span>{{ 'dashboard.widgetSettings.backgroundColor' | cxTranslate }}</span>
+			<button
+				type="button"
+				class="cxdev-widget-settings-reset"
+				[disabled]="!hasCustomBackgroundColor()"
+				(click)="resetBackgroundColor()">
+				{{ 'dashboard.widgetSettings.resetBackgroundColor' | cxTranslate }}
+			</button>
+		</div>
+
+		<div class="cxdev-widget-theme-colors">
+			@for (color of themeColors; track color.value) {
+				<button
+					type="button"
+					class="cxdev-widget-theme-color"
+					[class.is-selected]="isSelectedBackgroundColor(color.value)"
+					[style.--cxdev-theme-color]="color.value"
+					(click)="updateBackgroundColor(color.value)"
+					[attr.aria-label]="color.labelKey | cxTranslate"
+					[attr.aria-pressed]="isSelectedBackgroundColor(color.value)">
+					<span>{{ color.labelKey | cxTranslate }}</span>
+				</button>
+			}
+
+			<label
+				class="cxdev-widget-theme-color cxdev-widget-custom-color"
+				[class.is-selected]="backgroundColor().startsWith('#')"
+				[style.--cxdev-theme-color]="customBackgroundColor()">
+				<span>{{ 'dashboard.widgetSettings.customBackgroundColor' | cxTranslate }}</span>
+				<input
+					type="color"
+					[value]="customBackgroundColor()"
+					(input)="updateBackgroundColor($any($event.target).value)" />
+			</label>
+		</div>
+	</div>
+</section>

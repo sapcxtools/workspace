@@ -1,0 +1,49 @@
+/* Dracula — dark */
+html:has(cxdev-root.cxdev-theme-dracula) {
+	color-scheme: dark;
+
+	--color-surface-1: #282a36;
+	--color-surface-2: #303241;
+	--color-surface-3: #44475a;
+
+	--color-text-1: #f8f8f2;
+	--color-text-2: #b7bad0;
+	--color-text-3: #6272a4;
+
+	--color-border-1: #56597a;
+	--color-border-2: #3d4053;
+
+	--color-primary: #bd93f9;
+	--color-on-primary: #282a36;
+	--color-accent: #ff79c6;
+
+	--color-danger: #ff5555;
+	--color-warning: #ffb86c;
+	--color-success: #50fa7b;
+	--color-info: #8be9fd;
+}
+
+/* Dracula — light (Alucard) */
+html:has(cxdev-root.cxdev-theme-dracula-light) {
+	color-scheme: light;
+
+	--color-surface-1: #fffbeb;
+	--color-surface-2: #f7f2e2;
+	--color-surface-3: #ede8d8;
+
+	--color-text-1: #1f1f1f;
+	--color-text-2: #635d97;
+	--color-text-3: #9d98c2;
+
+	--color-border-1: #cbc6b6;
+	--color-border-2: #e3decd;
+
+	--color-primary: #644ac9;
+	--color-on-primary: #fffbeb;
+	--color-accent: #a3144d;
+
+	--color-danger: #cb3a2a;
+	--color-warning: #a34d14;
+	--color-success: #14710a;
+	--color-info: #036a96;
+}

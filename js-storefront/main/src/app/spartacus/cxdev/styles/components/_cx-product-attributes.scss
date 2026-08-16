@@ -1,0 +1,108 @@
+@use '../variables/breakpoints' as bp;
+
+cx-product-attributes {
+	container-type: inline-size;
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+
+	.container {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		padding: 0;
+	}
+
+	.container > h2 {
+		display: none;
+	}
+
+	table {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		margin-bottom: var(--spacing-lg);
+		border: 1px solid var(--color-border-subtle);
+		border-collapse: separate;
+		border-spacing: 0;
+		border-radius: var(--radius-card);
+		background: var(--color-background);
+		table-layout: fixed;
+		overflow: hidden;
+
+		th {
+			display: block;
+			width: 100%;
+			background: var(--color-background-raised);
+
+			h2 {
+				margin: 0;
+				padding: var(--spacing-md);
+				text-align: left;
+				color: var(--color-text-body);
+				font-family: var(--font-family-title);
+				font-size: clamp(var(--font-size-md), 4vw, var(--font-size-xl));
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		tr {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			align-items: stretch;
+
+			&:nth-child(odd) {
+				background-color: var(--color-background-raised);
+			}
+
+			td {
+				width: auto;
+				min-width: 0;
+				padding: var(--spacing-md);
+				overflow-wrap: anywhere;
+				word-break: normal;
+			}
+
+			td:first-of-type {
+				font-weight: var(--font-weight-bold);
+				color: var(--color-text-body);
+			}
+
+			td:last-of-type {
+				color: var(--color-text-secondary);
+				font-weight: var(--font-weight-medium);
+			}
+		}
+
+		ul {
+			margin: 0;
+			padding-inline-start: var(--spacing-md);
+		}
+
+		li {
+			padding-inline-start: var(--spacing-xs);
+		}
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		table {
+			margin-bottom: var(--spacing-md);
+		}
+
+		table tr {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--spacing-xs);
+			padding: var(--spacing-md);
+		}
+
+		table tr td {
+			padding: 0;
+		}
+
+		table tr td:last-of-type {
+			padding-inline-start: var(--spacing-sm);
+			border-inline-start: var(--spacing-xxs) solid var(--color-primary);
+		}
+	}
+}

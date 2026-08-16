@@ -1,0 +1,24 @@
+<ul class="cxdev-clock-settings-list">
+	@for (timezone of timezones(); track timezone) {
+		<li>
+			<span>{{ timezone }}</span>
+			<button
+				(click)="removeTimezone(timezone)"
+				[attr.aria-label]="'dashboard.clock.remove' | cxTranslate">
+				✕
+			</button>
+		</li>
+	}
+</ul>
+
+<div class="cxdev-clock-settings-add">
+	<select #timezoneSelect [attr.aria-label]="'dashboard.clock.selectTimezone' | cxTranslate">
+		<option value="">{{ 'dashboard.clock.selectTimezone' | cxTranslate }}</option>
+		@for (timezone of availableTimezones; track timezone) {
+			<option [value]="timezone">{{ timezone }}</option>
+		}
+	</select>
+	<button class="btn-secondary" (click)="addTimezone(timezoneSelect)">
+		{{ 'dashboard.clock.add' | cxTranslate }}
+	</button>
+</div>

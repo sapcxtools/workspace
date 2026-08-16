@@ -1,0 +1,67 @@
+/* primitive size tokens */
+
+@property --size-100 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 8px;
+}
+
+@property --size-200 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 16px;
+}
+
+@property --size-300 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 24px;
+}
+
+@property --size-400 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 32px;
+}
+
+@property --size-500 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 54px;
+}
+
+@property --size-600 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 128px;
+}
+
+@property --size-650 {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 192px;
+}
+
+@property --size-700 {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 256px;
+}
+
+@property --size-800 {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 512px;
+}
+
+:root {
+	/* semantic size tokens */
+	--size-xxs: var(--size-100);
+	--size-xs: var(--size-200);
+	--size-sm: var(--size-300);
+	--size-md: var(--size-400);
+	--size-lg: var(--size-500);
+	--size-xl: var(--size-600);
+	--size-xxl: var(--size-700);
+	--size-xxxl: var(--size-800);
+}

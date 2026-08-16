@@ -1,0 +1,264 @@
+@if (cart) {
+	<div
+		[cxFocus]="focusConfig"
+		(esc)="close('Escape clicked')"
+		class="modal-dialog modal-dialog-centered cx-saved-cart-form-dialog"
+		role="dialog"
+		aria-labelledby="dialogTitle">
+		<form [formGroup]="form" class="modal-content cx-saved-cart-form-container">
+			<div class="modal-header cx-saved-cart-form-header">
+				<h3 id="dialogTitle" class="cx-saved-cart-form-title modal-title">
+					@switch (layoutOption) {
+						@case (savedCartFormType.EDIT) {
+							{{ 'savedCartDialog.editSavedCart' | cxTranslate }}
+						}
+						@case (savedCartFormType.DELETE) {
+							{{ 'savedCartDialog.deleteSavedCart' | cxTranslate }}
+						}
+						@case (savedCartFormType.SAVE) {
+							{{ 'savedCartDialog.saveForLater' | cxTranslate }}
+						}
+						@case (savedCartFormType.RESTORE) {
+							{{ 'savedCartDialog.restoreSavedCart' | cxTranslate }}
+						}
+					}
+				</h3>
+
+				<button
+					(click)="close('Close Save Cart Dialog')"
+					[disabled]="isLoading$ | async"
+					class="cx-saved-cart-form-close close"
+					type="button"
+					title="{{ 'common.close' | cxTranslate }}"
+					[attr.aria-label]="'common.close' | cxTranslate">
+					<span aria-hidden="true">
+						<cx-icon [type]="iconTypes.CLOSE"></cx-icon>
+					</span>
+				</button>
+			</div>
+
+			<div class="modal-body cx-saved-cart-form-body">
+				@if (
+					layoutOption === savedCartFormType.DELETE || layoutOption === savedCartFormType.RESTORE
+				) {
+					<p class="cx-saved-cart-form-subtitle">
+						{{
+							(layoutOption === savedCartFormType.DELETE
+								? 'savedCartDialog.followingCartDelete'
+								: 'savedCartDialog.followingCartRestore'
+							) | cxTranslate
+						}}
+					</p>
+
+					<div class="cx-saved-cart-form-row">
+						<div class="cx-saved-cart-values-container">
+							<div class="cx-saved-cart-label">
+								{{ 'savedCartDialog.name' | cxTranslate }}
+							</div>
+							<div class="cx-saved-cart-value">
+								{{ cart.name }}
+							</div>
+						</div>
+
+						<div class="cx-saved-cart-values-container">
+							<div class="cx-saved-cart-label">
+								{{ 'savedCartDialog.id' | cxTranslate }}
+							</div>
+							<div class="cx-saved-cart-value">
+								{{ cart.code }}
+							</div>
+						</div>
+
+						<div class="cx-saved-cart-values-container">
+							<div class="cx-saved-cart-label">
+								{{ 'savedCartDialog.description' | cxTranslate }}
+							</div>
+							<div class="cx-saved-cart-value">
+								{{ cart.description }}
+							</div>
+						</div>
+
+						<div class="cx-saved-cart-values-container">
+							<div class="cx-saved-cart-label">
+								{{ 'savedCartDialog.quantityFull' | cxTranslate }}
+							</div>
+							<div class="cx-saved-cart-value">
+								{{ cart.totalUnitCount }}
+							</div>
+						</div>
+
+						<div class="cx-saved-cart-values-container">
+							<div class="cx-saved-cart-label">
+								{{ 'savedCartDialog.total' | cxTranslate }}
+							</div>
+							<div class="cx-saved-cart-value">
+								{{ cart.totalPriceWithTax?.formattedValue }}
+							</div>
+						</div>
+					</div>
+
+					@if (layoutOption === savedCartFormType.RESTORE) {
+						<div class="cx-copy-saved-cart-row form-check">
+							<input
+								id="cx-copy-saved-cart"
+								type="checkbox"
+								class="cx-copy-saved-cart-input"
+								[checked]="isCloneSavedCart"
+								(change)="toggleIsCloneSavedCart()" />
+							<label for="cx-copy-saved-cart" class="cx-copy-saved-cart-label">
+								{{ 'savedCartDialog.keepCopySavedCart' | cxTranslate }}
+							</label>
+						</div>
+
+						@if (isCloneSavedCart) {
+							<div class="cx-copy-saved-cart-row">
+								<label>
+									<span class="label-content">
+										{{ 'savedCartDialog.nameOfCloneCart' | cxTranslate }}
+									</span>
+
+									<input
+										[maxLength]="nameMaxLength"
+										class="form-control"
+										formControlName="cloneName"
+										type="text"
+										placeholder="{{
+											'savedCartDialog.defaultCloneCartName'
+												| cxTranslate: { name: form.get('name')?.value }
+										}}" />
+								</label>
+							</div>
+						}
+					}
+
+					<div class="cx-saved-cart-form-footer">
+						<button
+							(click)="close('Close Save Cart Dialog')"
+							class="mr-2 btn btn-secondary"
+							type="button">
+							{{ 'savedCartDialog.cancel' | cxTranslate }}
+						</button>
+
+						@if (layoutOption === savedCartFormType.DELETE) {
+							@if (cart.code) {
+								<button
+									(click)="deleteCart(cart.code)"
+									[disabled]="isDisableDeleteButton$ | async"
+									class="ml-2 btn btn-primary"
+									type="button">
+									{{ 'savedCartDialog.delete' | cxTranslate }}
+								</button>
+							}
+						} @else {
+							@if (cart.code) {
+								<button
+									(click)="restoreSavedCart(cart.code)"
+									[disabled]="isDisableRestoreButton$ | async"
+									class="ml-2 btn btn-primary"
+									type="button">
+									{{ 'savedCartDialog.restore' | cxTranslate }}
+								</button>
+							}
+						}
+					</div>
+				} @else {
+					@if (layoutOption === savedCartFormType.SAVE) {
+						<p class="cx-saved-cart-form-subtitle">
+							{{ 'savedCartDialog.itemsSavedForLater' | cxTranslate }}
+						</p>
+						<cx-form-required-legend />
+					}
+
+					<div class="cx-saved-cart-form-row">
+						<label>
+							<span class="cx-saved-carts-label label-content">
+								{{ 'savedCartDialog.savedCartName' | cxTranslate }}
+								<cx-form-required-asterisks />
+							</span>
+
+							<input
+								required="true"
+								[maxLength]="nameMaxLength"
+								class="form-control"
+								[attr.aria-invalid]="form.get('name')?.touched && form.get('name')?.invalid"
+								[attr.aria-errormessage]="'nameError'"
+								formControlName="name"
+								required
+								type="text" />
+
+							<cx-form-errors
+								id="nameError"
+								[translationParams]="{
+									label: 'savedCartDialog.savedCartName' | cxTranslate,
+								}"
+								[control]="form.get('name')"></cx-form-errors>
+						</label>
+					</div>
+
+					<div class="cx-saved-cart-form-row">
+						<label>
+							<span class="cx-saved-carts-label label-content">
+								{{ 'savedCartDialog.savedCartDescription' | cxTranslate }}
+								<span class="cx-saved-carts-label-optional">
+									({{ 'savedCartDialog.optional' | cxTranslate }})
+								</span>
+							</span>
+
+							<textarea
+								[maxLength]="descriptionMaxLength"
+								class="form-control"
+								[attr.aria-invalid]="
+									form.get('description')?.touched && form.get('description')?.invalid
+								"
+								[attr.aria-errormessage]="'descriptionError'"
+								formControlName="description"
+								rows="5"></textarea>
+
+							<cx-form-errors
+								id="descriptionError"
+								[translationParams]="{
+									label: 'savedCartDialog.savedCartDescription' | cxTranslate,
+								}"
+								[control]="form.get('description')"></cx-form-errors>
+
+							<p class="cx-saved-carts-input-hint">
+								{{
+									'savedCartDialog.charactersLeft'
+										| cxTranslate: { count: descriptionsCharacterLeft }
+								}}
+							</p>
+						</label>
+					</div>
+
+					<div class="cx-copy-saved-cart-row form-check">
+						<input
+							id="cxdevKeepCartCheckbox"
+							type="checkbox"
+							class="cx-copy-saved-cart-input"
+							formControlName="cxdevKeepCartCheckbox" />
+						<label for="cxdevKeepCartCheckbox" class="cx-copy-saved-cart-label">
+							{{ 'cart.saveCartDialog.keepCartCheckbox' | cxTranslate }}
+						</label>
+					</div>
+
+					<div class="cx-saved-cart-form-footer">
+						<button
+							(click)="close('Close Save Cart Dialog')"
+							[disabled]="isLoading$ | async"
+							class="btn btn-secondary"
+							type="button">
+							{{ 'savedCartDialog.cancel' | cxTranslate }}
+						</button>
+						<button
+							(click)="saveOrEditCart(cart.code!)"
+							[disabled]="isLoading$ | async"
+							class="btn btn-primary"
+							type="button">
+							{{ 'savedCartDialog.save' | cxTranslate }}
+						</button>
+					</div>
+				}
+			</div>
+		</form>
+	</div>
+}

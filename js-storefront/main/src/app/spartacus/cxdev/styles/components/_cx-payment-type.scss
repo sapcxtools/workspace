@@ -1,0 +1,17 @@
+cx-payment-type {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+	max-width: var(--max-width-form);
+
+	.cx-checkout-btns {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--spacing-sm);
+	}
+
+	label.cx-payment-type-container {
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+}

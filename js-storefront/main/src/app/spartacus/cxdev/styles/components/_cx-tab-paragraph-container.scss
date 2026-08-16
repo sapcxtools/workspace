@@ -1,0 +1,90 @@
+@use '../elements/elements';
+
+@use '../variables/breakpoints' as bp;
+
+cx-tab-paragraph-container {
+	container-type: inline-size;
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+
+	cx-tab {
+		display: block;
+		width: 100%;
+		min-width: 0;
+
+		.tab {
+			display: flex;
+			gap: var(--spacing-md);
+			padding: var(--spacing-md) 0;
+
+			button {
+				&:not(.active) {
+					color: var(--color-text-body);
+				}
+
+				&.active {
+					border-color: var(--color-border-subtle);
+				}
+			}
+		}
+
+		button.tab-btn {
+			position: relative;
+			padding: var(--spacing-md) 0;
+			border-bottom: 1px solid var(--color-border-subtle);
+			color: var(--color-primary);
+			font-family: var(--font-family-title);
+			font-size: clamp(var(--font-size-md), 4vw, var(--font-size-lg));
+			font-weight: var(--font-weight-bold);
+			transition:
+				color 0.2s ease,
+				border-color 0.2s ease;
+
+			&::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: -1px;
+				width: 0;
+				height: var(--spacing-xxs);
+				border-radius: var(--radius-pill);
+				background: var(--color-primary);
+				transition: width 0.2s ease;
+			}
+
+			&:hover {
+				color: var(--color-text-body);
+			}
+
+			&.active {
+				color: var(--color-text-body);
+				border-color: var(--color-primary);
+
+				&::after {
+					width: 100%;
+				}
+			}
+		}
+
+		cx-tab-panel {
+			display: block;
+			width: 100%;
+			max-width: 100%;
+			min-width: 0;
+			margin-top: var(--spacing-lg);
+			padding: clamp(var(--spacing-md), 4vw, var(--spacing-xl));
+			border: 1px solid var(--color-border-subtle);
+			border-radius: var(--radius-card);
+			background: var(--color-background);
+			overflow: hidden;
+		}
+	}
+
+	@container (width < #{bp.$breakpoint-md}) {
+		cx-tab cx-tab-panel {
+			margin-top: var(--spacing-md);
+		}
+	}
+}

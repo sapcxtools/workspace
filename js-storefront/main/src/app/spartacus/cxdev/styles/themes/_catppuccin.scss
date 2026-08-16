@@ -1,0 +1,49 @@
+/* Catppuccin — Mocha (dark) */
+html:has(cxdev-root.cxdev-theme-catppuccin-mocha) {
+	color-scheme: dark;
+
+	--color-surface-1: #1e1e2e;
+	--color-surface-2: #262637;
+	--color-surface-3: #313244;
+
+	--color-text-1: #cdd6f4;
+	--color-text-2: #a6adc8;
+	--color-text-3: #7f849c;
+
+	--color-border-1: #585b70;
+	--color-border-2: #45475a;
+
+	--color-primary: #cba6f7;
+	--color-on-primary: #11111b;
+	--color-accent: #89b4fa;
+
+	--color-danger: #f38ba8;
+	--color-warning: #fab387;
+	--color-success: #a6e3a1;
+	--color-info: #74c7ec;
+}
+
+/* Catppuccin — Latte (light) */
+html:has(cxdev-root.cxdev-theme-catppuccin-latte) {
+	color-scheme: light;
+
+	--color-surface-1: #eff1f5;
+	--color-surface-2: #e6e9ef;
+	--color-surface-3: #dce0e8;
+
+	--color-text-1: #4c4f69;
+	--color-text-2: #5c5f77;
+	--color-text-3: #8c8fa1;
+
+	--color-border-1: #bcc0cc;
+	--color-border-2: #ccd0da;
+
+	--color-primary: #8839ef;
+	--color-on-primary: #ffffff;
+	--color-accent: #1e66f5;
+
+	--color-danger: #d20f39;
+	--color-warning: #fe640b;
+	--color-success: #40a02b;
+	--color-info: #209fb5;
+}

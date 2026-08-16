@@ -1,0 +1,52 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+
+	thead {
+		background-color: var(--color-background-emphasis);
+		tr {
+			th {
+				text-align: left;
+				padding: var(--spacing-sm) var(--spacing-md);
+				&:first-child {
+					border-top-left-radius: var(--radius-table-header);
+					border-bottom-left-radius: var(--radius-table-header);
+				}
+				&:last-child {
+					border-top-right-radius: var(--radius-table-header);
+					border-bottom-right-radius: var(--radius-table-header);
+				}
+			}
+		}
+	}
+
+	tbody {
+		tr {
+			border-bottom: 1px solid var(--color-border-subtle);
+		}
+		.cx-mobile-only,
+		.cx-mobile-header,
+		.cx-order-history-label,
+		.cx-table-label-mobile,
+		.cx-invoices-list-label {
+			display: none;
+		}
+	}
+
+	td {
+		min-width: 0;
+		padding: var(--spacing-md);
+
+		.cx-table-item-container {
+			display: flex;
+			align-items: flex-start;
+			gap: var(--spacing-md);
+		}
+	}
+
+	.cx-table-item-container {
+		cx-media img {
+			width: var(--size-xl);
+		}
+	}
+}
