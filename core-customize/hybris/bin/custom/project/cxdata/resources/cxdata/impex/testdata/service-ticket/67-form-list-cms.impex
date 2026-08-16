@@ -1,0 +1,23 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CxFormListComponent; $contentCV[unique = true]; uid[unique = true]                  ; name                                ; forms(id)                                                                    ; viewMode(code)
+                                  ;                          ; CxAllFormsListComponent             ; All Forms List Component            ; composableGenericForm,requestContact,requestWarranty,requestTechnicalSupport ; TOGGLE_MODAL
+                                  ;                          ; CxProductSummaryFormListComponent   ; Product Summary Form List Component ; requestTechnicalSupport,requestWarranty                                      ; TOGGLE_MODAL
+                                  ;                          ; CxAllFormsInlineListComponent       ; All Forms Inline List Component     ; composableGenericForm,requestContact,requestWarranty,requestTechnicalSupport ; INLINE
+
+# Append the product-summary form list to the ProductSummarySlot on all product detail pages
+UPDATE ContentSlot; $contentCV; uid[unique = true]  ; cmsComponents(uid, $contentCV)[mode = append]
+                  ;           ; ProductSummarySlot  ; CxProductSummaryFormListComponent
+
+# Add CxAllFormsInlineListComponent component to contact page
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]   ; active; cmsComponents(uid, $contentCV)[mode=append]
+                         ;                          ; contactUs-Section1Slot ; true  ; CxAllFormsInlineListComponent

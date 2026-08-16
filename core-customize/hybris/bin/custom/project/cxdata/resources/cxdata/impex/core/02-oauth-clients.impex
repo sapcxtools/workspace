@@ -1,0 +1,6 @@
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$frontendUrl = $config-ccv2.services.jsapps.url.0
+
+# Storefront oAuth client credential
+INSERT_UPDATE OAuthClientDetails; clientId[unique = true]; public; authorities ; scope ; authorizedGrantTypes             ; registeredRedirectUri; loginPageUri
+                                ; storefront             ; true  ; ROLE_CLIENT ; basic ; authorization_code,refresh_token ; $frontendUrl         ; $frontendUrl/login

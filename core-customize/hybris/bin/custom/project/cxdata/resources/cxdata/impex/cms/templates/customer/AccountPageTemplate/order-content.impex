@@ -1,0 +1,37 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = orderDetails
+$pageName = Order Details Page
+$pageLabel = /my-account/order
+$masterTemplate = AccountPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]  ; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $pageId-BodyContent ; BodyContent            ;                                                        ; $pageId-BodyContentSlot
+
+# Create components for page
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                          ; name                                             ; flexType
+                              ;                          ; AccountOrderDetailsItemsComponent           ; Account Order Details Items Info Component       ; AccountOrderDetailsItemsComponent
+                              ;                          ; AccountOrderDetailsOverviewComponent        ; Account Order Details Overview Info Component    ; AccountOrderDetailsOverviewComponent
+                              ;                          ; AccountOrderDetailsShippingComponent        ; Account Order Details Shipping Info Component    ; AccountOrderDetailsShippingComponent
+                              ;                          ; AccountOrderDetailsTotalsComponent          ; Account Order Details Order Totals Component     ; AccountOrderDetailsTotalsComponent
+                              ;                          ; AccountOrderDetailsReorderComponent         ; Account Order Details Reorder Component          ; AccountOrderDetailsReorderComponent
+                              ;                          ; AccountOrderDetailsPDFInvoicesComponent     ; Account Order Details PDF Invoices Component     ; AccountOrderDetailsPDFInvoicesComponent
+                              ;                          ; AccountOrderDetailsApprovalDetailsComponent ; Account Order Details Approval Details Component ; AccountOrderDetailsApprovalDetailsComponent
+; ; AccountOrderDetailsTrackingDetailsComponent ; Account Order Details Tracking Details Component ; AccountOrderDetailsTrackingDetailsComponent
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]      ; cmsComponents(uid, $contentCV)
+                         ;                          ; $pageId-BodyContentSlot ; AccountOrderDetailsOverviewComponent,AccountOrderDetailsShippingComponent,AccountOrderDetailsItemsComponent,AccountOrderDetailsTotalsComponent,AccountOrderDetailsApprovalDetailsComponent,AccountOrderDetailsReorderComponent,AccountOrderDetailsPDFInvoicesComponent,AccountOrderDetailsTrackingDetailsComponent
+

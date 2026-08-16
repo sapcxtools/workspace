@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cxTicketMachinesValueProvider"
+          class="sap.commerce.cx.core.serviceticket.provider.DefaultCxTicketMachinesValueProvider">
+        <constructor-arg name="fieldNameProvider" ref="solrFieldNameProvider"/>
+    </bean>
+
+    <bean id="cxTicketTypeFacetDisplayNameProvider" parent="abstractEnumFacetDisplayNameProvider">
+        <constructor-arg name="enumerationCode" value="CxServiceTicketType"/>
+    </bean>
+
+    <bean id="cxTicketStatusFacetDisplayNameProvider" parent="abstractEnumFacetDisplayNameProvider">
+        <constructor-arg name="enumerationCode" value="CxServiceTicketStatus"/>
+    </bean>
+
+    <bean id="cxServiceTicketDAO"
+          class="sap.commerce.cx.core.serviceticket.dao.impl.DefaultCxServiceServiceTicketDAO">
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+    <alias name="defaultCxServiceTicketFormService" alias="cxServiceTicketFormService"/>
+    <bean id="defaultCxServiceTicketFormService"
+          class="sap.commerce.cx.core.serviceticket.impl.DefaultCxServiceTicketFormService">
+        <constructor-arg name="cxServiceTicketFormDao">
+            <bean class="de.hybris.platform.servicelayer.internal.dao.DefaultGenericDao">
+                <constructor-arg name="typecode" value="CxServiceTicketForm"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="cxServiceTicketSearchStrategy" parent="abstractContentSearchStrategy">
+        <constructor-arg name="searchQueryPageableConverter" ref="cxServiceTicketSearchQueryPageableConverter"/>
+        <constructor-arg name="solrSearchStateConverter" ref="cxTicketSolrSearchStateConverter"/>
+    </bean>
+
+    <bean id="cxTicketSolrSearchStateConverter" parent="abstractCxContentSolrSearchStateConverter">
+        <property name="populators">
+            <list>
+                <ref bean="cxTicketSolrSearchStatePopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cxTicketSolrSearchStatePopulator" parent="abstractSolrSearchStatePopulator">
+        <property name="searchPath" value="${cxcore.solr.ticket.search.path:/service-requests}"/>
+    </bean>
+
+    <bean id="cxServiceTicketSearchQueryPageableConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass"
+                  value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchRequest"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxServiceTicketFixedIndexedTypeSolrQueryPopulator"/>
+                <ref bean="commerceSearchPagePopulator"/>
+                <ref bean="commerceSearchSortPopulator"/>
+                <ref bean="commerceSearchFiltersPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cxServiceTicketFixedIndexedTypeSolrQueryPopulator"
+          parent="abstractFixedIndexedTypeSolrQueryPopulator">
+        <constructor-arg name="indexedTypeIdentifier" value="${cxdata.import.defaults.solr.indextype.serviceTicket}"/>
+    </bean>
+
+    <alias name="defaultCxServiceTicketService" alias="cxServiceTicketService"/>
+    <bean id="defaultCxServiceTicketService"
+          class="sap.commerce.cx.core.serviceticket.impl.DefaultCxServiceTicketService">
+        <constructor-arg name="cxServiceTicketDAO" ref="cxServiceTicketDAO"/>
+        <constructor-arg name="modelService" ref="modelService"/>
+        <constructor-arg name="b2BCustomerService" ref="b2bCustomerService"/>
+        <constructor-arg name="b2bUnitService" ref="b2bUnitService"/>
+        <constructor-arg name="enumerationService" ref="enumerationService"/>
+        <constructor-arg name="productService" ref="productService"/>
+        <constructor-arg name="cxServiceTicketCodeGenerator" ref="cxServiceTicketCodeGenerator"/>
+        <constructor-arg name="cronJobService" ref="cronJobService"/>
+        <constructor-arg name="configurationService" ref="configurationService"/>
+        <constructor-arg name="cxEmailService" ref="cxEmailService"/>
+    </bean>
+
+    <bean id="cxServiceTicketCodeGenerator"
+          class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+        <property name="key" value="service_ticket_code"/>
+        <property name="digits" value="8"/>
+        <property name="start" value="00000001"/>
+        <property name="type" value="numeric"/>
+        <property name="template" value="$"/>
+    </bean>
+
+    <bean id="isTicketClassifiedAsNewAttributeHandler"
+          class="sap.commerce.cx.core.serviceticket.attributehandler.IsTicketClassifiedAsNewAttributeHandler">
+        <constructor-arg name="configurationService" ref="configurationService"/>
+    </bean>
+</beans>

@@ -1,0 +1,29 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = manageAccountSummary
+$pageName = Manage Account Summary Page
+$pageLabel = /organization/account-summary
+$masterTemplate = CompanyPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]  ; position[unique = true]; page(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $pageId-BodyContent ; BodyContent            ; $pageId                             ; $pageId-BodyContentSlot
+
+# Create components for page
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                ; name                                  ; flexType
+                              ;                          ; ManageAccountSummaryListComponent ; Manage Account Summary List Component ; ManageAccountSummaryListComponent
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]      ; name                        ; cmsComponents(uid, $contentCV)
+                         ;                          ; $pageId-BodyContentSlot ; Manage Account Summary Slot ; ManageAccountSummaryListComponent

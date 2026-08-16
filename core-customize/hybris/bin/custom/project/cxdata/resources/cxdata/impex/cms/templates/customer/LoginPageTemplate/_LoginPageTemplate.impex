@@ -1,0 +1,54 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$templateId = LoginPageTemplate
+$templateName = Login Page Template
+$frontendTemplateName =
+$restrictedPageTypes = ContentPage
+$resourcePath = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/cms/templates/_structure-view
+$velocityTemplate = structure_loginPageTemplate.vm
+############################################################
+
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; name          ; frontendTemplateName  ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; $templateId       ; $templateName ; $frontendTemplateName ; $restrictedPageTypes     ; false
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+                   ;                          ; $templateId       ; $resourcePath/$velocityTemplate
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $contentCV)[unique = true][default = $templateId]; validComponentTypes(code); compTypeGroup(code)
+                             ; SiteLogo               ;                                                                ;                          ; logo
+                             ; HeaderLinks            ;                                                                ;                          ; headerlinks
+                             ; SearchBox              ;                                                                ;                          ; searchbox
+                             ; MiniCart               ;                                                                ;                          ; minicart
+                             ; NavigationBar          ;                                                                ;                          ; navigation
+                             ; Footer                 ;                                                                ;                          ; footer
+                             ; TopHeaderSlot          ;                                                                ;                          ; wide
+                             ; BottomHeaderSlot       ;                                                                ;                          ; wide
+                             ; LeftContentSlot        ;                                                                ;                          ; wide
+                             ; RightContentSlot       ;                                                                ;                          ; wide
+                             ; PlaceholderContentSlot ;                                                                ;                          ;
+                             ; SiteContext            ;                                                                ; CMSSiteContextComponent  ;
+                             ; SiteLinks              ;                                                                ; CMSLinkComponent         ;
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                 ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = $templateId]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; $templateId-SiteLogo               ; SiteLogo               ;                                                                    ; SiteLogoSlot                               ; true
+                                    ;                          ; $templateId-HomepageLink           ; HomepageNavLink        ;                                                                    ; HomepageNavLinkSlot                        ; true
+                                    ;                          ; $templateId-NavigationBar          ; NavigationBar          ;                                                                    ; NavigationBarSlot                          ; true
+                                    ;                          ; $templateId-MiniCart               ; MiniCart               ;                                                                    ; MiniCartSlot                               ; true
+                                    ;                          ; $templateId-Footer                 ; Footer                 ;                                                                    ; FooterSlot                                 ; true
+                                    ;                          ; $templateId-HeaderLinks            ; HeaderLinks            ;                                                                    ; HeaderLinksSlot                            ; true
+                                    ;                          ; $templateId-SearchBox              ; SearchBox              ;                                                                    ; SearchBoxSlot                              ; true
+                                    ;                          ; $templateId-TopHeaderSlot          ; TopHeaderSlot          ;                                                                    ; TopHeaderSlot                              ; true
+                                    ;                          ; $templateId-BottomHeaderSlot       ; BottomHeaderSlot       ;                                                                    ; BottomHeaderSlot                           ; true
+                                    ;                          ; $templateId-LeftContentSlot        ; LeftContentSlot        ;                                                                    ; LeftContentSlot                            ; true
+                                    ;                          ; $templateId-RightContentSlot       ; RightContentSlot       ;                                                                    ; RightContentSlot                           ; true
+                                    ;                          ; $templateId-PlaceholderContentSlot ; PlaceholderContentSlot ;                                                                    ; PlaceholderContentSlot                     ; true
+                                    ;                          ; $templateId-SiteContextSlot        ; SiteContext            ;                                                                    ; SiteContextSlot                            ; true
+                                    ;                          ; $templateId-SiteLinksSlot          ; SiteLinks              ;                                                                    ; SiteLinksSlot                              ; true

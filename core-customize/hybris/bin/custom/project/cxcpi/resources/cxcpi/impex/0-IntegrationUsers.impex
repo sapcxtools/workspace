@@ -1,0 +1,90 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+
+$setPlaintextPassword = @password[translator = de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator]
+$passwordEncoding = argon2
+
+$inboundUserName = $config-cxcpi.integration.inbound.productuser.username
+$inboundUserPassword = $config-cxcpi.integration.inbound.productuser.password
+
+$inboundOrderUserName = $config-cxcpi.integration.inbound.orderuser.username
+$inboundOrderUserPassword = $config-cxcpi.integration.inbound.orderuser.password
+############################################################
+
+INSERT_UPDATE UserGroup; UID[unique = true]            ; locname[lang = $primaryLang]     ; description                                 ; groups(uid)[mode = append]
+                       ; integrationusergroup          ; Integration User Group           ; Common Group for all the Integration Groups ;
+                       ; sapInboundClassificationGroup ; SAp Inbound Classification Group ; SAp Inbound Classification Group            ; integrationusergroup
+                       ; sapInboundProductGroup        ; SAP Inbound Product Group        ; SAP Inbound Product Group                   ; integrationusergroup
+                       ; sapInboundPriceGroup          ; SAP Inbound Price Group          ; SAP Inbound Price Group                     ; integrationusergroup
+                       ; sapInboundB2BCustomerGroup    ; SAP Inbound B2B Customer Group   ; SAP Inbound B2B Customer Group              ; integrationusergroup
+                       ; sapInboundOMMOrderGroup       ; SAP Inbound OMM Order Group      ; SAP Inbound OMM Order Group                 ; integrationusergroup
+
+INSERT_UPDATE SearchRestriction; code[unique = true]                    ; name[lang = $primaryLang]                   ; query                                                                                                                                                                                                                                               ; principal(UID)       ; restrictedType(code); active; generate
+                               ; sapInboundCCRestriction                ; SAP Inbound CC Restriction                  ; ({code}='InboundClassificationClass' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundClassificationGroup' }} )) OR ({code}!='InboundClassificationClass')                   ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundCARestriction                ; SAP Inbound CA Restriction                  ; ({code}='InboundClassificationAttribute' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundClassificationGroup' }} )) OR ({code}!='InboundClassificationAttribute')           ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundCAVRestriction               ; SAP Inbound CAV Restriction                 ; ({code}='InboundClassificationAttributeValue' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundClassificationGroup' }} )) OR ({code}!='InboundClassificationAttributeValue') ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundCAARestriction               ; SAP Inbound CAA Restriction                 ; ({code}='InboundClassAttributeAssignment' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundClassificationGroup' }} )) OR ({code}!='InboundClassAttributeAssignment')         ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundProductRestriction           ; SAP Inbound Product Restriction             ; ({code}='InboundProduct' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundProductGroup' }} )) OR ({code}!='InboundProduct')                                                  ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundERPVariantProductRestriction ; SAP Inbound ERP Variant Product Restriction ; ({code}='InboundERPVariantProduct' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundProductGroup' }} )) OR ({code}!='InboundERPVariantProduct')                              ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundProductFeatureRestriction    ; SAP Inbound Product Feature Restriction     ; ({code}='InboundProductFeature' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundProductGroup' }} )) OR ({code}!='InboundProductFeature')                                    ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundOMMStockLeveRestriction      ; SAP Inbound OMM Stock Leve Restriction      ; ({code}='InboundOMMStockLevel' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundProductGroup' }} )) OR ({code}!='InboundOMMStockLevel')                                      ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundPriceRowRestriction          ; SAP Inbound Price Row Restriction           ; ({code}='InboundPriceRow' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundPriceGroup' }} )) OR ({code}!='InboundPriceRow')                                                  ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundDiscountRowRestriction       ; SAP Inbound Discount Row Restriction        ; ({code}='InboundDiscountRow' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundPriceGroup' }} )) OR ({code}!='InboundDiscountRow')                                            ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundB2BCustomerRestriction       ; SAP Inbound B2B Customer Restriction        ; ({code}='InboundB2BCustomer' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundB2BCustomerGroup' }} )) OR ({code}!='InboundB2BCustomer')                                      ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundB2BUnitRestriction           ; SAP Inbound B2B Unit Restriction            ; ({code}='InboundB2BUnit' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundB2BCustomerGroup' }} )) OR ({code}!='InboundB2BUnit')                                              ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundOMMOrderRestriction          ; SAP Inbound OMM Order Restriction           ; ({code}='InboundOMMOrder' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundOMMOrderGroup' }} )) OR ({code}!='InboundOMMOrder')                                               ; integrationusergroup ; IntegrationObject   ; true  ; true
+                               ; sapInboundOMMOrderEntryRestriction     ; SAP Inbound OMM Order Entry Restriction     ; ({code}='InboundOMMOrderEntry' AND EXISTS ( {{ select {ug:PK} from {UserGroup as ug} where {ug:PK} IN (?session.user.groups) and {ug:uid} = 'sapInboundOMMOrderGroup' }} )) OR ({code}!='InboundOMMOrderEntry')                                     ; integrationusergroup ; IntegrationObject   ; true  ; true
+
+
+INSERT_UPDATE Employee; UID[unique = true]    ; name                       ; password                  ; groups(uid)[mode = append]                                                                                                 ; $setPlaintextPassword; loginDisabled[default = false]; backOfficeLoginDisabled[default = true]
+                      ; $inboundUserName      ; SAP Inbound Product User   ; $inboundUserPassword      ; sapInboundProductGroup,sapInboundClassificationGroup,sapInboundPriceGroup,sapInboundB2BCustomerGroup,integrationadmingroup ;                      ;                               ;
+                      ; $inboundOrderUserName ; SAP Inbound OMM Order User ; $inboundOrderUserPassword ; sapInboundOMMOrderGroup,integrationadmingroup                                                                              ;                      ;                               ;
+
+$START_USERRIGHTS
+Type           ; UID                  ; MemberOfGroups; Password; Target                                         ; change; create; remove; change_perm
+UserGroup      ; integrationadmingroup;               ;         ;                                                ;       ;       ;       ;  ;
+               ;                      ;               ;         ; ItemSyncTimestamp                              ; +     ;       ;       ;
+               ;                      ;               ;         ; SyncItemJob                                    ; +     ;       ;       ;
+               ;                      ;               ;         ; Type                                           ; +     ;       ;       ;
+               ;                      ;               ;         ; Product                                        ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Category                                       ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; variantType                                    ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Catalog                                        ; +     ;       ;       ;
+               ;                      ;               ;         ; CatalogVersion                                 ; +     ;       ;       ;
+               ;                      ;               ;         ; Media                                          ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; MediaContainer                                 ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; MediaFormat                                    ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; MediaFolder                                    ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Vendor                                         ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; StockLevel                                     ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Tax                                            ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; TaxRow                                         ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; PriceRow                                       ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; ProductFeature                                 ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; ProductReference                               ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Warehouse                                      ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; ProductOrderLimit                              ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; Order                                          ; +     ; +     ; +     ; +; +;
+               ;                      ;               ;         ; OrderEntry                                     ; +     ; +     ; +     ; +; +;
+$END_USERRIGHTS;                      ;               ;         ;                                                ;
+
+$START_USERRIGHTS                                                                                                        ;       ;       ;  ;  ;;;;;
+Type           ; UID                        ; MemberOfGroups ; Password ; Target            ; read ; change ; create ; remove ; change_perm
+UserGroup      ; sapInboundB2BCustomerGroup ;                ;          ;                   ;      ;        ;        ;        ;
+               ;                            ;                ;          ; B2BUnit           ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Address           ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Country           ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Region            ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; UserDiscountGroup ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; UserGroup         ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; UserPriceGroup    ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; B2BCustomer       ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Gender            ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Language          ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; UserGroup         ; +    ; +      ; +      ; +      ; -
+               ;                            ;                ;          ; Title             ; +    ; +      ; +      ; +      ; -
+$END_USERRIGHTS;                            ;                ;          ;                   ;

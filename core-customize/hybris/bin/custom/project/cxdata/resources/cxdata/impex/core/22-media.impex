@@ -1,0 +1,2 @@
+INSERT_UPDATE MediaFolder;qualifier[unique=true];path[unique=true]
+                         ;images;images

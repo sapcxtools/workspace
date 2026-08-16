@@ -1,0 +1,47 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+# Global
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]     ; name                      ; active
+                         ;                          ; SiteLogoSlot           ; Default Site Logo Slot    ; true
+                         ;                          ; HomepageNavLinkSlot    ; Default Homepage Link     ; true
+                         ;                          ; MiniCartSlot           ; Mini Cart                 ; true
+                         ;                          ; NavigationBarSlot      ; Navigation Bar            ; true
+                         ;                          ; SiteLinksSlot          ; Slot contains some links  ; true
+                         ;                          ; SiteContextSlot        ; Site Context Slot         ; true
+                         ;                          ; SearchBoxSlot          ; Search Box                ; true
+                         ;                          ; HeaderLinksSlot        ; Header links              ; true
+                         ;                          ; TopHeaderSlot          ; Top Header                ; true
+                         ;                          ; BottomHeaderSlot       ; Bottom Header             ; true
+                         ;                          ; FooterSlot             ; Footer                    ; true
+                         ;                          ; TopContentSlot         ; Top Content               ; true
+                         ;                          ; SideContentSlot        ; Side Content              ; true
+                         ;                          ; BottomContentSlot      ; Bottom Content            ; true
+                         ;                          ; MiddleContentSlot      ; Middle Content Slot       ; true
+                         ;                          ; LeftContentSlot        ; Left Content Slot         ; true
+                         ;                          ; RightContentSlot       ; Right Content Slot        ; true
+                         ;                          ; CenterContentSlot      ; Center Content Slot       ; true
+                         ;                          ; CenterLeftContentSlot  ; Center Left Content Slot  ; true
+                         ;                          ; CenterRightContentSlot ; Center Right Content Slot ; true
+                         ;                          ; PlaceholderContentSlot ; Placeholder Content Slot  ; true
+                         ;                          ; EmptyCartMiddleContent ; Empty Cart Middle Content ; true
+
+INSERT_UPDATE ComponentTypeGroup; code[unique = true]
+                                ; logo
+                                ; headerlinks
+                                ; searchbox
+                                ; minicart
+                                ; wide
+                                ; narrow
+                                ; footer
+                                ; navigation
+                                ; mobile
+                                ; email

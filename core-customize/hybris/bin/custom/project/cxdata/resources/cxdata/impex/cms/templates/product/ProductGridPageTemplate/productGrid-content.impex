@@ -1,0 +1,25 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = productGrid
+$pageName = Product Grid
+$masterTemplate = ProductGridPageTemplate
+############################################################
+
+INSERT_UPDATE CategoryPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); defaultPage; approvalStatus(code)[default = 'approved']
+                          ;                          ; $pageId           ; $pageName ; $masterTemplate                ; true       ;
+
+# Create components for page
+INSERT_UPDATE ProductGridComponent; $contentCV[unique = true]; uid[unique = true]   ; name                   ; actions(uid, $contentCV)
+                                  ;                          ; ProductGridComponent ; Product Grid Component ; ListAddToCartAction,ListOrderFormAction
+
+# Add components to content clots
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; ProductGridSlot   ; ProductGridComponent

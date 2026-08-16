@@ -1,0 +1,50 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = productDetails
+$pageName = Product Details
+$masterTemplate = ProductDetailsPageTemplate
+############################################################
+
+INSERT_UPDATE ProductPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); defaultPage; approvalStatus(code)[default = 'approved']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; true       ;
+
+# Create components for page
+INSERT_UPDATE AddToCartAction; $contentCV[unique = true]; uid[unique = true]; url       ; name
+                             ;                          ; AddToCartAction   ; /cart/add ; Product Add To Cart Action
+
+INSERT_UPDATE ProductAddToCartComponent; $contentCV[unique = true]; uid[unique = true]; name                ; actions(uid, $contentCV)
+                                       ;                          ; AddToCart         ; Product Add To Cart ; AddToCartAction
+
+INSERT_UPDATE ProductReferencesComponent; $contentCV[unique = true]; uid[unique = true]; name      ; productReferenceTypes(code); maximumNumberProducts
+                                        ;                          ; Similar           ; Similar   ; SIMILAR                    ; 5
+                                        ;                          ; Sparepart         ; Sparepart ; SPAREPART                  ; 10
+
+INSERT_UPDATE ProductRefinementComponent; $contentCV[unique = true]; uid[unique = true]       ; name
+                                        ;                          ; RefinementFacetComponent ; Product Refinement Facet Component
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]         ; name                        ; flexType
+                              ;                          ; ProductDetailsTabComponent ; Product Details Tab         ; ProductDetailsTabComponent
+                              ;                          ; ProductSpecsTabComponent   ; Product Specification Tab   ; ProductSpecsTabComponent
+                              ;                          ; ProductImagesComponent     ; ProductImagesComponent      ; ProductImagesComponent
+                              ;                          ; ProductIntroComponent      ; ProductIntroComponent       ; ProductIntroComponent
+                              ;                          ; ProductSummaryComponent    ; ProductSummaryComponent     ; ProductSummaryComponent
+                              ;                          ; ConfigureProductComponent  ; Configure Product Component ; ConfigureProductComponent
+
+INSERT_UPDATE CMSTabParagraphContainer; $contentCV[unique = true]; uid[unique = true]; name          ; visible; simpleCMSComponents(uid, $contentCV)
+                                      ;                          ; TabPanelContainer ; Tab container ; true   ; ProductDetailsTabComponent,ProductSpecsTabComponent
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]     ; name                        ; active[default = true]; cmsComponents(uid, $contentCV)
+                         ;                          ; UpSellingSlot          ; Up Selling                  ;                       ; Similar
+                         ;                          ; CrossSellingSlot       ; Cross Selling               ;                       ; Sparepart
+                         ;                          ; TabsSlot               ; Tabs                        ;                       ; TabPanelContainer
+                         ;                          ; ProductSummarySlot     ; Summary for product details ;                       ; ProductImagesComponent,ProductIntroComponent,ProductSummaryComponent,AddToCart,ConfigureProductComponent
+                         ;                          ; ProductLeftRefinements ; Refinements                 ;                       ; RefinementFacetComponent

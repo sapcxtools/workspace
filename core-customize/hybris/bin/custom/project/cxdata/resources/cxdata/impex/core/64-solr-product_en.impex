@@ -1,0 +1,26 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$solrIndexedType = $config-cxdata.import.defaults.solr.indextype.product
+$lang = en
+############################################################
+
+UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; displayName[lang = $lang]
+; $solrIndexedType ; category         ; Category
+; $solrIndexedType ; code             ; Code
+; $solrIndexedType ; description      ; Description
+; $solrIndexedType ; name             ; Name
+; $solrIndexedType ; price            ; Price
+; $solrIndexedType ; summary          ; Summary
+; $solrIndexedType ; ean              ; EAN
+
+
+# Define the available sorts
+UPDATE SolrSort; indexedType(identifier)[unique = true]; code[unique = true]; name[lang = $lang]
+               ; $solrIndexedType                      ; name-asc           ; Name (ascending)
+               ; $solrIndexedType                      ; name-desc          ; Name (descending)
+               ; $solrIndexedType                      ; price-asc          ; Price (lowest first)
+               ; $solrIndexedType                      ; price-desc         ; Price (highest first)
+               ; $solrIndexedType                      ; relevance          ; Relevance
+               ; $solrIndexedType                      ; topRated           ; Top Rated

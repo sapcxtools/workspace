@@ -1,0 +1,248 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$vendorId = $config-cxdata.import.defaults.vendor.id
+$vendorName = $config-cxdata.import.defaults.vendor.name
+$warehouseId = $config-cxdata.import.defaults.warehouse.id
+$warehouseName = $config-cxdata.import.defaults.warehouse.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+
+$requiresAuthentication = $config-cxdata.import.defaults.requiresauthentication
+$enableRegistration = $config-cxdata.import.defaults.enableregistration
+$useNetValues = $config-cxdata.import.defaults.usenetvalues
+
+
+############################################################
+# UserGroups
+############################################################
+INSERT_UPDATE UserGroup; uid[unique = true]
+                       ; admingroup
+                       ; employeegroup
+                       ; productmanagergroup
+                       ; contentmanagergroup
+                       ; customergroup
+                       ; b2bcustomergroup
+                       ; b2badmingroup
+
+############################################################
+# BaseStore / BaseSite (generic setup)
+############################################################
+INSERT_UPDATE Vendor; code[unique = true]; name[lang = $primaryLang]
+                    ; $vendorId          ; $vendorName
+
+INSERT_UPDATE Warehouse; code[unique = true]; name[lang = $primaryLang]; vendor(code); default; external; isAllowRestock; score; priority
+                       ; $warehouseId       ; $warehouseName           ; $vendorId   ; true   ; false   ; true          ; 1    ; 10
+
+INSERT_UPDATE AtpFormula; code[unique = true]; availability; allocation; cancellation; increase; reserved; shrinkage; wastage; returned
+                        ; $warehouseId       ; true        ; false     ; false       ; true    ; false   ; true     ; true   ; true
+
+INSERT_UPDATE BaseStore; uid[unique = true]; name[lang = $primaryLang]; warehouses(code); languages(isocode); defaultLanguage(isocode); currencies(isocode); defaultCurrency(isocode); net           ; defaultAtpFormula(code); productSearchStrategy                        ; sapInvoiceEnabled
+                       ; $storeId          ; $storeName               ; $warehouseId    ; $primaryLang      ; $primaryLang            ; $primaryCurrency   ; $primaryCurrency        ; $useNetValues ; $warehouseId           ; commerceSolrFacetSearchProductSearchStrategy ; true
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+UPDATE BaseStore;;;;;;;;;;;;;;;;;;;;; uid[unique = true]; languages(isocode)
+"#% beforeEach:
+    line.put(21, ""$storeId"");
+    if (""true"".equals(line.get(3))) line.put(22, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(22, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+UPDATE BaseStore;;;;;;;;;;;;;;;;;;;;; uid[unique = true]; currencies(isocode)
+"#% beforeEach:
+    line.put(21, ""$storeId"");
+    if (""true"".equals(line.get(6))) line.put(22, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(6))) line.put(22, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Currencies.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+UPDATE BaseStore;;;;;;;;;;;;;;;;;;;;; uid[unique = true]; billingCountries(isocode); deliveryCountries(isocode)
+"#% beforeEach:
+    line.put(21, ""$storeId"");
+    if (""true"".equals(line.get(3))) line.put(22, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(22, ""(-) "" + line.get(2));
+    line.put(23, line.get(22));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Countries.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+UPDATE BaseStore; uid[unique = true]; billingCountries(isocode); deliveryCountries(isocode); currencies(isocode); languages(isocode)
+#                ; $storeId          ; DE,US,GB                 ; DE,US,GB                  ; EUR                ; en,de
+
+INSERT_UPDATE CMSSite; uid[unique = true]; name[lang = $primaryLang]; defaultLanguage(isocode); stores(uid); requiresAuthentication  ; enableRegistration  ; defaultCatalog(id); channel(code)
+                     ; $siteId           ; $siteName                ; $primaryLang            ; $storeId   ; $requiresAuthentication ; $enableRegistration ; $productCatalogId ; B2B
+
+
+
+############################################################
+# Catalog Structure
+############################################################
+# Product catalog
+INSERT_UPDATE Catalog; id[unique = true] ; name[lang = $primaryLang]; baseStores(uid)
+                     ; $productCatalogId ; Products ($siteName)     ; $storeId
+
+INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]     ; active; languages(isocode); readPrincipals(uid)          ; writePrincipals(uid)
+                            ; $productCatalogId         ; $productCatalogEditVersion ; false ; $primaryLang      ; employeegroup                ; admingroup, productmanagergroup
+                            ; $productCatalogId         ; $productCatalogLiveVersion ; true  ; $primaryLang      ; employeegroup, customergroup ; admingroup, productmanagergroup
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+UPDATE CatalogVersion;;;;;;;;;;;;;;;;;;;;; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+"#% beforeEach:
+    line.put(21, ""$productCatalogId"");
+    line.put(22, ""$productCatalogEditVersion"");
+    if (""true"".equals(line.get(3))) line.put(23, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(23, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+"#% beforeEach:
+    line.put(21, ""$productCatalogId"");
+    line.put(22, ""$productCatalogLiveVersion"");
+    if (""true"".equals(line.get(3))) line.put(23, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(23, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+#                                         ; $productCatalogId         ; $productCatalogEditVersion ; en,de
+#                                         ; $productCatalogId         ; $productCatalogLiveVersion ; en,de
+
+
+$productCatalogSync = $productCatalogId ($productCatalogEditVersion -> $productCatalogLiveVersion)
+REMOVE CatalogVersionSyncJob; code[unique = true]
+                            ; $productCatalogSync
+
+INSERT_UPDATE CatalogVersionSyncJob; code[unique = true] ; sourceVersion(catalog(id), version)          ; targetVersion(catalog(id), version)          ; syncLanguages(isocode); rootTypes(code)                                                                                                                                                                  ; active; createNewItems; removeMissingItems; enableTransactions; maxSchedulerThreads; maxThreads; copyCacheSize; syncPrincipals(uid)
+                                   ; $productCatalogSync ; $productCatalogId:$productCatalogEditVersion ; $productCatalogId:$productCatalogLiveVersion ; $primaryLang          ; Product, Category, ClassificationAttribute, ClassAttributeAssignment, ClassificationAttributeUnit, ClassificationAttributeValue, AttributeValueAssignment, Media, MediaContainer ; true  ; true          ; true              ; false             ; 1                  ; 1         ; 5000         ; productmanagergroup
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+INSERT_UPDATE CatalogVersionSyncJob;;;;;;;;;;;;;;;;;;;;; code[unique = true]; syncLanguages(isocode)
+"#% beforeEach:
+    line.put(21, ""$productCatalogSync"");
+    if (""true"".equals(line.get(3))) line.put(22, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(22, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE CatalogVersionSyncJob; code[unique = true] ; syncLanguages(isocode)
+#                                   ; $productCatalogSync ; en,de
+
+INSERT_UPDATE SyncAttributeDescriptorConfig; syncJob(code)[unique = true]; attributeDescriptor(enclosingType(code), qualifier)[unique = true]; includedInSync; copyByValue
+# Remove Product Attributes that we do not need  -> ~15% boost
+                                   ; $productCatalogSync ; Item:comments                      ; false ; true
+                                   ; $productCatalogSync ; Product:barcodes                   ; false ; true
+                                   ; $productCatalogSync ; Product:deliveryModes              ; false ; true
+                                   ; $productCatalogSync ; Product:futureStocks               ; false ; true
+                                   ; $productCatalogSync ; Product:keywords                   ; false ; true
+                                   ; $productCatalogSync ; Product:productOrderLimit          ; false ; true
+                                   ; $productCatalogSync ; Product:productReviews             ; false ; true
+                                   ; $productCatalogSync ; Product:promotions                 ; false ; true
+                                   ; $productCatalogSync ; Product:restrictions               ; false ; true
+                                   ; $productCatalogSync ; Product:stockLevels                ; false ; true
+                                   ; $productCatalogSync ; Product:vendors                    ; false ; true
+                                   ; $productCatalogSync ; Product:linkComponents             ; false ; true
+                                   ; $productCatalogSync ; Product:productCarouselComponents  ; false ; true
+                                   ; $productCatalogSync ; Product:productDetailComponents    ; false ; true
+                                   ; $productCatalogSync ; Product:productFeatureComponents   ; false ; true
+                                   ; $productCatalogSync ; Product:productListComponents      ; false ; true
+                                   ; $productCatalogSync ; Product:detail                     ; false ; true
+                                   ; $productCatalogSync ; Product:logo                       ; false ; true
+                                   ; $productCatalogSync ; Product:normal                     ; false ; true
+                                   ; $productCatalogSync ; Product:thumbnails                 ; false ; true
+                                   ; $productCatalogSync ; Product:thumbnail                  ; false ; true
+# Remove not needed Category attributes -> ~ 10% for Category sync
+                                   ; $productCatalogSync ; Category:productCarouselComponents ; false ; true
+                                   ; $productCatalogSync ; Category:productListComponents     ; false ; true
+                                   ; $productCatalogSync ; Category:restrictions              ; false ; true
+                                   ; $productCatalogSync ; Category:promotions                ; false ; true
+                                   ; $productCatalogSync ; Category:others                    ; false ; true
+                                   ; $productCatalogSync ; Category:data_sheet                ; false ; true
+                                   ; $productCatalogSync ; Category:detail                    ; false ; true
+                                   ; $productCatalogSync ; Category:logo                      ; false ; true
+                                   ; $productCatalogSync ; Category:thumbnail                 ; false ; true
+                                   ; $productCatalogSync ; Category:thumbnails                ; false ; true
+
+# Classification catalog
+INSERT_UPDATE ClassificationSystem; id[unique = true]        ; name[lang = $primaryLang]  ; baseStores(uid)
+                                  ; $classificationCatalogId ; Classification ($siteName) ; $storeId
+
+INSERT_UPDATE ClassificationSystemVersion; catalog(id)[unique = true]; version[unique = true]            ; active; languages(isoCode); readPrincipals(uid)          ; writePrincipals(uid)            ; inclPacking[virtual = true, default = true]; inclDuty[virtual = true, default = true]; inclFreight[virtual = true, default = true]; inclAssurance[virtual = true, default = true]
+                                         ; $classificationCatalogId  ; $classificationCatalogLiveVersion ; true  ; $primaryLang      ; employeegroup, customergroup ; admingroup, productmanagergroup ;                                            ;                                         ;                                            ;
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+INSERT_UPDATE ClassificationSystemVersion;;;;;;;;;;;;;;;;;;;;; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+"#% beforeEach:
+    line.put(21, ""$classificationCatalogId"");
+    line.put(22, ""$classificationCatalogLiveVersion"");
+    if (""true"".equals(line.get(3))) line.put(23, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(23, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE ClassificationSystemVersion; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+#                                         ; $classificationCatalogId  ; $classificationCatalogLiveVersion ; en,de
+
+UPDATE BaseStore; uid[unique = true]; catalogs(id)
+                ; $storeId          ; $productCatalogId,$classificationCatalogId
+
+

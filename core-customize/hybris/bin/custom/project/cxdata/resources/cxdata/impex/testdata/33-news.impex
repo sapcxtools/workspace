@@ -1,0 +1,72 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+############################################################
+# CX News Media
+############################################################
+
+INSERT_UPDATE MediaFolder; qualifier[unique = true]; path
+                         ; news ; $siteId/news
+
+INSERT_UPDATE MediaFormat; qualifier[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]
+                         ; NewsTeaserImage ; NewsTeaserImage ; NewsTeaserImage
+
+# CSV columns:
+# 1: Media Code
+# 2: Alt Text
+# 3: Picture
+# 4: Media Folder
+# 5: Media Format
+INSERT_UPDATE Media; code[unique = true]; altText; realFileName; folder(qualifier); mediaFormat(qualifier); @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; $productCV
+"#% beforeEach:
+	line.put(6, ""$mediaResourcePath"" + line.get(4) + ""/"" + line.get(3));
+	line.put(7, ""image/"" + FilenameUtils.getExtension(line.get(3)));"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/CxNewsMedia.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+############################################################
+# CX News Items
+############################################################
+
+# CSV columns:
+# 1: ID
+# 2: Title DE
+# 3: Title EN
+# 4: Short DE
+# 5: Short EN
+# 6: Description DE
+# 7: Description EN
+# 8: Media DE
+# 9: Media EN
+# 10: Valid From
+# 11: Valid To
+# 12: URL
+INSERT_UPDATE CxNews; id[unique = true]; title[lang = de]; title[lang = en]; shortDescription[lang = de]; shortDescription[lang = en]; description[lang = de]; description[lang = en]; teaserImage(code, $productCV)[lang = de]; teaserImage(code, $productCV)[lang = en]; validFrom[dateformat = dd.MM.yyyy HH:mm:ss]; validTo[dateformat = dd.MM.yyyy HH:mm:ss]; url
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/CxNews.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+############################################################
+# CX News Example
+#
+# Example for adding a news item directly via ImpEx without CSV.
+# Copy the data row below and adjust the values to add further news items.
+############################################################
+
+INSERT_UPDATE CxNews; id[unique = true]; title[lang = de]; title[lang = en]; shortDescription[lang = de]; shortDescription[lang = en]; description[lang = de]; description[lang = en]; teaserImage(code, $productCV)[lang = de]; teaserImage(code, $productCV)[lang = en]; validFrom[dateformat = dd.MM.yyyy HH\:mm\:ss]; validTo[dateformat = dd.MM.yyyy HH\:mm\:ss]; url
+#                     ; example-news-001 ; Beispiel-News ; Example News ; Kurzer Beispieltext für das Dashboard. ; Short example text for the dashboard. ; Dies ist ein Beispiel für einen direkt über ImpEx angelegten News-Eintrag. ; This is an example of a news item created directly via ImpEx. ; ; ; 01.08.2026 00:00:00 ; 31.12.2026 23:59:59 ; https://www.example.com
+

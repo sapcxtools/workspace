@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<bean class="sap.commerce.cx.facades.data.contact.ContactData">
+		<property name="email" type="String"/>
+		<property name="firstName" type="String"/>
+		<property name="lastName" type="String"/>
+		<property name="subject" type="String"/>
+		<property name="message" type="String"/>
+	</bean>
+
+	<bean class="sap.commerce.cx.facades.data.servicerequest.ServiceRequestData">
+		<property name="id" type="String"/>
+		<property name="email" type="String"/>
+		<property name="firstName" type="String"/>
+		<property name="lastName" type="String"/>
+		<property name="subject" type="String"/>
+		<property name="message" type="String"/>
+		<property name="createdOn" type="java.util.Date"/>
+		<property name="lastUpdated" type="java.util.Date"/>
+		<property name="status" type="String"/>
+	</bean>
+
+	<bean class="sap.commerce.cx.facades.data.servicerequest.ServiceRequestSearchPageData"
+	      extends="de.hybris.platform.core.servicelayer.data.SearchPageData&lt;sap.commerce.cx.facades.data.servicerequest.ServiceRequestData&gt;">
+	</bean>
+
+	<bean class="sap.commerce.cx.facades.data.servicerequest.ServiceRequestCountData">
+		<property name="openRequests" type="int"/>
+		<property name="closedRequests" type="int"/>
+	</bean>
+
+    <bean class="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetData">
+        <property name="code" type="String"/>
+        <property name="displayName" type="String"/>
+        <property name="contentComponentUid" type="String"/>
+        <property name="contentComponentType" type="String"/>
+        <property name="minColumnSpan" type="int"/>
+        <property name="minRowSpan" type="int"/>
+        <property name="multipleOccurrenceAllowed" type="boolean"/>
+    </bean>
+
+	<bean class="sap.commerce.cx.facades.data.dashboard.CxDashboardConfigData">
+		<property name="code" type="String"/>
+		<property name="name" type="String"/>
+		<property name="active" type="boolean"/>
+		<property name="position" type="int"/>
+		<property name="widgetConfigs" type="java.util.List&lt;sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetConfigData&gt;"/>
+	</bean>
+
+	<bean class="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetConfigData">
+		<property name="position" type="int"/>
+		<property name="columnSpan" type="int"/>
+		<property name="rowSpan" type="int"/>
+		<property name="widget" type="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetData"/>
+		<property name="settings" type="java.util.List&lt;sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetSettingData&gt;"/>
+	</bean>
+
+    <bean class="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetSettingData">
+        <property name="key" type="String"/>
+        <property name="value" type="String"/>
+    </bean>
+
+	<bean class="sap.commerce.cx.facades.data.cart.CxSaveCartParameterData"
+		  extends="de.hybris.platform.commercefacades.order.data.CommerceSaveCartParameterData">
+		<property name="keepActiveCart" type="boolean"/>
+	</bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.OrderData"
+          extends="de.hybris.platform.commercefacades.order.data.AbstractOrderData">
+        <property name="trackingUrl" type="String"/>
+    </bean>
+
+	<bean class="de.hybris.platform.b2bcommercefacades.data.B2BRegistrationData">
+		<property name="firstName" type="String" />
+		<property name="ustId" type="String" />
+	</bean>
+
+
+
+    <!-- ** Service Ticket ** -->
+    <bean class="sap.commerce.cx.facades.data.serviceticket.CxServiceTicketCountData">
+        <property name="openRequests" type="int"/>
+        <property name="closedRequests" type="int"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketData">
+        <property name="code" type="java.lang.String"/>
+        <property name="typeCode" type="java.lang.String"/>
+        <property name="type" type="java.lang.String"/>
+        <property name="status" type="java.lang.String"/>
+        <property name="title" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="machines"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData&gt;"/>
+        <property name="allMachines" type="java.lang.Boolean"/>
+        <property name="customer" type="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+        <property name="creationTime" type="java.util.Date"/>
+        <property name="isNew" type="java.lang.Boolean"/>
+        <property name="parentAccountGroup" type="de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData"/>
+        <property name="form" type="java.lang.String"/>
+        <property name="recipientsTo" type="java.util.List&lt;java.lang.String&gt;"/>
+        <property name="recipientsCc" type="java.util.List&lt;java.lang.String&gt;"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormData">
+        <property name="id" type="java.lang.String"/>
+        <property name="title" type="java.lang.String"/>
+        <property name="type" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="recipients" type="java.util.List&lt;java.lang.String&gt;"/>
+        <property name="dynamicRecipient" type="java.lang.Boolean"/>
+        <property name="formFields"
+                  type="java.util.List&lt;sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormFieldData&gt;"/>
+        <property name="machines" type="java.util.List&lt;java.lang.String&gt;"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormFieldData">
+        <property name="id" type="java.lang.String"/>
+        <property name="label" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="required" type="java.lang.Boolean"/>
+        <property name="hidden" type="java.lang.Boolean"/>
+        <property name="fieldType" type="java.lang.String"/>
+        <property name="minValue" type="java.lang.Double"/>
+        <property name="maxValue" type="java.lang.Double"/>
+        <property name="minLength" type="java.lang.Integer"/>
+        <property name="maxLength" type="java.lang.Integer"/>
+        <property name="defaultValue" type="java.lang.String"/>
+        <property name="placeholder" type="java.lang.String"/>
+        <property name="formFieldValues"
+                  type="java.util.List&lt;sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormFieldValueData&gt;"/>
+        <property name="value" type="java.lang.String"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormFieldValueData">
+        <property name="id" type="java.lang.String"/>
+        <property name="label" type="java.lang.String"/>
+        <property name="childFields"
+                  type="java.util.List&lt;sap.commerce.cx.facades.data.serviceticket.data.CxServiceTicketFormFieldData&gt;"/>
+    </bean>
+
+    <!-- ** End Service Ticket ** -->
+
+	<bean class="sap.commerce.cx.facades.news.data.CxNewsData">
+		<property name="id" type="String"/>
+		<property name="title" type="String"/>
+		<property name="description" type="String"/>
+		<property name="shortDescription" type="String"/>
+		<property name="teaserImage" type="de.hybris.platform.cmsfacades.data.MediaData"/>
+		<property name="url" type="String"/>
+		<property name="creationTime" type="java.util.Date"/>
+	</bean>
+</beans>

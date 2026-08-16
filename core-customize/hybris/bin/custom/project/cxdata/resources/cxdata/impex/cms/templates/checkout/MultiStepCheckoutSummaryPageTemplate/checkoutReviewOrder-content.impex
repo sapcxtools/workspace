@@ -1,0 +1,36 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = checkoutReviewOrder
+$pageName = Checkout Review Order Page
+$pageLabel = /checkout/review-order
+$masterTemplate = MultiStepCheckoutSummaryPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]  ; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $pageId-BodyContent ; BodyContent            ;                                                        ; $pageId-BodyContentSlot
+                                ;                          ; $pageId-SideContent ; SideContent            ;                                                        ; $pageId-SideContentSlot
+
+# Create components for page
+INSERT_UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]        ; name                                 ; content[lang = de]
+                                   ;                          ; $pageId-InfoTextParagraph ; Checkout Summary Info Text Paragraph ;
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]           ; name                           ; flexType
+                              ;                          ; CheckoutPlaceOrderComponent  ; CheckoutPlaceOrderComponent    ; CheckoutPlaceOrder
+                              ;                          ; CheckoutReviewOrderComponent ; CheckoutReviewOrderComponent   ; CheckoutReviewOrder
+                              ;                          ; ExportOrderEntriesComponent  ; Export Order Entries Component ; ExportOrderEntriesComponent
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]      ; name                       ; cmsComponents(uid, $contentCV)
+                         ;                          ; $pageId-BodyContentSlot ; Checkout Review Order Slot ; CheckoutProgressComponent,CheckoutProgressMobileTopComponent,CheckoutReviewOrderComponent,ExportOrderEntriesComponent,CheckoutProgressMobileBottomComponent,$pageId-InfoTextParagraph
+                         ;                          ; $pageId-SideContentSlot ; Checkout Place Order Slot  ; CheckoutOrderSummaryComponent,CheckoutPlaceOrderComponent

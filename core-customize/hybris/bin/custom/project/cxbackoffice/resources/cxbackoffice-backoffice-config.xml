@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config xmlns="http://www.hybris.com/cockpit/config"
+        xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea"
+        xmlns:explorer-tree="http://www.hybris.com/cockpitng/config/explorertree"
+        xmlns:list-view="http://www.hybris.com/cockpitng/component/listView"
+        xmlns:y="http://www.hybris.com/cockpit/config/hybris"
+        xmlns:yc="http://www.hybris.com/cockpitng/config/common"
+        xmlns:advanced-search="http://www.hybris.com/cockpitng/config/advancedsearch"
+        xmlns:simple-search="http://www.hybris.com/cockpitng/config/simplesearch"
+        xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config"
+    >
+
+    <!-- ** Default Explorer Tree Navigation Config ** -->
+    <context merge-by="module" component="explorer-tree">
+        <explorer-tree:explorer-tree>
+            <explorer-tree:navigation-node id="hmc_treenode_medias">
+            </explorer-tree:navigation-node>
+            <explorer-tree:navigation-node id="hmc_treenode_catalog">
+                <explorer-tree:type-node code="ProductReference" id="odu_typenode_productreference"/>
+                <explorer-tree:navigation-node id="hmc_treenode_classificationgroup">
+                    <explorer-tree:type-node code="ProductFeature" id="odu_typenode_productfeature"/>
+                </explorer-tree:navigation-node>
+            </explorer-tree:navigation-node>
+            <explorer-tree:navigation-node id="hmc.cms2">
+                <explorer-tree:navigation-node id="cx_treenode_dashboard">
+                    <explorer-tree:type-node code="CxDashboardConfig" id="CxDashboardConfig"/>
+                    <explorer-tree:type-node code="CxDashboardWidgetConfig" id="CxDashboardWidgetConfig"/>
+                    <explorer-tree:type-node code="CxDashboardWidget" id="CxDashbaordWidget"/>
+                    <explorer-tree:type-node code="CxDashboardProductListComponent" id="CxDashboardProductListComponent"/>
+                    <explorer-tree:type-node code="CxDashboardTeaserComponent" id="CxDashboardTeaserComponent"/>
+                </explorer-tree:navigation-node>
+                <explorer-tree:navigation-node id="cx_treenode_news">
+                    <explorer-tree:type-node code="CxNews" id="CxNews"/>
+                </explorer-tree:navigation-node>
+            </explorer-tree:navigation-node>
+            <explorer-tree:navigation-node id="cx_treenode_servicetickets">
+                <explorer-tree:type-node id="cx_typenode_service_ticket" code="CxServiceTicket"/>
+                <explorer-tree:type-node id="cx_typenode_service_ticket_status" code="CxServiceTicketStatus"/>
+                <explorer-tree:type-node id="cx_typenode_service_ticket_type" code="CxServiceTicketType"/>
+                <explorer-tree:type-node id="cx_treenode_service_ticket_form" code="CxServiceTicketForm"/>
+                <explorer-tree:type-node id="cx_typenode_service_ticket_form_field" code="CxServiceTicketFormField"/>
+                <explorer-tree:type-node id="cx_typenode_service_request_form_field_value"
+                                         code="CxServiceTicketFormFieldValue"/>
+            </explorer-tree:navigation-node>
+        </explorer-tree:explorer-tree>
+    </context>
+    <!-- ** END Default Explorer Tree Navigation Config ** -->
+
+    <!-- ** Dashboard Configuration ** -->
+    <context type="CxDashboardConfig" parent="GenericItem" merge-by="type" module="cxbackoffice">
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="editor-area">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.properties">
+                    <editorArea:section name="cx.section.config">
+                        <editorArea:attribute qualifier="name"/>
+                        <editorArea:attribute qualifier="active"/>
+                        <editorArea:attribute qualifier="customer"/>
+                        <editorArea:attribute qualifier="widgetConfigs"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+        <context component="listview">
+            <list-view:list-view>
+                <list-view:column qualifier="code" position="1"/>
+                <list-view:column qualifier="name" position="2"/>
+                <list-view:column qualifier="active" position="3"/>
+                <list-view:column qualifier="creationtime" position="4"/>
+                <list-view:column qualifier="customer" position="5"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="equals"/>
+                    <advanced-search:field name="name" selected="true" operator="equals"/>
+                    <advanced-search:field name="active" selected="true" operator="equals"/>
+                    <advanced-search:field name="customer" selected="true" operator="equals"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+    </context>
+
+    <context type="CxDashboardWidgetConfig" parent="GenericItem" merge-by="type" module="cxbackoffice">
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="editor-area">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code"/>
+                        <editorArea:attribute qualifier="widget"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.properties">
+                    <editorArea:section name="dpx.section.config">
+                        <editorArea:attribute qualifier="position"/>
+                        <editorArea:attribute qualifier="columnSpan"/>
+                        <editorArea:attribute qualifier="rowSpan"/>
+                        <editorArea:attribute qualifier="dashboardConfig"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+        <context component="listview">
+            <list-view:list-view>
+                <list-view:column qualifier="code" position="1"/>
+                <list-view:column qualifier="widget" position="2"/>
+                <list-view:column qualifier="dashboardConfig" position="3"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="equals"/>
+                    <advanced-search:field name="widget" selected="true" operator="equals"/>
+                    <advanced-search:field name="dashboardConfig" selected="true" operator="equals"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+    </context>
+
+    <context type="CxDashboardWidget" parent="GenericItem" merge-by="type" module="cxbackoffice">
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="editor-area">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code"/>
+                        <editorArea:attribute qualifier="contentComponent"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.properties">
+                    <editorArea:section name="dpx.section.config">
+                        <editorArea:attribute qualifier="minRowSpan"/>
+                        <editorArea:attribute qualifier="minColumnSpan"/>
+                        <editorArea:attribute qualifier="multipleOccurrenceAllowed"/>
+                        <editorArea:attribute qualifier="widgetConfig"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+        <context component="listview">
+            <list-view:list-view>
+                <list-view:column qualifier="code" position="1"/>
+                <list-view:column qualifier="contentComponent" position="2"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="equals"/>
+                    <advanced-search:field name="contentComponent" selected="true" operator="equals"/>
+                    <advanced-search:field name="widgetConfig" selected="true" operator="contains"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+    </context>
+
+    <context type="CMSSite" merge-by="type">
+        <context component="editor-area">
+            <editorArea:editorArea>
+                <editorArea:tab name="hmc.properties">
+                    <editorArea:section name="cx.section.site.dashboard" merge-mode="MERGE" position="2">
+                        <editorArea:attribute qualifier="availableDashboardWidgets"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxDashboardProductListComponent" parent="CMSProductListComponent"
+             merge-by="type" module="cxbackoffice">
+        <context component="editor-area">
+            <editorArea:editorArea>
+                <editorArea:tab name="hmc.properties">
+                    <editorArea:section name="hmc.section.cmscomponent.features">
+                        <editorArea:attribute qualifier="productCount"/>
+                        <editorArea:attribute qualifier="category"/>
+                        <editorArea:attribute qualifier="linkText"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+    <!-- ** END Dashboard Configuration ** -->
+
+    <!-- ** Product Configuration ** -->
+    <context type="ProductFeature" merge-by="type">
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="product" selected="true" operator="equals"/>
+                    <advanced-search:field name="qualifier" selected="true" operator="contains"/>
+                    <advanced-search:field name="language" selected="true" operator="equals"/>
+                    <advanced-search:field name="classificationAttributeAssignment" selected="true" operator="equals"/>
+                    <advanced-search:field name="value"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+    </context>
+
+    <context type="ProductReference" merge-by="type">
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>source.code + ' -> ' + target.code + ' (' + typeName + ')'</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="source" selected="true" operator="equals"/>
+                    <advanced-search:field name="target" selected="true" operator="equals"/>
+                    <advanced-search:field name="referenceType" selected="true" operator="equals"/>
+                    <advanced-search:field name="qualifier" selected="false"/>
+                    <advanced-search:field name="active" selected="false"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="listviewactions" merge-by="type">
+            <y:actions>
+                <y:extended-group position="30" qualifier="export" show-group-header="false">
+                    <y:action action-id="com.hybris.backoffice.widgets.actions.excel.export" position="10" property="pageable.typeCode"/>
+                    <y:action action-id="com.hybris.backoffice.widgets.actions.excel.exporttemplate" position="20" property="pageable.typeCode"/>
+                    <y:action action-id="com.hybris.cockpitng.listview.action.export.csv" position="30" property="exportColumnsAndData">
+                        <y:parameter>
+                            <yc:name>actionName</yc:name>
+                            <yc:value>label.export.csv</yc:value>
+                        </y:parameter>
+                    </y:action>
+                    <y:extended-action action-id="com.hybris.backoffice.widgets.actions.excel.export" position="40"/>
+                </y:extended-group>
+                <y:group position="40" qualifier="import" show-group-header="false" show-separator="false">
+                    <y:action action-id="com.hybris.backoffice.widgets.actions.excel.import" position="10" property="pageable.typeCode"/>
+                </y:group>
+            </y:actions>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="source"/>
+                <list-view:column qualifier="target"/>
+                <list-view:column qualifier="referenceType"/>
+                <list-view:column qualifier="qualifier" merge-mode="remove"/>
+                <list-view:column qualifier="active" merge-mode="remove"/>
+            </list-view:list-view>
+        </context>
+        <context component="create-wizard">
+            <wz:flow id="productReferenceWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                    <wz:assign property="newObject.source"
+                               value="ctx?.parentObject"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="source" position="1"/>
+                            <wz:property qualifier="target" position="2"/>
+                            <wz:property qualifier="referenceType" position="3"/>
+                            <wz:property qualifier="preselected" exclude="true"/>
+                            <wz:property qualifier="active" exclude="true"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation id="step1.navigation">
+                        <wz:cancel/>
+                        <wz:done visible="newObject.source !=null AND newObject.target !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+    </context>
+    <!-- ** END Product Configuration ** -->
+
+    <!-- ** News Configuration ** -->
+    <context type="CxNews" parent="GenericItem" merge-by="type" module="cxbackoffice">
+
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>title</y:label>
+                    <y:label>id</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+
+        <context component="editor-area">
+            <editorArea:editorArea>
+
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="id"/>
+                        <editorArea:attribute qualifier="title"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+
+                <editorArea:tab name="tab.cxnews.content">
+                    <editorArea:section name="section.cxnews.content">
+                        <editorArea:attribute qualifier="shortDescription"/>
+                        <editorArea:attribute qualifier="teaserImage"/>
+                        <editorArea:attribute qualifier="description"/>
+                        <editorArea:attribute qualifier="url"/>
+                    </editorArea:section>
+                </editorArea:tab>
+
+                <editorArea:tab name="tab.cxnews.publication">
+                    <editorArea:section name="section.cxnews.publication">
+                        <editorArea:attribute qualifier="validFrom"/>
+                        <editorArea:attribute qualifier="validTo"/>
+                        <editorArea:attribute qualifier="active"/>
+                    </editorArea:section>
+                </editorArea:tab>
+
+            </editorArea:editorArea>
+        </context>
+
+        <context component="listview">
+            <list-view:list-view>
+                <list-view:column qualifier="id" position="1"/>
+                <list-view:column qualifier="title" position="2"/>
+                <list-view:column qualifier="validFrom" position="3"/>
+                <list-view:column qualifier="validTo" position="4"/>
+                <list-view:column qualifier="active" position="5"/>
+                <list-view:column qualifier="modifiedtime" position="6"/>
+            </list-view:list-view>
+        </context>
+
+        <context component="simple-search">
+            <simple-search:simple-search>
+                <simple-search:field name="id"/>
+                <simple-search:field name="title"/>
+            </simple-search:simple-search>
+        </context>
+
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="id" selected="true" operator="equals"/>
+                    <advanced-search:field name="title" selected="true" operator="contains"/>
+                    <advanced-search:field name="shortDescription" selected="false" operator="contains"/>
+                    <advanced-search:field name="validFrom" selected="true"/>
+                    <advanced-search:field name="validTo" selected="true"/>
+                    <advanced-search:field name="url" selected="false" operator="contains"/>
+                    <advanced-search:field name="modifiedtime" selected="false"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="create-wizard">
+            <wz:flow id="CxNewsWizard" title="create.cxnews.title">
+
+                <wz:prepare id="cxNewsPrepare">
+                    <wz:initialize property="newCxNews"
+                                   type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+
+                <wz:step id="step1"
+                         label="create.cxnews.step1.label"
+                         sublabel="create.cxnews.step1.sublabel">
+
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newCxNews">
+                            <wz:property qualifier="id"/>
+                            <wz:property qualifier="title"/>
+                            <wz:property qualifier="shortDescription"/>
+                            <wz:property qualifier="teaserImage"/>
+                            <wz:property qualifier="description"/>
+                            <wz:property qualifier="url"/>
+                        </wz:property-list>
+                    </wz:content>
+
+                    <wz:navigation id="step1.navigation">
+                        <wz:cancel/>
+                        <wz:next/>
+                    </wz:navigation>
+
+                </wz:step>
+
+                <wz:step id="step2"
+                         label="create.cxnews.step2.label"
+                         sublabel="create.cxnews.step2.sublabel">
+
+                    <wz:content id="step2.content">
+                        <wz:property-list root="newCxNews">
+                            <wz:property qualifier="validFrom"/>
+                            <wz:property qualifier="validTo"/>
+                            <wz:property qualifier="active"/>
+                        </wz:property-list>
+                    </wz:content>
+
+                    <wz:navigation id="step2.navigation">
+                        <wz:back/>
+                        <wz:cancel/>
+                        <wz:done>
+                            <wz:save property="newCxNews"/>
+                        </wz:done>
+                    </wz:navigation>
+
+                </wz:step>
+
+            </wz:flow>
+        </context>
+
+
+    </context>
+    <!-- ** END News Configuration ** -->
+
+    <!-- ** Solr Configuration ** -->
+    <context type="SolrIndexedProperty" parent="GenericItem" component="editor-area" merge-by="type">
+        <editorArea:editorArea>
+            <editorArea:tab name="hmc.tab.configuration.indexedproperty.facet" merge-mode="merge">
+                <editorArea:section name="hmc.sec.configuration.indexedproperty.facet" merge-mode="merge">
+                    <editorArea:attribute qualifier="facetDisplayType" position="3"/>
+                </editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>
+    <!-- ** END Solr Configuration ** -->
+
+    <!-- ** Service Ticket Configuration ** -->
+    <context type="CxServiceTicketStatus" merge-by="type">
+        <context component="create-wizard" merge-by="type">
+            <wz:flow id="CxServiceTicketStatusWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="code"/>
+                            <wz:property qualifier="name"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation>
+                        <wz:cancel/>
+                        <wz:done visible="newObject.code !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="code"/>
+                <simple-search:field name="name"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code + " : " + name</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="code"/>
+                <list-view:column qualifier="name"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="contains"/>
+                    <advanced-search:field name="name" selected="true"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="code"/>
+                        <editorArea:attribute qualifier="name"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxServiceTicketType" merge-by="type">
+        <context component="create-wizard" merge-by="type">
+            <wz:flow id="CxServiceTicketTypeWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="code"/>
+                            <wz:property qualifier="name"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation>
+                        <wz:cancel/>
+                        <wz:done visible="newObject.code !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="code"/>
+                <simple-search:field name="name"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code + " : " + name</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="code"/>
+                <list-view:column qualifier="name"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="contains"/>
+                    <advanced-search:field name="name" selected="true"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="code"/>
+                        <editorArea:attribute qualifier="name"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxServiceTicketFormFieldValue" merge-by="type">
+        <context component="create-wizard" merge-by="type">
+            <wz:flow id="CxServiceTicketFormFieldValueWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="id"/>
+                            <wz:property qualifier="label"/>
+                            <wz:property qualifier="creationtime" exclude="true"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation>
+                        <wz:cancel/>
+                        <wz:done visible="newObject.id !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="id"/>
+                <simple-search:field name="label"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>id</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="id"/>
+                <list-view:column qualifier="label"/>
+                <list-view:column qualifier="childFields"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="id" selected="true" operator="contains"/>
+                    <advanced-search:field name="label" selected="true"/>
+                    <advanced-search:field name="childFields" selected="true" operator="contains"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="id"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="id"/>
+                        <editorArea:attribute qualifier="label"/>
+                        <editorArea:attribute qualifier="childFields"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxServiceTicketFormField" merge-by="type">
+        <context component="create-wizard" merge-by="type">
+            <wz:flow id="CxServiceTicketFormFieldWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="id"/>
+                            <wz:property qualifier="label"/>
+                            <wz:property qualifier="description"/>
+                            <wz:property qualifier="required"/>
+                            <wz:property qualifier="active"/>
+                            <wz:property qualifier="hidden"/>
+                            <wz:property qualifier="fieldType"/>
+                            <wz:property qualifier="minValue"/>
+                            <wz:property qualifier="maxValue"/>
+                            <wz:property qualifier="maxLength"/>
+                            <wz:property qualifier="minLength"/>
+                            <wz:property qualifier="defaultValue"/>
+                            <wz:property qualifier="placeholder"/>
+                            <wz:property qualifier="creationtime" exclude="true"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation>
+                        <wz:cancel/>
+                        <wz:done visible="newObject.id !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="id"/>
+                <simple-search:field name="label"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>id</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="id"/>
+                <list-view:column qualifier="label"/>
+                <list-view:column qualifier="description"/>
+                <list-view:column qualifier="required"/>
+                <list-view:column qualifier="hidden"/>
+                <list-view:column qualifier="active"/>
+                <list-view:column qualifier="fieldType"/>
+                <list-view:column qualifier="minValue"/>
+                <list-view:column qualifier="maxValue"/>
+                <list-view:column qualifier="minLength"/>
+                <list-view:column qualifier="maxLength"/>
+                <list-view:column qualifier="defaultValue"/>
+                <list-view:column qualifier="placeholder"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="id" selected="true" operator="contains"/>
+                    <advanced-search:field name="label" selected="true"/>
+                    <advanced-search:field name="description"/>
+                    <advanced-search:field name="required"/>
+                    <advanced-search:field name="hidden"/>
+                    <advanced-search:field name="active"/>
+                    <advanced-search:field name="fieldType"/>
+                    <advanced-search:field name="minValue"/>
+                    <advanced-search:field name="maxValue"/>
+                    <advanced-search:field name="minLength"/>
+                    <advanced-search:field name="maxLength"/>
+                    <advanced-search:field name="defaultValue"/>
+                    <advanced-search:field name="placeholder"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="id"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="label"/>
+                        <editorArea:attribute qualifier="description"/>
+                        <editorArea:attribute qualifier="required"/>
+                        <editorArea:attribute qualifier="hidden"/>
+                        <editorArea:attribute qualifier="active"/>
+                        <editorArea:attribute qualifier="fieldType"/>
+                        <editorArea:attribute qualifier="minValue"/>
+                        <editorArea:attribute qualifier="maxValue"/>
+                        <editorArea:attribute qualifier="minLength"/>
+                        <editorArea:attribute qualifier="maxLength"/>
+                        <editorArea:attribute qualifier="defaultValue"/>
+                        <editorArea:attribute qualifier="placeholder"/>
+                        <editorArea:attribute qualifier="formFieldValues"/>
+                        <editorArea:attribute qualifier="form"/>
+                        <editorArea:attribute qualifier="parentFieldValues"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxServiceTicketForm" merge-by="type">
+        <context component="create-wizard" merge-by="type">
+            <wz:flow id="CxServiceTicketFormWizard" title="create.title(ctx.TYPE_CODE)">
+                <wz:prepare id="itemPrepare">
+                    <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+                </wz:prepare>
+                <wz:step id="step1" label="flow.allmanadatory">
+                    <wz:content id="step1.content">
+                        <wz:property-list root="newObject">
+                            <wz:property qualifier="id"/>
+                            <wz:property qualifier="title"/>
+                            <wz:property qualifier="type"/>
+                            <wz:property qualifier="description"/>
+                            <wz:property qualifier="recipients"/>
+                            <wz:property qualifier="dynamicRecipient"/>
+                            <wz:property qualifier="formFields"/>
+                            <wz:property qualifier="creationtime" exclude="true"/>
+                        </wz:property-list>
+                    </wz:content>
+                    <wz:navigation>
+                        <wz:cancel/>
+                        <wz:done visible="newObject.id !=null">
+                            <wz:save property="newObject"/>
+                        </wz:done>
+                    </wz:navigation>
+                </wz:step>
+            </wz:flow>
+        </context>
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="id"/>
+                <simple-search:field name="title"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>id</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="id"/>
+                <list-view:column qualifier="title"/>
+                <list-view:column qualifier="type"/>
+                <list-view:column qualifier="description"/>
+                <list-view:column qualifier="recipients"/>
+                <list-view:column qualifier="dynamicRecipient"/>
+                <list-view:column qualifier="formFields"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="id" selected="true" operator="contains"/>
+                    <advanced-search:field name="title" selected="true"/>
+                    <advanced-search:field name="type" selected="true"/>
+                    <advanced-search:field name="description"/>
+                    <advanced-search:field name="recipients"/>
+                    <advanced-search:field name="dynamicRecipient"/>
+                    <advanced-search:field name="formFields" operator="contains"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="id"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="title"/>
+                        <editorArea:attribute qualifier="type"/>
+                        <editorArea:attribute qualifier="description"/>
+                        <editorArea:attribute qualifier="recipients"/>
+                        <editorArea:attribute qualifier="dynamicRecipient"/>
+                        <editorArea:attribute qualifier="formFields"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+
+    <context type="CxServiceTicket" merge-by="type">
+        <context component="simple-search" merge-by="type">
+            <simple-search:simple-search>
+                <simple-search:field name="code"/>
+                <simple-search:field name="title"/>
+            </simple-search:simple-search>
+        </context>
+        <context component="base">
+            <y:base>
+                <y:labels>
+                    <y:label>code + " : " + title</y:label>
+                </y:labels>
+            </y:base>
+        </context>
+        <context component="listview" merge-by="type">
+            <list-view:list-view>
+                <list-view:column qualifier="code"/>
+                <list-view:column qualifier="type"/>
+                <list-view:column qualifier="status"/>
+                <list-view:column qualifier="title"/>
+                <list-view:column qualifier="description"/>
+                <list-view:column qualifier="customer"/>
+                <list-view:column qualifier="parentAccountGroup"/>
+                <list-view:column qualifier="machines"/>
+                <list-view:column qualifier="allMachines"/>
+                <list-view:column qualifier="isNew"/>
+            </list-view:list-view>
+        </context>
+        <context component="advanced-search" merge-by="type">
+            <advanced-search:advanced-search>
+                <advanced-search:field-list>
+                    <advanced-search:field name="code" selected="true" operator="contains"/>
+                    <advanced-search:field name="type"/>
+                    <advanced-search:field name="status"/>
+                    <advanced-search:field name="title"/>
+                    <advanced-search:field name="description"/>
+                    <advanced-search:field name="customer"/>
+                    <advanced-search:field name="parentAccountGroup"/>
+                    <advanced-search:field name="machines"/>
+                    <advanced-search:field name="allMachines"/>
+                    <advanced-search:field name="isNew"/>
+                </advanced-search:field-list>
+            </advanced-search:advanced-search>
+        </context>
+        <context component="editor-area" merge-by="type">
+            <editorArea:editorArea>
+                <editorArea:essentials>
+                    <editorArea:essentialSection name="hmc.essential">
+                        <editorArea:attribute qualifier="code" readonly="true"/>
+                        <editorArea:attribute qualifier="status"/>
+                        <editorArea:attribute qualifier="creationtime"/>
+                        <editorArea:attribute qualifier="modifiedtime" readonly="true"/>
+                    </editorArea:essentialSection>
+                </editorArea:essentials>
+                <editorArea:tab name="hmc.tab.common">
+                    <editorArea:section name="hmc.properties">
+                        <editorArea:attribute qualifier="code"/>
+                        <editorArea:attribute qualifier="type"/>
+                        <editorArea:attribute qualifier="title"/>
+                        <editorArea:attribute qualifier="description"/>
+                        <editorArea:attribute qualifier="customer"/>
+                        <editorArea:attribute qualifier="parentAccountGroup"/>
+                        <editorArea:attribute qualifier="machines"/>
+                        <editorArea:attribute qualifier="allMachines"/>
+                        <editorArea:attribute qualifier="isNew"/>
+                        <editorArea:attribute qualifier="recipientsTo"/>
+                        <editorArea:attribute qualifier="recipientsCc"/>
+                        <editorArea:attribute qualifier="form" editor="com.hybris.cockpitng.editor.wysiwyg"/>
+                    </editorArea:section>
+                </editorArea:tab>
+            </editorArea:editorArea>
+        </context>
+    </context>
+    <!-- ** End Service Ticket Configuration ** -->
+
+</config>
+

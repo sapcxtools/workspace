@@ -1,0 +1,43 @@
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$siteId = $config-cxdata.import.defaults.site.id
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+
+$typeCode = type(code)[default = 'CxDashboardWidget'];
+$target = target[allownull = true, default = 'sap.commerce.cx.core.model.CxDashboardWidgetModel'];
+$active = active[allownull = true, default = true];
+INSERT_UPDATE MinConstraint; id[unique = true]                             ; value; severity(code, itemtype(code)); $active; $target; $typeCode; qualifier     ; descriptor(enclosingType(code), qualifier)
+                           ; dashboardWidgetMinColumnSpanPositiveContraint ; 1    ; ERROR:Severity                ;        ;        ;          ; minColumnSpan ; CxDashboardWidget:minColumnSpan
+                           ; dashbaordWidgetMinRowSpanPositiveContraint    ; 1    ; ERROR:Severity                ;        ;        ;          ; minRowSpan    ; CxDashboardWidget:minRowSpan
+
+INSERT_UPDATE CxDashboardWidget; code [unique = true]                       ; contentComponent($contentCV, uid)    ; minColumnSpan; minRowSpan; multipleOccurrenceAllowed
+                                ; MyAccountDashboardTeaserComponentWidget    ; MyAccountDashboardTeaserComponent    ; 1            ; 1         ; false
+                                ; MyCompanyDashboardTeaserComponentWidget    ; MyCompanyDashboardTeaserComponent    ; 1            ; 1         ; false
+                                ; MyUsersDashboardTeaserComponentWidget      ; MyUsersDashboardTeaserComponent      ; 1            ; 1         ; false
+                                ; MyEquipmentDashboardComponentWidget        ; MyEquipmentDashboardComponent        ; 3            ; 1         ; false
+                                ; CxDashboardServiceRequestsComponentWidget ; CxDashboardServiceRequestsComponent ; 2            ; 1         ; false
+                                ; AccountOrderHistoryComponentWidget         ; AccountOrderHistoryComponent         ; 2            ; 2         ; false
+                                ; CxDashboardNotepadComponentWidget         ; CxDashboardNotepadComponent         ; 1            ; 1         ; true
+                                ; CxDashboardWeatherComponentWidget         ; CxDashboardWeatherComponent         ; 1            ; 1         ; true
+                                ; CxDashboardTodoComponentWidget            ; CxDashboardTodoComponent            ; 1            ; 1         ; true
+                                ; CxDashboardClockComponentWidget           ; CxDashboardClockComponent           ; 1            ; 1         ; true
+                                ; CartQuickOrderFormComponentWidget          ; CartQuickOrderFormComponent          ; 2            ; 1         ; false
+                                ; CxDashboardSpacerComponentWidget          ; CxDashboardSpacerComponent          ; 1            ; 1         ; true
+
+INSERT_UPDATE CxDashboardWidgetConfig; code[unique = true]                  ; position; columnSpan; rowSpan; widget(code)
+                                      ; defaultMyAccountTeaserWidgetConfig   ; 0       ; 1         ; 1      ; MyAccountDashboardTeaserComponentWidget
+                                      ; defaultMyCompanyTeaserWidgetConfig   ; 4       ; 1         ; 1      ; MyCompanyDashboardTeaserComponentWidget
+                                      ; defaultMyUsersTeaserWidgetConfig     ; 3       ; 1         ; 1      ; MyUsersDashboardTeaserComponentWidget
+                                      ; defaultMyEquipmentWidgetConfig       ; 2       ; 3         ; 1      ; MyEquipmentDashboardComponentWidget
+                                      ; defaultMyServiceRequestsWidgetConfig ; 5       ; 2         ; 1      ; CxDashboardServiceRequestsComponentWidget
+                                      ; defaultMyOrdersWidgetConfig          ; 1       ; 2         ; 2      ; AccountOrderHistoryComponentWidget
+
+INSERT_UPDATE CxDashboardConfig; code[unique = true]    ; name              ; active; widgetConfigs(code)
+                                ; defaultDashboardConfig ; Default Dashboard ; true  ; defaultMyAccountTeaserWidgetConfig,defaultMyCompanyTeaserWidgetConfig,defaultMyUsersTeaserWidgetConfig,defaultMyEquipmentWidgetConfig,defaultMyServiceRequestsWidgetConfig,defaultMyOrdersWidgetConfig
+
+UPDATE CMSSite; uid[unique = true]; defaultDashboardConfig(code); availableDashboardWidgets(code)
+              ; $siteId           ; defaultDashboardConfig      ; MyAccountDashboardTeaserComponentWidget,MyCompanyDashboardTeaserComponentWidget,MyUsersDashboardTeaserComponentWidget,MyEquipmentDashboardComponentWidget,CxDashboardServiceRequestsComponentWidget,AccountOrderHistoryComponentWidget,CxDashboardNotepadComponentWidget,CxDashboardWeatherComponentWidget,CxDashboardTodoComponentWidget,CxDashboardClockComponentWidget,CartQuickOrderFormComponentWidget,CxDashboardSpacerComponentWidget

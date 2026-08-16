@@ -1,0 +1,53 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = dashboardPage
+$pageName = Dashboard Page
+$pageLabel = /
+$masterTemplate = DashboardPageTemplate
+
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'true']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                ; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; MiddleContentSlotForDashboardPage ; MiddleContent          ;                                                        ; MiddleContent-dashboardPage
+
+#Icons
+INSERT_UPDATE Media; $contentCV[unique = true]; code[unique = true]            ; realfilename            ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; folder(qualifier)[default = 'images']; altText
+                   ;                          ; /media/cx_icon_my_users.png   ; cx_icon_my_users.png   ; jar:/cxdata/assets/icons/cx_icon_my_users.png                             ; image/png                   ;                                      ; "My Users"
+                   ;                          ; /media/cx_icon_my_account.png ; cx_icon_my_account.png ; jar:/cxdata/assets/icons/cx_icon_my_account.png                           ; image/png                   ;                                      ; "My Account"
+                   ;                          ; /media/cx_icon_my_company.png ; cx_icon_my_company.png ; jar:/cxdata/assets/icons/cx_icon_my_company.png                           ; image/png                   ;                                      ; "My Company"
+
+# Create components for page
+INSERT_UPDATE CxDashboardTeaserComponent; $contentCV[unique = true]; uid[unique = true]                ; icon($contentCV, code)         ; url                        ; external[default = false]
+                                         ;                          ; MyUsersDashboardTeaserComponent   ; /media/cx_icon_my_users.png   ; /organization/users        ;
+                                         ;                          ; MyAccountDashboardTeaserComponent ; /media/cx_icon_my_account.png ; /my-account/update-profile ;
+                                         ;                          ; MyCompanyDashboardTeaserComponent ; /media/cx_icon_my_company.png ; /organization              ;
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true] ; name                ; flexType
+                              ;                          ; DashboardComponent ; Dashboard Component ; DashboardComponent
+                              ;                          ; LatestNewsComponent      ; Latest News Component      ; CxLatestNewsComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                   ; name                                 ; flexType
+                              ;                          ; CxDashboardServiceRequestsComponent ; Dashboard Service Requests Component ; CxDashboardServiceRequestsComponent
+                              ;                          ; CxDashboardNotepadComponent         ; Dashboard Notepad Component          ; CxDashboardNotepadComponent
+                              ;                          ; CxDashboardWeatherComponent         ; Dashboard Weather Component          ; CxDashboardWeatherComponent
+                              ;                          ; CxDashboardTodoComponent            ; Dashboard Todo Component             ; CxDashboardTodoComponent
+                              ;                          ; CxDashboardSpacerComponent          ; Dashboard Spacer Component           ; CxDashboardSpacerComponent
+                              ;                          ; CxDashboardClockComponent           ; Dashboard Clock Component            ; CxDashboardClockComponent
+
+INSERT_UPDATE CxDashboardProductListComponent; $contentCV[unique = true]; uid[unique = true]            ; name                          ; productCount; category ; actions(uid, $contentCV)
+                                              ;                          ; MyEquipmentDashboardComponent ; MyEquipmentDashboardComponent ; 4           ; 99999999 ; ListAddToCartAction,ListOrderFormAction
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]          ; active[default = true]; cmsComponents(uid, $contentCV)
+                         ;                          ; MiddleContent-dashboardPage ;                       ; DashboardComponent, LatestNewsComponent

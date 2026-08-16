@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="cxfacades/service-ticket-spring.xml"/>
+
+    <!-- CMS component populators -->
+    <bean id="cxFormListComponentCMSPopulator"
+          class="sap.commerce.cx.facades.cms.populator.CxFormListComponentCMSPopulator"/>
+
+    <bean depends-on="cmsRenderingCmsItemConverterCustomPopulators" parent="listMergeDirective">
+        <property name="add" ref="cxFormListComponentCMSPopulator"/>
+    </bean>
+
+    <bean id="cxContactFacade" class="sap.commerce.cx.facades.contact.impl.DefaultCxContactFacade">
+        <constructor-arg name="cxContactService" ref="cxContactService"/>
+    </bean>
+
+    <bean id="cxRegistrationFacade"
+          class="sap.commerce.cx.facades.registration.impl.DefaultCxRegistrationFacade">
+        <constructor-arg name="cxRegistrationService" ref="cxRegistrationService"/>
+    </bean>
+
+    <!-- Dashboard Config -->
+    <bean name="cxDashboardWidgetPopulator" class="sap.commerce.cx.facades.dashboard.populators.CxDashboardWidgetPopulator">
+        <constructor-arg name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean name="cxDashboardWidgetConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetData"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxDashboardWidgetPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="cxDashboardWidgetConfigPopulator"
+          class="sap.commerce.cx.facades.dashboard.populators.CxDashboardWidgetConfigPopulator">
+        <constructor-arg name="widgetConverter" ref="cxDashboardWidgetConverter"/>
+    </bean>
+
+    <bean name="cxDashboardWidgetConfigConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="sap.commerce.cx.facades.data.dashboard.CxDashboardWidgetConfigData"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxDashboardWidgetConfigPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="cxDashboardConfigPopulator"
+          class="sap.commerce.cx.facades.dashboard.populators.CxDashboardConfigPopulator">
+        <constructor-arg name="widgetConfigConverter" ref="cxDashboardWidgetConfigConverter"/>
+    </bean>
+
+    <bean name="cxDashboardConfigConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="sap.commerce.cx.facades.data.dashboard.CxDashboardConfigData"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxDashboardConfigPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="cxDashboardFacade" class="sap.commerce.cx.facades.dashboard.impl.DefaultCxDashboardFacade">
+        <constructor-arg name="dashboardService" ref="cxDashboardService"/>
+        <constructor-arg name="dashboardConfigConverter" ref="cxDashboardConfigConverter"/>
+        <constructor-arg name="modelService" ref="modelService"/>
+        <constructor-arg name="dashboardWidgetConverter" ref="cxDashboardWidgetConverter"/>
+    </bean>
+    <!-- End of Dashboard Config -->
+
+    <!-- Save cart Config -->
+    <alias name="cxSaveCartFacade" alias="saveCartFacade"/>
+    <bean name="cxSaveCartFacade" class="sap.commerce.cx.facades.cart.impl.DefaultCxSaveCartFacade">
+        <constructor-arg name="delegate" ref="defaultSaveCartFacade"/>
+        <constructor-arg name="saveCartService" ref="commerceSaveCartService"/>
+        <constructor-arg name="cartService" ref="cartService"/>
+        <constructor-arg name="commerceCartService" ref="commerceCartService"/>
+        <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="cartConverter" ref="cartConverter"/>
+    </bean>
+    <!-- End of save cart Config -->
+
+    <!-- News Config -->
+    <bean id="cxNewsPopulator"
+          class="sap.commerce.cx.facades.news.populator.CxNewsPopulator">
+        <constructor-arg name="mediaConverter" ref="mediaModelConverter"/>
+    </bean>
+
+    <bean id="cxNewsConverter"
+          parent="abstractPopulatingConverter">
+        <property name="targetClass" value="sap.commerce.cx.facades.news.data.CxNewsData"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxNewsPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cxNewsFacade"
+          class="sap.commerce.cx.facades.news.impl.DefaultCxNewsFacade">
+        <constructor-arg name="cxNewsService" ref="cxNewsService"/>
+        <constructor-arg name="cxNewsConverter" ref="cxNewsConverter"/>
+    </bean>
+
+
+    <!--	Solr-->
+    <bean id="facetDataDisplayTypePopulator" class="sap.commerce.cx.facades.solr.populator.FacetDataDisplayTypePopulator"/>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="facetConverter"/>
+        <property name="add" ref="facetDataDisplayTypePopulator"/>
+    </bean>
+
+    <bean id="facetDataRemoveQueryPopulator" class="sap.commerce.cx.facades.solr.populator.FacetDataRemoveQueryPopulator">
+        <constructor-arg name="searchStateConverter" ref="solrSearchStateConverter"/>
+    </bean>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="facetConverter"/>
+        <property name="add" ref="facetDataRemoveQueryPopulator"/>
+    </bean>
+
+    <bean id="facetDataTypePopulator" class="sap.commerce.cx.facades.solr.populator.FacetDataTypePopulator"/>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="facetConverter"/>
+        <property name="add" ref="facetDataTypePopulator"/>
+    </bean>
+
+    <bean id="facetDataSolrStatsPopulator" class="sap.commerce.cx.facades.solr.populator.FacetDataSolrStatsPopulator"/>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="facetConverter"/>
+        <property name="add" ref="facetDataSolrStatsPopulator"/>
+    </bean>
+
+    <bean id="facetDataFromToValuesPopulator" class="sap.commerce.cx.facades.solr.populator.FacetDataFromToValuesPopulator"/>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="facetConverter"/>
+        <property name="add" ref="facetDataFromToValuesPopulator"/>
+    </bean>
+
+	<!--End of Solr -->
+
+    <bean id="cxOrderPopulator" class="sap.commerce.cx.facades.populator.CxOrderPopulator">
+        <constructor-arg name="baseStoreService" ref="baseStoreService"/>
+    </bean>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="orderConverter"/>
+        <property name="add" ref="cxOrderPopulator"/>
+    </bean>
+</beans>

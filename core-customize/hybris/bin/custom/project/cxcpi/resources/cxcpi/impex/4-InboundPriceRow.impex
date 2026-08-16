@@ -1,0 +1,39 @@
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundPriceRow
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]; type(code)        ; root[default = false]
+                                   ; InboundPriceRow                       ; PriceRow           ; PriceRow          ; true
+                                   ; InboundPriceRow                       ; Product            ; Product           ;
+                                   ; InboundPriceRow                       ; Currency           ; Currency          ;
+                                   ; InboundPriceRow                       ; Unit               ; Unit              ;
+                                   ; InboundPriceRow                       ; CatalogVersion     ; CatalogVersion    ;
+                                   ; InboundPriceRow                       ; Catalog            ; Catalog           ;
+                                   ; InboundPriceRow                       ; ProductPriceGroup  ; ProductPriceGroup ;
+                                   ; InboundPriceRow                       ; UserPriceGroup     ; UserPriceGroup    ;
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]
+                                            ; InboundPriceRow:UserPriceGroup                                     ; code                        ; UserPriceGroup:code                                ;                                                           ;
+                                            ; InboundPriceRow:ProductPriceGroup                                  ; code                        ; ProductPriceGroup:code                             ;                                                           ;
+                                            ; InboundPriceRow:Product                                            ; code                        ; Product:code                                       ;                                                           ;
+                                            ; InboundPriceRow:Product                                            ; catalogVersion              ; Product:catalogVersion                             ; InboundPriceRow:CatalogVersion                            ;
+                                            ; InboundPriceRow:Unit                                               ; code                        ; Unit:code                                          ;                                                           ;
+                                            ; InboundPriceRow:Currency                                           ; isocode                     ; Currency:isocode                                   ;                                                           ;
+                                            ; InboundPriceRow:Catalog                                            ; id                          ; Catalog:id                                         ;                                                           ;
+                                            ; InboundPriceRow:CatalogVersion                                     ; catalog                     ; CatalogVersion:catalog                             ; InboundPriceRow:Catalog                                   ;
+                                            ; InboundPriceRow:CatalogVersion                                     ; version                     ; CatalogVersion:version                             ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; net                         ; PriceRow:net                                       ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; sapConditionId              ; PriceRow:sapConditionId                            ;                                                           ; true
+                                            ; InboundPriceRow:PriceRow                                           ; startTime                   ; PriceRow:startTime                                 ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; endTime                     ; PriceRow:endTime                                   ;                                                           ; true
+                                            ; InboundPriceRow:PriceRow                                           ; price                       ; PriceRow:price                                     ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; unitFactor                  ; PriceRow:unitFactor                                ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; minqtd                      ; PriceRow:minqtd                                    ;                                                           ;
+                                            ; InboundPriceRow:PriceRow                                           ; currency                    ; PriceRow:currency                                  ; InboundPriceRow:Currency                                  ; true
+                                            ; InboundPriceRow:PriceRow                                           ; ug                          ; PriceRow:ug                                        ; InboundPriceRow:UserPriceGroup                            ;
+                                            ; InboundPriceRow:PriceRow                                           ; pg                          ; PriceRow:pg                                        ; InboundPriceRow:ProductPriceGroup                         ;
+                                            ; InboundPriceRow:PriceRow                                           ; product                     ; PriceRow:product                                   ; InboundPriceRow:Product                                   ;
+                                            ; InboundPriceRow:PriceRow                                           ; catalogVersion              ; PriceRow:catalogVersion                            ; InboundPriceRow:CatalogVersion                            ; true
+                                            ; InboundPriceRow:PriceRow                                           ; unit                        ; PriceRow:unit                                      ; InboundPriceRow:Unit                                      ; true
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundPriceRow                       ; BASIC

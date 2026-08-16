@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="items.xsd">
+
+<!-- =====================================================================================
+         DEPLOYMENT MAP
+         =====================================================================================
+         TYPE                              TABLE                      TYPECODE
+         =====================================================================================
+         CxDashboardConfig                dashboardconfig            20010
+         CxDashboardWidgetConfig          dashboardwidgetconfig      20011
+         CxServiceTicket                  serviceticket              20012
+         CxServiceTicketForm              cxticketform              20013
+         CxServiceTicketFormField         cxticketformfield         20014
+         CxServiceTicketFormFieldValue    cxticketformfieldvalue    20015
+         Tickets2Machines (relation)       tickets2Machines           20016
+         FormListComponent2STForms (rel.)  formlistcomp2stforms       20017
+         CxDashboardWidgetSetting		   dashboardwidgetsetting     20018
+         FormFieldValue2FormFields (rel.)  fieldValue2fields          20019
+         CxDashboardWidget                dashboardwidget            20020
+         CxNews                           cxnews                    20021
+         ===================================================================================== -->
+
+    <collectiontypes>
+        <collectiontype code="CxServiceTicketFormFieldValueList" elementtype="CxServiceTicketFormFieldValue"
+                        type="list"/>
+    </collectiontypes>
+
+    <enumtypes>
+		<enumtype code="SolrIndexedPropertyFacetDisplayType" dynamic="true">
+			<description>Enumeration for the facet display type in the storefront.</description>
+			<value code="radio"/>
+			<value code="checkbox"/>
+			<value code="select"/>
+			<value code="range"/>
+			<value code="slider"/>
+			<value code="autocomplete"/>
+		</enumtype>
+
+        <enumtype code="CxServiceTicketType" dynamic="true">
+            <description>Type of Service Ticket</description>
+        </enumtype>
+
+        <enumtype code="CxServiceTicketStatus" dynamic="true">
+            <description>Status of Service Ticket</description>
+        </enumtype>
+
+        <enumtype code="CxFormListViewMode">
+            <description>View mode for the FormListComponent.</description>
+            <value code="INLINE"/>
+            <value code="TOGGLE_INLINE"/>
+            <value code="TOGGLE_MODAL"/>
+        </enumtype>
+
+        <enumtype code="CxServiceTicketFormFieldType">
+            <value code="TEXT"/>
+            <value code="EMAIL"/>
+            <value code="HIDDEN"/>
+            <value code="PASSWORD"/>
+            <value code="COLOR"/>
+            <value code="TEXTAREA"/>
+            <value code="NUMBER"/>
+            <value code="RADIO"/>
+            <value code="CHECKBOX"/>
+            <value code="CHECKBOXES"/>
+            <value code="SELECT"/>
+            <value code="FILE"/>
+            <value code="DATE"/>
+            <value code="WEEK"/>
+        </enumtype>
+    </enumtypes>
+
+	<relations>
+		<relation code="CxDashboardConfig2Customer" localized="false">
+			<sourceElement type="CxDashboardConfig" qualifier="dashboardConfigs" cardinality="many" collectiontype="list">
+				<modifiers read="true" write="true" optional="true" partof="true" />
+			</sourceElement>
+			<targetElement type="Customer" qualifier="customer" cardinality="one">
+				<modifiers read="true" write="true" optional="true" unique="true" />
+			</targetElement>
+		</relation>
+
+        <relation code="CxDashboardConfig2WidgetConfig" localized="false">
+            <sourceElement type="CxDashboardConfig" qualifier="dashboardConfig" cardinality="one"/>
+            <targetElement type="CxDashboardWidgetConfig" qualifier="widgetConfigs" cardinality="many"/>
+        </relation>
+
+        <relation code="CxDashboardWidget2WidgetConfig" localized="false">
+            <sourceElement type="CxDashboardWidgetConfig" qualifier="widgetConfig" cardinality="many"/>
+            <targetElement type="CxDashboardWidget" qualifier="widget" cardinality="one"/>
+        </relation>
+
+        <relation code="CxDashboardWidgetConfig2WidgetSetting" localized="false">
+            <sourceElement type="CxDashboardWidgetConfig" qualifier="widgetConfig" cardinality="one">
+                <modifiers unique="true"/>
+            </sourceElement>
+			<targetElement type="CxDashboardWidgetSetting" qualifier="settings" cardinality="many"/>
+        </relation>
+
+        <relation code="BaseSite2DashboardWidgets" localized="false">
+            <sourceElement type="BaseSite" qualifier="baseSite" cardinality="one"/>
+            <targetElement type="CxDashboardWidget" qualifier="availableDashboardWidgets" cardinality="many"/>
+        </relation>
+
+        <relation code="Tickets2Machines" localized="false">
+            <deployment table="tickets2Machines" typecode="20016"/>
+            <sourceElement type="CxServiceTicket" qualifier="tickets" cardinality="many">
+                <modifiers optional="true"/>
+            </sourceElement>
+            <targetElement type="Product" qualifier="machines" cardinality="many">
+                <modifiers optional="true"/>
+            </targetElement>
+        </relation>
+
+        <relation code="ServiceTicketForm2ServiceTicketFormFields" localized="false">
+            <sourceElement type="CxServiceTicketForm" qualifier="form" cardinality="one">
+                <modifiers read="true" write="true" search="true"/>
+            </sourceElement>
+            <targetElement type="CxServiceTicketFormField" qualifier="formFields" cardinality="many" ordered="true">
+                <modifiers read="true" write="true" search="true"/>
+            </targetElement>
+        </relation>
+
+        <relation code="FormListComponent2ServiceTicketForms" localized="false">
+            <deployment table="formlistcomp2stforms" typecode="20017"/>
+            <sourceElement type="CxFormListComponent" qualifier="formListComponent" cardinality="many">
+                <modifiers read="true" write="true" optional="true"/>
+            </sourceElement>
+            <targetElement type="CxServiceTicketForm" qualifier="forms" cardinality="many" ordered="true">
+                <modifiers read="true" write="true" optional="true"/>
+            </targetElement>
+        </relation>
+
+        <relation code="FormFieldValue2FormFields" localized="false">
+            <deployment table="fieldValue2fields" typecode="20019"/>
+            <sourceElement type="CxServiceTicketFormFieldValue" qualifier="parentFieldValues" cardinality="many">
+                <modifiers read="true" write="true" search="true"/>
+            </sourceElement>
+            <targetElement type="CxServiceTicketFormField" qualifier="childFields" cardinality="many">
+                <modifiers read="true" write="true" search="true"/>
+            </targetElement>
+        </relation>
+	</relations>
+
+	<itemtypes>
+        <itemtype code="BaseStore" autocreate="false" generate="false">
+            <description>Extending BaseStore type with additional attributes.</description>
+            <attributes>
+                <attribute qualifier="trackingBaseUrl" type="java.lang.String">
+                    <description>Tracking Base URL</description>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="BaseSite" autocreate="false" generate="false">
+            <description>Extending BaseSite type with additional attributes.</description>
+            <attributes>
+                <attribute qualifier="defaultDashboardConfig" type="CxDashboardConfig">
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="Order" autocreate="false" generate="false">
+            <description>Extending Order type with additional attributes.</description>
+            <attributes>
+                <attribute qualifier="trackingId" type="java.lang.String">
+                    <description>Tracking ID</description>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <typegroup name="dashboard">
+			<itemtype code="CxDashboardConfig" extends="GenericItem">
+				<deployment table="dashboardconfig" typecode="20010"/>
+				<attributes>
+					<attribute qualifier="code" type="java.lang.String">
+						<persistence type="property"/>
+						<modifiers initial="true" unique="true" optional="false"/>
+					</attribute>
+					<attribute qualifier="name" type="java.lang.String">
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="active" type="boolean">
+						<persistence type="property"/>
+						<defaultvalue>true</defaultvalue>
+						<modifiers optional="false"/>
+					</attribute>
+                    <attribute qualifier="position" type="int">
+						<persistence type="property"/>
+						<defaultvalue>Integer.valueOf(0)</defaultvalue>
+						<modifiers optional="false"/>
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="CxDashboardWidgetConfig" extends="GenericItem">
+				<deployment table="dashboardwidgetconfig" typecode="20011"/>
+				<attributes>
+					<attribute qualifier="code" type="java.lang.String">
+						<persistence type="property"/>
+						<modifiers initial="true" unique="true" optional="false"/>
+					</attribute>
+					<attribute qualifier="position" type="int">
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="columnSpan" type="int">
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="rowSpan" type="int">
+						<persistence type="property"/>
+					</attribute>
+				</attributes>
+				<indexes>
+					<index name="idx">
+						<key attribute="code"/>
+					</index>
+				</indexes>
+			</itemtype>
+
+            <itemtype code="CxDashboardWidget" extends="GenericItem">
+                <deployment table="dashboardwidget" typecode="20020"/>
+                <attributes>
+                    <attribute qualifier="code" type="java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers initial="true" unique="true" optional="false"/>
+                    </attribute>
+                    <attribute qualifier="displayName" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="contentComponent" type="SimpleCMSComponent">
+                        <persistence type="property"/>
+                        <modifiers optional="false" initial="true"/>
+                    </attribute>
+                    <attribute qualifier="minColumnSpan" type="int">
+                        <persistence type="property"/>
+                        <defaultvalue>1</defaultvalue>
+                    </attribute>
+                    <attribute qualifier="minRowSpan" type="int">
+                        <persistence type="property"/>
+                        <defaultvalue>1</defaultvalue>
+                    </attribute>
+                    <attribute qualifier="multipleOccurrenceAllowed" type="boolean">
+                        <persistence type="property"/>
+                        <defaultvalue>false</defaultvalue>
+                        <modifiers optional="false"/>
+                    </attribute>
+                </attributes>
+                <indexes>
+                    <index name="idx">
+                        <key attribute="code"/>
+                    </index>
+                </indexes>
+            </itemtype>
+
+            <itemtype code="CxDashboardWidgetSetting" extends="GenericItem">
+                <deployment table="dashboardwidgetsetting" typecode="20018"/>
+            <attributes>
+                <attribute qualifier="key" type="java.lang.String">
+                    <persistence type="property"/>
+                    <modifiers optional="false" unique="true"/>
+                </attribute>
+                <attribute qualifier="value" type="java.lang.String">
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+            </itemtype>
+		</typegroup>
+
+		<typegroup name="cms">
+			<itemtype code="CxDashboardTeaserComponent" extends="CMSLinkComponent">
+				<attributes>
+					<attribute qualifier="headline" type="localized:java.lang.String">
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="description" type="localized:java.lang.String">
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="icon" type="Media">
+						<persistence type="property"/>
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="CxDashboardProductListComponent" extends="CMSProductListComponent">
+				<attributes>
+					<attribute qualifier="productCount" type="int">
+						<description>Number of products to display in the list</description>
+						<persistence type="property"/>
+						<defaultvalue>4</defaultvalue>
+					</attribute>
+					<attribute qualifier="category" type="java.lang.String">
+						<description>Category from which the products should be displayed</description>
+						<persistence type="property"/>
+					</attribute>
+					<attribute qualifier="linkText" type="localized:java.lang.String">
+						<description>Text for the link to the category. Only displayed if set.</description>
+						<persistence type="property"/>
+					</attribute>
+				</attributes>
+			</itemtype>
+
+            <itemtype code="CxFormListComponent" extends="SimpleCMSComponent"
+                      jaloclass="com.cxcore.jalo.cms.CxFormListComponent">
+                <description>CMS component for displaying a list of service request forms.</description>
+                <attributes>
+                    <attribute qualifier="viewMode" type="CxFormListViewMode">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="headline" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers optional="true"/>
+                    </attribute>
+                    <attribute qualifier="description" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers optional="true"/>
+                    </attribute>
+                    <attribute qualifier="toggleText" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers optional="true"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+
+            <itemtype code="CxServiceTicketComponent" extends="SimpleCMSComponent"
+                      jaloclass="com.cxcore.jalo.cms.CxServiceTicketComponent">
+                <description>CMS component for embedding a CX service ticket form.</description>
+                <attributes>
+                    <attribute qualifier="formId" type="localized:java.lang.String">
+                        <persistence type="property" />
+                        <description>Identifier of the service ticket form to be rendered.</description>
+                    </attribute>
+                </attributes>
+            </itemtype>
+		</typegroup>
+
+		<typegroup name="solr">
+			<itemtype code="SolrIndexedProperty" autocreate="false" generate="false">
+				<description>Extending SolrIndexedProperty type with additional attributes.</description>
+				<attributes>
+                    <attribute qualifier="facetDisplayType" type="SolrIndexedPropertyFacetDisplayType">
+                        <description>Suggestion for the visual representation of this facet in the frontend.
+                        </description>
+                        <defaultvalue>em().getEnumerationValue("SolrIndexedPropertyFacetDisplayType", "checkbox")
+                        </defaultvalue>
+                        <persistence type="property"/>
+                    </attribute>
+				</attributes>
+			</itemtype>
+		</typegroup>
+
+        <typegroup name="ServiceTicket">
+            <itemtype code="CxServiceTicket">
+                <deployment table="serviceticket" typecode="20012"/>
+                <attributes>
+                    <attribute qualifier="code" type="java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers optional="false" unique="true" initial="true"/>
+                    </attribute>
+                    <attribute qualifier="type" type="CxServiceTicketType">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="status" type="CxServiceTicketStatus">
+                        <persistence type="property"/>
+                        <description>The status of service ticket</description>
+                    </attribute>
+                    <attribute qualifier="title" type="java.lang.String">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="isNew" type="java.lang.Boolean">
+                        <persistence type="dynamic" attributeHandler="isTicketClassifiedAsNewAttributeHandler"/>
+                        <description>Checks if the provided ticket is new (1-3 days old)</description>
+                        <defaultvalue>java.lang.Boolean.TRUE</defaultvalue>
+                        <modifiers optional="false"/>
+                    </attribute>
+                    <attribute qualifier="description" type="java.lang.String">
+                        <description>Description as text</description>
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                            <columntype database="mysql">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="oracle">
+                                <value>CLOB</value>
+                            </columntype>
+                            <columntype database="sqlserver">
+                                <value>TEXT</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                    <attribute qualifier="allMachines" type="java.lang.Boolean">
+                        <defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
+                        <persistence type="property"/>
+                        <modifiers optional="false"/>
+                    </attribute>
+                    <attribute qualifier="customer" type="B2BCustomer">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="parentAccountGroup" type="B2BUnit">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="form" type="java.lang.String">
+                        <description>Ticket form as json</description>
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                            <columntype database="mysql">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="oracle">
+                                <value>CLOB</value>
+                            </columntype>
+                            <columntype database="sqlserver">
+                                <value>TEXT</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                    <attribute qualifier="recipientsTo" type="StringCollection">
+                        <persistence type="property"/>
+                        <description>String list for email-addresses to send the service ticket to</description>
+                    </attribute>
+                    <attribute qualifier="recipientsCc" type="StringCollection">
+                        <persistence type="property"/>
+                        <description>String list for cc email-addresses to send the service ticket to</description>
+                    </attribute>
+                </attributes>
+                <indexes>
+                    <index name="cxServiceTicketIndex">
+                        <key attribute="code"/>
+                    </index>
+                </indexes>
+            </itemtype>
+
+            <itemtype code="CxServiceTicketForm" extends="GenericItem">
+                <deployment table="cxticketform" typecode="20013"/>
+                <attributes>
+                    <attribute qualifier="id" type="java.lang.String">
+                        <modifiers optional="false" initial="true" unique="true"/>
+                        <persistence type="property"/>
+                        <description>ID of the service ticket form</description>
+                    </attribute>
+                    <attribute qualifier="title" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <description>Title of the service ticket form</description>
+                    </attribute>
+                    <attribute qualifier="type" type="CxServiceTicketType">
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="description" type="localized:java.lang.String">
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                            <columntype database="mysql">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="oracle">
+                                <value>CLOB</value>
+                            </columntype>
+                            <columntype database="sqlserver">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="sap">
+                                <value>NCLOB</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                    <attribute qualifier="recipients" type="StringCollection">
+                        <persistence type="property"/>
+                        <description>String list for email-addresses to send the service ticket to</description>
+                    </attribute>
+                    <attribute qualifier="dynamicRecipient" type="java.lang.Boolean">
+                        <modifiers optional="false" initial="true"/>
+                        <persistence type="property"/>
+                        <defaultvalue>false</defaultvalue>
+                        <description>If true adds a hidden email field, that can be filled by frontend as an input
+                        </description>
+                    </attribute>
+                </attributes>
+                <indexes>
+                    <index name="cxServiceTicketFormIndex" unique="true">
+                        <key attribute="id"/>
+                    </index>
+                </indexes>
+            </itemtype>
+
+            <itemtype code="CxServiceTicketFormField" extends="GenericItem">
+                <deployment table="cxticketformfield" typecode="20014"/>
+                <attributes>
+                    <attribute qualifier="id" type="java.lang.String">
+                        <modifiers optional="false" initial="true" unique="true"/>
+                        <persistence type="property"/>
+                        <description>The id of the service ticket form field.</description>
+                    </attribute>
+                    <attribute qualifier="label" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <description>Label of the service ticket form field.</description>
+                    </attribute>
+                    <attribute qualifier="description" type="localized:java.lang.String">
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                            <columntype database="mysql">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="oracle">
+                                <value>CLOB</value>
+                            </columntype>
+                            <columntype database="sqlserver">
+                                <value>TEXT</value>
+                            </columntype>
+                            <columntype database="sap">
+                                <value>NCLOB</value>
+                            </columntype>
+                        </persistence>
+                        <description>Description of the Contact Form Field.</description>
+                    </attribute>
+                    <attribute qualifier="required" type="boolean">
+                        <persistence type="property"/>
+                        <modifiers optional="false"/>
+                        <defaultvalue>false</defaultvalue>
+                        <description>Is the service ticket form field required.</description>
+                    </attribute>
+                    <attribute qualifier="hidden" type="boolean">
+                        <persistence type="property"/>
+                        <modifiers optional="false"/>
+                        <defaultvalue>false</defaultvalue>
+                        <description>Is the service ticket form field should be hidden.</description>
+                    </attribute>
+                    <attribute qualifier="active" type="boolean">
+                        <persistence type="property"/>
+                        <modifiers optional="false"/>
+                        <defaultvalue>true</defaultvalue>
+                        <description>Is the service ticket form field is active.</description>
+                    </attribute>
+                    <attribute qualifier="fieldType" type="CxServiceTicketFormFieldType">
+                        <modifiers optional="false" initial="true"/>
+                        <persistence type="property"/>
+                        <description>Type of the contact form field.</description>
+                    </attribute>
+                    <attribute qualifier="minValue" type="java.lang.Double">
+                        <persistence type="property"/>
+                        <description>Validation constraint for fieldtype=number.</description>
+                    </attribute>
+                    <attribute qualifier="maxValue" type="java.lang.Double">
+                        <persistence type="property"/>
+                        <description>Validation constraint for fieldtype=number.</description>
+                    </attribute>
+                    <attribute qualifier="maxLength" type="java.lang.Integer">
+                        <persistence type="property"/>
+                        <description>Validation constraint for fieldtype=string.</description>
+                    </attribute>
+                    <attribute qualifier="minLength" type="java.lang.Integer">
+                        <persistence type="property"/>
+                        <description>Validation constraint for fieldtype=string.</description>
+                    </attribute>
+                    <attribute qualifier="defaultValue" type="java.lang.String">
+                        <persistence type="property"/>
+                        <description>Default value.</description>
+                    </attribute>
+                    <attribute qualifier="placeholder" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <description>Placeholder for the value.</description>
+                    </attribute>
+                    <attribute qualifier="formFieldValues" type="CxServiceTicketFormFieldValueList">
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+                <indexes>
+                    <index name="cxServiceTicketFormFieldIndex" unique="true">
+                        <key attribute="id"/>
+                    </index>
+                </indexes>
+            </itemtype>
+
+            <itemtype code="CxServiceTicketFormFieldValue" extends="GenericItem">
+                <deployment table="cxticketformfieldvalue" typecode="20015"/>
+                <attributes>
+                    <attribute qualifier="id" type="java.lang.String">
+                        <modifiers optional="false" initial="true" unique="true"/>
+                        <persistence type="property"/>
+                        <description>The id of the value field.</description>
+                    </attribute>
+                    <attribute qualifier="label" type="localized:java.lang.String">
+                        <persistence type="property"/>
+                        <description>Value of the field.</description>
+                    </attribute>
+                </attributes>
+                <indexes>
+                    <index name="cxServiceTicketFormFieldValueIndex" unique="true">
+                        <key attribute="id"/>
+                    </index>
+                </indexes>
+            </itemtype>
+        </typegroup>
+        <typegroup name="news">
+            <itemtype code="CxNews"
+                      extends="GenericItem">
+
+                <deployment table="cxnews" typecode="20021"/>
+
+                <attributes>
+                    <attribute qualifier="id" type="java.lang.String">
+                        <description>Unique business identifier of the news item.</description>
+                        <modifiers optional="false"
+                                   unique="true"/>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="title" type="localized:java.lang.String">
+                        <description>Localized news title.</description>
+                        <modifiers optional="false"/>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="description" type="localized:java.lang.String">
+                        <description>Localized full news description.</description>
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                    <attribute qualifier="shortDescription" type="localized:java.lang.String">
+                        <description>Localized short teaser text.</description>
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                    <attribute qualifier="teaserImage" type="localized:Media">
+                        <description>Localized teaser image shown in the news teaser.</description>
+                        <modifiers read="true"
+                                   write="true"
+                                   search="true"
+                                   optional="true"/>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="validFrom" type="java.util.Date">
+                        <description>Start date from which the news item is active.</description>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="validTo" type="java.util.Date">
+                        <description>End date until which the news item is active.</description>
+                        <modifiers read="true"
+                                   write="true"
+                                   search="true"
+                                   optional="true"/>
+                        <persistence type="property"/>
+                    </attribute>
+                    <attribute qualifier="active" type="java.lang.Boolean">
+                        <description>
+                            Dynamic flag. True if current date is between validFrom and validTo.
+                        </description>
+                        <modifiers read="true"
+                                   write="false"
+                                   search="false"
+                                   optional="true"/>
+                        <persistence type="dynamic"
+                                     attributeHandler="cxNewsActiveAttributeHandler"/>
+                    </attribute>
+                    <attribute qualifier="url" type="java.lang.String">
+                        <description>Optional target URL for the "mehr..." link.</description>
+                        <persistence type="property">
+                            <columntype>
+                                <value>HYBRIS.LONG_STRING</value>
+                            </columntype>
+                        </persistence>
+                    </attribute>
+                </attributes>
+
+                <indexes>
+                    <index name="CxNewsIdIdx" unique="true">
+                        <key attribute="id"/>
+                    </index>
+
+                    <index name="CxNewsValidityIdx">
+                        <key attribute="validFrom"/>
+                        <key attribute="validTo"/>
+                    </index>
+                </indexes>
+            </itemtype>
+            <itemtype code="CxNewsOverviewComponent"
+                      extends="SimpleCMSComponent">
+                <description>CMS component for displaying all active news on the news overview page.</description>
+            </itemtype>
+        </typegroup>
+	</itemtypes>
+</items>

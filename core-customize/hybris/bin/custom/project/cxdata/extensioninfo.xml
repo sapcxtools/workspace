@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+    <extension name="cxdata" jaloLogicFree="true" usemaven="true" abstractclassprefix="Generated" classprefix="CxData">
+        <!--
+            List all extensions (custom and SAP) that you would like to have their
+            essential and project data imports executed before the projects data.
+        -->
+        <requires-extension name="cxcore"/>
+
+        <!--required by solr config-->
+        <requires-extension name='yacceleratorfacades' />
+
+        <coremodule packageroot="sap.commerce.cx.data" generated="true" manager="de.hybris.platform.jalo.extension.GenericManager"/>
+    </extension>
+</extensioninfo>

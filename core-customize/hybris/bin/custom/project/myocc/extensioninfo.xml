@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
-    <extension name="myocc" jaloLogicFree="true" usemaven="true" abstractclassprefix="Generated" classprefix="MyOcc">
-        <requires-extension name="commercewebservices"/>
-        <requires-extension name="myfacades"/>
-        
-        <coremodule packageroot="sap.commerce.project.occ" generated="true" manager="de.hybris.platform.jalo.extension.GenericManager"/>
-    </extension>
-</extensioninfo>

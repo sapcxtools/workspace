@@ -1,0 +1,19 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = en
+$pageId = login
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Login"
+
+UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]          ; content[lang = $lang]
+                            ;                          ; NoAccountParagraphComponent ; "<p class='cx-section-title'>Don't have an account?</p><a class='btn-link' href='/login/register'>Register here</a>"

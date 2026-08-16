@@ -1,0 +1,53 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$storeName = $config-cxdata.import.defaults.store.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+# Product References Import
+#
+# 1: source product code
+# 2: target product code
+# 3: referenceType (e.g. SIMILAR, SPAREPART)
+# 4: active (true/false)
+# 5: preselected (true/false)
+############################################################
+INSERT_UPDATE ProductReference;; source(code, $productCV)[unique = true]; target(code, $productCV)[unique = true]; referenceType(code); active[default = true]; preselected[default = false]
+"#% beforeEach:
+    ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/References.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE ProductReference; source(code, $productCV)[unique = true]; target(code, $productCV)[unique = true]; referenceType(code); active[default = true]; preselected[default = false]
+#                              ; 100201000001001                        ; V20551071                              ; SPAREPART          ; true                  ;
+#                              ; 100101000001                           ; 100101000002                           ; SIMILAR            ; true                  ;

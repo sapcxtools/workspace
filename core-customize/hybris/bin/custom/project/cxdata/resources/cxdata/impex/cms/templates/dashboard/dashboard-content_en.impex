@@ -1,0 +1,24 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = en
+
+$pageId = dashboardPage
+############################################################
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Dashboard"
+
+UPDATE CxDashboardTeaserComponent; $contentCV[unique = true]; uid[unique = true]                ; linkName[lang = $lang]; headline[lang = $lang]; description[lang = $lang]
+                                  ;                          ; MyUsersDashboardTeaserComponent   ; My Users              ; Manage my Users       ; Here you can view and edit the data of your users
+                                  ;                          ; MyAccountDashboardTeaserComponent ; My Account            ; Manage my Account     ; Here you can view your account data
+                                  ;                          ; MyCompanyDashboardTeaserComponent ; My Company            ; Manage my Company     ; Here you can view and edit your company data
+
+UPDATE CxDashboardProductListComponent; $contentCV[unique = true]; uid[unique = true]                  ; linkText[lang = $lang]
+                                       ;                          ; MyEquipmentDashboardComponent ; View my equipment

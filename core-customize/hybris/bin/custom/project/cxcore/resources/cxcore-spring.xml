@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="cxcore/service-ticket-spring.xml"/>
+
+	<alias name="defaultCxEmailService" alias="cxEmailService"/>
+	<bean id="defaultCxEmailService" class="sap.commerce.cx.core.email.impl.DefaultCxEmailService">
+		<constructor-arg name="i18NService" ref="i18NService"/>
+		<constructor-arg name="htmlEmailService" ref="htmlEmailService"/>
+		<constructor-arg name="htmlEmailGenerator" ref="htmlEmailGenerator"/>
+	</bean>
+
+	<bean id="cxContactService" class="sap.commerce.cx.core.contact.impl.DefaultCxContactService">
+		<constructor-arg name="configurationService" ref="configurationService"/>
+		<constructor-arg name="cxEmailService" ref="cxEmailService"/>
+	</bean>
+
+    <bean id="cxRegistrationService"
+          class="sap.commerce.cx.core.registration.service.impl.DefaultCxRegistrationService">
+        <constructor-arg name="configurationService" ref="configurationService"/>
+		<constructor-arg name="cxEmailService" ref="cxEmailService"/>
+	</bean>
+
+	<bean name="cxDashboardWidgetConfigValidateInterceptor" class="sap.commerce.cx.core.dashboard.interceptors.CxDashboardWidgetConfigValidateInterceptor">
+		<constructor-arg name="modelService" ref="modelService"/>
+	</bean>
+
+	<bean id="cxDashboardWidgetConfigInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="cxDashboardWidgetConfigValidateInterceptor" />
+		<property name="typeCode" value="CxDashboardWidgetConfig" />
+<!--		<property name="order" value="5000" />-->
+	</bean>
+
+	<bean name="cxDashboardDao" class="sap.commerce.cx.core.dashboard.dao.impl.DefaultCxDashboardDao"/>
+
+	<bean name="cxDashboardService" class="sap.commerce.cx.core.dashboard.service.impl.DefaultCxDashboardService">
+		<constructor-arg name="dashboardDao" ref="cxDashboardDao"/>
+		<constructor-arg name="modelService" ref="modelService"/>
+		<constructor-arg name="userService" ref="userService"/>
+		<constructor-arg name="baseSiteService" ref="baseSiteService"/>
+	</bean>
+
+	<alias name="cxSaveCartService" alias="commerceSaveCartService"/>
+	<bean name="cxSaveCartService" class="sap.commerce.cx.core.cart.impl.DefaultCxCommerceSaveCartService">
+		<constructor-arg name="delegate" ref="defaultCommerceSaveCartService"/>
+		<constructor-arg name="cartService" ref="cartService"/>
+		<constructor-arg name="keyGenerator" ref="#{configurationService.configuration.getProperty('commerceservices.orderCode.keyGenerator')}"/>
+	</bean>
+	<!-- News -->
+	<bean id="cxNewsDao"
+		  class="sap.commerce.cx.core.news.dao.impl.DefaultCxNewsDao">
+	</bean>
+
+	<bean id="cxNewsService"
+		  class="sap.commerce.cx.core.news.service.impl.DefaultCxNewsService">
+		<constructor-arg name="cxNewsDao" ref="cxNewsDao"/>
+		<constructor-arg name="configurationService" ref="configurationService"/>
+	</bean>
+
+	<bean id="cxNewsActiveAttributeHandler"
+		  class="sap.commerce.cx.core.news.attributehandlers.CxNewsActiveAttributeHandler">
+		<constructor-arg name="timeService" ref="timeService"/>
+	</bean>
+
+    <!-- ** Solr ** -->
+	<bean id="indexedPropertyFacetDisplayTypePopulator" class="sap.commerce.cx.core.solr.populator.IndexedPropertyFacetDisplayTypePopulator"/>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="indexedPropertyConverter"/>
+		<property name="add" ref="indexedPropertyFacetDisplayTypePopulator"/>
+	</bean>
+
+	<bean id="searchQueryFacetStatsPopulator" class="sap.commerce.cx.core.solr.populator.SearchQueryFacetStatsPopulator">
+		<constructor-arg name="fieldNameTranslator" ref="fieldNameTranslator"/>
+	</bean>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="facetSearchQueryConverter"/>
+		<property name="add" ref="searchQueryFacetStatsPopulator"/>
+	</bean>
+
+	<!--
+        In order to support range facets which is not built in with the SAP standard
+        we need to rely on the spring bean overriding mechanism. This mechanism was deactivated
+        in Spring 5.x and may also be deactivated for SAP Commerce at some point in time. If so,
+        the following bean definition will fail and the override mechanism needs to be reactivated,
+        see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.1-Release-Notes#bean-overriding
+
+        We hope that the response objects will be extendable at this point in time, just like any
+        other data bean, defined in the beans.xml.
+    -->
+	<bean id="facetSearchQueryFacetsPopulator" class="sap.commerce.cx.core.solr.populator.SearchQueryRangedFacetPopulator" parent="abstractFacetSearchQueryPopulator">
+		<property name="configurationService" ref="configurationService"/>
+	</bean>
+
+	<!--
+        In order to enhance the search response with the statistics information from the facets
+        we need to rely on the spring bean overriding mechanism. This mechanism was deactivated
+        in Spring 5.x and may also be deactivated for SAP Commerce at some point in time. If so,
+        the following bean definition will fail and the override mechanism needs to be reactivated,
+        see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.1-Release-Notes#bean-overriding
+
+        We hope that the response objects will be extendable at this point in time, just like any
+        other data bean, defined in the beans.xml.
+    -->
+	<bean id="facetSearchResultConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="sap.commerce.cx.core.solr.populator.ExtendedSolrSearchResult"/>
+		<property name="populators">
+			<list>
+				<ref bean="facetSearchResultBasicPopulator"/>
+				<ref bean="facetSearchResultFacetsPopulator"/>
+				<ref bean="facetSearchResultDocumentsPopulator"/>
+				<ref bean="facetSearchResultSortsPopulator"/>
+				<ref bean="facetSearchResultFacetStatsPopulator"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="facetSearchResultFacetStatsPopulator" class="sap.commerce.cx.core.solr.populator.SearchResultFacetStatsPopulator">
+		<constructor-arg name="fieldNameTranslator" ref="fieldNameTranslator"/>
+	</bean>
+
+	<bean id="searchResponseFacetDisplayTypePopulator" class="sap.commerce.cx.core.solr.populator.SearchResponseFacetDisplayTypePopulator"/>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="commerceSolrSearchResponseConverter"/>
+		<property name="add" ref="searchResponseFacetDisplayTypePopulator"/>
+	</bean>
+
+	<bean id="searchResponseFacetRemoveQueryPopulator" class="sap.commerce.cx.core.solr.populator.SearchResponseFacetRemoveQueryPopulator"/>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="commerceSolrSearchResponseConverter"/>
+		<property name="add" ref="searchResponseFacetRemoveQueryPopulator"/>
+	</bean>
+
+	<bean id="searchResponseFacetRangeValuePopulator" class="sap.commerce.cx.core.solr.populator.SearchResponseFacetRangeValuePopulator"/>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="commerceSolrSearchResponseConverter"/>
+		<property name="add" ref="searchResponseFacetRangeValuePopulator"/>
+	</bean>
+
+	<bean id="searchResponseFacetStatsPopulator" class="sap.commerce.cx.core.solr.populator.SearchResponseFacetStatsPopulator"/>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="commerceSolrSearchResponseConverter"/>
+		<property name="add" ref="searchResponseFacetStatsPopulator"/>
+	</bean>
+
+    <alias name="defaultCxCommerceSearchQueryPageableConverter" alias="commerceSearchQueryPageableConverter"/>
+    <bean id="defaultCxCommerceSearchQueryPageableConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass"
+                  value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchRequest"/>
+        <property name="populators">
+            <list>
+                <ref bean="cxProductFixedIndexedTypeSolrQueryPopulator"/>
+                <ref bean="commerceSearchPagePopulator"/>
+                <ref bean="commerceSearchSortPopulator"/>
+                <ref bean="commerceSearchTextPopulator"/>
+                <ref bean="commerceSearchFiltersPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cxProductFixedIndexedTypeSolrQueryPopulator" parent="abstractFixedIndexedTypeSolrQueryPopulator">
+        <constructor-arg name="indexedTypeIdentifier" value="${cxdata.import.defaults.solr.indextype.product}"/>
+    </bean>
+
+    <bean id="cxSearchQueryCodec" class="sap.commerce.cx.core.solr.util.SolrSearchQueryCodec"/>
+
+    <bean id="abstractContentSearchStrategy"
+          class="sap.commerce.cx.core.contentsearch.impl.DefaultContentSearchStrategy"
+          abstract="true">
+        <constructor-arg name="searchRequestConverter" ref="commerceSolrSearchRequestConverter"/>
+        <constructor-arg name="searchResponseConverter" ref="contentSolrSearchResponseConverter"/>
+        <constructor-arg name="solrSearchQueryDecoder" ref="solrSearchQueryDecoder"/>
+        <constructor-arg name="threadContextService" ref="threadContextService"/>
+        <constructor-arg name="searchQueryCodec" ref="cxSearchQueryCodec"/>
+    </bean>
+
+    <bean id="abstractCxContentSolrSearchStateConverter" parent="abstractPopulatingConverter" abstract="true">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.search.data.SearchStateData"/>
+    </bean>
+
+    <bean id="abstractSolrSearchStatePopulator"
+          class="de.hybris.platform.commercefacades.search.solrfacetsearch.converters.populator.SolrSearchStatePopulator"
+          abstract="true">
+        <property name="categoryDataUrlResolver" ref="categoryDataUrlResolver"/>
+        <property name="searchQueryConverter" ref="solrSearchQueryEncoder"/>
+    </bean>
+
+    <bean id="abstractFixedIndexedTypeSolrQueryPopulator"
+          parent="defaultCommerceSearchSolrQueryPopulator"
+          abstract="true"
+          class="sap.commerce.cx.core.contentsearch.populator.SearchSolrQueryWithFixedIndexedTypePopulator"/>
+
+    <alias name="defaultContentSolrSearchResponseConverter" alias="contentSolrSearchResponseConverter"/>
+    <bean id="defaultContentSolrSearchResponseConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="sap.commerce.cx.core.contentsearch.facetdata.ContentSearchPageData"/>
+        <property name="populators">
+            <list>
+                <ref bean="commerceSearchResponseQueryPopulator"/>
+                <ref bean="commerceSearchResponsePaginationPopulator"/>
+                <ref bean="commerceSearchResponseResultsPopulator"/>
+                <ref bean="commerceSearchResponseFacetsPopulator"/>
+                <ref bean="commerceSearchResponseFacetFilterPopulator"/>
+                <ref bean="commerceSearchResponseSortsPopulator"/>
+                <ref bean="commerceSearchResponseBreadcrumbsPopulator"/>
+                <ref bean="searchResponseFacetDisplayTypePopulator"/>
+                <ref bean="searchResponseFacetRemoveQueryPopulator"/>
+                <ref bean="searchResponseFacetRangeValuePopulator"/>
+                <ref bean="searchResponseFacetStatsPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="abstractEnumFacetDisplayNameProvider" class="sap.commerce.cx.core.solr.provider.DefaultEnumFacetDisplayNameProvider"
+          abstract="true">
+        <constructor-arg name="enumerationService" ref="enumerationService"/>
+        <constructor-arg name="i18nService" ref="i18nService"/>
+        <constructor-arg name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <!-- ** End of Solr ** -->
+</beans>

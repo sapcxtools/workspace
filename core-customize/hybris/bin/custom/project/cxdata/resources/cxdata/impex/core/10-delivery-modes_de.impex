@@ -1,0 +1,14 @@
+$lang = de
+
+$premiumNet = premium-net
+$standardNet = standard-net
+$dpd = dpd
+$freight = spedition
+$pickup = storePickup
+
+UPDATE ZoneDeliveryMode; code[unique = true]; name[lang = $lang]   ; description[lang = $lang]
+                       ; $premiumNet        ; "Premium-Lieferung"  ; "1-2 Werktage"
+                       ; $standardNet       ; "Standard-Lieferung" ; "3-5 Werktage"
+                       ; $dpd               ; "DPD"                ; "Paketdienst"
+                       ; $freight           ; "Spedition"          ; "Lieferung per Spedition"
+                       ; $pickup            ; "Selbstabholung"     ; "Abholung vor Ort"

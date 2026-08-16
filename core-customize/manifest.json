@@ -48,9 +48,20 @@
             }
         ],
         "tests": {
-            "extensions": ["cxdevtoolkit", "cxdevbackoffice", "cxdevreporting", "cxdevenvconfig"],
+            "extensions": [
+                "cxdevtoolkit",
+                "cxdevreporting",
+                "cxdevenvconfig",
+                "cxbackoffice",
+                "cxcore",
+                "cxcpi",
+                "cxdata",
+                "cxfacades",
+                "cxocc",
+                "cxfake"
+            ],
             "annotations": ["UnitTests", "IntegrationTests"],
-            "packages": ["me.cxdev.*"]
+            "packages": ["me.cxdev.*", "sap.commerce.cx.*"]
         }
     },
     "aspects": [

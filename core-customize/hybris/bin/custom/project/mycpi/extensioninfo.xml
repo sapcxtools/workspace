@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
-    <extension name="mycpi" jaloLogicFree="true" usemaven="true" abstractclassprefix="Generated" classprefix="MyCpi">
-        <requires-extension name="mycore"/>
-        
-        <coremodule packageroot="sap.commerce.project.cpi" generated="true" manager="de.hybris.platform.jalo.extension.GenericManager"/>
-    </extension>
-</extensioninfo>

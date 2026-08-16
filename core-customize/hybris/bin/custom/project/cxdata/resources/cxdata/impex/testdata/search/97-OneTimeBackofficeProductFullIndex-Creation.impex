@@ -1,0 +1,9 @@
+############################################################
+# Default Macros
+############################################################
+$fullBackofficeIndexCronJob = full-backofficeIndex-CronJob;
+$backofficeSFCName = Solr Config for Backoffice;
+############################################################
+
+INSERT_UPDATE SolrIndexerCronJob; code[unique = true]         ; job(code)      ; singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code)
+                                ; $fullBackofficeIndexCronJob ; solrIndexerJob ; false           ; en                      ; true  ; $backofficeSFCName     ; full

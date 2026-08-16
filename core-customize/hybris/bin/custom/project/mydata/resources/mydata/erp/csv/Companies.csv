@@ -1,5 +1,0 @@
-Data-Locale,Customer,Parent,Name,Market,SAPPublicKey,Partner Role,Street,Number,Postal Code,City,Country
-,ORG_1001,,Solo Robotics Main,DE,ORG_1001|ORG_1001|KNA1|DE,DE,Robo Street,1,10115,Berlin,DE
-,ORG_2000,,Future Mfg Headquarters,DE,ORG_2000|ORG_2000|KNA1|DE,DE,Future Avenue,100,20095,Hamburg,DE
-,ORG_2001,ORG_2000,Plant Hamburg,DE,ORG_2001|ORG_2001|KNA1|DE,DE,Future Avenue,100,20095,Hamburg,DE
-,ORG_2002,ORG_2000,Plant Dresden,DE,ORG_2002|ORG_2002|KNA1|DE,DE,Industry Road,5,01067,Dresden,DE

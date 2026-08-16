@@ -1,0 +1,85 @@
+INSERT_UPDATE CxServiceTicketStatus; code[unique = true]
+                                    ; OPEN
+                                    ; IN_PROGRESS
+                                    ; COMPLETED
+
+INSERT_UPDATE CxServiceTicketType; code[unique = true]
+                                  ; REQUEST_FOR_QUOTE
+                                  ; REQUEST_FOR_EXISTING_ORDER
+                                  ; REQUEST_WARRANTY
+                                  ; TECHNICAL_SUPPORT
+                                  ; REQUEST_CONTACT
+                                  ; OTHER
+
+# Request Contact
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]; type(code)      ; recipients                 ; formFields(id)                                                                                                      ; dynamicRecipient[default = false]
+                                  ; requestContact   ; REQUEST_CONTACT ; "customer.service@cx.com" ; requestContact_firstName,requestContact_lastName,requestContact_email,requestContact_message,requestContact_subject ; false
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]        ; required[default = true]; hidden[default = false]; fieldType(code); defaultValue; formFieldValues(id)
+                                       ; requestContact_firstName ; true                    ;                        ; TEXT         ;             ;
+                                       ; requestContact_lastName  ; true                    ;                        ; TEXT         ;             ;
+                                       ; requestContact_email     ; true                    ;                        ; EMAIL         ;             ;
+                                       ; requestContact_message   ; true                    ;                        ; TEXTAREA         ;             ;
+                                       ; requestContact_subject   ; true                    ;                        ; TEXT         ;             ;
+
+INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]        ; childFields(id)
+                                            ; requestContact_firstName ;
+                                            ; requestContact_lastName  ;
+                                            ; requestContact_email     ;
+                                            ; requestContact_message   ;
+                                            ; requestContact_subject   ;
+
+
+# Request Warranty
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]; type(code)       ; recipients                 ; formFields(id)                                                                                                                                              ; dynamicRecipient[default = false]
+                                  ; requestWarranty  ; REQUEST_WARRANTY ; "customer.service@cx.com" ; requestWarranty_machine_number,requestWarranty_serial_number,requestWarranty_failure_type,requestWarranty_issue_description,requestWarranty_operating_hours ; false
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                 ; required[default = true]; hidden[default = false]; fieldType(code); defaultValue                            ; formFieldValues(id)
+                                       ; requestWarranty_machine_number    ; true                    ;                        ; TEXT         ;                                         ;
+                                       ; requestWarranty_serial_number     ; false                   ;                        ; TEXT         ;                                         ;
+                                       ; requestWarranty_failure_type      ; true                    ;                        ; RADIO          ; requestWarranty_failure_type_mechanical ; requestWarranty_failure_type_mechanical,requestWarranty_failure_type_electrical,requestWarranty_failure_type_performance,requestWarranty_failure_type_leakage,requestWarranty_failure_type_other
+                                       ; requestWarranty_issue_description ; true                    ;                        ; TEXTAREA         ;                                         ;
+                                       ; requestWarranty_operating_hours   ; false                   ;                        ; NUMBER         ; 0                                       ;
+
+INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                        ; childFields(id)
+                                            ; requestWarranty_failure_type_mechanical  ;
+                                            ; requestWarranty_failure_type_electrical  ;
+                                            ; requestWarranty_failure_type_performance ;
+                                            ; requestWarranty_failure_type_leakage     ;
+                                            ; requestWarranty_failure_type_other       ;
+
+# Request Technical Support
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]       ; type(code)        ; recipients                 ; formFields(id)                                                 ; dynamicRecipient[default = false]
+                                  ; requestTechnicalSupport ; TECHNICAL_SUPPORT ; "customer.service@cx.com" ; requestTechnicalSupport_TSorST,requestTechnicalSupport_comment ;
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                              ; required[default = true]; hidden[default = false]; fieldType(code); defaultValue                        ; formFieldValues(id)
+                                       ; requestTechnicalSupport_TSorST                 ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_ST,requestTechnicalSupport_option_TS
+                                       ; requestTechnicalSupport_select_date            ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_asap,requestTechnicalSupport_option_kw
+                                       ; requestTechnicalSupport_select_asap            ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_control,requestTechnicalSupport_option_pump_group,requestTechnicalSupport_option_closing_unit,requestTechnicalSupport_option_injection_unit,requestTechnicalSupport_option_other
+                                       ; requestTechnicalSupport_select_kw              ;                         ;                        ; WEEK    ;                                     ;
+                                       ; requestTechnicalSupport_ST_select_reason       ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_kw_1,requestTechnicalSupport_option_kw_2,requestTechnicalSupport_option_kw_3,requestTechnicalSupport_option_kw_4,requestTechnicalSupport_option_other
+                                       ; requestTechnicalSupport_checkbox_need_supplies ;                         ;                        ; RADIO          ; requestTechnicalSupport_option_true ; requestTechnicalSupport_option_true,requestTechnicalSupport_option_false
+                                       ; requestTechnicalSupport_TS_select_response     ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_response_call,requestTechnicalSupport_option_response_email,requestTechnicalSupport_option_other
+                                       ; requestTechnicalSupport_TS_select_reason       ;                         ;                        ; SELECT         ;                                     ; requestTechnicalSupport_option_control,requestTechnicalSupport_option_pump_group,requestTechnicalSupport_option_closing_unit,requestTechnicalSupport_option_injection_unit,requestTechnicalSupport_option_other
+                                       ; requestTechnicalSupport_comment                ; false                   ;                        ; TEXTAREA         ;                                     ;
+
+INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                             ; childFields(id)
+                                            ; requestTechnicalSupport_option_ST             ; requestTechnicalSupport_select_date
+                                            ; requestTechnicalSupport_option_asap           ; requestTechnicalSupport_select_asap
+                                            ; requestTechnicalSupport_option_control        ;
+                                            ; requestTechnicalSupport_option_pump_group     ;
+                                            ; requestTechnicalSupport_option_closing_unit   ;
+                                            ; requestTechnicalSupport_option_injection_unit ;
+                                            ; requestTechnicalSupport_option_other          ;
+                                            ; requestTechnicalSupport_option_true           ;
+                                            ; requestTechnicalSupport_option_false          ;
+                                            ; requestTechnicalSupport_option_kw             ; requestTechnicalSupport_select_kw,requestTechnicalSupport_ST_select_reason,requestTechnicalSupport_checkbox_need_supplies
+                                            ; requestTechnicalSupport_option_kw_1           ;
+                                            ; requestTechnicalSupport_option_kw_2           ;
+                                            ; requestTechnicalSupport_option_kw_3           ;
+                                            ; requestTechnicalSupport_option_kw_4           ;
+                                            ; requestTechnicalSupport_option_TS             ; requestTechnicalSupport_TS_select_response, requestTechnicalSupport_TS_select_reason
+                                            ; requestTechnicalSupport_option_response_call  ;
+                                            ; requestTechnicalSupport_option_response_email ;
+
+

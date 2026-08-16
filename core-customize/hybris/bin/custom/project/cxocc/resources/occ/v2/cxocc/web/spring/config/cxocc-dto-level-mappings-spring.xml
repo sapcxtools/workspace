@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ** Dashboard ** -->
+    <bean parent="fieldSetLevelMapping" id="cxDashboardConfigWsDTOMapping">
+        <property name="dtoClass" value="sap.commerce.cx.occ.dto.dashboard.CxDashboardConfigWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="code,name,active,position"/>
+                <entry key="DEFAULT" value="BASIC,widgetConfigs(DEFAULT)"/>
+                <entry key="FULL" value="DEFAULT"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxDashboardWidgetConfigWsDTOMapping">
+        <property name="dtoClass" value="sap.commerce.cx.occ.dto.dashboard.CxDashboardWidgetConfigWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="position,columnSpan,rowSpan,widget(BASIC)"/>
+                <entry key="DEFAULT" value="BASIC,widget(DEFAULT),settings"/>
+                <entry key="FULL" value="DEFAULT"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxDashboardWidgetWsDTOMapping">
+        <property name="dtoClass" value="sap.commerce.cx.occ.dto.dashboard.CxDashboardWidgetWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="code, displayName, contentComponentUid, contentComponentType"/>
+                <entry key="DEFAULT" value="BASIC,minColumnSpan, minRowSpan, multipleOccurrenceAllowed"/>
+                <entry key="FULL" value="DEFAULT"/>
+            </map>
+        </property>
+    </bean>
+    <!-- ** End Dashboard ** -->
+
+    <!-- ** Service Ticket ** -->
+    <bean parent="fieldSetLevelMapping" id="serviceTicketCountWsDTO">
+        <property name="dtoClass" value="sap.commerce.cx.occ.dto.serviceticket.ServiceTicketCountWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="openRequests,closedRequests"/>
+                <entry key="DEFAULT" value="BASIC"/>
+                <entry key="FULL" value="DEFAULT"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxServiceTicketMapping">
+        <property name="dtoClass"
+                  value="sap.commerce.cx.occ.dto.serviceticket.CxServiceTicketWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="code,type,typeCode,title,description,status"/>
+                <entry key="DEFAULT"
+                       value="BASIC,machines(code,name),allMachines,customer(uid,firstName,lastName),creationTime,parentAccountGroup,isNew,form"/>
+                <entry key="FULL" value="DEFAULT"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxServiceTicketFormMapping">
+        <property name="dtoClass"
+                  value="sap.commerce.cx.occ.dto.serviceticket.CxServiceTicketFormDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="id,type,title,description"/>
+                <entry key="DEFAULT"
+                       value="BASIC,machines,recipients,dynamicRecipient,formFields(DEFAULT)"/>
+                <entry key="FULL" value="DEFAULT,formFields(FULL)"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxServiceTicketFormFieldMapping">
+        <property name="dtoClass"
+                  value="sap.commerce.cx.occ.dto.serviceticket.CxServiceTicketFormFieldDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC"
+                       value="id,label,description,required,hidden,fieldType,minValue,minLength,maxValue,maxLength,defaultValue,placeholder,formFieldValues(BASIC),value"/>
+                <entry key="DEFAULT"
+                       value="BASIC,formFieldValues(DEFAULT)"/>
+                <entry key="FULL" value="DEFAULT,formFieldValues(FULL)"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="cxServiceTicketFormFieldValueMapping">
+        <property name="dtoClass"
+                  value="sap.commerce.cx.occ.dto.serviceticket.CxServiceTicketFormFieldValueDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="id,label,childFields(BASIC)"/>
+                <entry key="DEFAULT"
+                       value="BASIC,childFields(DEFAULT)"/>
+                <entry key="FULL" value="DEFAULT,childFields(FULL)"/>
+            </map>
+        </property>
+    </bean>
+    <!-- ** Service Ticket ** -->
+
+    <!--Solr -->
+    <bean parent="fieldSetLevelMapping">
+        <property name="dtoClass" value="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetWsDTO"/>
+        <property name="levelMapping">
+            <map merge="true">
+                <entry key="BASIC" value="facetDisplayType,type,from,to,solrStatsField(FULL),removeQuery"/>
+                <entry key="DEFAULT" value="facetDisplayType,type,from,to,solrStatsField(FULL),removeQuery(DEFAULT)"/>
+                <entry key="FULL" value="facetDisplayType,type,from,to,solrStatsField(FULL),removeQuery(FULL)"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping">
+        <property name="dtoClass" value="sap.commerce.cx.occ.dto.solr.SolrStatsFieldWsDTO"/>
+        <property name="levelMapping">
+            <map merge="true">
+                <entry key="BASIC" value="name,min,max,count"/>
+                <entry key="DEFAULT" value="name,min,max,count"/>
+                <entry key="FULL" value="name,min,max,count"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping">
+        <property name="dtoClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.CxServiceTicketSearchPageWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC"
+                       value="facets(BASIC),currentQuery(BASIC),breadcrumbs(BASIC),results(BASIC),pagination(BASIC),sorts(BASIC)"/>
+                <entry key="DEFAULT"
+                       value="facets(DEFAULT),currentQuery(DEFAULT),breadcrumbs(DEFAULT),results(DEFAULT),pagination(DEFAULT),sorts(DEFAULT)"/>
+                <entry key="FULL"
+                       value="facets(FULL),currentQuery(FULL),breadcrumbs(FULL),results(FULL),pagination(FULL),sorts(FULL)"/>
+            </map>
+        </property>
+    </bean>
+    <!--End of Solr -->
+
+    <bean parent="fieldSetLevelMapping">
+        <property name="dtoClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.OrderWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="trackingUrl"/>
+                <entry key="DEFAULT" value="trackingUrl"/>
+                <entry key="FULL" value="trackingUrl"/>
+            </map>
+        </property>
+    </bean>
+</beans>

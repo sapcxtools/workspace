@@ -1,0 +1,33 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = searchResultsEmpty
+$pageName = Search Results Empty Page
+$pageLabel = /searchEmpty
+$masterTemplate = SearchResultsEmptyPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $pageId-Top       ; TopContent             ;                                                        ; $pageId-TopContent
+                                ;                          ; $pageId-Side      ; SideContent            ;                                                        ; $pageId-SideContent
+                                ;                          ; $pageId-Middle    ; MiddleContent          ;                                                        ; $pageId-MiddleContent
+
+# Create components for page
+INSERT_UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]         ; name
+                                   ;                          ; $pageId-ParagraphComponent ; No Search Results Paragraph Component
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]    ; name                      ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; $pageId-TopContent    ; Top Slot for $pageName    ; true  ;
+                         ;                          ; $pageId-SideContent   ; Side Slot for $pageName   ; true  ;
+                         ;                          ; $pageId-MiddleContent ; Middle Slot for $pageName ; true  ; $pageId-ParagraphComponent

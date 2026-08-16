@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+    <!-- Solr -->
+    <bean class="de.hybris.platform.commerceservices.search.facetdata.FacetData&lt;STATE&gt;">
+        <property name="facetDisplayType" type="String"/>
+        <property name="type" type="String"/>
+        <property name="from" type="String"/>
+        <property name="to" type="String"/>
+        <property name="solrStatsField" type="sap.commerce.cx.core.solr.SolrStatsField"/>
+        <property name="removeQuery" type="STATE"/>
+    </bean>
+
+    <bean class="de.hybris.platform.solrfacetsearch.config.IndexedProperty">
+        <property name="facetDisplayType" type="String"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.core.solr.SolrStatsField">
+        <property name="name" type="java.lang.String"/>
+        <property name="min" type="java.lang.Double"/>
+        <property name="max" type="java.lang.Double"/>
+        <property name="count" type="java.lang.Long"/>
+        <property name="countDistinct" type="java.lang.Long"/>
+        <property name="missing" type="java.lang.Long"/>
+        <property name="sum" type="java.lang.Double"/>
+        <property name="sumOfSquares" type="java.lang.Double"/>
+        <property name="mean" type="java.lang.Double"/>
+        <property name="stdDev" type="java.lang.Double"/>
+    </bean>
+
+    <bean class="sap.commerce.cx.core.solr.SolrStats">
+        <property name="solrStatsFields" type="java.util.Map&lt;java.lang.String, sap.commerce.cx.core.solr.SolrStatsField&gt;"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commerceservices.search.facetdata.FacetSearchPageData&lt;STATE, RESULT&gt;"
+          extends="de.hybris.platform.commerceservices.search.pagedata.SearchPageData&lt;RESULT>">
+        <property name="stats" type="sap.commerce.cx.core.solr.SolrStats"/>
+    </bean>
+
+
+    <bean class="sap.commerce.cx.core.contentsearch.facetdata.ContentSearchPageData&lt;STATE, RESULT&gt;"
+          extends="de.hybris.platform.commerceservices.search.facetdata.FacetSearchPageData&lt;STATE, RESULT>">
+        <description>POJO containing the result page for content search.</description>
+        <property name="freeTextSearch" type="String"/>
+        <property name="keywordRedirectUrl" type="String"/>
+    </bean>
+
+    <!--End of Solr -->
+</beans>

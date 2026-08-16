@@ -1,0 +1,73 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$templateId = NewsOverviewPageTemplate
+$templateName = News Overview Page Template
+$frontendTemplateName =
+$restrictedPageTypes = ContentPage
+$resourcePath = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/cms/templates/_structure-view
+$velocityTemplate = structure_newsOverviewPageTemplate.vm
+############################################################
+
+############################################################
+# Page Template
+############################################################
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; name          ; frontendTemplateName ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; $templateId       ; $templateName ; $frontendTemplateName; $restrictedPageTypes     ;
+
+#UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+#                   ;                          ; $templateId       ; $resourcePath/$velocityTemplate
+
+############################################################
+# Content Slot Names
+############################################################
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $contentCV)[unique = true][default = $templateId]; validComponentTypes(code) ; compTypeGroup(code)
+                             ; SiteLogo               ;                                                               ;                           ; logo
+                             ; HomepageNavLink        ;                                                               ;                           ; navigation
+                             ; HeaderLinks            ;                                                               ;                           ; headerlinks
+                             ; SearchBox              ;                                                               ;                           ; searchbox
+                             ; MiniCart               ;                                                               ;                           ; minicart
+                             ; NavigationBar          ;                                                               ;                           ; navigation
+                             ; TopContent             ;                                                               ;                           ; wide
+                             ; NewsOverviewContent    ;                                                               ; CxNewsOverviewComponent  ; wide
+                             ; Footer                 ;                                                               ;                           ; footer
+                             ; TopHeaderSlot          ;                                                               ;                           ; wide
+                             ; BottomHeaderSlot       ;                                                               ;                           ; wide
+                             ; PlaceholderContentSlot ;                                                               ;                           ;
+                             ; SiteContext            ;                                                               ; CMSSiteContextComponent   ;
+                             ; SiteLinks              ;                                                               ; CMSLinkComponent          ;
+
+############################################################
+# Custom Content Slots
+############################################################
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]       ; name                      ; active
+                         ;                          ; NewsOverviewContentSlot ; News Overview Content Slot; true
+
+############################################################
+# Assign Content Slots to Template
+############################################################
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                 ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = $templateId]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; $templateId-SiteLogo               ; SiteLogo               ;                                                                    ; SiteLogoSlot                               ; true
+                                    ;                          ; $templateId-HomepageLink           ; HomepageNavLink        ;                                                                    ; HomepageNavLinkSlot                        ; true
+                                    ;                          ; $templateId-NavigationBar          ; NavigationBar          ;                                                                    ; NavigationBarSlot                          ; true
+                                    ;                          ; $templateId-MiniCart               ; MiniCart               ;                                                                    ; MiniCartSlot                               ; true
+                                    ;                          ; $templateId-Footer                 ; Footer                 ;                                                                    ; FooterSlot                                 ; true
+                                    ;                          ; $templateId-HeaderLinks            ; HeaderLinks            ;                                                                    ; HeaderLinksSlot                            ; true
+                                    ;                          ; $templateId-SearchBox              ; SearchBox              ;                                                                    ; SearchBoxSlot                              ; true
+                                    ;                          ; $templateId-TopHeaderSlot          ; TopHeaderSlot          ;                                                                    ; TopHeaderSlot                              ; true
+                                    ;                          ; $templateId-BottomHeaderSlot       ; BottomHeaderSlot       ;                                                                    ; BottomHeaderSlot                           ; true
+                                    ;                          ; $templateId-TopContent             ; TopContent             ;                                                                    ; TopContentSlot                             ; true
+                                    ;                          ; $templateId-NewsOverviewContent    ; NewsOverviewContent    ;                                                                    ; NewsOverviewContentSlot                    ; true
+                                    ;                          ; $templateId-PlaceholderContentSlot ; PlaceholderContentSlot ;                                                                    ; PlaceholderContentSlot                     ; true
+                                    ;                          ; $templateId-SiteContextSlot        ; SiteContext            ;                                                                    ; SiteContextSlot                            ; true
+                                    ;                          ; $templateId-SiteLinksSlot          ; SiteLinks              ;                                                                    ; SiteLinksSlot                              ; true

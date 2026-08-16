@@ -1,0 +1,20 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = de
+
+$pageId = searchResultsEmpty
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Keine Ergebnisse"
+
+UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]         ; content[lang = $lang]
+                            ;                          ; $pageId-ParagraphComponent ; "<h2>Leider wurden für Ihre Suche keine Ergebnisse gefunden</h2><p>Vorschläge:</p><ul><li>Bitte überprüfen Sie die Rechtschreibung des eingegebenen Begriffs.</li><li>Ihre Eingabe war möglicherweise zu spezifisch. Verbessern Sie die Suchergebnisse, indem Sie weniger Begriffe eingeben.</li><li>Wählen Sie die Produkte über die Kategorien oben aus.</li></ul>"

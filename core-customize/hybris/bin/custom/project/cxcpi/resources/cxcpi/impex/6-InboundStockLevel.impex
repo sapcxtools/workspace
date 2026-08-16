@@ -1,0 +1,20 @@
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundOMMStockLevel
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]; type(code) ; root[default = false]
+                                   ; InboundOMMStockLevel                  ; StockLevel         ; StockLevel ; true
+                                   ; InboundOMMStockLevel                  ; Warehouse          ; Warehouse  ;
+                                   ; InboundOMMStockLevel                  ; Vendor             ; Vendor     ;
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]
+                                            ; InboundOMMStockLevel:StockLevel                                    ; available                   ; StockLevel:available                               ;                                                           ;
+                                            ; InboundOMMStockLevel:StockLevel                                    ; maxPreOrder                 ; StockLevel:maxPreOrder                             ;                                                           ;
+                                            ; InboundOMMStockLevel:StockLevel                                    ; productCode                 ; StockLevel:productCode                             ;                                                           ; true
+                                            ; InboundOMMStockLevel:StockLevel                                    ; warehouse                   ; StockLevel:warehouse                               ; InboundOMMStockLevel:Warehouse                            ; true
+                                            ; InboundOMMStockLevel:Warehouse                                     ; code                        ; Warehouse:code                                     ;                                                           ; true
+                                            ; InboundOMMStockLevel:Warehouse                                     ; vendor                      ; Warehouse:vendor                                   ; InboundOMMStockLevel:Vendor                               ;
+                                            ; InboundOMMStockLevel:Warehouse                                     ; name                        ; Warehouse:name                                     ;                                                           ;
+                                            ; InboundOMMStockLevel:Vendor                                        ; code                        ; Vendor:code                                        ;                                                           ; true
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundOMMStockLevel                  ; BASIC

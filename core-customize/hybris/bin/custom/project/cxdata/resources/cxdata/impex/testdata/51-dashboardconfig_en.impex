@@ -1,0 +1,17 @@
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+
+$lang = en
+
+UPDATE CxDashboardWidget; code[unique=true];displayName[lang=$lang]
+                         ; MyAccountDashboardTeaserComponentWidget; My Account
+                         ; MyCompanyDashboardTeaserComponentWidget; My Company
+                         ; MyUsersDashboardTeaserComponentWidget; My Users
+                         ; MyEquipmentDashboardComponentWidget; My Equipment
+                         ; CxDashboardServiceRequestsComponentWidget; Service Requests
+                         ; AccountOrderHistoryComponentWidget;Order History
+                         ; CxDashboardNotepadComponentWidget;Notes
+                         ; CxDashboardWeatherComponentWidget;Weather
+                         ; CxDashboardTodoComponentWidget;To Do
+                         ; CxDashboardClockComponentWidget;Clock
+                         ; CartQuickOrderFormComponentWidget;Quick Order
+                         ; CxDashboardSpacerComponentWidget;Spacer

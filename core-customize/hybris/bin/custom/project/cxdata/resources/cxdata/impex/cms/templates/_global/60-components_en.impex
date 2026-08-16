@@ -1,0 +1,28 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = en
+############################################################
+
+# CMS Mini Cart Component
+UPDATE MiniCartComponent; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                        ;                          ; MiniCart          ; "YOUR SHOPPING CART"
+
+UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; linkName[lang = $lang]
+                       ;                          ; HomepageNavLink   ; "Home"
+                       ;                          ; FAQLink           ; "FAQ"
+
+# Site Logo Media
+INSERT_UPDATE Media; $contentCV[unique = true]; code[unique = true]       ; realfilename       ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; folder(qualifier)[default = 'images']; altText
+                   ;                          ; /media/cx_short_logo.png ; cx_short_logo.png ; jar:/cxdata/assets/cx_short_logo.png                                      ; image/png                   ;                                      ; "SAP Commerce"
+
+# Site Logo Component
+UPDATE SimpleBannerComponent; $contentCV[unique = true]; uid[unique = true]; media(code, $contentCV)[lang = $lang]
+                            ;                          ; SiteLogoComponent ; /media/cx_short_logo.png

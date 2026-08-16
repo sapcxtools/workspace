@@ -1,0 +1,66 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$solrConfigName = $config-cxdata.import.defaults.solr.solrConfigName
+$solrIndexedType = $config-cxdata.import.defaults.solr.indextype.serviceTicket
+$solrIndexedTypeProduct = $config-cxdata.import.defaults.solr.indextype.product
+$solrIndexedTypes = $solrIndexedType,$solrIndexedTypeProduct
+############################################################
+
+INSERT_UPDATE SolrIndexedType; identifier[unique = true]; type(code)       ; variant; group ; groupFieldName; groupLimit; groupFacets; ftsQueryBuilder             ; ftsQueryBuilderParameters;
+                             ; $solrIndexedType         ; CxServiceTicket ; false  ; false ;               ; 6         ; false      ; defaultFreeTextQueryBuilder ; groupByQueryType->false
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]          ; type(code); user(uid); injectCurrentDate; injectCurrentTime; injectLastIndexTime; query
+                              ; $solrIndexedType                          ; $solrIndexedType-FullIndex-Query   ; full      ; admin    ; true             ; true             ; false              ; SELECT DISTINCT {t:PK} FROM {CxServiceTicket as t}
+                              ; $solrIndexedType                          ; $solrIndexedType-UpdateIndex-Query ; update    ; admin    ; true             ; true             ; true               ; SELECT DISTINCT {t:PK} FROM {CxServiceTicket as t} WHERE {t:modifiedtime} >= ?lastIndexTime
+                              ; $solrIndexedType                          ; $solrIndexedType-DeleteIndex-Query ; delete    ; admin    ; true             ; true             ; true               ; SELECT DISTINCT {t:PK} FROM {CxServiceTicket as t} WHERE 1=0
+
+UPDATE SolrFacetSearchConfig; name[unique = true]; solrIndexedTypes(identifier)
+                            ; $solrConfigName    ; $solrIndexedTypes
+
+# Define indexed properties
+REMOVE SolrIndexedProperty[batchmode = true]; solrIndexedType(identifier)[unique = true]
+                                            ; $solrIndexedType
+
+# Search query template
+INSERT_UPDATE SolrSearchQueryTemplate; name[unique = true]; indexedType(identifier)[unique = true]; ftsQueryBuilder             ; group ; groupProperty(name, solrIndexedType(identifier)); groupFacets; groupLimit; ftsQueryBuilderParameters
+                                     ; DEFAULT            ; $solrIndexedType                      ; defaultFreeTextQueryBuilder ; false ;                                                 ; false      ; 6         ; groupByQueryType->false
+
+# Non-facet properties
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; useForAutocomplete[default = false]; fieldValueProvider             ; valueProviderParameter                 ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQueryType(code)[default = POSTFIX];
+                                 ; $solrIndexedType                          ; itemtype           ; string    ;                   ;                          ;                           ;                            ;                                    ;                                ;                                        ;                                ;                    ;                          ;              ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; code               ; string    ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getCode()                        ;                                ;                    ; true                     ; 100          ; true                             ; 30                   ; 3                            ;                               ;                   ; PREFIX_AND_POSTFIX
+                                 ; $solrIndexedType                          ; type               ; string    ;                   ;                          ;                           ;                            ;                                    ; solrEnumValueResolver          ;                                        ;                                ;                    ; true                     ; 100          ; true                             ; 30                   ; 3                            ;                               ;                   ; PREFIX_AND_POSTFIX
+                                 ; $solrIndexedType                          ; status             ; string    ;                   ;                          ;                           ;                            ;                                    ; solrEnumValueResolver          ;                                        ;                                ;                    ; true                     ; 100          ; true                             ; 30                   ; 3                            ;                               ;                   ; PREFIX_AND_POSTFIX
+                                 ; $solrIndexedType                          ; title              ; text      ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getTitle()                       ;                                ;                    ; true                     ; 50           ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; description        ; text      ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getDescription()                 ;                                ;                    ; true                     ; 30           ; true                             ; 30                   ; 3                            ;                               ;                   ; PREFIX_AND_POSTFIX
+                                 ; $solrIndexedType                          ; creationtime       ; string    ;                   ;                          ;                           ;                            ;                                    ; dateValueResolver              ;                                        ;                                ;                    ; true                     ; 50           ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; customer           ; string    ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getCustomer().getUid()           ;                                ;                    ; true                     ; 30           ; true                             ; 30                   ; 3                            ;                               ;                   ; PREFIX_AND_POSTFIX
+                                 ; $solrIndexedType                          ; machines           ; string    ;                   ;                          ;                           ; true                       ;                                    ; cxTicketMachinesValueProvider ;                                        ;                                ;                    ;                          ;              ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; allMachines        ; boolean   ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getAllMachines()                 ;                                ;                    ;                          ;              ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; parentAccountGroup ; string    ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getParentAccountGroup().getUid() ;                                ;                    ;                          ;              ;                                  ;                      ;                              ;                               ;                   ;
+                                 ; $solrIndexedType                          ; isNew              ; boolean   ;                   ;                          ;                           ;                            ;                                    ; springELValueProvider          ; #item.getIsNew()                       ;                                ;                    ;                          ;              ;                                  ;                      ;                              ;                               ;                   ;
+
+# Non-facet search query properties
+INSERT_UPDATE SolrSearchQueryProperty; indexedProperty(name, solrIndexedType(identifier))[unique = true]; ftsQuery; ftsQueryBoost; ftsWildcardQuery; ftsWildcardQueryMinTermLength; ftsWildcardQueryBoost; ftsWildcardQueryType(code); includeInResponse; searchQueryTemplate(name, indexedType(identifier))[unique = true][default = DEFAULT:$solrIndexedType]
+                                     ; itemtype:$solrIndexedType                                        ; false   ;              ; false           ;                              ;                      ; POSTFIX                   ; true             ;
+                                     ; code:$solrIndexedType                                            ; true    ; 100          ; true            ; 3                            ; 20                   ; PREFIX_AND_POSTFIX        ; true             ;
+                                     ; title:$solrIndexedType                                           ; true    ; 30           ; true            ; 3                            ; 20                   ; PREFIX_AND_POSTFIX        ; true             ;
+                                     ; description:$solrIndexedType                                     ; true    ; 30           ; true            ; 3                            ; 20                   ; PREFIX_AND_POSTFIX        ; true             ;
+
+# Facet search query properties
+INSERT_UPDATE SolrSearchQueryProperty; indexedProperty(name, solrIndexedType(identifier))[unique = true]; facet; facetType(code); priority; facetDisplayNameProvider                ; includeInResponse; searchQueryTemplate(name, indexedType(identifier))[unique = true][default = DEFAULT:$solrIndexedType]
+                                     ; type:$solrIndexedType                                            ; true ; Refine         ; 100     ; cxTicketTypeFacetDisplayNameProvider   ; true             ;
+                                     ; status:$solrIndexedType                                          ; true ; Refine         ; 100     ; cxTicketStatusFacetDisplayNameProvider ; true             ;
+
+INSERT_UPDATE SolrSort; indexedType(identifier)[unique = true]; code[unique = true]; useBoost
+                      ; $solrIndexedType                      ; relevance          ; true
+                      ; $solrIndexedType                      ; date-asc           ; false
+                      ; $solrIndexedType                      ; date-desc          ; false
+
+# Define the sort fields
+INSERT_UPDATE SolrSortField; sort(indexedType(identifier), code)[unique = true]; fieldName[unique = true]; ascending[unique = true]
+                           ; $solrIndexedType  :relevance                      ; score                   ; false
+                           ; $solrIndexedType  :date-asc                       ; creationtime            ; true
+                           ; $solrIndexedType  :date-desc                      ; creationtime            ; false

@@ -1,0 +1,78 @@
+$lang = en
+
+INSERT_UPDATE CxServiceTicketStatus; code[unique = true]; name[lang = $lang]
+                                    ; OPEN               ; "Open"
+                                    ; IN_PROGRESS        ; "In progress"
+                                    ; COMPLETED          ; "Completed"
+
+INSERT_UPDATE CxServiceTicketType; code[unique = true]        ; name[lang = $lang]
+                                  ; REQUEST_FOR_QUOTE          ; "Request For Quote"
+                                  ; REQUEST_FOR_EXISTING_ORDER ; "Request For Existing Order"
+                                  ; REQUEST_WARRANTY           ; "Request Warranty"
+                                  ; TECHNICAL_SUPPORT          ; "Technical Support"
+                                  ; REQUEST_BUY_BACK_MACHINE   ; "Request Buy Back Machine"
+                                  ; REQUEST_CONTACT            ; "Contact"
+                                  ; OTHER                      ; "Other"
+
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]; title[lang = $lang]; description[lang = $lang]
+                                  ; requestContact   ; Contact            ; "Here you can send us a message if you have any questions about our products or services or need further information. We will get back to you as soon as possible."
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]        ; fieldType(code); label[lang = $lang]; description[lang = $lang]  ; placeholder[lang = $lang]
+                                       ; requestContact_firstName ; TEXT           ; "First Name"       ; "Enter your first name"    ;
+                                       ; requestContact_lastName  ; TEXT           ; "Last Name"        ; "Enter your last name"     ;
+                                       ; requestContact_email     ; EMAIL          ; "Email"            ; "Enter your email address" ;
+                                       ; requestContact_message   ; TEXTAREA       ; "Message"          ; "Enter your message"       ;
+                                       ; requestContact_subject   ; TEXT           ; "Subject"          ; "Enter the subject"        ;
+
+# Request Warranty
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]; title[lang = $lang]; description[lang = $lang]
+                                  ; requestWarranty  ; Warranty Request   ; "Submit a warranty claim for a machine or component."
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                 ; fieldType(code); label[lang = $lang]   ; description[lang = $lang]                                                       ; placeholder[lang = $lang]
+                                       ; requestWarranty_machine_number    ; TEXT           ; "Machine Number"      ; "Enter the machine number."                                                     ;
+                                       ; requestWarranty_serial_number     ; TEXT           ; "Serial Number"       ; "Enter the serial number of the affected machine or component."                 ;
+                                       ; requestWarranty_operating_hours   ; NUMBER         ; "Operating Hours"     ; "Specify the approximate operating hours at the time of failure."               ;
+                                       ; requestWarranty_failure_type      ; RADIO          ; "Type of Failure"     ; "Select the category that best describes the reported issue."                   ;
+                                       ; requestWarranty_issue_description ; TEXTAREA       ; "Failure Description" ; "Provide a detailed description of the failure, including symptoms and impact." ; "Pump loses pressure after startup"
+
+INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                        ; label[lang = $lang]
+                                            ; requestWarranty_failure_type_mechanical  ; "Mechanical Failure"
+                                            ; requestWarranty_failure_type_electrical  ; "Electrical Failure"
+                                            ; requestWarranty_failure_type_performance ; "Performance Issue"
+                                            ; requestWarranty_failure_type_leakage     ; "Leakage"
+                                            ; requestWarranty_failure_type_other       ; "Other"
+# Request Technical Support
+INSERT_UPDATE CxServiceTicketForm; id[unique = true]       ; title[lang = $lang]         ; description[lang = $lang]
+                                  ; requestTechnicalSupport ; "Request Technical Support" ; "Here you can request technical support for your machine"
+
+INSERT_UPDATE CxServiceTicketFormField; id[unique = true]                              ; fieldType(code); label[lang = $lang] ; description[lang = $lang]; placeholder[lang = $lang]
+                                       ; requestTechnicalSupport_TSorST                 ; SELECT         ; "Matter of request" ;                          ; "Please select"
+                                       ; requestTechnicalSupport_select_date            ; SELECT         ; "Urgency"           ;                          ; "Please select"
+                                       ; requestTechnicalSupport_select_asap            ; SELECT         ; "Subject"           ;                          ; "Please select"
+                                       ; requestTechnicalSupport_select_kw              ; WEEK           ; "Calendar week"     ;                          ; "Please select"
+                                       ; requestTechnicalSupport_checkbox_need_supplies ; RADIO          ; "Need supplies"     ;                          ; "Please select"
+                                       ; requestTechnicalSupport_TS_select_response     ; SELECT         ; "Response type"     ;                          ; "Please select"
+                                       ; requestTechnicalSupport_TS_select_reason       ; SELECT         ; "Subject"           ;                          ; "Please select"
+                                       ; requestTechnicalSupport_ST_select_reason       ; SELECT         ; "Subject"           ;                          ; "Please select"
+                                       ; requestTechnicalSupport_comment                ; TEXTAREA       ; "Description"       ;                          ; "Please enter a comment"
+
+INSERT_UPDATE CxServiceTicketFormFieldValue; id[unique = true]                             ; label[lang = $lang]
+                                            ; requestTechnicalSupport_option_ST             ; "Maintenance/Service Technician"
+                                            ; requestTechnicalSupport_option_asap           ; "As soon as possible"
+                                            ; requestTechnicalSupport_option_control        ; "Control"
+                                            ; requestTechnicalSupport_option_pump_group     ; "Pump group"
+                                            ; requestTechnicalSupport_option_closing_unit   ; "Closing unit"
+                                            ; requestTechnicalSupport_option_injection_unit ; "Injection unit"
+                                            ; requestTechnicalSupport_option_other          ; "Other"
+                                            ; requestTechnicalSupport_option_true           ; "Yes"
+                                            ; requestTechnicalSupport_option_false          ; "No"
+
+                                            ; requestTechnicalSupport_option_kw             ; "Calendar week"
+                                            ; requestTechnicalSupport_option_kw_1           ; "Maintenance"
+                                            ; requestTechnicalSupport_option_kw_2           ; "Calibration"
+                                            ; requestTechnicalSupport_option_kw_3           ; "Audit Check"
+                                            ; requestTechnicalSupport_option_kw_4           ; "Expert Check"
+
+                                            ; requestTechnicalSupport_option_TS             ; "Technical Support"
+                                            ; requestTechnicalSupport_option_response_call  ; "Please call me"
+                                            ; requestTechnicalSupport_option_response_email ; "Email response"

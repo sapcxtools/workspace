@@ -1,0 +1,9 @@
+############################################################
+# Default Macros
+############################################################
+$fullBackofficeIndexCronJob = full-backofficeIndex-CronJob;
+$backofficeSFCName = Solr Config for Backoffice;
+############################################################
+
+REMOVE SolrIndexerCronJob; code[unique = true]
+                         ; $fullBackofficeIndexCronJob

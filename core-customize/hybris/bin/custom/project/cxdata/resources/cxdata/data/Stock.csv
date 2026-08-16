@@ -1,0 +1,27 @@
+Data-Locale,Material ID,Warehouse,Availability,InStockStatus,Overselling
+,100101000001,default,8,notSpecified,false
+,100101000002,default,4,notSpecified,false
+,100102000001,default,15,notSpecified,false
+,100102000002,default,9,notSpecified,false
+,100103000001,default,6,notSpecified,false
+,100103000002,default,3,notSpecified,false
+,100201000001,default,20,notSpecified,false
+,100201000002,default,12,notSpecified,false
+,100202000001,default,5,notSpecified,false
+,100202000002,default,2,notSpecified,false
+,V20550000,default,9999,notSpecified,false
+,V10551212,default,112,notSpecified,false
+,V20551005,default,1114,notSpecified,false
+,V20551008,default,111,notSpecified,false
+,V20551010,default,113,notSpecified,false
+,V20551071,default,114,notSpecified,false
+,V20551073,default,114,notSpecified,false
+,V20551074,default,113,notSpecified,false
+,V20551075,default,113,notSpecified,false
+,V20551076,default,117,notSpecified,false
+,V20551087,default,1110,notSpecified,false
+,V20551088,default,1110,notSpecified,false
+,V20551089,default,1110,notSpecified,false
+,V20551090,default,115,notSpecified,false
+,V20551091,default,113,notSpecified,false
+,V20551092,default,112,notSpecified,false

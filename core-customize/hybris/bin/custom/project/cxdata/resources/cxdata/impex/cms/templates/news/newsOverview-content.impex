@@ -1,0 +1,48 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = newsOverview
+$pageName = News Overview
+$pageLabel = /news
+$masterTemplate = NewsOverviewPageTemplate
+
+$contentSlotId = NewsOverviewContent-newsOverview
+$contentSlotForPageId = NewsOverviewContentSlotForNewsOverviewPage
+$contentSlotPosition = NewsOverviewContent
+
+$componentId = NewsOverviewComponent
+$componentName = News Overview Component
+$componentFlexType = CxNewsOverviewComponent
+
+############################################################
+
+############################################################
+# News Overview Page
+############################################################
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+############################################################
+# Create CMS Flex Component for Spartacus
+############################################################
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]; name           ; flexType
+                              ;                          ; $componentId      ; $componentName ; $componentFlexType
+
+############################################################
+# Create page specific content slot
+############################################################
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; active[default = true]; cmsComponents(uid, $contentCV)
+                         ;                          ; $contentSlotId    ;                       ; $componentId
+
+############################################################
+# Add page specific content slot to page
+############################################################
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]    ; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $contentSlotForPageId; $contentSlotPosition ;                                                        ; $contentSlotId

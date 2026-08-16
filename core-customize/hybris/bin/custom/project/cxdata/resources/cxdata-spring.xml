@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Trigger reliable system setup executor with extension context CX Data (and all its dependencies) -->
+	<bean id="cxSystemSetup" class="sap.commerce.cx.data.setup.CxSystemSetup">
+		<constructor-arg name="reliableSystemSetupExecutor" ref="cxdevtoolkitSystemSetupExecutor"/>
+	</bean>
+
+	<alias name="cxProductGalleryImagesPopulator" alias="productGalleryImagesPopulator"/>
+	<bean id="cxProductGalleryImagesPopulator" parent="defaultProductGalleryImagesPopulator">
+		<property name="imageFormats">
+			<list>
+				<value>superZoom</value>
+				<value>zoom</value>
+				<value>product</value>
+				<value>thumbnail</value>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="cxProductPrimaryImagePopulator" alias="productPrimaryImagePopulator"/>
+	<bean id="cxProductPrimaryImagePopulator" parent="defaultProductPrimaryImagePopulator">
+		<property name="imageFormats">
+			<list>
+				<value>superZoom</value>
+				<value>zoom</value>
+				<value>product</value>
+				<value>thumbnail</value>
+				<value>cartIcon</value>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="cxImageFormatMapping" alias="imageFormatMapping"/>
+	<bean id="cxImageFormatMapping" parent="defaultImageFormatMapping">
+		<property name="mapping">
+			<map>
+				<entry key="superZoom" value="ProductImage_480x480"/>
+				<entry key="zoom" value="ProductImage_480x480"/>
+				<entry key="product" value="ProductImage_480x480"/>
+				<entry key="thumbnail" value="ProductImage_480x480"/>
+				<entry key="cartIcon" value="ProductImage_480x480"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="image480ValueProvider" parent="abstractImageValueProvider" >
+		<property name="mediaFormat" value="ProductImage_480x480"/>
+	</bean>
+
+	<bean id="cxCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="cxCategorySource"/>
+	</bean>
+	<bean id="cxVariantCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+		<property name="categorySource" ref="cxVariantCategorySource"/>
+	</bean>
+
+	<bean id="cxCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="cxCategorySource"/>
+	</bean>
+
+	<bean id="cxBrandCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+		<property name="categorySource" ref="cxBrandCategorySource"/>
+	</bean>
+
+	<bean id="cxCategorySource" parent="defaultCategorySource">
+		<property name="rootCategory" value="10000000"/> <!-- '1' is the root icecat category -->
+	</bean>
+	<bean id="cxVariantCategorySource" parent="variantCategorySource"/>
+
+	<bean id="cxBrandCategorySource" parent="defaultCategorySource">
+		<property name="rootCategory" value="10000000"/> <!-- '10000000' is the root of the pumps hierarchy -->
+	</bean>
+</beans>

@@ -1,0 +1,5 @@
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+
+# Deactivate Frontend Restriction on category by default for perfomance purposes
+UPDATE SearchRestriction; code[unique = true]         ; active[default = false]
+                        ; Frontend_RestrictedCategory ;

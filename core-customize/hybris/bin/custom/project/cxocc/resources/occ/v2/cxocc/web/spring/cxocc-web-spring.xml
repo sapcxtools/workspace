@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="config/cxocc-dto-mappings-spring.xml"/>
+    <import resource="config/cxocc-dto-level-mappings-spring.xml"/>
+
+    <context:component-scan base-package="sap.commerce.cx.occ.controllers"/>
+
+    <alias name="cxDefaultContactFormValidator" alias="cxContactFormValidator"/>
+    <bean id="cxDefaultContactFormValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="email"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="subject"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="message"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultOrgUserRegistrationDataValidator" alias="orgUserRegistrationDataValidator"/>
+    <bean id="defaultOrgUserRegistrationDataValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="firstName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="lastName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="email"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="ustId"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <alias name="cxB2BRegistrationDataConverter" alias="b2BRegistrationDataConverter" />
+    <bean id="cxB2BRegistrationDataConverter" class="sap.commerce.cx.occ.mapping.converter.CxB2BRegistrationDataConverter" />
+</beans>

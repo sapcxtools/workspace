@@ -1,0 +1,34 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = en
+############################################################
+
+UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]           ; title[lang = $lang]
+                        ;                          ; FollowUsNavNode              ; "Follow Us"
+                        ;                          ; SAPCommerceNavNode           ; "SAP Commerce Cloud"
+                        ;                          ; SAPCustomerExperienceNavNode ; "SAP Customer Experience"
+
+UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]    ; linkName[lang = $lang]
+                       ;                          ; AboutSAPCommerceLink  ; "About SAP Commerce Cloud"
+                       ;                          ; AgileCommerceBlogLink ; "Agile Commerce Blog"
+                       ;                          ; DocumentationLink     ; "Documentation"
+                       ;                          ; FacebookLink          ; "Facebook"
+                       ;                          ; LinkedInLink          ; "Linked In"
+                       ;                          ; TwitterLink           ; "Twitter"
+                       ;                          ; ImprintLink           ; "Company information"
+                       ;                          ; VisitSAPLink          ; "Visit SAP"
+                       ;                          ; ContactUsLink         ; "Contact"
+
+UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]  ; content[lang = $lang]
+                            ;                          ; NoticeTextParagraph ; "<div class=""cx-notice"">© CX, Inc. All Rights Reserved, 2026</div>"
+
+UPDATE FooterNavigationComponent; $contentCV[unique = true]; uid[unique = true]        ; notice[lang = $lang][translator = de.hybris.platform.acceleratorservices.dataimport.batch.converter.CopyrightTranslator, dateFormat = yyyy]
+                                ;                          ; FooterNavigationComponent ; "Copyright © {0} SAP SE or an SAP affiliate company. All rights reserved."

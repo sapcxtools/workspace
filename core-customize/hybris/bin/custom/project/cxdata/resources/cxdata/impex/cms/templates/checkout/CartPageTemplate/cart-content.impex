@@ -1,0 +1,56 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = cartPage
+$pageName = Cart Page
+$pageLabel = /cart
+$masterTemplate = CartPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]             ; position[unique = true]; page(uid, $contentCV)[unique = true][default = $pageId]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; $pageId-TopContent             ; TopContent             ;                                                        ; $pageId-TopContentSlot
+                                ;                          ; $pageId-EmptyCartMiddleContent ; EmptyCartMiddleContent ;                                                        ; $pageId-EmptyCartMiddleContentSlot
+                                ;                          ; $pageId-CenterLeftContent      ; CenterLeftContentSlot  ;                                                        ; $pageId-CenterLeftContentSlot
+                                ;                          ; $pageId-CenterRightContent     ; CenterRightContentSlot ;                                                        ; $pageId-CenterRightContentSlot
+                                ;                          ; $pageId-BottomContent          ; BottomContentSlot      ;                                                        ; $pageId-BottomContentSlot
+
+# Create components for page
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                ; name                                  ; flexType
+                              ;                          ; CartComponent                     ; Cart Display Component                ; CartComponent
+                              ;                          ; CartTotalsComponent               ; Cart Totals Display Component         ; CartTotalsComponent
+                              ;                          ; PotentialPromotionsComponent      ; Potential Promotions Component        ; PotentialPromotionsComponent
+                              ;                          ; PromotionsComponent               ; Promotions Component                  ; PromotionsComponent
+                              ;                          ; CartQuickOrderFormComponent       ; Cart Quick Order Form Component       ; CartQuickOrderFormComponent
+                              ;                          ; CartProceedToCheckoutComponent    ; Cart Proceed To Checkout Component    ; CartProceedToCheckoutComponent
+                              ;                          ; QuoteRequestComponent             ; Quotes Request Component              ; QuoteRequestComponent
+                              ;                          ; ImportExportOrderEntriesComponent ; Import Export Order Entries Component ; ImportExportOrderEntriesComponent
+                              ;                          ; ImportOrderEntriesComponent       ; Import Order Entries Component        ; ImportOrderEntriesComponent
+                              ;                          ; ClearCartComponent                ; Clear Cart Component                  ; ClearCartComponent
+                              ;                          ; CheckoutComponent                 ; Checkout Display Component            ; CheckoutComponent
+                              ;                          ; AddToSavedCartsComponent          ; Add To Saved Carts Component          ; AddToSavedCartsComponent
+
+INSERT_UPDATE CartSuggestionComponent; $contentCV[unique = true]; uid[unique = true]; name             ; productReferenceTypes(code); maximumNumberProducts; filterPurchased
+                                     ;                          ; CartSuggestions   ; Cart Suggestions ; SPAREPART,SIMILAR          ; 20                   ; true
+
+INSERT_UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]          ; name
+                                   ;                          ; EmptyCartParagraphComponent ; Empty Cart Paragraph Component
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]      ; name             ; url
+                              ;                          ; SavedCartsLinkComponent ; Saved Carts Link ; /my-account/saved-carts
+
+# Add components to content clots
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]                 ; name                                   ; cmsComponents(uid, $contentCV)                                                        ; active[default = true]
+                         ;                          ; $pageId-TopContentSlot             ; TopContentSlot for $pageId             ; AddToSavedCartsComponent,CartComponent,ClearCartComponent,ImportOrderEntriesComponent ;
+                         ;                          ; $pageId-CenterLeftContentSlot      ; CenterLeftContentSlot for $pageId      ; PromotionsComponent,PotentialPromotionsComponent                                      ;
+                         ;                          ; $pageId-CenterRightContentSlot     ; CenterRightContentSlot for $pageId     ; CartTotalsComponent,CartQuickOrderFormComponent,CartProceedToCheckoutComponent,QuoteRequestComponent              ;
+                         ;                          ; $pageId-BottomContentSlot          ; BottomContentSlot for $pageId          ; CheckoutComponent,CartSuggestions                                                     ;
+                         ;                          ; $pageId-EmptyCartMiddleContentSlot ; EmptyCartMiddleContentSlot for $pageId ; EmptyCartParagraphComponent,QuickOrderComponent,SavedCartsLinkComponent                                   ;

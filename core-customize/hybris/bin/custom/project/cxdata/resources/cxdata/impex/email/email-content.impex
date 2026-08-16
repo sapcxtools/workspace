@@ -1,0 +1,38 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$emailPackageName = $config-emailContextPackageName
+$emailVerificationTokenPackageName = de.hybris.platform.acceleratorservices.process.email.context.impl
+############################################################
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]                ; name                                 ; frontendTemplateName      ; subject(code)                       ; htmlTemplate(code)               ; restrictedPageTypes(code); active[default = true]
+                               ;                          ; CustomerRegistrationEmailTemplate ; Customer Registration Email Template ; customerRegistrationEmail ; Email_Customer_Registration_Subject ; Email_Customer_Registration_Body ; EmailPage                ;
+                               ;                          ; ForgottenPasswordEmailTemplate    ; Forgotten Password Email Template    ; forgottenPasswordEmail    ; Email_Forgotten_Password_Subject    ; Email_Forgotten_Password_Body    ; EmailPage                ;
+                               ;                          ; OrderConfirmationEmailTemplate    ; Order Confirmation Email Template    ; orderConfirmationEmail    ; Email_Order_Confirmation_Subject    ; Email_Order_Confirmation_Body    ; EmailPage                ;
+                               ;                          ; VerificationTokenEmailTemplate    ; Verification Token Email Template    ; verificationTokenEmail    ; Email_Verification_Token_Subject    ; Email_Verification_Token_Body    ; EmailPage                ;
+
+# Email Pages
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]        ; name                        ; masterTemplate(uid, $contentCV)   ; defaultPage; approvalStatus(code)[default = 'approved']
+                       ;                          ; CustomerRegistrationEmail ; Customer Registration Email ; CustomerRegistrationEmailTemplate ; true       ;
+                       ;                          ; ForgottenPasswordEmail    ; Forgotten Password Email    ; ForgottenPasswordEmailTemplate    ; true       ;
+                       ;                          ; OrderConfirmationEmail    ; Order Confirmation Email    ; OrderConfirmationEmailTemplate    ; true       ;
+                       ;                          ; VerificationTokenEmail    ; Verification Token Email    ; VerificationTokenEmailTemplate    ; true       ;
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate; code[unique = true]                 ; contextClass                                                     ; rendererType(code)[default = 'velocity']
+                              ; Email_Customer_Registration_Body    ; $emailPackageName.CustomerEmailContext                           ;
+                              ; Email_Customer_Registration_Subject ; $emailPackageName.CustomerEmailContext                           ;
+                              ; Email_Forgotten_Password_Body       ; $emailPackageName.ForgottenPasswordEmailContext                  ;
+                              ; Email_Forgotten_Password_Subject    ; $emailPackageName.ForgottenPasswordEmailContext                  ;
+                              ; Email_Order_Confirmation_Body       ; $emailPackageName.OrderNotificationEmailContext                  ;
+                              ; Email_Order_Confirmation_Subject    ; $emailPackageName.OrderNotificationEmailContext                  ;
+                              ; Email_Verification_Token_Body       ; $emailVerificationTokenPackageName.VerificationTokenEmailContext ;
+                              ; Email_Verification_Token_Subject    ; $emailVerificationTokenPackageName.VerificationTokenEmailContext ;

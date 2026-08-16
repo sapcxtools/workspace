@@ -1,0 +1,26 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = en
+
+$pageId = cartPage
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Your Shopping Cart"
+
+UPDATE CartSuggestionComponent; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                              ;                          ; CartSuggestions   ; "You may also like..."
+
+UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]          ; content[lang = $lang]
+                            ;                          ; EmptyCartParagraphComponent ; "<h2>Your shopping cart is empty</h2><p>Browse our products by clicking a category above</p>"
+
+UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]      ; linkName[lang = $lang]
+                       ;                          ; SavedCartsLinkComponent ; "Saved Carts"

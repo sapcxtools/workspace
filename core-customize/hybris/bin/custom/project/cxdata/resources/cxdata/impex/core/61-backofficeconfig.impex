@@ -1,0 +1,12 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$boCatalogVersion = catalogVersion(catalog(id[default = '_boconfig']), version[default = 'hidden'])[unique = true, default = '_boconfig:hidden']
+$boMediaFolder = backofficelogos
+############################################################
+
+# Change Backoffice Logo
+INSERT_UPDATE Media; $boCatalogVersion[unique = true]; code[unique = true]       ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; folder(qualifier)[default = $boMediaFolder]
+                   ;                                 ; backoffice-shellbar-logo  ; jar:/cxdata/assets/cx_short_logo.png                                      ;                             ;
+                   ;                                 ; backoffice-loginpage-logo ; jar:/cxdata/assets/cx_short_logo.png                                      ;                             ;

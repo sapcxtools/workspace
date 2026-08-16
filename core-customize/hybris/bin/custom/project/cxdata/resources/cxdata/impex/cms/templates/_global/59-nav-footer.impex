@@ -1,0 +1,83 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]; name         ; parent(uid, $contentCV)
+                               ;                          ; CxFooterNavNode  ; Footer Pages ;
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]           ; name                          ; parent(uid, $contentCV)
+                               ;                          ; SAPCommerceNavNode           ; SAP Commerce Cloud Pages      ; CxFooterNavNode
+                               ;                          ; SAPCustomerExperienceNavNode ; SAP Customer Experience Pages ; CxFooterNavNode
+                               ;                          ; FollowUsNavNode              ; Follow Us Pages               ; CxFooterNavNode
+
+##----- Children of SAPCommerceNavNode -----##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]                ; name                               ; parent(uid, $contentCV)
+                               ;                          ; AboutSAPCommerceNavNode           ; About SAP Commerce Cloud Page      ; SAPCommerceNavNode
+                               ;                          ; DocumentationNavNode              ; Documentation Page                 ; SAPCommerceNavNode
+                               ;                          ; AboutSAPCustomerExperienceNavNode ; About SAP Customer Experience Page ; SAPCommerceNavNode
+
+## entries of the above navigation nodes ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]                     ; name                                                ; navigationNode(uid, $contentCV)   ; item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; AboutSAPCommerceNavNodeEntry           ; About SAP Commerce Cloud Navigation Node Entry      ; AboutSAPCommerceNavNode           ; AboutSAPCommerceLink
+                                ;                          ; DocumentationNavNodeEntry              ; Documentation Navigation Node Entry                 ; DocumentationNavNode              ; DocumentationLink
+                                ;                          ; AboutSAPCustomerExperienceNavNodeEntry ; About SAP Customer Experience Navigation Node Entry ; AboutSAPCustomerExperienceNavNode ; VisitSAPLink
+
+## links of the above navigation nodes ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]   ; name                          ; url                                       ; target(code)[default = 'newWindow']
+                              ;                          ; AboutSAPCommerceLink ; About SAP Commerce Cloud Link ; "http://www.cx.sap.com/products/commerce" ;
+                              ;                          ; DocumentationLink    ; Documentation Link            ; "https://help.hybris.com"                 ;
+                              ;                          ; VisitSAPLink         ; Visit SAP Link                ; "http://www.cx.sap.com"                   ;
+
+##----- Children of SAPCustomerExperienceNavNode -----##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]; name            ; parent(uid, $contentCV)
+                               ;                          ; ContactUsNavNode  ; Contact Us Page ; SAPCustomerExperienceNavNode
+                               ;                          ; ImprintNavNode    ; Imprint Page    ; SAPCustomerExperienceNavNode
+
+## entries of the above navigation nodes ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]    ; name                             ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; ContactUsNavNodeEntry ; Contact Us Navigation Node Entry ; ContactUsNavNode               ; ContactUsLink
+                                ;                          ; ImprintNavNodeEntry   ; Imprint Navigation Node Entry    ; ImprintNavNode                 ; ImprintLink
+
+## links of the above navigation nodes ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name            ; url      ; target(code)[default = 'sameWindow']
+                              ;                          ; ImprintLink       ; Imprint Link    ; /imprint ;
+                              ;                          ; ContactUsLink     ; Contact Us Link ; /contact ;
+
+##----- Children of FollowUsNavNode -----##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]       ; name                     ; parent(uid, $contentCV)
+                               ;                          ; AgileCommerceBlogNavNode ; Agile Commerce Blog Page ; FollowUsNavNode
+                               ;                          ; LinkedInNavNode          ; LinkedIn Page            ; FollowUsNavNode
+                               ;                          ; FacebookNavNode          ; Facebook Page            ; FollowUsNavNode
+                               ;                          ; TwitterNavNode           ; Twitter Page             ; FollowUsNavNode
+## entries of the above navigation nodes ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]            ; name                                      ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; AgileCommerceBlogNavNodeEntry ; Agile Commerce Blog Navigation Node Entry ; AgileCommerceBlogNavNode       ; AgileCommerceBlogLink
+                                ;                          ; LinkedInNavNodeEntry          ; LinkedIn Navigation Node Entry            ; LinkedInNavNode                ; LinkedInLink
+                                ;                          ; FacebookNavNodeEntry          ; Facebook Navigation Node Entry            ; FacebookNavNode                ; FacebookLink
+                                ;                          ; TwitterNavNodeEntry           ; Twitter Navigation Node Entry             ; TwitterNavNode                 ; TwitterLink
+
+## links of the above navigation nodes ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]    ; name                     ; url                                      ; target(code)[default = 'newWindow']
+                              ;                          ; AgileCommerceBlogLink ; Agile Commerce Blog Link ; "http://www.agile-commerce.com/"         ;
+                              ;                          ; LinkedInLink          ; Linked In Link           ; "http://www.linkedin.com/groups/5063400" ;
+                              ;                          ; FacebookLink          ; Facebook Link            ; "http://www.facebook.com/sapcx/"         ;
+                              ;                          ; TwitterLink           ; Twitter Link             ; "http://www.twitter.com/SAP_CX"          ;
+
+INSERT_UPDATE FooterNavigationComponent; $contentCV[unique = true]; uid[unique = true]        ; wrapAfter; showLanguageCurrency; navigationNode(uid, $contentCV)
+                                       ;                          ; FooterNavigationComponent ; 4        ; true                ; CxFooterNavNode
+
+INSERT_UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]  ; name
+                                   ;                          ; NoticeTextParagraph ; Notice Text Paragraph
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                    ; name                                      ; flexType
+                              ;                          ; ScrollToTopComponent                  ; Scroll To Top Component                   ; ScrollToTopComponent
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; FooterSlot        ; FooterNavigationComponent,NoticeTextParagraph,ScrollToTopComponent

@@ -1,0 +1,160 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$vendorId = $config-cxdata.import.defaults.vendor.id
+$vendorName = $config-cxdata.import.defaults.vendor.name
+$warehouseId = $config-cxdata.import.defaults.warehouse.id
+$warehouseName = $config-cxdata.import.defaults.warehouse.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+
+############################################################
+# Titles
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE Title;; code[unique = true]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Titles.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $primaryLang
+INSERT_UPDATE Title;; code[unique = true]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Titles.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE Title;; code[unique = true]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Titles.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+############################################################
+# Languages
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE Language;; isocode[unique = true]; active[default = false]; fallbackLanguages(isocode); name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $primaryLang
+INSERT_UPDATE Language;; isocode[unique = true]; active[default = false]; fallbackLanguages(isocode); name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE Language;; isocode[unique = true]; active[default = false]; fallbackLanguages(isocode); name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+############################################################
+# Countries
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE Country;; isocode[unique = true]; active[default = false]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Countries.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $primaryLang
+INSERT_UPDATE Country;; isocode[unique = true]; active[default = false]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Countries.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE Country;; isocode[unique = true]; active[default = false]; name[lang = $lang]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Countries.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+############################################################
+# Currencies
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE Currency;; isocode[unique = true]; name[lang = $lang];; symbol; active[default = false]; conversion[numberformat = #, #######]; digits
+"#% beforeEach: ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Currencies.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $primaryLang
+INSERT_UPDATE Currency;; isocode[unique = true]; name[lang = $lang];; symbol; active[default = false]; conversion[numberformat = #, #######]; digits
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Currencies.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE Currency;; isocode[unique = true]; name[lang = $lang];; symbol; active[default = false]; conversion[numberformat = #, #######]; digits
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Currencies.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# Activate primary currency
+UPDATE Currency; isocode[unique = true]; base
+               ; $primaryCurrency      ; true
+
+
+############################################################
+# Units
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE Unit;;; name[lang = $lang]; code[unique = true]; unitType; conversion[numberformat = #, ###########]
+"#% beforeEach: ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Units.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $primaryLang
+INSERT_UPDATE Unit;;; name[lang = $lang]; code[unique = true]; unitType; conversion[numberformat = #, ###########]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Units.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE Unit;;; name[lang = $lang]; code[unique = true]; unitType; conversion[numberformat = #, ###########]
+"#% beforeEach: ImpexHelper.filterLocalizedLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Units.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE Title; code[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]
+#                   ; ms                 ; Frau                     ; Ms.
+#                   ; mr                 ; Herr                     ; Mr.
+
+INSERT_UPDATE Language; isocode[unique = true]; active[default = false]; fallbackLanguages(isocode); name[lang = $primaryLang]; name[lang = $optionalLang1]
+#                      ; en                    ; true                   ;                           ; English                  ; Englisch
+#                      ; de                    ; true                   ; en                        ; German                   ; Deutsch
+
+INSERT_UPDATE Unit; code[unique = true]; unitType; conversion[numberformat = #, ###########]; name[lang = $primaryLang]; name[lang = $optionalLang1]
+#                  ; KGM                ; SAP-MASS ; 1                                        ; Kilogram                 ; Kilogramm
+#                  ; CMT                ; SAP-LENG ; 0.01                                     ; Centimeter               ; Zentimeter

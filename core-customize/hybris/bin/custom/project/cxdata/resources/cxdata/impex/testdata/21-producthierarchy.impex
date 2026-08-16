@@ -1,0 +1,110 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+# ProductHierarchy
+# 1: Data-Locale
+# 2: ID
+# 3: Name
+# 4: Parent
+# 5: Category Image
+# 6: Media Folder
+# 7: Media Format
+############################################################
+INSERT_UPDATE MediaFolder;;;;;; qualifier[unique = true];;;;;;;;;;;;;;; path
+"#% beforeEach:
+    line.put(21, ""$siteId/"" + line.get(6));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE MediaFormat;;;;;;; qualifier[unique = true];;;;;;;;;;;;;; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(7));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE MediaContainer;;; name[lang = $primaryLang];;;;;;;;;;;;;;;;; $productCV; qualifier[unique = true]
+"#% beforeEach:
+    line.put(21, line.get(6) + ""/"" + line.get(5));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Media;;; altText;; realFileName; folder(qualifier); mediaFormat(qualifier);;;;;;;;;;;;; $productCV; code[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(6) + ""/"" + line.get(5));
+    line.put(22, ""$mediaResourcePath"" + line.get(6) + ""/"" + line.get(5));
+    line.put(23, ""image/"" + FilenameUtils.getExtension(line.get(5)));
+    line.put(24, line.get(6) + ""/"" + line.get(5));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Category;; code[unique = true]; name[lang = $primaryLang]; supercategories(code, $productCV);;;;;;;;;;;;;;;; $productCV; picture(code, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(6) + ""/"" + line.get(5));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Category;; code[unique = true]; name[lang = $optionalLang1]; supercategories(code, $productCV);;;;;;;;;;;;;;;; $productCV; picture(code, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(6) + ""/"" + line.get(5));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$optionalLang1"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ProductHierarchy.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE MediaFolder; qualifier[unique = true]; path
+#                         ; categories              ; $siteId/categories
+
+INSERT_UPDATE MediaFormat; qualifier[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]
+#                         ; CategoryImage_480x480   ; CategoryImage_480x480    ; CategoryImage_480x480
+
+INSERT_UPDATE MediaContainer; qualifier[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]; $productCV
+#                            ; categories/pump-flow-axial.png ; Axial flow pumps         ; Axialpumpen                ;
+
+INSERT_UPDATE Media; code[unique = true]; altText; realFileName; folder(qualifier); mediaFormat(qualifier); @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV); $productCV
+#                   ; categories/pump-flow-axial.png ; Axial flow pumps ; pump-flow-axial.png ; categories       ; CategoryImage_480x480 ; $mediaResourcePathcategories/pump-flow-axial.png                            ; image/png                  ; categories/pump-flow-axial.png       ;
+
+INSERT_UPDATE Category; code[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]; supercategories(code, $productCV); picture(code, $productCV); $productCV
+#                      ; 10010100           ; Axial flow pumps         ; Axialpumpen                ; 10010000                         ; categories/pump-flow-axial.png ;

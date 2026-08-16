@@ -1,0 +1,17 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = de
+############################################################
+
+UPDATE CxFormListComponent; $contentCV[unique = true]; uid[unique = true]                ; toggleText[lang = $lang]    ; headline[lang = $lang]   ; description[lang = $lang]
+                            ;                          ; CxAllFormsListComponent          ; Neue Anfrage                ; Wählen Sie Ihre Serviceanfrage ;
+                            ;                          ; CxProductSummaryFormListComponent; Service Anfrage erstellen   ; Wählen Sie Ihre Serviceanfrage ;
+                            ;                          ; CxAllFormsInlineListComponent    ;                             ; Ihre Service-Anfragen    ; Hier finden Sie alle verfügbaren Formulare für Ihre Service-Anfragen. Wählen Sie das passende Formular aus, füllen Sie es vollständig aus und senden Sie es ab. Wir werden uns so schnell wie möglich bei Ihnen melden.

@@ -1,0 +1,53 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+# Prices
+# 1: Data-Locale
+# 2: Material ID
+# 3: Net
+# 4: Price
+# 5: Currency
+# 6: Unit
+# 7: Unit factor
+# 8: Minimum quantity
+# 9: Product group
+# 10: Customer group
+############################################################
+INSERT_UPDATE PriceRow;; product(code, $productCV)[unique = true]; net[default = false]; price; currency(isocode)[unique = true]; unit(code)[unique = true]; unitFactor[default = 1]; minqtd[default = 1][unique = true]; pg(code)[unique = true]; ug(code)[unique = true]
+"#% beforeEach:
+    ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Prices.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+INSERT_UPDATE PriceRow;; product(code, $productCV)[unique = true]; net[default = false]; price; currency(isocode)[unique = true]; unit(code)[unique = true]; unitFactor[default = 1]; minqtd[default = 1][unique = true]; pg(code)[unique = true]; ug(code)[unique = true]
+"#% beforeEach:
+    ImpexHelper.filterUnlocalizedLine(line, 1);"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Prices_Customer_Specific.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE PriceRow; product(code, $productCV)[unique = true]; net[default = false]; price; currency(isocode)[unique = true]; unit(code)[unique = true]; unitFactor[default = 1]; minqtd[default = 1][unique = true]; pg(code)[unique = true]; ug(code)[unique = true]
+#                      ; 100101000001                            ; true                ; 18500.00 ; EUR                             ; PCE                      ; 1                      ; 1                                 ;                        ;
+#                      ; V10551212                               ; true                ; 0.51     ; EUR                             ; PCE                      ; 1                      ; 1                                 ;                        ; CX_PRICE_GROUP

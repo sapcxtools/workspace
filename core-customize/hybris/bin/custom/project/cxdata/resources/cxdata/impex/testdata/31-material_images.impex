@@ -1,0 +1,85 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+# Materials
+# 1: Material ID
+# 2: Name
+# 3: Picture
+# 4: Media Folder
+# 5: Media Format
+############################################################
+INSERT_UPDATE MediaFolder;;;; qualifier[unique = true];;;;;;;;;;;;;;;; path
+"#% beforeEach:
+    line.put(21, ""$siteId/"" + line.get(4));"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/MaterialImages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE MediaFormat;;;;; qualifier[unique = true];;;;;;;;;;;;;;;; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(5));"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/MaterialImages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+# PRIMARY IMAGE
+INSERT_UPDATE MediaContainer;;;;;;;;;;;;;;;;;;;; $productCV; qualifier[unique = true]; name[lang = $primaryLang]
+"#% beforeEach:
+    line.put(21, line.get(4) + ""/"" + line.get(3));
+    line.put(22, line.get(4) + "" ("" + line.get(3) + "")"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/MaterialImages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+INSERT_UPDATE Media;; altText; realFileName; folder(qualifier); mediaFormat(qualifier);;;;;;;;;;;;;;; $productCV; code[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV)
+"#% beforeEach:
+    line.put(21, line.get(4) + ""/"" + line.get(3));
+    line.put(22, ""$mediaResourcePath"" + line.get(4) + ""/"" + line.get(3));
+    line.put(23, ""image/"" + FilenameUtils.getExtension(line.get(3)));
+    line.put(24, line.get(4) + ""/"" + line.get(3));"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/MaterialImages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+INSERT_UPDATE Product; code[unique = true];;;;;;;;;;;;;;;;;;; $productCV; picture(code, $productCV); thumbnail(code, $productCV); galleryImages(qualifier, $productCV)[collection-delimiter = |, mode = append]
+"#% beforeEach:
+    line.put(21, line.get(4) + ""/"" + line.get(3));
+    line.put(22, line.get(4) + ""/"" + line.get(3));
+    line.put(23, line.get(4) + ""/"" + line.get(3));"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/MaterialImages.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE MediaFolder; qualifier[unique = true]; path
+#                         ; products                ; $siteId/products
+
+INSERT_UPDATE MediaFormat; qualifier[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]
+#                         ; ProductImage_480x480    ; ProductImage_480x480     ; ProductImage_480x480
+
+INSERT_UPDATE MediaContainer; qualifier[unique = true]; name[lang = $primaryLang]; name[lang = $optionalLang1]; $productCV
+#                            ; mediaContainer-products/MAT_100101000001_045deg.jpg ; products(ProductImage_480x480) ; products(ProductImage_480x480) ;
+
+INSERT_UPDATE Media; code[unique = true]; altText; realFileName; folder(qualifier); mediaFormat(qualifier); @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/png']; mediaContainer(qualifier, $productCV); $productCV
+#                   ; picture-MAT_100101000001_045deg.jpg       ; Eco Flow axial flow pump AX 200 ; MAT_100101000001_045deg.jpg ; products         ; ProductImage_480x480  ; $mediaResourcePathproducts/MAT_100101000001_045deg.jpg                      ; image/png                  ; mediaContainer-products/MAT_100101000001_045deg.jpg ;
+#                   ; thumbnail-MAT_100101000001_045deg.jpg     ; Eco Flow axial flow pump AX 200 ; MAT_100101000001_045deg.jpg ; products         ; ProductImage_480x480  ; $mediaResourcePathproducts/MAT_100101000001_045deg.jpg                      ; image/png                  ; mediaContainer-products/MAT_100101000001_045deg.jpg ;
+#                   ; galleryImage1-MAT_100101000001_045deg.jpg ; Eco Flow axial flow pump AX 200 ; MAT_100101000001_045deg.jpg ; products         ; ProductImage_480x480  ; $mediaResourcePathproducts/MAT_100101000001_045deg.jpg                      ; image/png                  ; mediaContainer-products/MAT_100101000001_045deg.jpg ;
+#                   ; galleryImage2-MAT_100101000001_045deg.jpg ; Eco Flow axial flow pump AX 200 ; MAT_100101000001_045deg.jpg ; products         ; ProductImage_480x480  ; $mediaResourcePathproducts/MAT_100101000001_045deg.jpg                      ; image/png                  ; mediaContainer-products/MAT_100101000001_045deg.jpg ;
+
+INSERT_UPDATE Product; code[unique = true]; picture(code, $productCV); thumbnail(code, $productCV); galleryImages(qualifier, $productCV)[collection-delimiter = |, mode = append]; $productCV
+#                     ; 100101000001       ; picture-MAT_100101000001_045deg.jpg ; thumbnail-MAT_100101000001_045deg.jpg ; mediaContainer-products/MAT_100101000001_045deg.jpg                          ;

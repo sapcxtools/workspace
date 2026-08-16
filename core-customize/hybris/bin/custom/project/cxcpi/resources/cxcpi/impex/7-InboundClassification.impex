@@ -1,0 +1,115 @@
+#************************************
+#*** Inbound Classification Class ***
+#************************************
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundClassificationClass
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true] ; type(code)          ; root[default = false]
+                                   ; InboundClassificationClass            ; Catalog             ; Catalog             ;
+                                   ; InboundClassificationClass            ; Category            ; Category            ;
+                                   ; InboundClassificationClass            ; CatalogVersion      ; CatalogVersion      ;
+                                   ; InboundClassificationClass            ; ClassificationClass ; ClassificationClass ; true
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]; autoCreate[default = false]
+                                            ; InboundClassificationClass:Catalog                                 ; id                          ; Catalog:id                                         ;                                                           ; true                   ;
+                                            ; InboundClassificationClass:Category                                ; catalogVersion              ; Category:catalogVersion                            ; InboundClassificationClass:CatalogVersion                 ; true                   ;
+                                            ; InboundClassificationClass:Category                                ; code                        ; Category:code                                      ;                                                           ; true                   ;
+                                            ; InboundClassificationClass:CatalogVersion                          ; catalog                     ; CatalogVersion:catalog                             ; InboundClassificationClass:Catalog                        ; true                   ;
+                                            ; InboundClassificationClass:CatalogVersion                          ; active                      ; CatalogVersion:active                              ;                                                           ;                        ;
+                                            ; InboundClassificationClass:CatalogVersion                          ; version                     ; CatalogVersion:version                             ;                                                           ; true                   ;
+                                            ; InboundClassificationClass:ClassificationClass                     ; catalogVersion              ; ClassificationClass:catalogVersion                 ; InboundClassificationClass:CatalogVersion                 ; true                   ;
+                                            ; InboundClassificationClass:ClassificationClass                     ; supercategories             ; ClassificationClass:supercategories                ; InboundClassificationClass:Category                       ;                        ;
+                                            ; InboundClassificationClass:ClassificationClass                     ; name                        ; ClassificationClass:name                           ;                                                           ;                        ;
+                                            ; InboundClassificationClass:ClassificationClass                     ; code                        ; ClassificationClass:code                           ;                                                           ; true                   ;
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundClassificationClass            ; BASIC
+
+
+#**********************************************
+#*** Inbound Classification Attribute Value ***
+#**********************************************
+
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundClassificationAttributeValue
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]          ; type(code)                   ; root[default = false]
+                                   ; InboundClassificationAttributeValue   ; ClassificationSystemVersion  ; ClassificationSystemVersion  ;
+                                   ; InboundClassificationAttributeValue   ; Catalog                      ; Catalog                      ;
+                                   ; InboundClassificationAttributeValue   ; ClassificationAttributeValue ; ClassificationAttributeValue ; true
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code)      ; unique[default = false]; autoCreate[default = false]
+                                            ; InboundClassificationAttributeValue:ClassificationSystemVersion    ; version                     ; ClassificationSystemVersion:version                ;                                                                 ; true                   ;
+                                            ; InboundClassificationAttributeValue:ClassificationSystemVersion    ; catalog                     ; ClassificationSystemVersion:catalog                ; InboundClassificationAttributeValue:Catalog                     ; true                   ;
+                                            ; InboundClassificationAttributeValue:Catalog                        ; id                          ; Catalog:id                                         ;                                                                 ; true                   ;
+                                            ; InboundClassificationAttributeValue:ClassificationAttributeValue   ; code                        ; ClassificationAttributeValue:code                  ;                                                                 ; true                   ;
+                                            ; InboundClassificationAttributeValue:ClassificationAttributeValue   ; name                        ; ClassificationAttributeValue:name                  ;                                                                 ;                        ;
+                                            ; InboundClassificationAttributeValue:ClassificationAttributeValue   ; systemVersion               ; ClassificationAttributeValue:systemVersion         ; InboundClassificationAttributeValue:ClassificationSystemVersion ; true                   ;
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundClassificationAttributeValue   ; BASIC
+
+#****************************************
+#*** Inbound Classification Attribute ***
+#****************************************
+
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundClassificationAttribute
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]          ; type(code)                   ; root[default = false]
+                                   ; InboundClassificationAttribute        ; Catalog                      ; Catalog                      ;
+                                   ; InboundClassificationAttribute        ; ClassificationAttributeValue ; ClassificationAttributeValue ;
+                                   ; InboundClassificationAttribute        ; ClassificationSystemVersion  ; ClassificationSystemVersion  ;
+                                   ; InboundClassificationAttribute        ; ClassificationAttribute      ; ClassificationAttribute      ; true
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true] ; attributeDescriptor(enclosingType(code), qualifier)  ; returnIntegrationObjectItem(integrationObject(code), code)  ; unique[default = false]; autoCreate[default = false]
+                                            ; InboundClassificationAttribute:Catalog                             ; id                           ; Catalog:id                                           ;                                                             ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationAttributeValue        ; code                         ; ClassificationAttributeValue:code                    ;                                                             ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationAttributeValue        ; systemVersion                ; ClassificationAttributeValue:systemVersion           ; InboundClassificationAttribute:ClassificationSystemVersion  ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationSystemVersion         ; version                      ; ClassificationSystemVersion:version                  ;                                                             ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationSystemVersion         ; catalog                      ; ClassificationSystemVersion:catalog                  ; InboundClassificationAttribute:Catalog                      ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationAttribute             ; name                         ; ClassificationAttribute:name                         ;                                                             ;                        ;
+                                            ; InboundClassificationAttribute:ClassificationAttribute             ; code                         ; ClassificationAttribute:code                         ;                                                             ; true                   ;
+                                            ; InboundClassificationAttribute:ClassificationAttribute             ; sapERPCharacteristicLongText ; ClassificationAttribute:sapERPCharacteristicLongText ;                                                             ;                        ;
+                                            ; InboundClassificationAttribute:ClassificationAttribute             ; defaultAttributeValues       ; ClassificationAttribute:defaultAttributeValues       ; InboundClassificationAttribute:ClassificationAttributeValue ;                        ;
+                                            ; InboundClassificationAttribute:ClassificationAttribute             ; systemVersion                ; ClassificationAttribute:systemVersion                ; InboundClassificationAttribute:ClassificationSystemVersion  ; true                   ;
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundClassificationAttribute        ; BASIC
+
+#******************************************
+#*** Inbound Class Attribute Assignment ***
+#******************************************
+
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundClassAttributeAssignment
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]             ; type(code)                      ; root[default = false]
+                                   ; InboundClassAttributeAssignment       ; ClassAttributeAssignment        ; ClassAttributeAssignment        ; true
+                                   ; InboundClassAttributeAssignment       ; ClassificationAttributeTypeEnum ; ClassificationAttributeTypeEnum ;
+                                   ; InboundClassAttributeAssignment       ; ClassificationSystemVersion     ; ClassificationSystemVersion     ;
+                                   ; InboundClassAttributeAssignment       ; ClassificationSystem            ; ClassificationSystem            ;
+                                   ; InboundClassAttributeAssignment       ; ClassificationAttribute         ; ClassificationAttribute         ;
+                                   ; InboundClassAttributeAssignment       ; ClassificationClass             ; ClassificationClass             ;
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code)      ; unique[default = false]
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; classificationClass         ; ClassAttributeAssignment:classificationClass       ; InboundClassAttributeAssignment:ClassificationClass             ; true
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; formatDefinition            ; ClassAttributeAssignment:formatDefinition          ;                                                                 ;
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; systemVersion               ; ClassAttributeAssignment:systemVersion             ; InboundClassAttributeAssignment:ClassificationSystemVersion     ; true
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; attributeType               ; ClassAttributeAssignment:attributeType             ; InboundClassAttributeAssignment:ClassificationAttributeTypeEnum ; false
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; description                 ; ClassAttributeAssignment:description               ;                                                                 ;
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; multiValued                 ; ClassAttributeAssignment:multiValued               ;                                                                 ;
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; classificationAttribute     ; ClassAttributeAssignment:classificationAttribute   ; InboundClassAttributeAssignment:ClassificationAttribute         ; true
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; range                       ; ClassAttributeAssignment:range                     ;                                                                 ;
+                                            ; InboundClassAttributeAssignment:ClassAttributeAssignment           ; sapCpiAssignmentUnitCode    ; ClassAttributeAssignment:sapCpiAssignmentUnitCode  ;                                                                 ;
+                                            ; InboundClassAttributeAssignment:ClassificationAttributeTypeEnum    ; code                        ; ClassificationAttributeTypeEnum:code               ;                                                                 ; true
+                                            ; InboundClassAttributeAssignment:ClassificationSystemVersion        ; catalog                     ; ClassificationSystemVersion:catalog                ; InboundClassAttributeAssignment:ClassificationSystem            ; true
+                                            ; InboundClassAttributeAssignment:ClassificationSystemVersion        ; version                     ; ClassificationSystemVersion:version                ;                                                                 ; true
+                                            ; InboundClassAttributeAssignment:ClassificationSystem               ; id                          ; ClassificationSystem:id                            ;                                                                 ; true
+                                            ; InboundClassAttributeAssignment:ClassificationAttribute            ; code                        ; ClassificationAttribute:code                       ;                                                                 ; true
+                                            ; InboundClassAttributeAssignment:ClassificationAttribute            ; systemVersion               ; ClassificationAttribute:systemVersion              ; InboundClassAttributeAssignment:ClassificationSystemVersion     ; true
+                                            ; InboundClassAttributeAssignment:ClassificationClass                ; catalogVersion              ; ClassificationClass:catalogVersion                 ; InboundClassAttributeAssignment:ClassificationSystemVersion     ; true
+                                            ; InboundClassAttributeAssignment:ClassificationClass                ; code                        ; ClassificationClass:code                           ;                                                                 ; true
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundClassAttributeAssignment       ; BASIC

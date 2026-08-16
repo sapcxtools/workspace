@@ -1,0 +1,9 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$fullIndexCronJob = $config-cxdata.import.defaults.solr.fullIndexCronJob
+############################################################
+
+# Trigger Full Product Catalog Index (synchronously)
+#%me.cxdev.commerce.toolkit.impex.ImpExTasks.startCronJob("$fullIndexCronJob")

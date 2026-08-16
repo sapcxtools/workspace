@@ -1,0 +1,27 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$siteId = $config-cxdata.import.defaults.site.id
+$profileName = SearchProfile-$siteId
+$solrIndexedType = ServiceTicket
+############################################################
+$lang = en
+
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; displayName[lang = $lang]
+                                 ; $profileName-$solrIndexedType             ; title              ; "Title"
+                                 ; $profileName-$solrIndexedType             ; description        ; "Description"
+                                 ; $profileName-$solrIndexedType             ; creationtime       ; "Date"
+                                 ; $profileName-$solrIndexedType             ; customer           ; "Customer"
+                                 ; $profileName-$solrIndexedType             ; machines           ; "Machine list"
+                                 ; $profileName-$solrIndexedType             ; allMachines        ; "Show all machines"
+                                 ; $profileName-$solrIndexedType             ; parentAccountGroup ; "Parent Account Group"
+                                 ; $profileName-$solrIndexedType             ; isNew              ; "Show Is New Flag"
+                                 ; $profileName-$solrIndexedType             ; status             ; "Status"
+                                 ; $profileName-$solrIndexedType             ; type               ; "Type"
+
+# Define the available sorts
+UPDATE SolrSort; indexedType(identifier)[unique = true]; code[unique = true]; name[lang = $lang]
+               ; $profileName-$solrIndexedType         ; relevance          ; "Relevance"
+               ; $profileName-$solrIndexedType         ; date-asc           ; "Date (ascending)"
+               ; $profileName-$solrIndexedType         ; date-desc          ; "Date (descending)"

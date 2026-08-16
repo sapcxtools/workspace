@@ -1,0 +1,70 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$templateId = ProductDetailsPageTemplate
+$templateName = Product Details Page Template
+$frontendTemplateName = product/productLayout2Page
+$restrictedPageTypes = ProductPage
+$resourcePath = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/cms/templates/_structure-view
+$velocityTemplate = structure_productDetails2PageTemplate.vm
+############################################################
+
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; name          ; frontendTemplateName  ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; $templateId       ; $templateName ; $frontendTemplateName ; $restrictedPageTypes     ; false
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+                   ;                          ; $templateId       ; $resourcePath/$velocityTemplate
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $contentCV)[unique = true][default = $templateId]; validComponentTypes(code)       ; compTypeGroup(code)
+                             ; SiteLogo               ;                                                                ;                                 ; logo
+                             ; HeaderLinks            ;                                                                ;                                 ; headerlinks
+                             ; SearchBox              ;                                                                ;                                 ; searchbox
+                             ; MiniCart               ;                                                                ;                                 ; minicart
+                             ; NavigationBar          ;                                                                ;                                 ; navigation
+                             ; Section1               ;                                                                ;                                 ; wide
+                             ; Section2               ;                                                                ;                                 ; wide
+                             ; Section3               ;                                                                ;                                 ; wide
+                             ; Section4               ;                                                                ;                                 ; wide
+                             ; VariantSelector        ;                                                                ; ProductVariantSelectorComponent ; narrow
+                             ; AddToCart              ;                                                                ; ProductAddToCartComponent       ; narrow
+                             ; CrossSelling           ;                                                                ; ProductReferencesComponent      ; narrow
+                             ; UpSelling              ;                                                                ; ProductReferencesComponent      ; narrow
+                             ; Footer                 ;                                                                ;                                 ; footer
+                             ; Tabs                   ;                                                                ; CMSTabParagraphContainer        ;
+                             ; TopHeaderSlot          ;                                                                ;                                 ; wide
+                             ; BottomHeaderSlot       ;                                                                ;                                 ; wide
+                             ; PlaceholderContentSlot ;                                                                ;                                 ;
+                             ; SiteContext            ;                                                                ; CMSSiteContextComponent         ;
+                             ; SiteLinks              ;                                                                ; CMSLinkComponent                ;
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                 ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = $templateId]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; $templateId-SiteLogo               ; SiteLogo               ;                                                                    ; SiteLogoSlot                               ; true
+                                    ;                          ; $templateId-HomepageLink           ; HomepageNavLink        ;                                                                    ; HomepageNavLinkSlot                        ; true
+                                    ;                          ; $templateId-MiniCart               ; MiniCart               ;                                                                    ; MiniCartSlot                               ; true
+                                    ;                          ; $templateId-NavigationBar          ; NavigationBar          ;                                                                    ; NavigationBarSlot                          ; true
+                                    ;                          ; $templateId-Tabs                   ; Tabs                   ;                                                                    ; TabsSlot                                   ; true
+                                    ;                          ; $templateId-Footer                 ; Footer                 ;                                                                    ; FooterSlot                                 ; true
+                                    ;                          ; $templateId-HeaderLinks            ; HeaderLinks            ;                                                                    ; HeaderLinksSlot                            ; true
+                                    ;                          ; $templateId-SearchBox              ; SearchBox              ;                                                                    ; SearchBoxSlot                              ; true
+                                    ;                          ; $templateId-UpSelling              ; UpSelling              ;                                                                    ; UpSellingSlot                              ; true
+                                    ;                          ; $templateId-CrossSelling           ; CrossSelling           ;                                                                    ; CrossSellingSlot                           ; true
+                                    ;                          ; $templateId-TopHeaderSlot          ; TopHeaderSlot          ;                                                                    ; TopHeaderSlot                              ; true
+                                    ;                          ; $templateId-BottomHeaderSlot       ; BottomHeaderSlot       ;                                                                    ; BottomHeaderSlot                           ; true
+                                    ;                          ; $templateId-PlaceholderContentSlot ; PlaceholderContentSlot ;                                                                    ; PlaceholderContentSlot                     ; true
+                                    ;                          ; $templateId-SiteContextSlotPage    ; SiteContext            ;                                                                    ; SiteContextSlot                            ; true
+                                    ;                          ; $templateId-SiteLinksSlotPage      ; SiteLinks              ;                                                                    ; SiteLinksSlot                              ; true
+                                    ;                          ; $templateId-Summary                ; Summary                ;                                                                    ; ProductSummarySlot                         ; true
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]     ; name                        ; active[default = true]
+                         ;                          ; UpSellingSlot          ; Up Selling                  ;
+                         ;                          ; CrossSellingSlot       ; Cross Selling               ;
+                         ;                          ; TabsSlot               ; Tabs                        ;
+                         ;                          ; ProductSummarySlot     ; Summary for product details ;
+                         ;                          ; ProductLeftRefinements ; Refinements                 ;

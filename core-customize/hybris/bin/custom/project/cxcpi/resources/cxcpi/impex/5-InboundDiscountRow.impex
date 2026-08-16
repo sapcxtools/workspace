@@ -1,0 +1,36 @@
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundDiscountRow
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]  ; type(code)           ; root[default = false]
+                                   ; InboundDiscountRow                    ; Discount             ; Discount             ;
+                                   ; InboundDiscountRow                    ; CatalogVersion       ; CatalogVersion       ;
+                                   ; InboundDiscountRow                    ; ProductDiscountGroup ; ProductDiscountGroup ;
+                                   ; InboundDiscountRow                    ; DiscountRow          ; DiscountRow          ; true
+                                   ; InboundDiscountRow                    ; Currency             ; Currency             ;
+                                   ; InboundDiscountRow                    ; UserPriceGroup       ; UserPriceGroup       ;
+                                   ; InboundDiscountRow                    ; Product              ; Product              ;
+                                   ; InboundDiscountRow                    ; Catalog              ; Catalog              ;
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]; autoCreate[default = false]
+                                            ; InboundDiscountRow:Discount                                        ; code                        ; Discount:code                                      ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:CatalogVersion                                  ; version                     ; CatalogVersion:version                             ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:CatalogVersion                                  ; catalog                     ; CatalogVersion:catalog                             ; InboundDiscountRow:Catalog                                ; true                   ;
+                                            ; InboundDiscountRow:ProductDiscountGroup                            ; code                        ; ProductDiscountGroup:code                          ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; sapConditionId              ; DiscountRow:sapConditionId                         ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; product                     ; DiscountRow:product                                ; InboundDiscountRow:Product                                ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; currency                    ; DiscountRow:currency                               ; InboundDiscountRow:Currency                               ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; discount                    ; DiscountRow:discount                               ; InboundDiscountRow:Discount                               ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; value                       ; DiscountRow:value                                  ;                                                           ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; endTime                     ; DiscountRow:endTime                                ;                                                           ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; ug                          ; DiscountRow:ug                                     ; InboundDiscountRow:UserPriceGroup                         ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; pg                          ; DiscountRow:pg                                     ; InboundDiscountRow:ProductDiscountGroup                   ;                        ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; catalogVersion              ; DiscountRow:catalogVersion                         ; InboundDiscountRow:CatalogVersion                         ; true                   ;
+                                            ; InboundDiscountRow:DiscountRow                                     ; startTime                   ; DiscountRow:startTime                              ;                                                           ;                        ;
+                                            ; InboundDiscountRow:Currency                                        ; isocode                     ; Currency:isocode                                   ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:UserPriceGroup                                  ; code                        ; UserPriceGroup:code                                ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:Product                                         ; code                        ; Product:code                                       ;                                                           ; true                   ;
+                                            ; InboundDiscountRow:Product                                         ; catalogVersion              ; Product:catalogVersion                             ; InboundDiscountRow:CatalogVersion                         ; true                   ;
+                                            ; InboundDiscountRow:Catalog                                         ; id                          ; Catalog:id                                         ;                                                           ; true                   ;
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundDiscountRow                    ; BASIC

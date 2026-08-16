@@ -1,0 +1,283 @@
+###################################################################
+# THYMELEAF EMAIL TEMPLATES IMPORT
+# Format: ; <templateName> ; "<html_code>"
+#
+# HTML PREPARATION (Select ONLY the HTML payload in IDE, then replace):
+# Step 1 (Regex OFF)  : Replace ${ with $d{
+# Step 2 (Regex OFF) : Replace "    with ""    (Escapes attributes)
+#
+# FATAL: Do not replace the outer ImpEx boundary quotes ("<!DOC...</html>").
+###################################################################
+$d = $
+
+INSERT_UPDATE ThymeleafEmailTemplate; code[unique = true]; template[lang = de]
+                                    ; contact            ; "<!DOCTYPE html>
+<html>
+    <body>
+        <p th:text=""'Neue Kontaktanfrage'""></p>
+        <p th:text=""'Name: ' + $d{firstName} + ' ' + $d{lastName}""></p>
+        <p th:text=""'E-Mail: ' + $d{email}""></p>
+        <p th:text=""'Nachricht: ' + $d{message}""></p>
+    </body>
+</html>"
+                                    ; registration       ; "<!DOCTYPE html>
+<html>
+    <body>
+        <p>Neue Registrierungsanfrage</p>
+        <p th:text=""'Titel: ' + $d{title}""></p>
+        <p th:text=""'Vorname: ' + $d{firstname}""></p>
+        <p th:text=""'Name: ' + $d{name}""></p>
+        <p th:text=""'E-Mail-Adresse: ' + $d{email}""></p>
+        <p th:text=""'Telefon: ' + $d{telephone}""></p>
+        <p th:text=""'Firmenname: ' + $d{companyName}""></p>
+        <p th:text=""'Straße und Hausnummer: ' + $d{companyAddressStreet}""></p>
+        <p th:text=""'Adresszusatz: ' + $d{companyAddressStreetLine2}""></p>
+        <p th:text=""'Ort: ' + $d{companyAddressCity}""></p>
+        <p th:text=""'PLZ: ' + $d{companyAddressPostalCode}""></p>
+        <p th:text=""'Region/Bundesland: ' + $d{companyAddressRegion}""></p>
+        <p th:text=""'Land: ' + $d{country}""></p>
+        <p th:text=""'USt-ID: ' + $d{ustId}""></p>
+    </body>
+</html>"
+
+                                    ; serviceticket      ; "<!DOCTYPE html>
+<head>
+    <style>
+        body {
+            color: #454545;
+        }
+
+        .header {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 2rem;
+            background: linear-gradient(90deg, #0064b6 0%, #008cff 100%);
+            box-shadow: inset 0 -4px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .header-content {
+            z-index: 1;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 50px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+        }
+
+        .header-subline {
+            margin: 0.5rem 0 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        h2 {
+            margin: 1rem 0;
+            color: #008cff;
+        }
+
+        table th {
+            text-align: left;
+            color: #000000;
+            padding-bottom: 1rem;
+        }
+
+        .formFields-table {
+            width: 100%;
+            table-layout: fixed;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        .formFields-table td {
+            width: 50%;
+            vertical-align: top;
+        }
+
+        .form-field-value {
+            background: #f6f8fa;
+            padding: 0.5rem 1rem;
+            color: #000000;
+        }
+
+        .form-field-value .value {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        @media only screen and (max-width: 768px) {
+            h1 {
+                font-size: 30px;
+            }
+            .header {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class=""header"">
+    <div class=""header-content"">
+        <h1>
+            <span th:text=""'CX Service Ticket.'""></span>
+        </h1>
+
+        <p class=""header-subline""
+           th:if=""$d{intro != null and !#strings.isEmpty(intro)}"">
+            <span th:text=""$d{intro}""></span>
+        </p>
+    </div>
+</div>
+
+<div>
+    <h2><span th:text=""'Ticket ID'""></span></h2>
+    <th:block>
+        <table class=""formFields-table"">
+            <thead></thead>
+            <tbody>
+            <tr>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{ticketCode}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+
+    <h2><span th:text=""'Organisation'""></span></h2>
+    <th:block th:if=""$d{accountGroup != null and address != null}"">
+        <table class=""formFields-table"">
+            <thead></thead>
+            <tbody>
+            <tr>
+                <td class=""form-field-value"" th:text=""'Debitor ID'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{accountGroup.uid}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <td class=""form-field-value"" th:text=""'Strasse'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{address.line1}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr th:if=""$d{address.line2 != null and !#strings.isEmpty(address.line2)}"">
+                <td class=""form-field-value"" th:text=""'Adresszusatz'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{address.line2}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <td class=""form-field-value"" th:text=""'Postleitzahl und Ort'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{address.postalCode}"">...</span>
+                        <span class=""value"" th:text=""$d{address.town}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr th:if=""$d{address.country != null}"">
+                <td class=""form-field-value"" th:text=""'Land'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{address.country.name}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+
+    <th:block th:if=""$d{accountGroup == null or address == null}"">
+        <p th:text=""' '""></p>
+    </th:block>
+</div>
+
+<h2><span th:text=""'Kunde'""></span></h2>
+<th:block th:if=""$d{customerName != null and !#strings.isEmpty(customerName)}"">
+    <table class=""formFields-table"">
+        <thead></thead>
+        <tbody>
+        <tr>
+            <td class=""form-field-value"">
+                <th:block>
+                    <span class=""value"" th:text=""$d{customerName}"">...</span>
+                </th:block>
+            </td>
+            <td class=""form-field-value"">
+                <th:block>
+                    <span class=""value"" th:text=""$d{customerEmail}"">...</span>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+
+<h2><span th:text=""'Maschinen'""></span></h2>
+<th:block th:if=""$d{machines != null and !machines.isEmpty()}"">
+    <th:block th:each=""machine : $d{machines}"">
+        <table class=""formFields-table"">
+            <thead>
+            <tr></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class=""form-field-value"" th:text=""'Code'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{machine.code}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <td class=""form-field-value"" th:text=""'Beschreibung'"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{machine.name}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+</th:block>
+
+<h2><span th:text=""'Information'""></span></h2>
+<th:block th:if=""$d{formFields != null and !formFields.isEmpty()}"">
+    <table class=""formFields-table"">
+        <thead></thead>
+        <tbody>
+        <th:block th:each=""formField : $d{formFields}"">
+            <tr>
+                <td class=""form-field-value"" th:text=""$d{formField.label}"">...</td>
+                <td class=""form-field-value"">
+                    <th:block>
+                        <span class=""value"" th:text=""$d{formField.value}"">...</span>
+                    </th:block>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</th:block>
+
+</body>
+</html>"

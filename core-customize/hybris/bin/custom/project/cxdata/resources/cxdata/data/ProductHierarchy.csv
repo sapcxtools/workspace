@@ -1,0 +1,53 @@
+﻿Data-Locale,ID,Name,Parent,Category Image,Media Folder,Media Format
+de,10000000,Pumpen,,pump-flow-axial.png,categories,CategoryImage_480x480
+en,10000000,Pumps,,pump-flow-axial.png,categories,CategoryImage_480x480
+es,10000000,Bombas,,pump-flow-axial.png,categories,CategoryImage_480x480
+ja,10000000,ポンプ,,pump-flow-axial.png,categories,CategoryImage_480x480
+pt,10000000,Bombas,,pump-flow-axial.png,categories,CategoryImage_480x480
+zh,10000000,泵,,pump-flow-axial.png,categories,CategoryImage_480x480
+de,10010000,Strömungspumpen,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+en,10010000,Centrifugal pumps,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+es,10010000,Bombas centrífugas,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+ja,10010000,遠心ポンプ,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+pt,10010000,Bombas centrífugas,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+zh,10010000,离心泵,10000000,pump-flow-axial.png,categories,CategoryImage_480x480
+de,10010100,Axialpumpen,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+en,10010100,Axial flow pumps,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+es,10010100,Bombas de flujo axial,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+ja,10010100,軸流ポンプ,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+pt,10010100,Bombas de fluxo axial,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+zh,10010100,轴流泵,10010000,pump-flow-axial.png,categories,CategoryImage_480x480
+de,10010200,Radialpumpen,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+en,10010200,Radial flow pumps,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+es,10010200,Bombas de flujo radial,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+ja,10010200,ラジアルポンプ,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+pt,10010200,Bombas de fluxo radial,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+zh,10010200,径流泵,10010000,pump-flow-radial.png,categories,CategoryImage_480x480
+de,10010300,Seitenkanalpumpen,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+en,10010300,Side channel pumps,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+es,10010300,Bombas de canal lateral,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+ja,10010300,サイドチャネルポンプ,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+pt,10010300,Bombas de canal lateral,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+zh,10010300,侧通道泵,10010000,pump-flow-sidechannel.png,categories,CategoryImage_480x480
+de,10020000,Verdrängerpumpen,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+en,10020000,Positive displacement pumps,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+es,10020000,Bombas de desplazamiento positivo,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+ja,10020000,容積式ポンプ,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+pt,10020000,Bombas de deslocamento positivo,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+zh,10020000,容积泵,10000000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+de,10020100,Membranpumpen,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+en,10020100,Diaphragm pumps,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+es,10020100,Bombas de diafragma,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+ja,10020100,ダイヤフラムポンプ,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+pt,10020100,Bombas de diafragma,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+zh,10020100,隔膜泵,10020000,pump-displacement-diaphragm.png,categories,CategoryImage_480x480
+de,10020200,Drehkolbenpumpen,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+en,10020200,Rotary lobe pumps,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+es,10020200,Bombas de lóbulos rotativos,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+ja,10020200,ロータリーロブポンプ,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+pt,10020200,Bombas de lóbulos rotativos,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+zh,10020200,回转凸轮泵,10020000,pump-displacement-rotarylobe.png,categories,CategoryImage_480x480
+de,20000000,Ersatzteile,,spare-parts.png,categories,CategoryImage_480x480
+en,20000000,Sparte Parts,,spare-parts.png,categories,CategoryImage_480x480
+de,99999999,Meine Pumpen,10000000,,categories,CategoryImage_480x480
+en,99999999,My Pumps,10000000,,categories,CategoryImage_480x480

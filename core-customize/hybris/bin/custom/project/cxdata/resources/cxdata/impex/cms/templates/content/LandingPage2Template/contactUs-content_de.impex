@@ -1,0 +1,21 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$lang = de
+
+$pageId = contactUs
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Kontakt"
+
+UPDATE CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]           ; content[lang = $lang]
+                            ;                          ; $pageId-WelcomeTextParagraph ; "<h2>Willkommen im CX Kontakt Bereich</h2>"
+                            ;                          ; $pageId-ParagraphComponent   ; "Kontaktieren Sie uns über das untenstehende Formular oder senden Sie uns eine E-Mail an support@yourcompany.com. Unser Team wird sich so schnell wie möglich bei Ihnen melden."

@@ -1,0 +1,79 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$vendorId = $config-cxdata.import.defaults.vendor.id
+$vendorName = $config-cxdata.import.defaults.vendor.name
+$warehouseId = $config-cxdata.import.defaults.warehouse.id
+$warehouseName = $config-cxdata.import.defaults.warehouse.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+$profileName = SearchProfile-$siteId
+$solrIndexedType = Product
+$solrIndexerUserId = admin
+
+$solrServerConfigName = Default
+$solrConfigName = SolrConfig-$siteId
+$indexConfigName = IndexConfig-$siteId
+$fullIndexCronJob = Solr-FullIndex-$siteId-CronJob
+$updateIndexCronJob = Solr-UpdateIndex-$siteId-CronJob
+$deleteIndexCronJob = Solr-DeleteIndex-$siteId-CronJob
+
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$classAttribute = classificationAttribute(code,$classSystemVersion)
+$classClass = classificationClass(code,$classCatalogVersion)
+$classAttributeAssignment = classAttributeAssignment($classClass,$classAttribute,$classSystemVersion)
+
+# Classification feature properties
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]   ; displayName[lang = $primaryLang]; displayName[lang = $optionalLang1]; localized[default = true]; $classAttributeAssignment                             ; facetDisplayType(code); type(code)[default = double]; customFacetSortProvider[default = facetNameSortProviderAscending]; facetType(code)[default = MultiSelectOr]; facet[default = true]; fieldValueProvider[default = commerceClassificationPropertyValueProvider]; priority
+                                 ; $profileName-$solrIndexedType             ; maximum_driving_speed ; Max. Driving Speed              ; Max. Antriebsdrehzahl             ;                          ; centrifugal-pumps:::maximum_driving_speed::::         ; slider                ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+                                 ; $profileName-$solrIndexedType             ; head                  ; Head                            ; Förderhöhe                        ;                          ; centrifugal-pumps:::head::::                          ; slider                 ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+                                 ; $profileName-$solrIndexedType             ; maximum_flow_rate     ; Max. Flow Rate                  ; Max. Durchflussrate               ;                          ; pumps:::maximum_flow_rate::::                         ; slider                ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+                                 ; $profileName-$solrIndexedType             ; engine_power          ; Engine Power                    ; Motorleistung                     ;                          ; pumps:::engine_power::::                              ; slider                 ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+                                 ; $profileName-$solrIndexedType             ; displacement_volume   ; Displacement volume             ; Verdrängungsvolumen               ;                          ; positive_displacement_pumps:::displacement_volume:::: ; slider                ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+                                 ; $profileName-$solrIndexedType             ; maximum_pressure      ; Max. Pressure                   ; Max. Druck                        ;                          ; positive_displacement_pumps:::maximum_pressure::::    ; slider                 ;                             ;                                                                  ;                                         ;                      ;                                                                          ; 1000 ;
+
+INSERT_UPDATE SolrSearchQueryProperty; indexedProperty(name, solrIndexedType(identifier))[unique = true]; facet[default = true]; facetType(code); priority; facetDisplayNameProvider; facetSortProvider; facetTopValuesProvider   ; includeInResponse[default = true]; searchQueryTemplate(name, indexedType(identifier))[unique = true][default = DEFAULT:$profileName-$solrIndexedType]
+                                     ; maximum_driving_speed:$profileName-$solrIndexedType              ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;
+                                     ; head:$profileName-$solrIndexedType                               ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;
+                                     ; maximum_flow_rate:$profileName-$solrIndexedType                  ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;
+                                     ; engine_power:$profileName-$solrIndexedType                       ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;
+                                     ; displacement_volume:$profileName-$solrIndexedType                ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;
+                                     ; maximum_pressure:$profileName-$solrIndexedType                   ;                      ; MultiSelectOr  ; 4000    ;                         ;                  ; defaultTopValuesProvider ;                                  ;

@@ -1,0 +1,35 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$siteResource = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/cms/templates/customer/CompanyPageTemplate/images
+$lang = de
+$pageId = myCompany
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "Meine Organisation"
+
+INSERT_UPDATE Media; $contentCV[unique = true]; code[unique = true]           ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite = true]; mime[default = 'image/png']; realfilename        ; folder(qualifier)[default = 'images']; altText
+                   ;                          ; AccountSummaryHomeLinkImageDe ; $siteResource/account-summary.svg                                                              ;                            ; account-summary.svg ;                                      ; [de] Account Summaries
+                   ;                          ; BudgetsHomeLinkImageDe        ; $siteResource/budgets.svg                                                                      ;                            ; budgets.svg         ;                                      ; [de] Budgets
+                   ;                          ; CostCentersHomeLinkImageDe    ; $siteResource/cost-centers.svg                                                                 ;                            ; cost-centers.svg    ;                                      ; [de] Cost Centers
+                   ;                          ; PurchaseLimitsHomeLinkImageDe ; $siteResource/purchase-limits.svg                                                              ;                            ; purchase-limits.svg ;                                      ; [de] Purchase Limits
+                   ;                          ; UnitsHomeLinkImageDe          ; $siteResource/units.svg                                                                        ;                            ; units.svg           ;                                      ; [de] Units
+                   ;                          ; UserGroupsHomeLinkImageDe     ; $siteResource/user-groups.svg                                                                  ;                            ; user-groups.svg     ;                                      ; [de] User Groups
+                   ;                          ; UsersHomeLinkImageDe          ; $siteResource/users.svg                                                                        ;                            ; users.svg           ;                                      ; [de] Users
+
+INSERT_UPDATE BannerComponent; $contentCV[unique = true]; uid[unique = true]     ; headline[lang = de]; content[lang = de]                                                                                                                                                                                                                                                                           ; media(code, $contentCV)[lang = de]
+                             ;                          ; AccountSummaryHomeLink ; Kontoübersicht     ; In der Kontoübersicht können Sie allgemeine Informationen zu einer Einheit einsehen, darunter Salden und eine Fälligkeitsübersicht der Rechnungen. Hier können Sie auch eine Liste der Transaktionsbelege für eine Einheit durchsehen.                                                       ; AccountSummaryHomeLinkImageDe
+                             ;                          ; BudgetsHomeLink        ; Budgets            ; Budgets werden Kostenstellen zugewiesen und legen allgemeine Einkaufsgrenzen fest.                                                                                                                                                                                                           ; BudgetsHomeLinkImageDe
+                             ;                          ; CostCentersHomeLink    ; Kostenstellen      ; Alle Bestellungen, die über das Einkaufskonto Ihrer Organisation aufgegeben werden, werden zu Nachverfolgungszwecken einer Kostenstelle zugeordnet. Jede Einheit kann mehreren Kostenstellen zugeordnet sein.                                                                                ; CostCentersHomeLinkImageDe
+                             ;                          ; PurchaseLimitsHomeLink ; Kaufbeschränkungen ; Mit Kauflimits können Sie die Ausgaben kontrollieren, indem Sie festlegen, wie viel Käufer pro Bestellung oder pro Woche, Monat, Quartal oder Jahr ausgeben dürfen. Kauflimits können einzelnen Benutzern und Benutzergruppen zugewiesen werden.                                             ; PurchaseLimitsHomeLinkImageDe
+                             ;                          ; UnitsHomeLink          ; Einheiten          ; Einheiten stehen für Abteilungen, Filialen, Regionen oder jede andere logische Gruppierung, die für Sie sinnvoll ist. Genehmiger werden Einheiten und einzelnen Benutzern zugewiesen. In den Einheiten werden auch die Lieferadressen gespeichert, die Käufer beim Einkauf verwenden können. ; UnitsHomeLinkImageDe
+                             ;                          ; UserGroupsHomeLink     ; Benutzergruppen    ; Mit Benutzergruppen können Sie Benutzer zu Gruppen zusammenfassen, um ihnen Einkaufslimits zuzuweisen.                                                                                                                                                                                       ; UserGroupsHomeLinkImageDe
+                             ;                          ; UsersHomeLink          ; Benutzer           ; Benutzer sind die Einkäufer, Genehmiger, Manager und Administratoren Ihres Unternehmens. Jedem Benutzer wird eine Rolle zugewiesen, die ihm das Tätigen oder Genehmigen von Einkäufen ermöglicht.                                                                                            ; UsersHomeLinkImageDe

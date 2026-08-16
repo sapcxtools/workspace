@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
-	<!-- Modelling of Dto and WsDto items, typically filled by the mapping framework from Data items -->
-</beans>

@@ -1,0 +1,45 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true] ; name       ; parent(uid, $contentCV)
+                               ;                          ; CxCategoryNavNode ; Categories ; CxLoggedInNavNode
+## entries of CxDashboardNavNode ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]      ; name                    ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; CxCategoryNavNodeEntry ; CxCategoryNavNodeEntry ; CxCategoryNavNode             ; CxCategoryLink
+
+## links of the above navigattion entries ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name            ; url         ; target(code)[default = 'sameWindow']
+                              ;                          ; CxCategoryLink   ; CxCategoryLink ; /c/10000000 ;
+
+##---- level 4. children of CxCategoryNavNode ----##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]      ; name                        ; parent(uid, $contentCV)
+                               ;                          ; AxialFlowPumpsNavNode   ; Axial Flow Pumps Category   ; CxCategoryNavNode
+                               ;                          ; RadialFlowPumpsNavNode  ; Radial Flow Pumps Category  ; CxCategoryNavNode
+                               ;                          ; SideChannelPumpsNavNode ; Side Channel Pumps Category ; CxCategoryNavNode
+                               ;                          ; DiaphragmPumpsNavNode   ; Diaphragm Pumps Category    ; CxCategoryNavNode
+                               ;                          ; RotaryLobePumpsNavNode  ; Rotary Lobe Pumps Category  ; CxCategoryNavNode
+                               ;                          ; SparepartsNavNode       ; Spareparts Category         ; CxCategoryNavNode
+## entries of the above navigation nodes ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]           ; name                                     ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; AxialFlowPumpsNavNodeEntry   ; Axial Flow Pumps Navigation Node Entry   ; AxialFlowPumpsNavNode          ; AxialFlowPumpsCategoryLink
+                                ;                          ; RadialFlowPumpsNavNodeEntry  ; Radial Flow Pumps Navigation Node Entry  ; RadialFlowPumpsNavNode         ; RadialFlowPumpsCategoryLink
+                                ;                          ; SideChannelPumpsNavNodeEntry ; Side Channel Pumps Navigation Node Entry ; SideChannelPumpsNavNode        ; SideChannelPumpsCategoryLink
+                                ;                          ; DiaphragmPumpsNavNodeEntry   ; Diaphragm Pumps Navigation Node Entry    ; DiaphragmPumpsNavNode          ; DiaphragmPumpsCategoryLink
+                                ;                          ; RotaryLobePumpsNavNodeEntry  ; Rotary Lobe Pumps Navigation Node Entry  ; RotaryLobePumpsNavNode         ; RotaryLobePumpsCategoryLink
+                                ;                          ; SparepartsNavNodeEntry       ; Spareparts Navigation Node Entry         ; SparepartsNavNode              ; SparepartsCategoryLink
+## links of the above navigation nodes ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]           ; name                             ; url                                                             ; target(code)[default = 'sameWindow']
+                              ;                          ; AxialFlowPumpsCategoryLink   ; Axial Flow Pumps Category Link   ; /Pumps/Centrifugal-pumps/Axial-flow-pumps/c/10010100            ;
+                              ;                          ; RadialFlowPumpsCategoryLink  ; Radial Flow Pumps Category Link  ; /Pumps/Centrifugal-pumps/Radial-flow-pumps/c/10010200           ;
+                              ;                          ; SideChannelPumpsCategoryLink ; Side Channel Pumps Category Link ; /Pumps/Centrifugal-pumps/Side-channel-pumps/c/10010300          ;
+                              ;                          ; DiaphragmPumpsCategoryLink   ; Diaphragm Pumps Category Link    ; /Pumps/Positive-displacement-pumps/Diaphragm-pumps/c/10020100   ;
+                              ;                          ; RotaryLobePumpsCategoryLink  ; Rotary Lobe Pumps Category Link  ; /Pumps/Positive-displacement-pumps/Rotary-lobe-pumps/c/10020200 ;
+                              ;                          ; SparepartsCategoryLink       ; Spareparts Category Link         ; /c/20000000                                                     ;

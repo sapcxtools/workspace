@@ -1,6 +1,0 @@
-Data-Locale,UUID,OrgID,SAPPublicKey,Partner role,Billing,Shipping,Unloading,Contact,AdrBook,Company Name,Line1,Line2,Postal Code,City,Country,First Name,Last Name,Email,Phone,OrgIDs
-,USR_1001,ORG_1001,USR_1001|USR_1001|BUS1006001|null,,false,false,false,true,false,Solo Robotics Main,Robo Street 1,,10115,Berlin,DE,Max,Mustermann,owner@local.cxdev.me,+49 30 1234567,"ORG_1001,b2badmingroup"
-,USR_2001,ORG_2000,USR_2001|USR_2001|BUS1006001|null,,false,false,false,true,false,Future Mfg Headquarters,Future Avenue 100,,20095,Hamburg,DE,Sarah,Connor,director@local.cxdev.me,+49 40 987654,"ORG_2000,b2badmingroup"
-,USR_2002,ORG_2000,USR_2002|USR_2002|BUS1006001|null,,false,false,false,true,false,Future Mfg Headquarters,Future Avenue 100,,20095,Hamburg,DE,John,Smith,buyer@local.cxdev.me,+49 40 987655,"ORG_2000,b2bapprovergroup,b2bmanagergroup"
-,USR_2003,ORG_2001,USR_2003|USR_2003|BUS1006001|null,,false,false,false,true,false,Plant Hamburg,Future Avenue 100,,20095,Hamburg,DE,Hans,Meier,lead.hamburg@local.cxdev.me,+49 40 987656,ORG_2001
-,USR_2004,ORG_2002,USR_2004|USR_2004|BUS1006001|null,,false,false,false,true,false,Plant Dresden,Industry Road 5,,01067,Dresden,DE,Anna,Schmidt,lead.dresden@local.cxdev.me,+49 351 123456,ORG_2002

@@ -1,0 +1,25 @@
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; InboundProductFeature
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]; code[unique = true]; type(code)     ; root[default = false]
+                                   ; InboundProductFeature                 ; ProductFeature     ; ProductFeature ;
+                                   ; InboundProductFeature                 ; Product            ; Product        ; true
+                                   ; InboundProductFeature                 ; Catalog            ; Catalog        ;
+                                   ; InboundProductFeature                 ; CatalogVersion     ; CatalogVersion ;
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true]; attributeName[unique = true]; attributeDescriptor(enclosingType(code), qualifier); returnIntegrationObjectItem(integrationObject(code), code); unique[default = false]; autoCreate[default = false]
+                                            ; InboundProductFeature:ProductFeature                               ; qualifier                   ; ProductFeature:qualifier                           ;                                                           ; true                   ;
+                                            ; InboundProductFeature:ProductFeature                               ; value                       ; ProductFeature:value                               ;                                                           ;                        ;
+                                            ; InboundProductFeature:ProductFeature                               ; product                     ; ProductFeature:product                             ; InboundProductFeature:Product                             ; true                   ;
+                                            ; InboundProductFeature:ProductFeature                               ; author                      ; ProductFeature:author                              ;                                                           ;                        ;
+                                            ; InboundProductFeature:ProductFeature                               ; valuePosition               ; ProductFeature:valuePosition                       ;                                                           ; true                   ;
+                                            ; InboundProductFeature:Product                                      ; catalogVersion              ; Product:catalogVersion                             ; InboundProductFeature:CatalogVersion                      ; true                   ;
+                                            ; InboundProductFeature:Product                                      ; features                    ; Product:features                                   ; InboundProductFeature:ProductFeature                      ;                        ;
+                                            ; InboundProductFeature:Product                                      ; code                        ; Product:code                                       ;                                                           ; true                   ;
+                                            ; InboundProductFeature:Catalog                                      ; id                          ; Catalog:id                                         ;                                                           ; true                   ;
+                                            ; InboundProductFeature:CatalogVersion                               ; active                      ; CatalogVersion:active                              ;                                                           ;                        ;
+                                            ; InboundProductFeature:CatalogVersion                               ; version                     ; CatalogVersion:version                             ;                                                           ; true                   ;
+                                            ; InboundProductFeature:CatalogVersion                               ; catalog                     ; CatalogVersion:catalog                             ; InboundProductFeature:Catalog                             ; true                   ;
+
+INSERT_UPDATE InboundChannelConfiguration; integrationObject(code)[unique = true]; authenticationType(code)
+                                         ; InboundProductFeature                 ; BASIC

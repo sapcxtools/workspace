@@ -1,0 +1,64 @@
+﻿Data-Locale,UUID,OrgID,SapPublicKey,Partner role,Billing,Shipping,Unloading,Contact,AdrBook,Company Name,Street,Number,Postal Code,City,Country
+,8800000001,8000001000,8000001000|8800000001|KNA1|RE,RE,true,false,false,false,true,Feuerwehrbedarf Europa GmbH,Blaulichtweg,22,50667,Köln,DE
+,8800000002,8000001000,8000001000|8800000002|KNA1|WE,WE,false,true,false,false,true,Feuerwehrbedarf Europa GmbH,Blaulichtweg,22,50667,Köln,DE
+,8800000003,8000002000,8000002000|8800000003|KNA1|RE,RE,true,false,false,false,true,Royal Fire Brigade Supplies Ltd.,Rescue Street,15,M15AA,Manchester,GB
+,8800000004,8000002000,8000002000|8800000004|KNA1|WE,WE,false,true,false,false,true,Royal Fire Brigade Supplies Ltd.,Rescue Street,15,M15AA,Manchester,GB
+,8800000005,8000003000,8000003000|8800000005|KNA1|RE,RE,true,false,false,false,true,American Rescue Supplies Inc.,Rescue Avenue,101,10001,New York,US
+,8800000006,8000003000,8000003000|8800000006|KNA1|WE,WE,false,true,false,false,true,American Rescue Supplies Inc.,Rescue Avenue,101,10001,New York,US
+,8800000007,8000004000,8000004000|8800000007|KNA1|RE,RE,true,false,false,false,true,Shanghai Industrial Fluids Co.,Huangpu Road,56,200000,Shanghai,CN
+,8800000008,8000004000,8000004000|8800000008|KNA1|WE,WE,false,true,false,false,true,Shanghai Industrial Fluids Co.,Huangpu Road,56,200000,Shanghai,CN
+,8800000009,8100001000,8100001000|8800000009|KNA1|RE,RE,true,false,false,false,true,Nordwasserwerke GmbH,Am Flussufer,12,20095,Hamburg,DE
+,8800000010,8100001000,8100001000|8800000010|KNA1|WE,WE,false,true,false,false,true,Nordwasserwerke GmbH,Am Flussufer,12,20095,Hamburg,DE
+,8800000011,8100001001,8100001001|8800000011|KNA1|RE,RE,true,false,false,false,true,Nordwasserwerke GmbH (Nord),Norduferstraße,10,20097,Hamburg,DE
+,8800000012,8100001001,8100001001|8800000012|KNA1|WE,WE,false,true,false,false,true,Nordwasserwerke GmbH (Nord),Norduferstraße,10,20097,Hamburg,DE
+,8800000013,8100001001,8100001001|8800000013|KNA1|WE,WE,false,true,false,false,true,Nordwasserwerke GmbH (Nord) Warenausgang 2,Peutestraße,44,20539,Hamburg,DE
+,8800000014,8100001002,8100001002|8800000014|KNA1|RE,RE,true,false,false,false,true,Nordwasserwerke GmbH (Süd),Südallee,3,80339,München,DE
+,8800000015,8100001002,8100001002|8800000015|KNA1|WE,WE,false,true,false,false,true,Nordwasserwerke GmbH (Süd),Südallee,3,80339,München,DE
+,8800000016,8100001003,8100001003|8800000016|KNA1|RE,RE,true,false,false,false,true,Nordwasserwerke GmbH (West),Weststraße,45,40210,Düsseldorf,DE
+,8800000017,8100001003,8100001003|8800000017|KNA1|WE,WE,false,true,false,false,true,Nordwasserwerke GmbH (West),Weststraße,45,40210,Düsseldorf,DE
+,8800000018,8100001003,8100001003|8800000018|KNA1|RE,RE,true,false,false,false,true,Nordwasserwerke GmbH (West) Buchhaltung 2,Königsallee,92,40212,Düsseldorf,DE
+,8800000019,8100002000,8100002000|8800000019|KNA1|RE,RE,true,false,false,false,true,Südliche Pumpendienste AG,Pumpenstraße,7,80331,München,DE
+,8800000020,8100002000,8100002000|8800000020|KNA1|WE,WE,false,true,false,false,true,Südliche Pumpendienste AG,Pumpenstraße,7,80331,München,DE
+,8800000021,8100002001,8100002001|8800000021|KNA1|RE,RE,true,false,false,false,true,Südliche Pumpendienste AG (Nord),Nordring,22,70173,Stuttgart,DE
+,8800000022,8100002001,8100002001|8800000022|KNA1|WE,WE,false,true,false,false,true,Südliche Pumpendienste AG (Nord),Nordring,22,70173,Stuttgart,DE
+,8800000023,8100002001,8100002001|8800000023|KNA1|WE,WE,false,true,false,false,true,Südliche Pumpendienste AG (Nord) Rampe B,Hafenstraße,3,70376,Stuttgart,DE
+,8800000024,8100002002,8100002002|8800000024|KNA1|RE,RE,true,false,false,false,true,Südliche Pumpendienste AG (Süd),Südstraße,8,94032,Passau,DE
+,8800000025,8100002002,8100002002|8800000025|KNA1|WE,WE,false,true,false,false,true,Südliche Pumpendienste AG (Süd),Südstraße,8,94032,Passau,DE
+,8800000026,8100002003,8100002003|8800000026|KNA1|RE,RE,true,false,false,false,true,Südliche Pumpendienste AG (West),Westuferweg,14,60311,Frankfurt,DE
+,8800000027,8100002003,8100002003|8800000027|KNA1|WE,WE,false,true,false,false,true,Südliche Pumpendienste AG (West),Westuferweg,14,60311,Frankfurt,DE
+,8800000028,8100002003,8100002003|8800000028|KNA1|RE,RE,true,false,false,false,true,Südliche Pumpendienste AG (West) Finance,Mainzer Landstraße,50,60325,Frankfurt,DE
+,8800000029,8100003000,8100003000|8800000029|KNA1|RE,RE,true,false,false,false,true,Westkraft Kläranlagen GmbH,Industrieweg,88,44137,Dortmund,DE
+,8800000030,8100003000,8100003000|8800000030|KNA1|WE,WE,false,true,false,false,true,Westkraft Kläranlagen GmbH,Industrieweg,88,44137,Dortmund,DE
+,8800000031,8100003001,8100003001|8800000031|KNA1|RE,RE,true,false,false,false,true,Westkraft Kläranlagen GmbH (Nord),Nordhafenweg,99,24103,Kiel,DE
+,8800000032,8100003001,8100003001|8800000032|KNA1|WE,WE,false,true,false,false,true,Westkraft Kläranlagen GmbH (Nord),Nordhafenweg,99,24103,Kiel,DE
+,8800000033,8100003002,8100003002|8800000033|KNA1|RE,RE,true,false,false,false,true,Westkraft Kläranlagen GmbH (Süd),Südtorplatz,7,89073,Ulm,DE
+,8800000034,8100003002,8100003002|8800000034|KNA1|WE,WE,false,true,false,false,true,Westkraft Kläranlagen GmbH (Süd),Südtorplatz,7,89073,Ulm,DE
+,8800000035,8100003002,8100003002|8800000035|KNA1|WE,WE,false,true,false,false,true,Westkraft Kläranlagen GmbH (Süd) Lager 2,Magirusstraße,15,89077,Ulm,DE
+,8800000036,8100003003,8100003003|8800000036|KNA1|RE,RE,true,false,false,false,true,Westkraft Kläranlagen GmbH (West),Westallee,21,45127,Essen,DE
+,8800000037,8100003003,8100003003|8800000037|KNA1|WE,WE,false,true,false,false,true,Westkraft Kläranlagen GmbH (West),Westallee,21,45127,Essen,DE
+,8800000038,8200001000,8200001000|8800000038|KNA1|RE,RE,true,false,false,false,true,Europäische Klärwerke AG,Wasserstraße,5,10117,Berlin,DE
+,8800000039,8200001000,8200001000|8800000039|KNA1|WE,WE,false,true,false,false,true,Europäische Klärwerke AG,Wasserstraße,5,10117,Berlin,DE
+,8800000040,8200001001,8200001001|8800000040|KNA1|RE,RE,true,false,false,false,true,Europäische Klärwerke AG (Deutschland),Wasserstraße,5,10117,Berlin,DE
+,8800000041,8200001001,8200001001|8800000041|KNA1|WE,WE,false,true,false,false,true,Europäische Klärwerke AG (Deutschland),Gewerbepark Süd,2,12489,Berlin,DE
+,8800000042,8200001002,8200001002|8800000042|KNA1|RE,RE,true,false,false,false,true,Europäische Klärwerke AG (Spanien),Calle del Agua,12,28010,Madrid,ES
+,8800000043,8200001002,8200001002|8800000043|KNA1|WE,WE,false,true,false,false,true,Europäische Klärwerke AG (Spanien),Avenida del Puerto,41,46024,Valencia,ES
+,8800000044,8200001002,8200001002|8800000044|KNA1|WE,WE,false,true,false,false,true,Europäische Klärwerke AG (Spanien) Nave 2,Polígono Río,8,41092,Sevilla,ES
+,8800000045,8200001003,8200001003|8800000045|KNA1|RE,RE,true,false,false,false,true,Europäische Klärwerke AG (Großbritannien),River Lane,33,SW1P1AA,London,GB
+,8800000046,8200001003,8200001003|8800000046|KNA1|WE,WE,false,true,false,false,true,Europäische Klärwerke AG (Großbritannien),Dockside Road,12,E16,London,GB
+,8800000047,8200002000,8200002000|8800000047|KNA1|RE,RE,true,false,false,false,true,Agua Limpia S.A.,Calle del Río,33,28013,Madrid,ES
+,8800000048,8200002000,8200002000|8800000048|KNA1|WE,WE,false,true,false,false,true,Agua Limpia S.A.,Calle del Río,33,28013,Madrid,ES
+,8800000049,8200002001,8200002001|8800000049|KNA1|RE,RE,true,false,false,false,true,Agua Limpia S.A. (Deutschland),Bachstraße,19,50667,Köln,DE
+,8800000050,8200002001,8200002001|8800000050|KNA1|WE,WE,false,true,false,false,true,Agua Limpia S.A. (Deutschland),Hafenstraße,6,20457,Hamburg,DE
+,8800000051,8200002002,8200002002|8800000051|KNA1|RE,RE,true,false,false,false,true,Agua Limpia S.A. (Spanien),Calle del Río,33,28013,Madrid,ES
+,8800000052,8200002002,8200002002|8800000052|KNA1|WE,WE,false,true,false,false,true,Agua Limpia S.A. (Spanien),Carretera del Norte,120,35010,Las Palmas,ES
+,8800000053,8200002003,8200002003|8800000053|KNA1|RE,RE,true,false,false,false,true,Agua Limpia S.A. (Großbritannien),River Street,11,M15AB,Manchester,GB
+,8800000054,8200002003,8200002003|8800000054|KNA1|WE,WE,false,true,false,false,true,Agua Limpia S.A. (Großbritannien),Harbor Way,25,L3,Liverpool,GB
+,8800000055,8200003000,8200003000|8800000055|KNA1|RE,RE,true,false,false,false,true,British Waterworks Ltd.,River Road,9,SW1A1AA,London,GB
+,8800000056,8200003000,8200003000|8800000056|KNA1|WE,WE,false,true,false,false,true,British Waterworks Ltd.,River Road,9,SW1A1AA,London,GB
+,8800000057,8200003001,8200003001|8800000057|KNA1|RE,RE,true,false,false,false,true,British Waterworks Ltd. (Deutschland),Wasserplatz,2,20095,Hamburg,DE
+,8800000058,8200003001,8200003001|8800000058|KNA1|WE,WE,false,true,false,false,true,British Waterworks Ltd. (Deutschland),Kattwykweg,19,21107,Hamburg,DE
+,8800000059,8200003001,8200003001|8800000059|KNA1|WE,WE,false,true,false,false,true,British Waterworks Ltd. (Deutschland) Lager 2,Billstraße,172,20539,Hamburg,DE
+,8800000060,8200003002,8200003002|8800000060|KNA1|RE,RE,true,false,false,false,true,British Waterworks Ltd. (Spanien),Calle Marina,25,08002,Barcelona,ES
+,8800000061,8200003002,8200003002|8800000061|KNA1|WE,WE,false,true,false,false,true,British Waterworks Ltd. (Spanien),Zona Portuaria,7,08039,Barcelona,ES
+,8800000062,8200003003,8200003003|8800000062|KNA1|RE,RE,true,false,false,false,true,British Waterworks Ltd. (Großbritannien),River Road,9,SW1A1AA,London,GB
+,8800000063,8200003003,8200003003|8800000063|KNA1|WE,WE,false,true,false,false,true,British Waterworks Ltd. (Großbritannien),Wharf Street,28,L1,London,GB

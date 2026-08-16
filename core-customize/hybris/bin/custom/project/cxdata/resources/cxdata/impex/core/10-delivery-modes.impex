@@ -1,0 +1,163 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$storeId = $config-cxdata.import.defaults.store.id
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+# Currencies
+$GBP = GBP
+$USD = USD
+$EUR = EUR
+
+$premiumNet = premium-net
+$standardNet = standard-net
+$dpd = dpd
+$freight = spedition
+$pickup = storePickup
+
+$zoneUk = uk
+$zoneContinentalEurope = continentalEurope
+$zoneUsa = usa
+$zoneJapan = japan
+$zoneChina = china
+
+# Delivery Zones
+INSERT_UPDATE Zone; code[unique = true]    ; countries(isocode)
+                  ; $zoneUk                ; GB
+                  ; $zoneContinentalEurope ; DE,ES
+                  ; $zoneUsa               ; US
+                  ; $zoneJapan             ; JP
+                  ; $zoneChina             ; CN
+
+# Zone Delivery Modes
+INSERT_UPDATE ZoneDeliveryMode; code[unique = true]; net  ; active[default = true]
+                              ; $premiumNet        ; true ;
+                              ; $standardNet       ; true ;
+                              ; $dpd               ; true ;
+                              ; $freight           ; true ;
+                              ; $pickup            ; true ;
+
+# UK
+INSERT_UPDATE ZoneDeliveryModeValue; deliveryMode(code)[unique = true]; zone(code)[default = $zoneUk][unique = true]; currency(isocode)[unique = true]; value ; minimum[unique = true]
+                                   ; $premiumNet                      ;                                             ; $GBP                            ; 10.99 ; 0.00
+                                   ; $premiumNet                      ;                                             ; $EUR                            ; 19.99 ; 0.00
+                                   ; $premiumNet                      ;                                             ; $USD                            ; 17.99 ; 0.00
+
+                                   ; $standardNet                     ;                                             ; $GBP                            ; 5.99  ; 0.00
+                                   ; $standardNet                     ;                                             ; $EUR                            ; 9.99  ; 0.00
+                                   ; $standardNet                     ;                                             ; $USD                            ; 9.99  ; 0.00
+
+                                   ; $dpd                             ;                                             ; $GBP                            ; 7.99  ; 0.00
+                                   ; $dpd                             ;                                             ; $EUR                            ; 12.99 ; 0.00
+                                   ; $dpd                             ;                                             ; $USD                            ; 11.99 ; 0.00
+
+                                   ; $freight                         ;                                             ; $GBP                            ; 49.99 ; 0.00
+                                   ; $freight                         ;                                             ; $EUR                            ; 69.99 ; 0.00
+                                   ; $freight                         ;                                             ; $USD                            ; 79.99 ; 0.00
+
+                                   ; $pickup                          ;                                             ; $GBP                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                             ; $EUR                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                             ; $USD                            ; 0.00  ; 0.00
+
+# Continental Europe
+INSERT_UPDATE ZoneDeliveryModeValue; deliveryMode(code)[unique = true]; zone(code)[default = $zoneContinentalEurope][unique = true]; currency(isocode)[unique = true]; value ; minimum[unique = true]
+                                   ; $premiumNet                      ;                                                            ; $GBP                            ; 11.99 ; 0.00
+                                   ; $premiumNet                      ;                                                            ; $EUR                            ; 14.99 ; 0.00
+                                   ; $premiumNet                      ;                                                            ; $USD                            ; 19.99 ; 0.00
+
+                                   ; $standardNet                     ;                                                            ; $GBP                            ; 6.99  ; 0.00
+                                   ; $standardNet                     ;                                                            ; $EUR                            ; 7.99  ; 0.00
+                                   ; $standardNet                     ;                                                            ; $USD                            ; 8.99  ; 0.00
+
+                                   ; $dpd                             ;                                                            ; $GBP                            ; 8.99  ; 0.00
+                                   ; $dpd                             ;                                                            ; $EUR                            ; 9.99  ; 0.00
+                                   ; $dpd                             ;                                                            ; $USD                            ; 12.99 ; 0.00
+
+                                   ; $freight                         ;                                                            ; $GBP                            ; 54.99 ; 0.00
+                                   ; $freight                         ;                                                            ; $EUR                            ; 49.99 ; 0.00
+                                   ; $freight                         ;                                                            ; $USD                            ; 74.99 ; 0.00
+
+                                   ; $pickup                          ;                                                            ; $GBP                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                                            ; $EUR                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                                            ; $USD                            ; 0.00  ; 0.00
+# USA
+INSERT_UPDATE ZoneDeliveryModeValue; deliveryMode(code)[unique = true]; zone(code)[default = $zoneUsa][unique = true]; currency(isocode)[unique = true]; value ; minimum[unique = true]
+                                   ; $premiumNet                      ;                                              ; $USD                            ; 19.99 ; 0.00
+                                   ; $premiumNet                      ;                                              ; $GBP                            ; 16.99 ; 0.00
+                                   ; $premiumNet                      ;                                              ; $EUR                            ; 21.99 ; 0.00
+
+                                   ; $standardNet                     ;                                              ; $GBP                            ; 11.99 ; 0.00
+                                   ; $standardNet                     ;                                              ; $EUR                            ; 9.99  ; 0.00
+                                   ; $standardNet                     ;                                              ; $USD                            ; 12.99 ; 0.00
+
+                                   ; $dpd                             ;                                              ; $GBP                            ; 14.99 ; 0.00
+                                   ; $dpd                             ;                                              ; $EUR                            ; 12.99 ; 0.00
+                                   ; $dpd                             ;                                              ; $USD                            ; 15.99 ; 0.00
+
+                                   ; $freight                         ;                                              ; $GBP                            ; 89.99 ; 0.00
+                                   ; $freight                         ;                                              ; $EUR                            ; 79.99 ; 0.00
+                                   ; $freight                         ;                                              ; $USD                            ; 67.99 ; 0.00
+
+                                   ; $pickup                          ;                                              ; $USD                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                              ; $GBP                            ; 0.00  ; 0.00
+                                   ; $pickup                          ;                                              ; $EUR                            ; 0.00  ; 0.00
+# Japan
+INSERT_UPDATE ZoneDeliveryModeValue; deliveryMode(code)[unique = true]; zone(code)[default = $zoneJapan][unique = true]; currency(isocode)[unique = true]; value  ; minimum[unique = true]
+                                   ; $premiumNet                      ;                                                ; $EUR                            ; 26.99  ; 0.00
+                                   ; $premiumNet                      ;                                                ; $GBP                            ; 20.49  ; 0.00
+                                   ; $premiumNet                      ;                                                ; $USD                            ; 24.49  ; 0.00
+
+                                   ; $standardNet                     ;                                                ; $GBP                            ; 11.49  ; 0.00
+                                   ; $standardNet                     ;                                                ; $EUR                            ; 16.99  ; 0.00
+                                   ; $standardNet                     ;                                                ; $USD                            ; 17.49  ; 0.00
+
+                                   ; $dpd                             ;                                                ; $GBP                            ; 14.99  ; 0.00
+                                   ; $dpd                             ;                                                ; $EUR                            ; 18.99  ; 0.00
+                                   ; $dpd                             ;                                                ; $USD                            ; 19.99  ; 0.00
+
+                                   ; $freight                         ;                                                ; $GBP                            ; 89.99  ; 0.00
+                                   ; $freight                         ;                                                ; $EUR                            ; 99.99  ; 0.00
+                                   ; $freight                         ;                                                ; $USD                            ; 109.99 ; 0.00
+
+                                   ; $pickup                          ;                                                ; $GBP                            ; 0.00   ; 0.00
+                                   ; $pickup                          ;                                                ; $EUR                            ; 0.00   ; 0.00
+                                   ; $pickup                          ;                                                ; $USD                            ; 0.00   ; 0.00
+
+# China
+INSERT_UPDATE ZoneDeliveryModeValue; deliveryMode(code)[unique = true]; zone(code)[default = $zoneChina][unique = true]; currency(isocode)[unique = true]; value  ; minimum[unique = true]
+                                   ; $premiumNet                      ;                                                ; $USD                            ; 14.49  ; 0.00
+                                   ; $premiumNet                      ;                                                ; $GBP                            ; 18.49  ; 0.00
+                                   ; $premiumNet                      ;                                                ; $EUR                            ; 27.99  ; 0.00
+
+                                   ; $standardNet                     ;                                                ; $EUR                            ; 18.99  ; 0.00
+                                   ; $standardNet                     ;                                                ; $GBP                            ; 9.49   ; 0.00
+                                   ; $standardNet                     ;                                                ; $USD                            ; 18.49  ; 0.00
+
+                                   ; $dpd                             ;                                                ; $GBP                            ; 16.99  ; 0.00
+                                   ; $dpd                             ;                                                ; $EUR                            ; 19.99  ; 0.00
+                                   ; $dpd                             ;                                                ; $USD                            ; 20.99  ; 0.00
+
+                                   ; $freight                         ;                                                ; $GBP                            ; 94.99  ; 0.00
+                                   ; $freight                         ;                                                ; $EUR                            ; 104.99 ; 0.00
+                                   ; $freight                         ;                                                ; $USD                            ; 119.99 ; 0.00
+
+                                   ; $pickup                          ;                                                ; $GBP                            ; 0.00   ; 0.00
+                                   ; $pickup                          ;                                                ; $EUR                            ; 0.00   ; 0.00
+                                   ; $pickup                          ;                                                ; $USD                            ; 0.00   ; 0.00
+
+INSERT_UPDATE BaseStore2DeliveryModeRel; source(uid)[unique = true]; target(code)[unique = true]
+                                       ; $storeId                  ; $premiumNet
+                                       ; $storeId                  ; $standardNet
+                                       ; $storeId                  ; $dpd
+                                       ; $storeId                  ; $freight
+                                       ; $storeId                  ; $pickup

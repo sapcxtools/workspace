@@ -1,0 +1,21 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]; name ; children(uid, $contentCV)[mode = append]
+                               ;                          ; root              ; root ;
+
+##- level 1. SiteRoot -##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]; name         ; parent(uid, $contentCV)
+                               ;                          ; SiteRootNode      ; SiteRootNode ; root
+
+##-- level 2. children of SiteRoot --##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true] ; name               ; parent(uid, $contentCV)
+                               ;                          ; CxLoggedInNavNode ; CxLoggedInNavNode ; SiteRootNode

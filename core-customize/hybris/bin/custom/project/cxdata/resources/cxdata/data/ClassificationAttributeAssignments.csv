@@ -1,0 +1,7 @@
+﻿ClassificationClass,ClassificationAttribute,AttributeType,Unit,MultiValued,Range,Mandatory
+centrifugal-pumps,maximum_driving_speed,number,rpm,false,false,false
+pumps,maximum_flow_rate,number,m3h,false,false,false
+centrifugal-pumps,head,number,m,false,false,false
+positive_displacement_pumps,displacement_volume,number,cm3_rev,false,false,false
+positive_displacement_pumps,maximum_pressure,number,bar,false,false,false
+pumps,engine_power,number,kw,false,false,false

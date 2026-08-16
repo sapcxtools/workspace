@@ -1,0 +1,13 @@
+﻿Data-Locale,ID,Name
+en,displacement_volume,Displacement volume
+en,head,Head
+en,maximum_driving_speed,Max. Driving Speed
+en,maximum_flow_rate,Max. Flow Rate
+en,maximum_pressure,Max. Pressure
+en,engine_power,Engine Power
+de,displacement_volume,Verdrängungsvolumen
+de,head,Förderhöhe
+de,maximum_driving_speed,Max. Antriebsdrehzahl
+de,maximum_flow_rate,Max. Durchflussrate
+de,maximum_pressure,Max. Druck
+de,engine_power,Motorleistung

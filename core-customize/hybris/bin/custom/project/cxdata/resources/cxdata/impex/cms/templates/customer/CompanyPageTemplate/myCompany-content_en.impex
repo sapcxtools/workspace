@@ -1,0 +1,35 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$siteResource = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/cms/templates/customer/CompanyPageTemplate/images
+$lang = en
+$pageId = myCompany
+############################################################
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; title[lang = $lang]
+                  ;                          ; $pageId           ; "My Company"
+
+INSERT_UPDATE Media; $contentCV[unique = true]; code[unique = true]           ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite = true]; mime[default = 'image/png']; realfilename        ; folder(qualifier)[default = 'images']; altText
+                   ;                          ; AccountSummaryHomeLinkImageEn ; $siteResource/account-summary.svg                                                              ;                            ; account-summary.svg ;                                      ; Account Summaries
+                   ;                          ; BudgetsHomeLinkImageEn        ; $siteResource/budgets.svg                                                                      ;                            ; budgets.svg         ;                                      ; Budgets
+                   ;                          ; CostCentersHomeLinkImageEn    ; $siteResource/cost-centers.svg                                                                 ;                            ; cost-centers.svg    ;                                      ; Cost Centers
+                   ;                          ; PurchaseLimitsHomeLinkImageEn ; $siteResource/purchase-limits.svg                                                              ;                            ; purchase-limits.svg ;                                      ; Purchase Limits
+                   ;                          ; UnitsHomeLinkImageEn          ; $siteResource/units.svg                                                                        ;                            ; units.svg           ;                                      ; Units
+                   ;                          ; UserGroupsHomeLinkImageEn     ; $siteResource/user-groups.svg                                                                  ;                            ; user-groups.svg     ;                                      ; User Groups
+                   ;                          ; UsersHomeLinkImageEn          ; $siteResource/users.svg                                                                        ;                            ; users.svg           ;                                      ; Users
+
+INSERT_UPDATE BannerComponent; $contentCV[unique = true]; uid[unique = true]     ; headline[lang = en]; content[lang = en]                                                                                                                                                                                                                       ; media(code, $contentCV)[lang = en]
+                             ;                          ; AccountSummaryHomeLink ; Account Summaries  ; Account summaries allow you to review general information about a unit, including balances and aging summary of invoices. Here, you can also browse through a list of transaction documents for a unit.                                  ; AccountSummaryHomeLinkImageEn
+                             ;                          ; BudgetsHomeLink        ; Budgets            ; Budgets are assigned to cost centers and set overall purchase limits.                                                                                                                                                                    ; BudgetsHomeLinkImageEn
+                             ;                          ; CostCentersHomeLink    ; Cost Centers       ; All orders placed through your organization's purchase account are linked to a cost center for tracking purposes. Each unit can have multiple cost centers.                                                                              ; CostCentersHomeLinkImageEn
+                             ;                          ; PurchaseLimitsHomeLink ; Purchase Limits    ; Purchase limits help you control spending by defining how much buyers can spend per order or per week, month, quarter, or year. Purchase limits can be assigned to users and user groups.                                                ; PurchaseLimitsHomeLinkImageEn
+                             ;                          ; UnitsHomeLink          ; Units              ; Units represent departments, stores, regions, or any other logical grouping that makes sense to you. Approvers are assigned to units and individual users. Units also store the shipping addresses buyers can use when making purchases. ; UnitsHomeLinkImageEn
+                             ;                          ; UserGroupsHomeLink     ; User Groups        ; User groups allow you to group users together for the purposes of assigning purchase limits.                                                                                                                                             ; UserGroupsHomeLinkImageEn
+                             ;                          ; UsersHomeLink          ; Users              ; Users are the buyers, approvers, managers, and administrators of your organization. Each user is assigned a role for making or approving purchases.                                                                                      ; UsersHomeLinkImageEn

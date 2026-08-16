@@ -1,0 +1,15 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+
+$productCatalogSync = $productCatalogId ($productCatalogEditVersion -> $productCatalogLiveVersion)
+############################################################
+
+# Trigger Full Product Catalog Synchronization (synchronously)
+#%me.cxdev.commerce.toolkit.impex.ImpExTasks.startFullCatalogSync("$productCatalogId:$productCatalogEditVersion", "$productCatalogId:$productCatalogLiveVersion", "$productCatalogSync")

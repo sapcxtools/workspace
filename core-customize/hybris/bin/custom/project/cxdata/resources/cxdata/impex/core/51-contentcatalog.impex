@@ -1,0 +1,123 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$vendorId = $config-cxdata.import.defaults.vendor.id
+$vendorName = $config-cxdata.import.defaults.vendor.name
+$warehouseId = $config-cxdata.import.defaults.warehouse.id
+$warehouseName = $config-cxdata.import.defaults.warehouse.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalog']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalog:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+############################################################
+# Catalog Structure
+############################################################
+
+# Content catalog
+INSERT_UPDATE ContentCatalog; id[unique = true] ; name[lang = $primaryLang]       ; cmsSites(uid)
+                            ; $contentCatalogId ; $contentCatalogName ($siteName) ; $siteId
+INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]     ; active; languages(isocode); readPrincipals(uid)          ; writePrincipals(uid)
+                            ; $contentCatalogId         ; $contentCatalogEditVersion ; false ; $primaryLang      ; employeegroup                ; admingroup, contentmanagergroup
+                            ; $contentCatalogId         ; $contentCatalogLiveVersion ; true  ; $primaryLang      ; employeegroup, customergroup ; admingroup, contentmanagergroup
+
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+UPDATE CatalogVersion;;;;;;;;;;;;;;;;;;;;; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+"#% beforeEach:
+    line.put(21, ""$contentCatalogId"");
+    line.put(22, ""$contentCatalogEditVersion"");
+    if (""true"".equals(line.get(3))) line.put(23, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(23, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+"#% beforeEach:
+    line.put(21, ""$contentCatalogId"");
+    line.put(22, ""$contentCatalogLiveVersion"");
+    if (""true"".equals(line.get(3))) line.put(23, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(23, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; languages(isocode)
+#                     ; $contentCatalogId         ; $contentCatalogEditVersion ; en,de
+#                     ; $contentCatalogId         ; $contentCatalogLiveVersion ; en,de
+
+$contentCatalogSync = $contentCatalogId ($contentCatalogEditVersion -> $contentCatalogLiveVersion)
+REMOVE CatalogVersionSyncJob; code[unique = true]
+                            ; $contentCatalogSync
+
+INSERT_UPDATE CatalogVersionSyncJob; code[unique = true] ; sourceVersion(catalog(id), version)          ; targetVersion(catalog(id), version)          ; syncLanguages(isocode); rootTypes(code)                          ; active; createNewItems; removeMissingItems; enableTransactions; maxSchedulerThreads; maxThreads; copyCacheSize; syncPrincipals(uid)
+                                   ; $contentCatalogSync ; $contentCatalogId:$contentCatalogEditVersion ; $contentCatalogId:$contentCatalogLiveVersion ; $primaryLang          ; CMSItem,CMSRelation,Media,MediaContainer ; true  ; true          ; true              ; false             ; 1                  ; 1         ; 5000         ; productmanagergroup
+
+############################################################
+# Variant 1: Dynamic assignment from CSV
+# Use this when data are maintained in CSV
+############################################################
+INSERT_UPDATE CatalogVersionSyncJob;;;;;;;;;;;;;;;;;;;;; code[unique = true]; syncLanguages(isocode)
+"#% beforeEach:
+    line.put(21, ""$contentCatalogSync"");
+    if (""true"".equals(line.get(3))) line.put(22, ""(+) "" + line.get(2));
+    if (""false"".equals(line.get(3))) line.put(22, ""(-) "" + line.get(2));
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$primaryLang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/Languages.csv""), ""UTF-8"", new char[]{','}, 1, -1 );"
+
+################################################################################
+# Variant 2: Static fallback without CSV input
+# Use this for quick setup when data are managed directly in this impex.
+################################################################################
+INSERT_UPDATE CatalogVersionSyncJob; code[unique = true]; syncLanguages(isocode)
+#                                   ; $contentCatalogSync ; en,de
+
+INSERT_UPDATE SyncAttributeDescriptorConfig; syncJob(code)[unique = true]; attributeDescriptor(enclosingType(code), qualifier)[unique = true]; includedInSync; copyByValue
+# Remove Attributes that we do not need
+
+
+
+UPDATE CMSSite; uid[unique = true]; contentCatalogs(id)
+              ; $siteId           ; $contentCatalogId
+

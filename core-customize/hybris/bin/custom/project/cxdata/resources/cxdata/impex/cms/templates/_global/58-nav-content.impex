@@ -1,0 +1,31 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]   ; name       ; parent(uid, $contentCV)
+                               ;                          ; CxDashboardNavNode  ; Dashboard  ; CxLoggedInNavNode
+                               ;                          ; CxMyPumpsNavNode    ; MyPumps    ; CxLoggedInNavNode
+                               ;                          ; CxQuickOrderNavNode ; QuickOrder ; CxLoggedInNavNode
+                               ;                          ; CxOrdersNavNode     ; Orders     ; CxLoggedInNavNode
+
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]        ; name                      ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; CxDashboardNavNodeEntry  ; CxDashboardNavNodeEntry  ; CxDashboardNavNode            ; CxDashboardLink
+                                ;                          ; CxMyPumpsNavNodeEntry    ; CxMyPumpsNavNodeEntry    ; CxMyPumpsNavNode              ; CxMyPumpsLink
+                                ;                          ; CxQuickOrderNavNodeEntry ; CxQuickOrderNavNodeEntry ; CxQuickOrderNavNode           ; CxQuickOrderLink
+                                ;                          ; CxOrdersNavNodeEntry     ; CxOrdersNavNodeEntry     ; CxOrdersNavNode               ; CxOrdersLink
+
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name              ; url                     ; target(code)[default = 'sameWindow']
+                              ;                          ; CxDashboardLink  ; CxDashboardLink  ; /                       ;
+                              ;                          ; CxMyPumpsLink    ; CxMyPumpsLink    ; /c/99999999             ;
+                              ;                          ; CxQuickOrderLink ; CxQuickOrderLink ; /my-account/quick-order ;
+                              ;                          ; CxOrdersLink     ; CxOrdersLink     ; /my-account/orders      ;
+
+UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true] ; children(uid, $contentCV)
+                        ;                          ; CxLoggedInNavNode ; CxDashboardNavNode, CxMyPumpsNavNode, CxCategoryNavNode, CxQuickOrderNavNode, CxOrdersNavNode

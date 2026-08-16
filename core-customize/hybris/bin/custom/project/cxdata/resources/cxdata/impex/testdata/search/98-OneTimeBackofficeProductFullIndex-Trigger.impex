@@ -1,0 +1,9 @@
+############################################################
+# Default Macros
+############################################################
+$fullBackofficeIndexCronJob = full-backofficeIndex-CronJob;
+$backofficeSFCName = Solr Config for Backoffice;
+############################################################
+
+# Trigger Full Product Catalog Synchronization (synchronously)
+#%me.cxdev.commerce.toolkit.impex.ImpExTasks.startCronJob("$fullBackofficeIndexCronJob")

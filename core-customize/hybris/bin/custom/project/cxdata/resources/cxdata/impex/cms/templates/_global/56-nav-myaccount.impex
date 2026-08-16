@@ -1,0 +1,56 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]  ; name       ; parent(uid, $contentCV)
+                               ;                          ; CxMyAccountNavNode ; My Account ;
+##----- Children of CxMyAccountNavNode -----##
+INSERT_UPDATE CMSNavigationNode; $contentCV[unique = true]; uid[unique = true]     ; name             ; parent(uid, $contentCV)
+                               ;                          ; PersonalDetailsNavNode ; Personal Details ; CxMyAccountNavNode
+                               ;                          ; AddressBookNavNode     ; Address Book     ; CxMyAccountNavNode
+                               ;                          ; PaymentDetailsNavNode  ; Payment Details  ; CxMyAccountNavNode
+                               ;                          ; MyCompanyNavNode       ; My Company       ; CxMyAccountNavNode
+                               ;                          ; OrderHistoryNavNode    ; Order History    ; CxMyAccountNavNode
+                               ;                          ; QuickOrderNavNode      ; Quick Order      ; CxMyAccountNavNode
+                               ;                          ; SavedCartsNavNode      ; Saved Carts      ; CxMyAccountNavNode
+                               ;                          ; ServiceRequestsNavNode ; Service Requests ; CxMyAccountNavNode
+                               ;                          ; SignOutNavNode         ; Logout           ; CxMyAccountNavNode
+## entries of the above navigation nodes ##
+INSERT_UPDATE CMSNavigationEntry; $contentCV[unique = true]; uid[unique = true]          ; name                        ; navigationNode(uid, $contentCV); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;                          ; PersonalDetailsNavNodeEntry ; PersonalDetailsNavNodeEntry ; PersonalDetailsNavNode         ; PersonalDetailsLink
+                                ;                          ; AddressBookNavNodeEntry     ; AddressBookNavNodeEntry     ; AddressBookNavNode             ; AddressBookLink
+                                ;                          ; PaymentDetailsNavNodeEntry  ; PaymentDetailsNavNodeEntry  ; PaymentDetailsNavNode          ; PaymentDetailsLink
+                                ;                          ; OrderHistoryNavNodeEntry    ; OrderHistoryNavNodeEntry    ; OrderHistoryNavNode            ; OrderHistoryLink
+                                ;                          ; QuickOrderNavNodeEntry      ; QuickOrderNavNodeEntry      ; QuickOrderNavNode              ; QuickOrderLink
+                                ;                          ; SavedCartsNavNodeEntry      ; SavedCartsNavNodeEntry      ; SavedCartsNavNode              ; SavedCartsLink
+                                ;                          ; MyCompanyNavNodeEntry       ; MyCompanyNavNodeEntry       ; MyCompanyNavNode               ; MyCompanyLink
+                                ;                          ; ServiceRequestsNavNodeEntry ; ServiceRequestsNavNodeEntry ; ServiceRequestsNavNode         ; ServiceRequestsLink
+                                ;                          ; SignOutNavNodeEntry         ; SignOutNavNodeEntry         ; SignOutNavNode                 ; SignOutLink
+## links of the above navigattion entries ##
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]  ; name                ; url                         ; target(code)[default = 'sameWindow']
+                              ;                          ; PersonalDetailsLink ; PersonalDetailsLink ; /my-account/update-profile  ;
+                              ;                          ; AddressBookLink     ; AddressBookLink     ; /my-account/address-book    ;
+                              ;                          ; PaymentDetailsLink  ; PaymentDetailsLink  ; /my-account/payment-details ;
+                              ;                          ; OrderHistoryLink    ; OrderHistoryLink    ; /my-account/orders          ;
+                              ;                          ; QuickOrderLink      ; QuickOrderLink      ; /my-account/quick-order     ;
+                              ;                          ; SavedCartsLink      ; SavedCartsLink      ; /my-account/saved-carts     ;
+                              ;                          ; MyCompanyLink       ; MyCompanyLink       ; /organization               ;
+                              ;                          ; ServiceRequestsLink ; ServiceRequestsLink ; /service-requests           ;
+                              ;                          ; SignOutLink         ; SignOutLink         ; /logout                     ;
+
+INSERT_UPDATE CMSUserGroupRestriction; $contentCV[unique = true]; uid[unique = true]                    ; name                                       ; userGroups(uid)  ; includeSubgroups; components(uid, $contentCV)
+                                     ;                          ; MyAccountLinkCustomerGroupRestriction ; My Account Link Customer Group Restriction ; b2bcustomergroup ; true            ; MyCompanyLink
+                                     ;                          ; MyAccountLinkAdminGroupRestriction    ; My Account Link Admin Group Restriction    ; b2badmingroup    ; true            ; MyCompanyLink
+
+INSERT_UPDATE NavigationComponent; $contentCV[unique = true]; uid[unique = true] ; name       ; styleClass      ; navigationNode(uid, $contentCV); restrictions(uid, $contentCV)
+                                 ;                          ; MyAccountComponent ; My Account ; accNavComponent ; CxMyAccountNavNode            ; loggedInUser
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)[mode = append]
+                         ;                          ; HeaderLinksSlot   ; MyAccountComponent

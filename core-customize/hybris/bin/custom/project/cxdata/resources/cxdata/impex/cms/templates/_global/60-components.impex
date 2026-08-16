@@ -1,0 +1,99 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+############################################################
+
+###### SiteLogoSlot ######
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(&componentRef)
+                  ;                          ; SiteLogoSlot      ; SiteLogoComponent
+
+INSERT_UPDATE SimpleBannerComponent; $contentCV[unique = true]; uid[unique = true]; name                ; &componentRef     ; urlLink
+                                   ;                          ; SiteLogoComponent ; Site Logo Component ; SiteLogoComponent ; "/"
+
+###### CmsSiteContext ######
+INSERT_UPDATE CmsSiteContext; code[unique = true]; name[lang = en]
+                            ; LANGUAGE           ; "language"
+                            ; CURRENCY           ; "currency"
+
+INSERT_UPDATE CMSSiteContextComponent; $contentCV[unique = true]; uid[unique = true]; name            ; context(code)
+                                     ;                          ; LanguageComponent ; Site Languages  ; LANGUAGE
+                                     ;                          ; CurrencyComponent ; Site Currencies ; CURRENCY
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; name              ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; SiteContextSlot   ; Site Context Slot ; true  ; LanguageComponent,CurrencyComponent
+
+###### SiteLinksSlot ######
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name     ; url  ; target(code)[default = 'sameWindow']; restrictions(uid, $contentCV)
+                              ;                          ; FAQLink           ; FAQ Link ; /faq ;                                     ;
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; name                     ; active; cmsComponents(uid, $contentCV)
+                  ;                          ; SiteLinksSlot     ; Slot contains some links ; true  ; FAQLink
+
+
+###### NavigationBarSlot ######
+INSERT_UPDATE CategoryNavigationComponent; $contentCV[unique = true]; uid[unique = true]    ; name                           ; navigationNode(uid, $contentCV); wrapAfter; restrictions(uid, $contentCV)
+                                         ;                          ; LoggedInNavComponent  ; LoggedIn Navigation Component  ; CxLoggedInNavNode             ; 6        ; loggedInUser
+                                         ;                          ; AnonymousNavComponent ; Anonymous Navigation Component ; CxAnonymousNavNode            ; 6        ; anonymousUserRestriction
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; NavigationBarSlot ; LoggedInNavComponent,AnonymousNavComponent
+
+
+###### BottomHeaderSlot ######
+INSERT_UPDATE BreadcrumbComponent; $contentCV[unique = true]; uid[unique = true]  ; name
+                                 ;                          ; BreadcrumbComponent ; Breadcrumb CMS Component
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true] ; name                  ; flexType
+                              ;                          ; PageTitleComponent ; Page Header Component ; PageTitleComponent
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; BottomHeaderSlot  ; BreadcrumbComponent, PageTitleComponent
+
+
+###### MiniCartSlot ######
+INSERT_UPDATE MiniCartComponent; $contentCV[unique = true]; uid[unique = true]; name      ; totalDisplay(code); shownProductCount; restrictions(uid, $contentCV)
+                               ;                          ; MiniCart          ; Mini Cart ; SUBTOTAL          ; 3                ; loggedInUser
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; MiniCartSlot      ; MiniCart
+
+
+###### HomepageNavLinkSlot ######
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]  ; cmsComponents(uid, $contentCV)
+                         ;                          ; HomepageNavLinkSlot ; HomepageNavLink
+
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name               ; url; target(code)[default = 'sameWindow']; restrictions(uid, $contentCV)
+                              ;                          ; HomepageNavLink   ; Home Page Nav Link ; /  ;                                     ;
+
+
+###### SearchBoxSlot ######
+INSERT_UPDATE SearchBoxComponent; $contentCV[unique = true]; uid[unique = true]; name       ; restrictions(uid, $contentCV); minCharactersBeforeRequest; maxProducts; maxSuggestions; waitTimeBeforeRequest
+                                ;                          ; SearchBox         ; Search Box ; loggedInUser                 ; 0                         ; 5          ; 5             ; 0
+
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                  ;                          ; SearchBoxSlot     ; SearchBox
+
+
+###### GLOBAL COMPONENTS ######
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]                    ; name                                      ; flexType
+                              ;                          ; QuickOrderComponent                   ; Quick Order Component                     ; QuickOrderComponent
+                              ;                          ; CheckoutOrderSummaryComponent         ; Checkout OrderSummary Component           ; CheckoutOrderSummary
+                              ;                          ; CheckoutProgressComponent             ; Checkout Progress Component               ; CheckoutProgress
+                              ;                          ; CheckoutProgressMobileTopComponent    ; Checkout Progress Mobile Top Component    ; CheckoutProgressMobileTop
+                              ;                          ; CheckoutProgressMobileBottomComponent ; Checkout Progress Mobile Bottom Component ; CheckoutProgressMobileBottom
+                              ;                          ; CheckoutCostCenterComponent           ; Checkout Cost Center Component            ; CheckoutCostCenterComponent
+                              ;                          ; ExportOrderEntriesComponent           ; Export Order Entries Component            ; ExportOrderEntriesComponent
+
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name            ; url    ; target(code)[default = 'sameWindow']; restrictions(uid, $contentCV)
+                              ;                          ; LoginLink         ; Login Page Link ; /login ;                                     ; anonymousUserRestriction
+
+###### GLOBAL ACTIONS ######
+INSERT_UPDATE ListAddToCartAction; $contentCV[unique = true]; uid[unique = true]  ; url        ; name
+                                 ;                          ; ListAddToCartAction ; /cart/add  ; List Add To Cart Action
+                                 ;                          ; ListOrderFormAction ; /orderForm ; Order Form Action

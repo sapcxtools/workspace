@@ -1,0 +1,26 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$pageId = searchResultsGrid
+$pageName = Search Grid Results Page
+$pageLabel = /searchGrid
+$masterTemplate = SearchResultsGridPageTemplate
+############################################################
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label      ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; $pageId           ; $pageName ; $masterTemplate                ; $pageLabel ;                              ;                                           ;
+
+# Create components for page
+INSERT_UPDATE SearchResultsGridComponent; $contentCV[unique = true]; uid[unique = true]; name                         ; actions(uid, $contentCV)
+                                        ;                          ; SearchResultsGrid ; Search Result Grid Component ; ListAddToCartAction,ListOrderFormAction
+
+# Add components to content clots
+UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]    ; name                                    ; active; cmsComponents(uid, $contentCV)
+                  ;                          ; SearchResultsGridSlot ; Search Result Grid Slot for Search List ; true  ; SearchResultsGrid

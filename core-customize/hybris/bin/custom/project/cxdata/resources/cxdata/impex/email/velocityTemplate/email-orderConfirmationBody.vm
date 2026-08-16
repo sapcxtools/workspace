@@ -1,0 +1,15 @@
+## messageSource=classpath:/yacceleratorcore/messages/email-orderConfirmation_$lang.properties
+<html>
+<body style="font-family: Arial, Helvetica, sans-serif; color:#333333;">
+    #if ( $ctx.order.guestCustomer )
+        #set ($orderInfoUrl = "${ctx.baseUrl}/guest/order/${ctx.order.guid}")
+    #else
+        #set ($orderInfoUrl = "${ctx.baseUrl}/my-account/order/${ctx.order.code}")
+    #end
+
+<p>
+    Ihre Bestellung wurde erfolgreich abgeschlossen.
+    <a href="$orderInfoUrl">Bestelldetails ansehen</a>
+</p>
+</body>
+</html>

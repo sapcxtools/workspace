@@ -1,0 +1,30 @@
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$contentCatalogId = $config-cxdata.import.defaults.catalog.content.id
+$contentCatalogName = $config-cxdata.import.defaults.catalog.content.name
+$contentCatalogEditVersion = $config-cxdata.import.defaults.catalog.content.versions.edit
+$contentCatalogLiveVersion = $config-cxdata.import.defaults.catalog.content.versions.live
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalogId]), CatalogVersion.version[default = $contentCatalogEditVersion])[unique = true, default = $contentCatalogId:$contentCatalogEditVersion]
+
+$emailResource = jar:sap.commerce.cx.data.setup.CxSystemSetup&/cxdata/impex/email/velocityTemplate
+
+$lang = de
+$fromEmail = customerservices@hybris.com
+$fromName = Kundendienst
+############################################################
+
+UPDATE RendererTemplate; code[unique = true]                 ; description[lang = $lang]             ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+                       ; Email_Customer_Registration_Body    ; "Customer Registration Email Body"    ; $emailResource/email-customerRegistrationBody.vm
+                       ; Email_Customer_Registration_Subject ; "Customer Registration Email Subject" ; $emailResource/email-customerRegistrationSubject.vm
+                       ; Email_Forgotten_Password_Body       ; "Forgotten Password Email Body"       ; $emailResource/email-forgottenPasswordBody.vm
+                       ; Email_Forgotten_Password_Subject    ; "Forgotten Password Email Subject"    ; $emailResource/email-forgottenPasswordSubject.vm
+                       ; Email_Order_Confirmation_Body       ; "Order Confirmation Email Body"       ; $emailResource/email-orderConfirmationBody.vm
+                       ; Email_Order_Confirmation_Subject    ; "Order Confirmation Email Subject"    ; $emailResource/email-orderConfirmationSubject.vm
+
+UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]        ; fromEmail[lang = $lang, default = $fromEmail]; fromName[lang = $lang, default = $fromName]
+                ;                          ; CustomerRegistrationEmail ;                                              ;
+                ;                          ; ForgottenPasswordEmail    ;                                              ;
+                ;                          ; OrderConfirmationEmail    ;                                              ;
+                ;                          ; VerificationTokenEmail    ;                                              ;

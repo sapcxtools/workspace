@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+    <extension name="cxcore" jaloLogicFree="true" usemaven="false" abstractclassprefix="Generated" classprefix="CxCore">
+        <!--
+            List all extensions (SAP and 3rd Party) that you would like to use.
+            Note: No other CX* extension must be listed here!
+        -->
+
+        <!-- CX TOOLS -->
+        <requires-extension name="cxdevtoolkit"/>
+        <requires-extension name="cms2"/>
+        <requires-extension name="personalizationcms"/>
+        <requires-extension name="b2bcommerce"/>
+        <requires-extension name="commercewebservicescommons"/>
+
+        <coremodule packageroot="sap.commerce.cx.core" generated="true" manager="de.hybris.platform.jalo.extension.GenericManager"/>
+    </extension>
+</extensioninfo>

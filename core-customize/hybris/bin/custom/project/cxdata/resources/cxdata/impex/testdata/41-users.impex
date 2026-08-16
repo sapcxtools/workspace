@@ -1,0 +1,96 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.lang3.StringUtils;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$storeId = $config-cxdata.import.defaults.store.id
+$defaultPassword = 1234
+############################################################
+
+INSERT_UPDATE UserPriceGroup; code[unique = true]; name[lang = en]
+                            ; CX_PRICE_GROUP    ; CX USERPRICEGROUP
+
+INSERT_UPDATE UserGroup; uid[unique = true]  ; groups(uid); locname[lang = en];
+                       ; SuperAccountMangers ;            ;
+
+INSERT_UPDATE Employee; uid[unique = true]; name         ; groups(uid)[mode = append]
+                      ; acctmgrd          ; Bruce Rivers ; employeegroup,acctmgrgroup,admingroup
+
+INSERT_UPDATE B2BCreditLimit; code[unique = true]; alertRateType(code, itemtype(code)); alertThreshold; amount; currency(isocode); dateRange(code, itemtype(code)); datePeriod[dateformat = dd.MM.yyyy hh:mm:ss];
+                            ; Monthly30KAlert3K  ; CURRENCY:B2BRateType               ; 3000          ; 30000 ; USD              ; MONTH:B2BPeriodRange           ;                                             ;
+
+INSERT_UPDATE B2BUnit; description; uid[unique = true]; name            ; locName[lang = en]; groups(uid); reportingOrganization(uid); Addresses(&addId); &B2BUnitID; accountManager(uid); accountManagerGroups(uid); creditLimit(code) ; approvalProcessCode; approvers(uid)
+                     ; KIS        ; Pronto            ; Pronto          ; Pronto            ;            ; Pronto                    ; ProntoAddrID1    ; ProntoID1 ; acctmgrd           ; SuperAccountMangers      ; Monthly30KAlert3K ; accApproval        ; hanna.schmidt@pronto-hw.com
+                     ; Unit A     ; Pronto Goods      ; Pronto Goods    ; Pronto Goods      ; Pronto     ; Pronto                    ; ProntoAddrID2    ; ProntoID2 ;                    ;                          ;                   ;                    ;
+                     ; Unit B     ; Pronto Services   ; Pronto Services ; Pronto Services   ; Pronto     ; Pronto                    ; ProntoAddrID3    ; ProntoID3 ;                    ;                          ;                   ;                    ; hanna.schmidt@pronto-hw.com
+
+UPDATE B2BUnit; uid[unique = true]; userPriceGroup(code)
+              ; Pronto Services   ; CX_PRICE_GROUP
+
+INSERT_UPDATE B2BUserGroup; uid[unique = true]  ; name                 ; unit(uid); permissions(code, unit(uid))
+                          ; enhancedPermissions ; Enhanced Permissions ; Pronto   ; Pronto_12K_USD_ORDER:Pronto,Pronto_15K_USD_MONTH:Pronto
+
+INSERT_UPDATE Address; streetname[unique = true]  ; postalcode[unique = true]; town          ; country(isocode); billingAddress; contactAddress; shippingAddress; unloadingAddress; firstname; lastname ; email                        ; title(code); &addId        ; owner(&B2BUnitID)[unique = true];
+                     ; 3000 Lombard Street        ; 94123                    ; San Francisco ; US              ; TRUE          ; TRUE          ; TRUE           ; TRUE            ; Akiro    ; Nakamura ; akiro.nakamura@pronto-hw.com ; mr         ; ProntoAddrID1 ; ProntoID1                       ;
+                     ; 700 E 50th Street          ; 10022                    ; New York      ; US              ; TRUE          ; TRUE          ; TRUE           ; TRUE            ; Gi       ; Sun      ; gi.sun@pronto-hw.com         ; mr         ; ProntoAddrID2 ; ProntoID2                       ;
+                     ; 11000 Bagby Street Houston ; Texas                    ; Houston       ; US              ; TRUE          ; TRUE          ; TRUE           ; TRUE            ; James    ; Bell     ; james.bell@Pronto-hw.com     ; mr         ; ProntoAddrID3 ; ProntoID3                       ;
+
+INSERT_UPDATE B2BCustomer; description; uid[unique = true]           ; customerID                           ; email                        ; name           ; title(code); groups(uid)                                                               ; permissionGroups(uid); sessionCurrency(isocode)[default = 'USD']; password[default = $defaultPassword]; loginDisabled[default = false]
+                         ; Admin A    ; wolfgang.posch@arineo.com    ; 9c7fc26d-3da6-4e22-b9d7-5be929088d24 ; wolfgang.posch@arineo.com    ; Wolfgang Posch ; mr         ; Pronto, b2badmingroup, b2bapprovergroup, b2bcustomergroup,b2bmanagergroup ;                      ;                                          ;                                     ;
+                         ; Admin B    ; linda.wolf@pronto-hw.com     ; ceff469f-25aa-4a10-99e3-da31245204e7 ; linda.wolf@pronto-hw.com     ; Linda Wolf     ; ms         ; Pronto, b2badmingroup, b2bapprovergroup, b2bcustomergroup                 ;                      ;                                          ;                                     ;
+                         ; Approver A ; hanna.schmidt@pronto-hw.com  ; db1f981a-97ca-49c4-9cb3-9f4dfb0a3e0a ; hanna.schmidt@pronto-hw.com  ; Hanna Schmidt  ; ms         ; Pronto, b2bapprovergroup                                                  ;                      ;                                          ;                                     ;
+                         ; Customer C ; william.hunter@pronto-hw.com ; 49f749e1-53cb-44e8-98ce-4d60e41d9e00 ; william.hunter@pronto-hw.com ; William Hunter ; mr         ; Pronto Services, b2bcustomergroup, enhancedPermissions                    ;                      ;                                          ;                                     ;
+                         ; Manager A  ; akiro.nakamura@pronto-hw.com ; 9c7fc26d-3da6-4e22-b9d7-5be929088d83 ; akiro.nakamura@pronto-hw.com ; Akiro Nakamura ; mr         ; Pronto, b2bmanagergroup                                                   ;                      ;                                          ;                                     ;
+
+INSERT_UPDATE B2BBudget; code[unique = true]; Unit(uid); budget; currency(isocode)[allownull = true]; dateRange[dateformat = dd.MM.yyyy hh:mm:ss, allownull = true]; name[lang = en]
+                       ; 30K_USD_MONTH      ; Pronto   ; 30000 ; USD                                ; 01.01.2010 00:00:00,12.31.2021 12:59:59                      ; 30K USD/MONTH
+                       ; 20K_USD_MONTH      ; Pronto   ; 20000 ; USD                                ; 01.01.2010 00:00:00,12.31.2021 12:59:59                      ; 20K USD/MONTH
+
+INSERT_UPDATE B2BCostCenter; code[unique = true]; Unit(uid)       ; currency(isocode); budgets(code) ; name[lang = en]
+                           ; Pronto_Goods       ; Pronto Goods    ; USD              ; 30K_USD_MONTH ; Pronto Goods
+                           ; Pronto_Services    ; Pronto Services ; USD              ; 20K_USD_MONTH ; Pronto Services
+
+INSERT_UPDATE B2BOrderThresholdPermission; code[unique = true]  ; Unit(uid); threshold; currency(isocode)
+                                         ; Pronto_5K_USD_ORDER  ; Pronto   ; 5000     ; USD
+                                         ; Pronto_6K_USD_ORDER  ; Pronto   ; 6000     ; USD
+                                         ; Pronto_10K_USD_ORDER ; Pronto   ; 10000    ; USD
+                                         ; Pronto_12K_USD_ORDER ; Pronto   ; 12000    ; USD
+
+INSERT_UPDATE B2BOrderThresholdTimespanPermission; code[unique = true]                 ; Unit(uid); threshold ; currency(isocode); range(code, itemtype(code))
+                                                 ; Pronto_15K_USD_MONTH                ; Pronto   ; 15000     ; USD              ; MONTH:B2BPeriodRange
+                                                 ; Pronto_12K_USD_MONTH                ; Pronto   ; 12000     ; USD              ; MONTH:B2BPeriodRange
+                                                 ; Pronto_Unlimited_Threshold_Timespan ; Pronto   ; 999999999 ; USD              ; MONTH:B2BPeriodRange
+
+UPDATE B2BCustomer; uid[unique = true]          ; permissions(code, unit(uid))
+                  ; hanna.schmidt@pronto-hw.com ; Pronto_Unlimited_Threshold_Timespan:Pronto,Pronto_10K_USD_ORDER:Pronto
+
+INSERT_UPDATE CreditCardPaymentInfo; code[unique = true]; owner(Customer.uid)         ; user(uid)[unique = true]    ; ccOwner        ; number           ; type(code); validFromMonth; validFromYear; validToMonth; validToYear; subscriptionId; saved[default = true]; billingAddress(&addId)
+                                   ; visa               ; wolfgang.posch@arineo.com   ; wolfgang.posch@arineo.com   ; Wolfgang Posch ; 4012888888881881 ; visa      ; 3             ; 2025         ; 12          ; 2045       ; 1234          ;                      ; ProntoAddrID1
+                                   ; amex               ; hanna.schmidt@pronto-hw.com ; hanna.schmidt@pronto-hw.com ; Hanna Schmidt  ; 371449635398431  ; amex      ; 1             ; 2025         ; 12          ; 2045       ; 1234          ;                      ; ProntoAddrID2
+                                   ; master             ; wolfgang.posch@arineo.com   ; wolfgang.posch@arineo.com   ; Wolfgang Posch ; 305693090259041  ; master    ; 5             ; 2025         ; 4           ; 2045       ; 1234          ;                      ; ProntoAddrID3
+
+$paymentProvider = Mockup
+UPDATE BaseStore; uid[unique = true]; paymentProvider  ; trackingBaseUrl
+                ; $storeId          ; $paymentProvider ; "https://www.ups.com/track?tracknum="
+
+INSERT_UPDATE Order; code[unique = true]; user(uid)                    ; date[dateformat = dd.MM.yyyy HH:mm]; currency(isocode); net  ; deliveryMode(code); calculated; store(uid); site(uid); deliveryCost; totalPrice; paymentAddress(&addId); deliveryAddress(&addId); paymentInfo(code); status(code)[default = CREATED]; trackingId
+                   ; 00000001           ; william.hunter@pronto-hw.com ; 28.05.26 10:58                     ; EUR              ; true ; storePickup       ; true      ; cx       ; cx      ; 0           ; 18,500.00 ; ProntoAddrID3         ; ProntoAddrID3          ; visa             ;                                ; 123456789
+                   ; 00000003           ; william.hunter@pronto-hw.com ; 28.05.26 10:59                     ; EUR              ; true ; spedition         ; true      ; cx       ; cx      ; 79.99       ; 70,829.99 ; ProntoAddrID3         ; ProntoAddrID3          ; master           ;                                ; 987654321
+
+INSERT_UPDATE OrderEntry; order(code)[unique = true]; product(code, $productCV)[unique = true]; quantity; calculated; unit(code); entryNumber; basePrice ; totalPrice
+                        ; 00000001                  ; 100101000001                            ; 1       ; true      ; PCE       ; 0          ; 18,500.00 ; 18,500.00
+                        ; 00000003                  ; 100101000001                            ; 2       ; true      ; PCE       ; 0          ; 18,500.00 ; 37,000.00
+                        ; 00000003                  ; 100101000002                            ; 1       ; true      ; PCE       ; 1          ; 27,900.00 ; 27,900.00
+                        ; 00000003                  ; 100201000001                            ; 3       ; true      ; PCE       ; 2          ; 1,950.00  ; 5,8500.00

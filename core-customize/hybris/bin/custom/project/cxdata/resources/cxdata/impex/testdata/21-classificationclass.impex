@@ -1,0 +1,70 @@
+############################################################
+# BeanShell imports
+############################################################
+"#% impex.setLocale(Locale.ENGLISH);"
+"#% import sap.commerce.cx.data.ImpexHelper;"
+"#% import org.apache.commons.io.FilenameUtils;"
+
+############################################################
+# Default Macros
+############################################################
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+$primaryCurrency = $config-cxdata.import.defaults.currency.primary
+$primaryLang = $config-cxdata.import.defaults.languages.primary
+$optionalLang1 = $config-cxdata.import.defaults.languages.optional1
+$optionalLang2 = $config-cxdata.import.defaults.languages.optional2
+$optionalLang3 = $config-cxdata.import.defaults.languages.optional3
+$optionalLang4 = $config-cxdata.import.defaults.languages.optional4
+$optionalLang5 = $config-cxdata.import.defaults.languages.optional5
+$optionalLang6 = $config-cxdata.import.defaults.languages.optional6
+$optionalLang7 = $config-cxdata.import.defaults.languages.optional7
+$optionalLang8 = $config-cxdata.import.defaults.languages.optional8
+$optionalLang9 = $config-cxdata.import.defaults.languages.optional9
+$siteId = $config-cxdata.import.defaults.site.id
+$siteName = $config-cxdata.import.defaults.site.name
+$storeId = $config-cxdata.import.defaults.store.id
+$storeName = $config-cxdata.import.defaults.store.name
+$productCatalogId = $config-cxdata.import.defaults.catalog.product.id
+$productCatalogName = $config-cxdata.import.defaults.catalog.product.name
+$productCatalogEditVersion = $config-cxdata.import.defaults.catalog.product.versions.edit
+$productCatalogLiveVersion = $config-cxdata.import.defaults.catalog.product.versions.live
+$productCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalogId]), CatalogVersion.version[default = $productCatalogEditVersion])[unique = true, default = $productCatalogId:$productCatalogEditVersion]
+$classificationCatalogId = $config-cxdata.import.defaults.catalog.classification.id
+$classificationCatalogName = $config-cxdata.import.defaults.catalog.classification.name
+$classificationCatalogLiveVersion = $config-cxdata.import.defaults.catalog.classification.versions.live
+$classCatalogVersion = catalogversion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$classSystemVersion = systemVersion(catalog(id[default = '$classificationCatalogId']), version[default = '$classificationCatalogLiveVersion'])[unique = true, default = '$classificationCatalogId:$classificationCatalogLiveVersion']
+$class = classificationClass(ClassificationClass.code, $classCatalogVersion)[unique = true]
+$mediaResourcePath = jar:sap.commerce.cx.data.ImpexHelper&/cxdata/assets/
+
+############################################################
+# Classification
+# 1: Data-Locale
+# 2: ID
+# 3: Name
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE ClassificationClass;; code[unique = true]; name[lang = $lang]; $classCatalogVersion
+"#% beforeEach:
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ClassificationClass.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+$lang = $optionalLang1
+INSERT_UPDATE ClassificationClass;; code[unique = true]; name[lang = $lang]; $classCatalogVersion
+"#% beforeEach:
+    ImpexHelper.filterUnlocalizedOrPrimaryLine(line, 1, ""$lang"");"
+"#% impex.includeExternalData(ImpexHelper.class.getResourceAsStream(""/cxdata/data/ClassificationClass.csv"") , ""UTF-8"", new char[]{','}, 1, -1 );"
+
+############################################################
+# Reusable ImpEx Header Templates for Test Data
+#
+# Provides a reusable ImpEx template for creating or updating ClassificationClass test data without requiring a CSV source file.
+#
+# Usage:
+# - Copy the appropriate template.
+# - Replace the example values with your test data.
+# - Extend the template if additional attributes are required.
+############################################################
+$lang = $primaryLang
+INSERT_UPDATE ClassificationClass; code[unique = true]; name[lang = $lang]; $classCatalogVersion
+#                                 ; centrifugal-pumps  ; Centrifugal Pumps ;
